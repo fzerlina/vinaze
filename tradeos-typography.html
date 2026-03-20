@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tradeos — Typography System</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500&family=Inconsolata:wght@400;500&family=Bebas+Neue&family=DM+Sans:wght@400;500&family=Fraunces:opsz,wght@9..144,400&family=Playfair+Display:wght@400&family=Barlow+Condensed:wght@400;600&family=Syne:wght@700&family=Roboto+Mono:wght@400&family=Fira+Code:wght@400&family=Azeret+Mono:wght@400&family=IBM+Plex+Mono:wght@400&family=Figtree:wght@400&family=Noto+Sans:wght@400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f5f4f1; font-family: 'Plus Jakarta Sans', sans-serif; color: #1a1a1a; }
+  .page { max-width: 960px; margin: 0 auto; padding: 52px 36px 100px; }
+
+  /* Page header */
+  .page-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 10px; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 58px; letter-spacing: 0.03em; color: #1a1a1a; line-height: 1; margin-bottom: 8px; }
+  .page-sub { font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 64px; max-width: 560px; }
+
+  /* Section */
+  .section { margin-bottom: 64px; }
+  .section-meta { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .section-num { font-family: 'Inconsolata', monospace; font-size: 12px; color: #ccc; }
+  .section-name { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; }
+
+  /* Selected card */
+  .selected-card { background: #fff; border: 1px solid #e5e4e0; border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
+  .selected-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid #f0efe9; }
+  .selected-head-left { display: flex; align-items: baseline; gap: 12px; }
+  .font-name { font-size: 15px; font-weight: 600; color: #1a1a1a; }
+  .font-meta { font-size: 11px; color: #ccc; }
+  .badge-selected { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 4px; background: #1a1a1a; color: #fff; letter-spacing: 0.04em; }
+  .badge-deciding { font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 4px; background: #fef3c7; color: #92400e; }
+
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .card-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .card-col { padding: 24px 22px; border-right: 1px solid #f0efe9; }
+  .card-col:last-child { border-right: none; }
+  .col-label { font-family: 'Inconsolata', monospace; font-size: 10px; color: #ccc; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 16px; }
+
+  /* Body specimens */
+  .body-intro { font-size: 20px; font-weight: 400; line-height: 1.5; color: #1a1a1a; margin-bottom: 6px; }
+  .body-base { font-size: 14px; line-height: 1.75; color: #555; margin-bottom: 6px; }
+  .body-sm { font-size: 12px; line-height: 1.8; color: #999; }
+  .specimen-sublabel { font-size: 10px; font-weight: 500; color: #ddd; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; margin-top: 14px; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  /* Mono specimens */
+  .mono-num-xl { font-size: 36px; font-weight: 400; color: #1a1a1a; line-height: 1.15; margin-bottom: 6px; }
+  .mono-num-md { font-size: 18px; color: #555; margin-bottom: 4px; }
+  .mono-num-sm { font-size: 12px; color: #999; margin-bottom: 3px; }
+  .mono-ambig { font-size: 34px; color: #e05a2b; line-height: 1.3; margin-bottom: 8px; }
+  .mono-ambig-note { font-size: 11px; color: #bbb; line-height: 1.55; }
+  .mono-ambig-note b { color: #888; font-weight: 500; }
+
+  /* Header specimens */
+  .hdr-xl { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 0.03em; color: #1a1a1a; line-height: 1.05; margin-bottom: 2px; }
+  .hdr-lg { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.03em; color: #1a1a1a; margin-bottom: 2px; }
+  .hdr-md { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.03em; color: #1a1a1a; margin-bottom: 14px; }
+  .hdr-body { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #888; line-height: 1.7; }
+
+  /* ERP panel */
+  .erp-panel { background: #f9f8f6; border-radius: 10px; padding: 18px 20px; }
+  .erp-panel-title { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.03em; color: #1a1a1a; margin-bottom: 14px; }
+  .erp-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 9px; }
+  .erp-lbl { font-size: 10px; font-weight: 500; color: #bbb; width: 68px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .erp-val { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #1a1a1a; }
+  .erp-mono { font-family: 'Inconsolata', monospace; font-size: 13px; color: #666; }
+  .erp-amount { font-family: 'Inconsolata', monospace; font-size: 13px; color: #1a1a1a; font-weight: 500; }
+  .pill { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: #dbeafe; color: #1e40af; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  /* Alternatives */
+  .alts-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #ccc; margin-bottom: 12px; }
+  .alts-grid { display: grid; gap: 10px; margin-bottom: 4px; }
+  .alts-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .alts-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .alt-card { background: #fff; border: 1px solid #ebe9e4; border-radius: 10px; padding: 16px 18px; }
+  .alt-font-name { font-size: 10px; font-weight: 600; color: #ccc; letter-spacing: 0.05em; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+  .alt-zbadge { font-size: 9px; padding: 2px 6px; border-radius: 3px; font-weight: 600; }
+  .alt-zbadge.slash { background: #d1fae5; color: #065f46; }
+  .alt-zbadge.dot { background: #fee2e2; color: #991b1b; }
+  .alt-body-specimen { font-size: 12px; line-height: 1.75; color: #ccc; }
+  .alt-hdr-specimen { font-size: 26px; color: #ccc; line-height: 1.2; }
+  .alt-mono-num { font-size: 22px; color: #ccc; margin-bottom: 4px; }
+  .alt-mono-ambig { font-size: 20px; color: #f0a896; }
+
+  hr.divider { border: none; border-top: 1px solid #f0efe9; margin: 14px 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- System nav -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:52px;">
+    <div style="font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#ccc;font-family:'Manrope',sans-serif;">TradeOS Design System</div>
+    <div style="display:flex;gap:6px;">
+      <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;padding:5px 12px;border-radius:6px;background:#1a1a1a;color:#fff;letter-spacing:0.07em;text-transform:uppercase;">00 Typography</span>
+      <a href="tradeos-formatting.html" style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;padding:5px 12px;border-radius:6px;border:1px solid #e5e4e0;color:#999;text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;">01 Formatting →</a>
+      <a href="tradeos-tokens.html" style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;padding:5px 12px;border-radius:6px;border:1px solid #e5e4e0;color:#999;text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;">02 Colors →</a>
+      <a href="tradeos-ui-reference.html" style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;padding:5px 12px;border-radius:6px;border:1px solid #e5e4e0;color:#999;text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;">03–05 Components →</a>
+      <a href="tradeos-forms.html" style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;padding:5px 12px;border-radius:6px;border:1px solid #e5e4e0;color:#999;text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;">06 Forms →</a>
+    </div>
+  </div>
+  <!-- Header -->
+  <div class="page-eyebrow">00 — Tradeos Design System</div>
+  <div class="page-title">Typography</div>
+  <div class="page-sub">Three font families forming the complete type system. Manrope for body text — sharp, slightly condensed, precise. Inconsolata for numbers and IDs. Bebas Neue for section headers.</div>
+
+  <!-- ============ 01 BODY TEXT ============ -->
+  <div class="section">
+    <div class="section-meta">
+      <span class="section-num">01</span>
+      <span class="section-name">Body Text</span>
+    </div>
+
+    <div class="selected-card">
+      <div class="selected-head">
+        <div class="selected-head-left">
+          <span class="font-name">Manrope</span>
+          <span class="font-meta">Google Fonts · free · SIL OFL</span>
+        </div>
+        <span class="badge-selected">Selected</span>
+      </div>
+      <div class="card-grid">
+        <div class="card-col">
+          <div class="col-label">Body usage</div>
+          <div class="specimen-sublabel">Intro / large</div>
+          <div class="body-intro" style="font-family:'Manrope',sans-serif;">14 active shipments across 6 trade corridors this week.</div>
+          <hr class="divider">
+          <div class="specimen-sublabel">Base / paragraph</div>
+          <div class="body-base" style="font-family:'Manrope',sans-serif;">Rotterdam–Shanghai remains the highest-volume route. Clearance delays at Port Klang have impacted 3 pending orders. Review the flagged shipments before end of day.</div>
+          <hr class="divider">
+          <div class="specimen-sublabel">Small / supporting</div>
+          <div class="body-sm" style="font-family:'Manrope',sans-serif;">Last updated 2 minutes ago · Auto-refreshes every 5 min · Data sourced from Tradeos core API</div>
+        </div>
+        <div class="card-col">
+          <div class="col-label">In context</div>
+          <div class="erp-panel">
+            <div class="erp-panel-title">Shipment Summary</div>
+            <div class="body-base" style="font-family:'Manrope',sans-serif;font-size:13px;color:#666;margin-bottom:16px;">3 shipments require attention. One is on hold pending customs documentation at Shanghai.</div>
+            <div class="erp-row"><span class="erp-lbl">Supplier</span><span class="erp-val">Fujian Exports Co.</span></div>
+            <div class="erp-row"><span class="erp-lbl">Route</span><span class="erp-val">CN → US · FOB</span></div>
+            <div class="erp-row"><span class="erp-lbl">Status</span><span class="pill">In Transit</span></div>
+            <div class="erp-row"><span class="erp-lbl">Notes</span><span class="erp-val" style="font-size:12px;color:#888;">ETA revised to Nov 18 due to port congestion</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alts-label">Alternatives explored</div>
+    <div class="alts-grid cols-4">
+      <div class="alt-card">
+        <div class="alt-font-name">Plus Jakarta Sans</div>
+        <div class="alt-body-specimen" style="font-family:'Plus Jakarta Sans',sans-serif;">14 active shipments across 6 corridors. Rotterdam–Shanghai is the highest-volume route.</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-font-name">Figtree</div>
+        <div class="alt-body-specimen" style="font-family:'Figtree',sans-serif;">14 active shipments across 6 corridors. Rotterdam–Shanghai is the highest-volume route.</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-font-name">Noto Sans</div>
+        <div class="alt-body-specimen" style="font-family:'Noto Sans',sans-serif;">14 active shipments across 6 corridors. Rotterdam–Shanghai is the highest-volume route.</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-font-name">Fraunces</div>
+        <div class="alt-body-specimen" style="font-family:'Fraunces',serif;">14 active shipments across 6 corridors. Rotterdam–Shanghai is the highest-volume route.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 02 NUMBERS / ID TEXT ============ -->
+  <div class="section">
+    <div class="section-meta">
+      <span class="section-num">02</span>
+      <span class="section-name">Numbers &amp; ID Text</span>
+    </div>
+
+    <div class="selected-card">
+      <div class="selected-head">
+        <div class="selected-head-left">
+          <span class="font-name">Inconsolata</span>
+          <span class="font-meta">Google Fonts · free · SIL OFL</span>
+        </div>
+        <span class="badge-selected">Selected</span>
+      </div>
+      <div class="card-grid three">
+        <div class="card-col">
+          <div class="col-label">Numbers</div>
+          <div class="mono-num-xl" style="font-family:'Inconsolata',monospace;">$142,500.00</div>
+          <div class="mono-num-md" style="font-family:'Inconsolata',monospace;">88,200 · 310,750</div>
+          <div class="mono-num-sm" style="font-family:'Inconsolata',monospace;">14,200 kg · 480 ctns</div>
+          <div class="mono-num-sm" style="font-family:'Inconsolata',monospace;">HS: 8471.30 · FOB</div>
+        </div>
+        <div class="card-col">
+          <div class="col-label">Disambiguation</div>
+          <div class="mono-ambig" style="font-family:'Inconsolata',monospace;">il1 O0Q</div>
+          <div class="mono-ambig-note">Slashed <b>0</b> — no dot, no ambiguity with O. Clear spacing between <b>i</b>, <b>l</b>, <b>1</b>. Compact width fits more data per row.</div>
+        </div>
+        <div class="card-col">
+          <div class="col-label">In context</div>
+          <div class="erp-panel">
+            <div class="erp-panel-title">Order Details</div>
+            <div class="erp-row"><span class="erp-lbl">Order ID</span><span class="erp-mono">TRD-2024-08841</span></div>
+            <div class="erp-row"><span class="erp-lbl">HS Code</span><span class="erp-mono">8471.30</span></div>
+            <div class="erp-row"><span class="erp-lbl">BL Ref</span><span class="erp-mono">BL-SH-20241103</span></div>
+            <div class="erp-row"><span class="erp-lbl">Weight</span><span class="erp-mono">14,200 kg</span></div>
+            <div class="erp-row"><span class="erp-lbl">Amount</span><span class="erp-amount">$142,500.00</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alts-label">Alternatives explored</div>
+    <div class="alts-grid cols-4">
+      <div class="alt-card">
+        <div class="alt-font-name">IBM Plex Mono <span class="alt-zbadge dot">dotted 0</span></div>
+        <div class="alt-mono-num" style="font-family:'IBM Plex Mono',monospace;">$142,500.00</div>
+        <div class="alt-mono-ambig" style="font-family:'IBM Plex Mono',monospace;">il1 O0Q</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-font-name">Fira Code <span class="alt-zbadge slash">slashed 0</span></div>
+        <div class="alt-mono-num" style="font-family:'Fira Code',monospace;">$142,500.00</div>
+        <div class="alt-mono-ambig" style="font-family:'Fira Code',monospace;">il1 O0Q</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-font-name">Roboto Mono <span class="alt-zbadge slash">slashed 0</span></div>
+        <div class="alt-mono-num" style="font-family:'Roboto Mono',monospace;">$142,500.00</div>
+        <div class="alt-mono-ambig" style="font-family:'Roboto Mono',monospace;">il1 O0Q</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-font-name">Azeret Mono <span class="alt-zbadge slash">slashed 0</span></div>
+        <div class="alt-mono-num" style="font-family:'Azeret Mono',monospace;">$142,500.00</div>
+        <div class="alt-mono-ambig" style="font-family:'Azeret Mono',monospace;">il1 O0Q</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 03 SECTION HEADERS ============ -->
+  <div class="section">
+    <div class="section-meta">
+      <span class="section-num">03</span>
+      <span class="section-name">Section Headers</span>
+    </div>
+
+    <div class="selected-card">
+      <div class="selected-head">
+        <div class="selected-head-left">
+          <span class="font-name">Bebas Neue</span>
+          <span class="font-meta">Google Fonts · free · SIL OFL</span>
+        </div>
+        <span class="badge-selected">Selected</span>
+      </div>
+      <div class="card-grid">
+        <div class="card-col">
+          <div class="col-label">Header sizes</div>
+          <div class="hdr-xl">Shipment Overview</div>
+          <div class="hdr-lg">Active Trade Routes</div>
+          <div class="hdr-md">Pending Clearance</div>
+          <div class="hdr-body">Body text follows in Plus Jakarta Sans at 14px — the contrast between Bebas Neue's condensed all-caps and Plus Jakarta's rounded forms creates immediate, scannable hierarchy across dense ERP panels.</div>
+        </div>
+        <div class="card-col">
+          <div class="col-label">In context</div>
+          <div class="erp-panel">
+            <div class="erp-panel-title">Order Details</div>
+            <div class="erp-row"><span class="erp-lbl">Order ID</span><span class="erp-mono">TRD-2024-08841</span></div>
+            <div class="erp-row"><span class="erp-lbl">Supplier</span><span class="erp-val">Fujian Exports Co.</span></div>
+            <div class="erp-row"><span class="erp-lbl">Route</span><span class="erp-val">CN → US (FOB Shanghai)</span></div>
+            <div class="erp-row"><span class="erp-lbl">Status</span><span class="pill">In Transit</span></div>
+            <div class="erp-row"><span class="erp-lbl">Amount</span><span class="erp-amount">$142,500.00</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alts-label">Alternatives explored</div>
+    <div class="alts-grid cols-3">
+      <div class="alt-card">
+        <div class="alt-font-name">Fraunces (Serif)</div>
+        <div class="alt-hdr-specimen" style="font-family:'Fraunces',serif;">Shipment Overview</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-font-name">Playfair Display (Serif)</div>
+        <div class="alt-hdr-specimen" style="font-family:'Playfair Display',serif;">Shipment Overview</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-font-name">Syne (Display)</div>
+        <div class="alt-hdr-specimen" style="font-family:'Syne',sans-serif;font-weight:700;">Shipment Overview</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

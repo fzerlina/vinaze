@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeOS — Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Inconsolata:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f4f1; font-family: 'Manrope', sans-serif; color: #1a1a1a; }
+.page { max-width: 960px; margin: 0 auto; padding: 0 36px 100px; }
+
+.sys-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0 52px;
+}
+.sys-nav-brand { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #ccc; }
+
+.hero { padding: 80px 0 72px; border-bottom: 1px solid #e5e4e0; margin-bottom: 72px; }
+.hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 14px; }
+.hero-title { font-family: 'Bebas Neue', sans-serif; font-size: 88px; letter-spacing: 0.03em; color: #1a1a1a; line-height: 1; margin-bottom: 20px; }
+.hero-sub { font-size: 15px; color: #888; line-height: 1.8; max-width: 560px; margin-bottom: 36px; }
+.hero-meta { display: flex; gap: 24px; }
+.hero-meta-item { display: flex; flex-direction: column; gap: 3px; }
+.hero-meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #bbb; }
+.hero-meta-value { font-family: 'Inconsolata', monospace; font-size: 13px; color: #555; }
+
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; margin-bottom: 20px; }
+
+.pages-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 72px; }
+.page-card {
+  display: flex; flex-direction: column;
+  background: #fff; border: 1px solid #e5e4e0; border-radius: 14px;
+  text-decoration: none; overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.page-card:hover { border-color: #1a1a1a; }
+.page-card-top { padding: 22px 24px 18px; flex: 1; }
+.page-card-num { font-family: 'Inconsolata', monospace; font-size: 11px; color: #ccc; margin-bottom: 10px; }
+.page-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.03em; color: #1a1a1a; margin-bottom: 8px; }
+.page-card-desc { font-size: 12px; color: #999; line-height: 1.65; }
+.page-card-footer {
+  padding: 12px 24px; border-top: 1px solid #f0efe9;
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.page-card-tag {
+  font-size: 10px; font-weight: 600; color: #bbb;
+  background: #f5f4f1; border-radius: 3px; padding: 2px 7px;
+  letter-spacing: 0.04em;
+}
+
+.principles-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 72px; }
+.principle {
+  background: #fff; border: 1px solid #e5e4e0; border-radius: 12px;
+  padding: 20px 22px;
+}
+.principle-ico { font-size: 20px; margin-bottom: 12px; }
+.principle-title { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+.principle-body { font-size: 12px; color: #999; line-height: 1.65; }
+
+.stack-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 72px; }
+.stack-item { background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; padding: 16px; }
+.stack-item-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #bbb; margin-bottom: 8px; }
+.stack-item-value { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
+.stack-item-sub { font-size: 11px; color: #bbb; }
+.swatch-strip { display: flex; gap: 6px; margin-bottom: 72px; }
+.swatch-strip-dot { height: 28px; border-radius: 6px; flex: 1; }
+
+.footer { text-align: center; font-size: 12px; color: #ccc; padding: 40px 0; border-top: 1px solid #e5e4e0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="sys-nav">
+    <div class="sys-nav-brand">TradeOS Design System</div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-eyebrow">Design System</div>
+    <div class="hero-title">TradeOS</div>
+    <div class="hero-sub">A reference system for building consistent, PSAK-compliant ERP interfaces. Covers typography, number formatting, color tokens, components, and form patterns for Indonesian financial products.</div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Version</span>
+        <span class="hero-meta-value">1.0.0</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Pages</span>
+        <span class="hero-meta-value">6 sections</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Compliance</span>
+        <span class="hero-meta-value">PSAK · DJP · e-Faktur</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Typefaces</span>
+        <span class="hero-meta-value">Manrope · Inconsolata · Bebas Neue</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Pages</div>
+  <div class="pages-grid">
+
+    <a href="tradeos-typography.html" class="page-card">
+      <div class="page-card-top">
+        <div class="page-card-num">00</div>
+        <div class="page-card-title">Typography</div>
+        <div class="page-card-desc">Typeface roles, size scale, weight rules, and usage contexts. Manrope for UI, Inconsolata for numbers, Bebas Neue for display.</div>
+      </div>
+      <div class="page-card-footer">
+        <span class="page-card-tag">Manrope</span>
+        <span class="page-card-tag">Inconsolata</span>
+        <span class="page-card-tag">Bebas Neue</span>
+        <span class="page-card-tag">Scale</span>
+      </div>
+    </a>
+
+    <a href="tradeos-formatting.html" class="page-card">
+      <div class="page-card-top">
+        <div class="page-card-num">01</div>
+        <div class="page-card-title">Formatting</div>
+        <div class="page-card-desc">IDR canonical format, negatives, zero and missing values, table alignment, PPN/DPP display, multi-currency, and PSAK-compliant rounding.</div>
+      </div>
+      <div class="page-card-footer">
+        <span class="page-card-tag">IDR</span>
+        <span class="page-card-tag">PSAK</span>
+        <span class="page-card-tag">PPN</span>
+        <span class="page-card-tag">Multi-currency</span>
+      </div>
+    </a>
+
+    <a href="tradeos-tokens.html" class="page-card">
+      <div class="page-card-top">
+        <div class="page-card-num">02</div>
+        <div class="page-card-title">Colors</div>
+        <div class="page-card-desc">Color tokens, number color semantics, delta chip rules, status indicators, and ERP color reference. Amber vs orange distinction for time urgency.</div>
+      </div>
+      <div class="page-card-footer">
+        <span class="page-card-tag">Tokens</span>
+        <span class="page-card-tag">Delta chips</span>
+        <span class="page-card-tag">Indicators</span>
+        <span class="page-card-tag">Status</span>
+      </div>
+    </a>
+
+    <a href="tradeos-ui-reference.html" class="page-card">
+      <div class="page-card-top">
+        <div class="page-card-num">03–05</div>
+        <div class="page-card-title">Components</div>
+        <div class="page-card-desc">Buttons, table system (GL, CoA, vendor, bills), and modules — AI insight cards, actionable feed, tax display. Includes drawer overlay and row states.</div>
+      </div>
+      <div class="page-card-footer">
+        <span class="page-card-tag">Buttons</span>
+        <span class="page-card-tag">Tables</span>
+        <span class="page-card-tag">AI insight</span>
+        <span class="page-card-tag">Feed</span>
+      </div>
+    </a>
+
+    <a href="tradeos-forms.html" class="page-card" style="grid-column: span 2;">
+      <div class="page-card-top">
+        <div class="page-card-num">06</div>
+        <div class="page-card-title">Forms</div>
+        <div class="page-card-desc">Floating label input system, all field states, input types (text, currency, select, date, search lookup), controls, validation rules, form layout, and ERP-specific patterns — NPWP, NSFP, DPP/PPN trio, CoA lookup.</div>
+      </div>
+      <div class="page-card-footer">
+        <span class="page-card-tag">Floating label</span>
+        <span class="page-card-tag">Currency</span>
+        <span class="page-card-tag">Validation</span>
+        <span class="page-card-tag">NPWP</span>
+        <span class="page-card-tag">NSFP</span>
+        <span class="page-card-tag">CoA lookup</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Design principles</div>
+  <div class="principles-grid">
+    <div class="principle">
+      <div class="principle-ico">◈</div>
+      <div class="principle-title">Numbers are not decoration</div>
+      <div class="principle-body">Color on numbers encodes direction — favorable, unfavorable, at risk. Never applied in GL views where column position already carries that meaning.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-ico">◎</div>
+      <div class="principle-title">IDR-first, always</div>
+      <div class="principle-body">All amounts default to IDR canonical: Rp 1.250.000,00. Period thousands, comma decimal. Multi-currency shows FCY + kurs + IDR equivalent — never collapses to one column.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-ico">⊞</div>
+      <div class="principle-title">Density over whitespace</div>
+      <div class="principle-body">ERP users process dozens of records at a time. Tables are dense by design. Spacing is functional — it creates hierarchy, not breathing room.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-ico">◇</div>
+      <div class="principle-title">Tax is always visible</div>
+      <div class="principle-body">DPP, PPN, and PPh are always shown as separate columns. Tax is never collapsed into a total. PSAK compliance depends on explicitness.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-ico">○</div>
+      <div class="principle-title">State over instruction</div>
+      <div class="principle-body">Fields communicate their state through visual properties — not helper text. A read-only field looks different from a disabled field. A due-soon row reads orange without a tooltip.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-ico">◉</div>
+      <div class="principle-title">One font per role</div>
+      <div class="principle-body">Manrope for all UI text. Inconsolata for all numbers, IDs, codes, and monetary values. Bebas Neue for page and section titles only. Never mixed within a single element.</div>
+    </div>
+  </div>
+
+  <div class="section-label">Core tokens</div>
+  <div class="swatch-strip">
+    <div class="swatch-strip-dot" style="background:#1a1a1a;" title="Ink"></div>
+    <div class="swatch-strip-dot" style="background:#f5f4f1;border:1px solid #e5e4e0;" title="Paper"></div>
+    <div class="swatch-strip-dot" style="background:#4a47a3;" title="Indigo"></div>
+    <div class="swatch-strip-dot" style="background:#1a6bff;" title="Blue"></div>
+    <div class="swatch-strip-dot" style="background:#00a870;" title="Green"></div>
+    <div class="swatch-strip-dot" style="background:#e0400a;" title="Red"></div>
+    <div class="swatch-strip-dot" style="background:#c07a00;" title="Amber"></div>
+    <div class="swatch-strip-dot" style="background:#d4580a;" title="Orange"></div>
+  </div>
+
+  <div class="section-label">Tech stack</div>
+  <div class="stack-row">
+    <div class="stack-item">
+      <div class="stack-item-label">UI text</div>
+      <div class="stack-item-value">Manrope</div>
+      <div class="stack-item-sub">400 · 500 · 600</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-item-label">Numbers</div>
+      <div class="stack-item-value">Inconsolata</div>
+      <div class="stack-item-sub">400 · 500</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-item-label">Display</div>
+      <div class="stack-item-value">Bebas Neue</div>
+      <div class="stack-item-sub">Titles only</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-item-label">Compliance</div>
+      <div class="stack-item-value">PSAK · DJP</div>
+      <div class="stack-item-sub">e-Faktur ready</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    TradeOS Design System · v1.0 · 2025
+  </div>
+
+</div>
+</body>
+</html>

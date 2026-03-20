@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeOS — Design System · Components</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Inconsolata:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f4f1; font-family: 'Manrope', sans-serif; color: #1a1a1a; }
+.page { max-width: 960px; margin: 0 auto; padding: 0 36px 100px; }
+
+/* ── SYSTEM NAV ── */
+.sys-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0 52px;
+}
+.sys-nav-brand { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #ccc; }
+.sys-nav-links { display: flex; gap: 6px; }
+.sys-nav-links a {
+  font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 6px;
+  border: 1px solid #e5e4e0; color: #999; text-decoration: none; letter-spacing: 0.07em; text-transform: uppercase;
+  transition: all 0.15s;
+}
+.sys-nav-links a:hover { border-color: #1a1a1a; color: #1a1a1a; }
+.sys-nav-links a.here { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+/* ── PAGE HEADER ── */
+.page-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 10px; }
+.page-title { font-family: 'Bebas Neue', sans-serif; font-size: 58px; letter-spacing: 0.03em; color: #1a1a1a; line-height: 1; margin-bottom: 8px; }
+.page-sub { font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 64px; max-width: 560px; }
+
+/* ── TOC ── */
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 64px; }
+.toc-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px; background: #fff;
+  border: 1px solid #e5e4e0; border-radius: 12px;
+  text-decoration: none; transition: all 0.15s;
+}
+.toc-item:hover { border-color: #1a1a1a; }
+.toc-num { font-family: 'Inconsolata', monospace; font-size: 11px; color: #ccc; width: 20px; flex-shrink: 0; }
+.toc-label { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+.toc-desc { font-size: 11px; color: #bbb; margin-left: auto; }
+
+/* ── SECTION ── */
+.section { margin-bottom: 72px; }
+.section-meta { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+.section-num { font-family: 'Inconsolata', monospace; font-size: 12px; color: #ccc; }
+.section-name { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.03em; color: #1a1a1a; margin-bottom: 6px; }
+.section-desc { font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 24px; max-width: 640px; }
+
+/* ── NOTE ── */
+.note {
+  background: #fff; border: 1px solid #e5e4e0; border-left: 3px solid #1a1a1a;
+  border-radius: 0 8px 8px 0; padding: 12px 16px;
+  font-size: 12px; color: #888; line-height: 1.7; margin-bottom: 24px;
+}
+.note b { color: #1a1a1a; font-weight: 600; }
+
+/* ── CARDS ── */
+.selected-card { background: #fff; border: 1px solid #e5e4e0; border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
+.card-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 22px; border-bottom: 1px solid #f0efe9; }
+.card-head-left { display: flex; align-items: baseline; gap: 10px; }
+.card-head-title { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+.card-head-meta { font-size: 11px; color: #ccc; }
+.badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.04em; }
+.badge-dark { background: #1a1a1a; color: #fff; }
+.badge-muted { background: #f0efe9; color: #999; }
+
+.card-grid { display: grid; }
+.card-grid.cols2 { grid-template-columns: 1fr 1fr; }
+.card-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.card-col { padding: 22px; border-right: 1px solid #f0efe9; }
+.card-col:last-child { border-right: none; }
+.col-label { font-family: 'Inconsolata', monospace; font-size: 10px; color: #ccc; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 16px; }
+
+/* ── GRID LAYOUTS ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+hr.divider { border: none; border-top: 1px solid #f0efe9; margin: 14px 0; }
+.sub-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #ccc; margin-bottom: 14px; margin-top: 32px; }
+
+/* ── ERP PANEL ── */
+.erp-panel { background: #f9f8f6; border-radius: 10px; padding: 18px 20px; }
+.erp-panel-title { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.03em; color: #1a1a1a; margin-bottom: 14px; }
+.erp-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 9px; }
+.erp-row:last-child { margin-bottom: 0; }
+.erp-lbl { font-size: 10px; font-weight: 500; color: #bbb; width: 88px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+.erp-val { font-family: 'Manrope', sans-serif; font-size: 13px; color: #1a1a1a; }
+.erp-mono { font-family: 'Inconsolata', monospace; font-size: 13px; color: #666; }
+.erp-amount { font-family: 'Inconsolata', monospace; font-size: 13px; color: #1a1a1a; font-weight: 500; }
+
+/* ── SWATCH ── */
+.swatch-group { margin-bottom: 28px; }
+.swatch-group-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #bbb; margin-bottom: 12px; }
+.swatch-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatch { display: flex; flex-direction: column; gap: 8px; padding: 14px; background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; min-width: 110px; }
+.swatch-dot { width: 36px; height: 36px; border-radius: 8px; }
+.swatch-name { font-size: 11px; font-weight: 600; color: #1a1a1a; }
+.swatch-hex { font-family: 'Inconsolata', monospace; font-size: 10px; color: #bbb; }
+.swatch-role { font-size: 10px; color: #bbb; line-height: 1.5; }
+
+/* ── NUMBERS ── */
+.num { font-family: 'Inconsolata', monospace; color: #1a1a1a; }
+.num.blue { color: #1a6bff; }
+.num.green { color: #00a870; }
+.num.red { color: #e0400a; }
+.num.amber { color: #c07a00; }
+.num.orange { color: #d4580a; }
+
+/* ── TAX TEXT ── */
+.tax-text { font-size: 11px; text-transform: uppercase; color: #a8a69f; font-weight: 400; letter-spacing: 0; font-family: 'Manrope', sans-serif; }
+
+/* ── INDICATOR PATTERNS ── */
+.ind-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid #f0efe9; }
+.ind-row:last-child { border-bottom: none; }
+.ind-meta { font-size: 11px; color: #bbb; width: 160px; flex-shrink: 0; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-red { background: #e0400a; }
+.dot-amber { background: #c07a00; }
+.dot-orange { background: #d4580a; }
+.dot-blue { background: #1a6bff; }
+.dot-mid { background: #bbb; }
+.dot-green { background: #00a870; }
+
+.pill { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 4px; font-size: 10px; font-weight: 600; font-family: 'Manrope', sans-serif; }
+.pill-green { background: #d1fae5; color: #065f46; }
+.pill-red { background: #fee2e2; color: #991b1b; }
+.pill-amber { background: #fef3c7; color: #92400e; }
+.pill-blue { background: #dbeafe; color: #1e40af; }
+.pill-neutral { background: #f0efe9; color: #888; }
+
+.st-green { font-size: 12px; font-weight: 600; color: #00a870; }
+.st-red { font-size: 12px; font-weight: 600; color: #e0400a; }
+.st-amber { font-size: 12px; font-weight: 600; color: #c07a00; }
+.st-orange { font-size: 12px; font-weight: 600; color: #d4580a; }
+.st-mid { font-size: 12px; color: #999; }
+
+/* ── TABLES ── */
+.tbl { width: 100%; border-collapse: collapse; font-size: 12px; font-family: 'Manrope', sans-serif; }
+
+/* Header — dark background, light text */
+.tbl thead tr { border-bottom: none; background: #1a1a1a; }
+.tbl th { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); padding: 10px 12px; text-align: left; }
+.tbl th.r  { text-align: right; }
+.tbl th.dr { color: rgba(255,255,255,0.45); text-align: right; }
+.tbl th.cr { color: rgba(255,255,255,0.45); text-align: right; }
+
+/* Alternating rows */
+.tbl tbody tr { border-bottom: 1px solid #ede9e3; transition: background 0.12s, color 0.12s; cursor: pointer; }
+.tbl tbody tr:nth-child(odd)  { background: #ffffff; }
+.tbl tbody tr:nth-child(even) { background: #faf9f7; }
+
+/* Hover state — soft blue tint */
+.tbl tbody tr:hover { background: #ddddf0; }
+.tbl tbody tr:hover td { color: #1a1a1a; }
+.tbl tbody tr:hover td.dim { color: #7a8aaa; }
+.tbl tbody tr:hover td.tbl-link { color: #1a1a1a; text-decoration-color: #a0a0cc; }
+
+/* Selected / active state — deeper blue, all text shifts */
+.tbl tbody tr.selected,
+.tbl tbody tr.expanded { background: #ddddf0; }
+.tbl tbody tr.selected td,
+.tbl tbody tr.expanded td { color: #2a2860; font-weight: 500; }
+.tbl tbody tr.selected td.dim,
+.tbl tbody tr.expanded td.dim { color: #6868a8; }
+.tbl tbody tr.selected td.tbl-link,
+.tbl tbody tr.expanded td.tbl-link { color: #2a2860; text-decoration-color: #9898cc; }
+.tbl tbody tr.selected td.dr,
+.tbl tbody tr.expanded td.dr,
+.tbl tbody tr.selected td.cr,
+.tbl tbody tr.expanded td.cr,
+.tbl tbody tr.selected td.bal,
+.tbl tbody tr.expanded td.bal,
+.tbl tbody tr.selected td.em,
+.tbl tbody tr.expanded td.em { color: #4a47a3; }
+.tbl tbody tr.selected .tax-text,
+.tbl tbody tr.expanded .tax-text { color: #7878b8; }
+.tbl tbody tr.selected .coa-code,
+.tbl tbody tr.expanded .coa-code { color: #7878b8; }
+
+/* Cells — alignment */
+.tbl td { padding: 10px 12px; color: #1a1a1a; vertical-align: middle; text-align: left; }
+.tbl td.r    { text-align: right; }
+.tbl td.dim  { color: #bbb; font-size: 11px; text-align: left; }
+.tbl td.mono { font-family: 'Inconsolata', monospace; font-size: 12px; text-align: left; }
+
+/* Numeric cells — always Inconsolata, always right-aligned */
+.tbl td.dr   { font-family: 'Inconsolata', monospace; color: #1a1a1a; text-align: right; }
+.tbl td.cr   { font-family: 'Inconsolata', monospace; color: #1a1a1a; text-align: right; }
+.tbl td.em   { font-family: 'Inconsolata', monospace; color: #ddd; text-align: right; }
+.tbl td.bal  { font-family: 'Inconsolata', monospace; color: #1a1a1a; text-align: right; font-weight: 500; }
+.tbl td.amtred { font-family: 'Inconsolata', monospace; color: #e0400a; text-align: right; }
+
+/* Clickable ref cell */
+.tbl td.tbl-link {
+  font-family: 'Inconsolata', monospace; font-size: 12px; color: #1a1a1a;
+  text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-color: #ccc; cursor: pointer; text-align: left;
+}
+
+/* Footer */
+.tbl tfoot tr { border-top: 2px solid #2a2926; background: #f5f4f1; }
+.tbl tfoot td { font-weight: 600; padding: 10px 12px; font-size: 12px; }
+
+/* ── COA INDENT ── */
+.coa-code { font-family: 'Inconsolata', monospace; font-size: 11px; color: #bbb; text-align: left; }
+/* Level 0 — account group (1xxx, 2xxx) */
+.coa-l0 { font-weight: 600; font-size: 12px; color: #1a1a1a; }
+/* Level 1 — sub-group (11xx) — indent 16px, left border connector */
+.coa-l1 { font-size: 12px; color: #555; padding-left: 16px; border-left: 2px solid #e5e4e0; margin-left: 6px; display: block; }
+/* Level 2 — leaf account (1100, 1200) — deeper indent */
+.coa-l2 { font-size: 12px; color: #888; padding-left: 32px; border-left: 2px solid #ede9e3; margin-left: 6px; display: block; }
+/* Group row background — structural, not state */
+.tbl tbody tr.coa-group { background: #f5f4f1 !important; }
+.tbl tbody tr.coa-group td { color: #1a1a1a; font-weight: 600; }
+
+/* ── DRAWER OVERLAY ── */
+.tbl-wrap { position: relative; }
+.drawer-overlay {
+  position: absolute; top: 0; right: -320px; width: 300px;
+  background: #fff; border: 1px solid #e5e4e0; border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 18px 20px; z-index: 10;
+  transition: right 0.2s ease;
+}
+.drawer-overlay.open { right: -316px; }
+.drawer-overlay-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #f0efe9;
+}
+.drawer-overlay-title { font-size: 12px; font-weight: 600; color: #1a1a1a; }
+.drawer-overlay-close { font-size: 14px; color: #bbb; cursor: pointer; line-height: 1; }
+.drawer-field { margin-bottom: 12px; }
+.drawer-field:last-of-type { margin-bottom: 0; }
+.drawer-field label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #bbb; display: block; margin-bottom: 3px; }
+.drawer-field span { font-size: 13px; color: #1a1a1a; }
+.drawer-cta { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #f0efe9; }
+.btn-sm { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; border: 1px solid; }
+.btn-primary { background: #4a47a3; color: #fff; border-color: #4a47a3; }
+.btn-ghost { background: transparent; color: #4a47a3; border-color: #4a47a3; }
+
+.chevron { display: inline-block; font-size: 9px; color: #ccc; margin-right: 5px; transition: transform 0.15s; }
+.chevron.open { transform: rotate(90deg); }
+
+/* ── AI INSIGHT ── */
+.insight-card { background: #1a1a1a; color: #f5f4f1; border-radius: 12px; padding: 22px; position: relative; overflow: hidden; }
+.insight-card::before { content: ''; position: absolute; top: -20px; right: -20px; width: 90px; height: 90px; background: #1a6bff; border-radius: 50%; opacity: 0.1; }
+.insight-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 10px; }
+.insight-body { font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.65; color: #f5f4f1; }
+.insight-body strong { color: #c07a00; font-weight: 600; }
+
+/* ── ACTION FEED ── */
+.action-item { display: flex; align-items: center; gap: 12px; padding: 13px 16px; background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; transition: all 0.15s; cursor: pointer; margin-bottom: 8px; }
+.action-item:last-child { margin-bottom: 0; }
+.action-item:hover { border-color: #1a1a1a; }
+.action-item.urgent { border-color: rgba(224,64,10,0.3); background: rgba(224,64,10,0.02); }
+.action-item.warn { border-color: rgba(192,122,0,0.3); background: rgba(192,122,0,0.02); }
+.action-title { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
+.action-desc { font-size: 11px; color: #999; }
+.action-cta { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; color: #4a47a3; padding: 5px 12px; border: 1px solid #4a47a3; border-radius: 5px; flex-shrink: 0; }
+.action-amt { font-family: 'Inconsolata', monospace; font-size: 12px; color: #1a1a1a; text-align: right; }
+.action-time { font-size: 10px; color: #bbb; text-align: right; }
+
+/* ── BP LIST ── */
+.bp-list { display: flex; flex-direction: column; gap: 10px; }
+.bp-item { display: flex; gap: 12px; align-items: flex-start; padding: 13px 16px; background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; }
+.bp-ico { font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+.bp-item strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.bp-item span { font-size: 12px; color: #999; line-height: 1.55; }
+
+/* ── DO/DON'T ── */
+.do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+.do-card { border-radius: 10px; padding: 16px; border: 1px solid; }
+.do-card.do { border-color: #86efac; background: rgba(209,250,229,0.3); }
+.do-card.dont { border-color: #fca5a5; background: rgba(254,226,226,0.3); }
+.do-card-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.do-card.do .do-card-lbl { color: #065f46; }
+.do-card.dont .do-card-lbl { color: #991b1b; }
+.do-card ul { padding-left: 14px; }
+.do-card li { font-size: 12px; color: #1a1a1a; margin-bottom: 6px; line-height: 1.5; }
+
+/* ── SEARCH BAR ── */
+.search-bar { padding: 10px 14px; border-bottom: 1px solid #f0efe9; display: flex; align-items: center; gap: 8px; background: #fff; }
+.search-bar span { font-size: 12px; color: #bbb; flex: 1; }
+.search-bar .kbd { font-family: 'Inconsolata', monospace; font-size: 10px; color: #e5e4e0; }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="sys-nav">
+  <a href="index.html" class="sys-nav-brand" style="text-decoration:none;color:#ccc;">TradeOS Design System</a>
+  <div class="sys-nav-links">
+    <a href="tradeos-typography.html">00 Typography</a>
+    <a href="tradeos-formatting.html">01 Formatting</a>
+    <a href="tradeos-tokens.html">02 Colors</a>
+    <a href="#" class="here">03–05 Components</a>
+    <a href="tradeos-forms.html">06 Forms</a>
+  </div>
+</div>
+
+<div class="page-eyebrow">03–05 — TradeOS Design System</div>
+<div class="page-title">Components</div>
+<div class="page-sub">Buttons, table system, and UI modules — grounded in modern finance conventions and Indonesian tax context. Color tokens and indicators are defined in page 02.</div>
+
+<div class="toc">
+  <a href="#buttons" class="toc-item"><span class="toc-num">03</span><span class="toc-label">Buttons</span><span class="toc-desc">Primary · Secondary · Link · AI</span></a>
+  <a href="#tables" class="toc-item"><span class="toc-num">04</span><span class="toc-label">Tables System</span><span class="toc-desc">GL · CoA · Vendors · Bills</span></a>
+  <a href="#modules" class="toc-item"><span class="toc-num">05</span><span class="toc-label">Modules</span><span class="toc-desc">Tax · AI Insights · Actionables</span></a>
+</div>
+
+<div class="section" id="buttons">
+  <div class="section-meta"><span class="section-num">03</span><span class="section-name">Buttons</span></div>
+  <div class="section-title">Buttons</div>
+  <div class="section-desc">Four button types — each with a fixed role. Never improvise a fifth type. The hierarchy runs: Primary → Secondary → Text link → AI command.</div>
+
+  <!-- ── FOUR TYPES SIDE BY SIDE ── -->
+  <div class="selected-card" style="margin-bottom:14px;">
+    <div class="card-head">
+      <div class="card-head-left"><span class="card-head-title">Button hierarchy</span></div>
+      <span class="badge badge-muted">All four types</span>
+    </div>
+    <div style="padding:24px 22px;">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid #e5e4e0;border-radius:10px;overflow:hidden;">
+
+        <!-- Primary -->
+        <div style="padding:22px 20px;border-right:1px solid #f0efe9;">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#bbb;margin-bottom:14px;">Primary</div>
+          <div style="margin-bottom:16px;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:#4a47a3;color:#fff;border:1px solid #4a47a3;border-radius:6px;padding:7px 16px;cursor:pointer;">Approve &amp; Pay</button>
+          </div>
+          <div style="margin-bottom:8px;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:#4a47a3;color:#fff;border:1px solid #4a47a3;border-radius:6px;padding:7px 16px;cursor:pointer;opacity:.4;" disabled>Approve &amp; Pay</button>
+          </div>
+          <div style="font-size:11px;color:#999;line-height:1.6;margin-top:14px;">The single strongest action on any screen. Use once per context — never two primaries side by side.</div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">bg</span><span style="font-family:'Inconsolata',monospace;font-size:11px;color:#888;">#4a47a3</span></div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">text</span><span style="font-family:'Inconsolata',monospace;font-size:11px;color:#888;">#ffffff</span></div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">label</span><span style="font-size:11px;color:#888;">Camel Case</span></div>
+          </div>
+        </div>
+
+        <!-- Secondary / Ghost -->
+        <div style="padding:22px 20px;border-right:1px solid #f0efe9;">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#bbb;margin-bottom:14px;">Secondary</div>
+          <div style="margin-bottom:16px;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#4a47a3;border:1px solid #4a47a3;border-radius:6px;padding:7px 16px;cursor:pointer;">View Journal</button>
+          </div>
+          <div style="margin-bottom:8px;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#bbb;border:1px solid #e0dff0;border-radius:6px;padding:7px 16px;cursor:pointer;opacity:.5;" disabled>View Journal</button>
+          </div>
+          <div style="font-size:11px;color:#999;line-height:1.6;margin-top:14px;">Ghost with indigo outline. Appears alongside a primary — always subordinate. Never used alone as the only action.</div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">bg</span><span style="font-family:'Inconsolata',monospace;font-size:11px;color:#888;">transparent</span></div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">border</span><span style="font-family:'Inconsolata',monospace;font-size:11px;color:#888;">#4a47a3</span></div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">label</span><span style="font-size:11px;color:#888;">Camel Case</span></div>
+          </div>
+        </div>
+
+        <!-- Text link -->
+        <div style="padding:22px 20px;border-right:1px solid #f0efe9;">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#bbb;margin-bottom:14px;">Text link</div>
+          <div style="margin-bottom:16px;padding:7px 0;">
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;color:#4a47a3;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(74,71,163,0.35);cursor:pointer;">View all transactions</span>
+          </div>
+          <div style="margin-bottom:8px;padding:7px 0;">
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;color:#bbb;text-decoration:underline;text-underline-offset:3px;cursor:pointer;opacity:.5;">View all transactions</span>
+          </div>
+          <div style="font-size:11px;color:#999;line-height:1.6;margin-top:14px;">Inline navigation and low-priority actions embedded in text or below a card. No border, no padding.</div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">color</span><span style="font-family:'Inconsolata',monospace;font-size:11px;color:#888;">#4a47a3</span></div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">underline</span><span style="font-size:11px;color:#888;">always visible</span></div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">label</span><span style="font-size:11px;color:#888;">Sentence case</span></div>
+          </div>
+        </div>
+
+        <!-- AI command -->
+        <div style="padding:22px 20px;">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#bbb;margin-bottom:14px;">AI command</div>
+          <div style="margin-bottom:16px;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#1a1a1a;border:1px solid #1a1a1a;border-radius:6px;padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L9.5 6H14.5L10.5 9.5L12 14.5L8 11L4 14.5L5.5 9.5L1.5 6H6.5L8 1Z" fill="#1a1a1a"/></svg>Explain variance</button>
+          </div>
+          <div style="margin-bottom:8px;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#bbb;border:1px solid #e5e4e0;border-radius:6px;padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;opacity:.5;" disabled><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.5 6H14.5L10.5 9.5L12 14.5L8 11L4 14.5L5.5 9.5L1.5 6H6.5L8 1Z" fill="#bbb"/></svg>Explain variance</button>
+          </div>
+          <div style="font-size:11px;color:#999;line-height:1.6;margin-top:14px;">Any action that triggers an AI response. Always opens with the sparkle icon — this is the only button type that uses an icon.</div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">icon</span><span style="font-size:11px;color:#888;">Sparkle — always first</span></div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">style</span><span style="font-size:11px;color:#888;">Ink outline (same as ghost)</span></div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="font-family:'Inconsolata',monospace;font-size:10px;background:#f5f4f1;padding:1px 6px;border-radius:3px;color:#555;">label</span><span style="font-size:11px;color:#888;">Sentence case</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── USAGE RULES ── -->
+  <div class="two-col" style="margin-bottom:14px;">
+
+    <!-- Do / Don't -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="do-card do">
+        <div class="do-card-lbl">✓ Do</div>
+        <ul>
+          <li>One primary button per context — the highest-commitment action</li>
+          <li>Secondary always pairs with a primary — never standalone</li>
+          <li>Text links for navigation and low-weight actions inside prose or below cards</li>
+          <li>AI command buttons always carry the sparkle icon, even when space is tight</li>
+          <li>All button labels in Camel Case — except text links, which use sentence case</li>
+          <li>Disabled state uses the same shape, reduced to 40% opacity</li>
+        </ul>
+      </div>
+      <div class="do-card dont">
+        <div class="do-card-lbl">✗ Don't</div>
+        <ul>
+          <li>Two primary buttons side by side — creates ambiguity about what to do</li>
+          <li>Secondary button alone without a primary — it has no anchor</li>
+          <li>AI commands without the sparkle icon — users won't know it's AI-powered</li>
+          <li>Text links inside table cells or data rows — use the <code style="font-family:'Inconsolata',monospace;font-size:10px;background:rgba(0,0,0,0.06);padding:1px 4px;border-radius:2px;">tbl-link</code> underline pattern instead</li>
+          <li>Mixed label casing within the same button group</li>
+          <li>Uppercase or ALL CAPS labels — they belonged to the previous system</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Pairing examples -->
+    <div class="selected-card" style="margin-bottom:0;">
+      <div class="card-head"><div class="card-head-left"><span class="card-head-title">Common pairings</span></div></div>
+      <div style="padding:16px 22px;display:flex;flex-direction:column;gap:20px;">
+
+        <div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:10px;">Drawer CTA — primary + secondary</div>
+          <div style="display:flex;gap:8px;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:#4a47a3;color:#fff;border:1px solid #4a47a3;border-radius:6px;padding:7px 16px;cursor:pointer;">Approve &amp; Pay</button>
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#4a47a3;border:1px solid #4a47a3;border-radius:6px;padding:7px 16px;cursor:pointer;">View Journal</button>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:10px;">Primary + text link — when secondary would over-weight</div>
+          <div style="display:flex;align-items:center;gap:16px;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:#4a47a3;color:#fff;border:1px solid #4a47a3;border-radius:6px;padding:7px 16px;cursor:pointer;">Submit Invoice</button>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;color:#4a47a3;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(74,71,163,0.35);cursor:pointer;">Save as draft</span>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:10px;">AI command — standalone, inside a card or inline</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#1a1a1a;border:1px solid #1a1a1a;border-radius:6px;padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.5 6H14.5L10.5 9.5L12 14.5L8 11L4 14.5L5.5 9.5L1.5 6H6.5L8 1Z" fill="#1a1a1a"/></svg>Explain variance</button>
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#1a1a1a;border:1px solid #1a1a1a;border-radius:6px;padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.5 6H14.5L10.5 9.5L12 14.5L8 11L4 14.5L5.5 9.5L1.5 6H6.5L8 1Z" fill="#1a1a1a"/></svg>Summarise period</button>
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#1a1a1a;border:1px solid #1a1a1a;border-radius:6px;padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.5 6H14.5L10.5 9.5L12 14.5L8 11L4 14.5L5.5 9.5L1.5 6H6.5L8 1Z" fill="#1a1a1a"/></svg>Flag anomalies</button>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:10px;">Destructive — secondary ghost, red border + text</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:#4a47a3;color:#fff;border:1px solid #4a47a3;border-radius:6px;padding:7px 16px;cursor:pointer;">Save Changes</button>
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#e0400a;border:1px solid #e0400a;border-radius:6px;padding:7px 16px;cursor:pointer;">Void Invoice</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AI COMMAND DETAIL ── -->
+  <div class="selected-card" style="margin-bottom:14px;">
+    <div class="card-head">
+      <div class="card-head-left">
+        <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#1a1a1a;">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.5 6H14.5L10.5 9.5L12 14.5L8 11L4 14.5L5.5 9.5L1.5 6H6.5L8 1Z" fill="#1a1a1a"/></svg>
+          AI command buttons
+        </span>
+      </div>
+      <span class="badge badge-muted">Always sparkle-first</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="padding:20px 22px;border-right:1px solid #f0efe9;">
+        <div class="note" style="margin-bottom:14px;"><b>The sparkle icon is the only visual signal</b> that an action will invoke AI. It must always appear — even if the button label already implies it (e.g. "Summarise"). Never replace it with another icon, never omit it for space.</div>
+        <div class="bp-list">
+          <div class="bp-item">
+            <div class="bp-ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.5 6H14.5L10.5 9.5L12 14.5L8 11L4 14.5L5.5 9.5L1.5 6H6.5L8 1Z" fill="#1a1a1a"/></svg></div>
+            <div><strong>Sparkle always leads</strong><span>Icon left of label — never right, never below. The icon is the signal; the label explains the action.</span></div>
+          </div>
+          <div class="bp-item">
+            <div class="bp-ico">Aa</div>
+            <div><strong>Sentence case labels</strong><span>AI command labels use sentence case — "Explain variance", not "Explain Variance". They describe what the AI will do, not a UI action the user performs.</span></div>
+          </div>
+          <div class="bp-item">
+            <div class="bp-ico">⬜</div>
+            <div><strong>Ink outline, never filled</strong><span>AI commands use the same ghost treatment as the secondary button but with ink (#1a1a1a) border and text — never the indigo primary fill. This keeps them visually separate from navigation actions.</span></div>
+          </div>
+          <div class="bp-item">
+            <div class="bp-ico">⏳</div>
+            <div><strong>Loading state: spinner replaces sparkle</strong><span>While the AI is responding, swap the sparkle for a spinner in the same position. Label changes to "Working…". Button becomes disabled.</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:20px 22px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#bbb;margin-bottom:14px;">In context — GL row detail</div>
+        <div style="background:#f9f8f6;border:1px solid #e5e4e0;border-radius:10px;overflow:hidden;">
+          <div style="background:#1a1a1a;padding:9px 14px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);">INV-0412 · PT Maju Jaya</span>
+            <span style="font-size:11px;color:rgba(255,255,255,.4);">02 Jan 2025</span>
+          </div>
+          <div style="padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#888;font-family:'Manrope',sans-serif;">Debit</span><span style="font-family:'Inconsolata',monospace;color:#1a1a1a;">11.100.000,00</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#888;font-family:'Manrope',sans-serif;">Account</span><span style="font-family:'Inconsolata',monospace;color:#1a1a1a;">1200 · Piutang Usaha</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#888;font-family:'Manrope',sans-serif;">PPN</span><span style="font-family:'Inconsolata',monospace;color:#888;font-size:11px;">PPN 11% · PPh 23/2%</span></div>
+          </div>
+          <div style="padding:10px 16px 14px;border-top:1px solid #ede9e3;display:flex;gap:8px;flex-wrap:wrap;">
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:#4a47a3;color:#fff;border:1px solid #4a47a3;border-radius:6px;padding:7px 14px;cursor:pointer;">Open Invoice</button>
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#4a47a3;border:1px solid #4a47a3;border-radius:6px;padding:7px 14px;cursor:pointer;">View Journal</button>
+            <button style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;color:#1a1a1a;border:1px solid #1a1a1a;border-radius:6px;padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.5 6H14.5L10.5 9.5L12 14.5L8 11L4 14.5L5.5 9.5L1.5 6H6.5L8 1Z" fill="#1a1a1a"/></svg>Explain entry</button>
+          </div>
+        </div>
+        <div style="margin-top:12px;font-size:11px;color:#999;line-height:1.6;">Three-button row — primary, secondary, AI command. Each reads as a distinct type at a glance. The sparkle makes the AI button immediately identifiable without reading its label.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TEXT LINK DETAIL ── -->
+  <div class="selected-card">
+    <div class="card-head">
+      <div class="card-head-left"><span class="card-head-title">Text link — usage and anatomy</span></div>
+      <span class="badge badge-muted">Inline · below-card · navigation</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="padding:20px 22px;border-right:1px solid #f0efe9;">
+        <div class="bp-list">
+          <div class="bp-item">
+            <div class="bp-ico">—</div>
+            <div><strong>Underline always visible</strong><span>The underline is the affordance. Don't hide it until hover — in a dense finance UI, users scan quickly and a bare colored word isn't obviously clickable.</span></div>
+          </div>
+          <div class="bp-item">
+            <div class="bp-ico">Aa</div>
+            <div><strong>Sentence case, Manrope 500</strong><span>"View all transactions", "Export to CSV", "See breakdown" — sentence case only. Same weight as body text, color makes it distinct.</span></div>
+          </div>
+          <div class="bp-item">
+            <div class="bp-ico">≠</div>
+            <div><strong>Not a substitute for tbl-link</strong><span>Ref codes inside table cells (INV-0412, JE-0088) use the <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#f0efe9;padding:1px 4px;border-radius:2px;">tbl-link</code> pattern — Inconsolata, muted underline. Text links are for prose and card footers only.</span></div>
+          </div>
+          <div class="bp-item">
+            <div class="bp-ico">↓</div>
+            <div><strong>Position: below cards or inline in prose</strong><span>Never floated right inside a data row. Never inside a button group. "See all 24 invoices ↗" at the bottom of a card is the canonical use.</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:20px 22px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#bbb;margin-bottom:14px;">In context — card footer &amp; narrative</div>
+        <div style="background:#fff;border:1px solid #e5e4e0;border-radius:10px;overflow:hidden;margin-bottom:12px;">
+          <div style="background:#1a1a1a;padding:9px 14px;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);">Outstanding AR — Top 3</span></div>
+          <div style="padding:0 14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f0efe9;font-size:12px;"><span style="color:#444;font-family:'Manrope',sans-serif;">PT Maju Jaya Sentosa</span><span style="font-family:'Inconsolata',monospace;color:#1a1a1a;">Rp 44.500.000,00</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f0efe9;font-size:12px;"><span style="color:#444;font-family:'Manrope',sans-serif;">CV Harapan Utama</span><span style="font-family:'Inconsolata',monospace;color:#1a1a1a;">Rp 22.000.000,00</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:12px;"><span style="color:#444;font-family:'Manrope',sans-serif;">PT Sumber Berkah</span><span style="font-family:'Inconsolata',monospace;color:#1a1a1a;">Rp 11.100.000,00</span></div>
+          </div>
+          <div style="padding:10px 14px;border-top:1px solid #f0efe9;">
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;color:#4a47a3;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(74,71,163,0.35);cursor:pointer;">View all 18 outstanding invoices</span>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #e5e4e0;border-radius:10px;padding:14px 16px;font-family:'Manrope',sans-serif;font-size:13px;color:#555;line-height:1.8;">
+          Total tagihan jatuh tempo bulan ini adalah <span style="font-family:'Inconsolata',monospace;color:#1a1a1a;font-size:13px;">Rp 77.600.000,00</span>.
+          <span style="color:#4a47a3;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(74,71,163,0.35);cursor:pointer;font-weight:500;">See breakdown by vendor</span> or <span style="color:#4a47a3;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(74,71,163,0.35);cursor:pointer;font-weight:500;">export to CSV</span>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" id="tables">
+  <div class="section-meta"><span class="section-num">01</span><span class="section-name">Tables System</span></div>
+  <div class="section-title">Tables System</div>
+  <div class="section-desc">Four table types — closed and open drawer states shown side by side. All share the same base rules.</div>
+
+  <div class="note"><b>Drawer pattern:</b> clicking any row opens a side overlay panel anchored to the right edge of the table. The table rows don't shift — the selected row is highlighted. Closed with ✕ or by clicking another row.</div>
+
+  <!-- TABLE RULES VISUAL REFERENCE -->
+  <div class="sub-label" style="margin-top:0;">Table rules — visual reference</div>
+  <div class="selected-card" style="margin-bottom:0;overflow:hidden;">
+    <div class="card-head">
+      <div class="card-head-left"><span class="card-head-title">Row states &amp; alignment</span></div>
+      <span class="badge badge-muted">Applies to all table types</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #f0efe9;">
+      <!-- Left: state legend -->
+      <div style="padding:20px 22px;border-right:1px solid #f0efe9;">
+        <div class="col-label" style="margin-bottom:16px;">Row states</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:120px;height:32px;background:#1a1a1a;border-radius:4px;display:flex;align-items:center;padding:0 10px;font-size:9px;color:rgba(255,255,255,0.45);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Header</div>
+            <span style="font-size:11px;color:#bbb;">Dark #2a2926 · white/45% text</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:120px;height:32px;background:#ffffff;border:1px solid #ede9e3;border-radius:4px;display:flex;align-items:center;padding:0 10px;font-size:11px;color:#1a1a1a;">Odd row</div>
+            <span style="font-size:11px;color:#bbb;">Default — white #ffffff</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:120px;height:32px;background:#faf9f7;border:1px solid #ede9e3;border-radius:4px;display:flex;align-items:center;padding:0 10px;font-size:11px;color:#1a1a1a;">Even row</div>
+            <span style="font-size:11px;color:#bbb;">Alternating — #faf9f7</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:120px;height:32px;background:#ddddf0;border:1px solid #b0b0d8;border-radius:4px;display:flex;align-items:center;padding:0 10px;font-size:11px;color:#1a1a1a;">Hovered row</div>
+            <span style="font-size:11px;color:#bbb;">Hover — indigo tint #ddddf0</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:120px;height:32px;background:#ddddf0;border:1px solid #b0b0d8;border-radius:4px;display:flex;align-items:center;padding:0 10px;font-size:11px;color:#2a2860;font-weight:500;">Selected row</div>
+            <span style="font-size:11px;color:#bbb;">Active — #ddddf0 · text #2a2860</span>
+          </div>
+        </div>
+      </div>
+      <!-- Right: alignment rules -->
+      <div style="padding:20px 22px;">
+        <div class="col-label" style="margin-bottom:16px;">Alignment rules</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:#faf9f7;border-radius:6px;overflow:hidden;border:1px solid #ede9e3;">
+            <table style="width:100%;border-collapse:collapse;font-size:11px;">
+              <thead><tr style="background:#1a1a1a;">
+                <th style="padding:6px 10px;text-align:left;font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Text content</th>
+                <th style="padding:6px 10px;text-align:right;font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Code</th>
+                <th style="padding:6px 10px;text-align:right;font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Amount</th>
+              </tr></thead>
+              <tbody>
+                <tr style="background:#fff;border-bottom:1px solid #ede9e3;">
+                  <td style="padding:7px 10px;color:#1a1a1a;text-align:left;">PT Maju Jaya</td>
+                  <td style="padding:7px 10px;font-family:'Inconsolata',monospace;color:#bbb;text-align:right;">1200</td>
+                  <td style="padding:7px 10px;font-family:'Inconsolata',monospace;color:#1a1a1a;text-align:right;">10.000.000,00</td>
+                </tr>
+                <tr style="background:#faf9f7;">
+                  <td style="padding:7px 10px;color:#1a1a1a;text-align:left;">CV Harapan Utama</td>
+                  <td style="padding:7px 10px;font-family:'Inconsolata',monospace;color:#bbb;text-align:right;">2100</td>
+                  <td style="padding:7px 10px;font-family:'Inconsolata',monospace;color:#1a1a1a;text-align:right;">5.300.000,00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;padding-top:4px;">
+            <div style="display:flex;gap:8px;align-items:center;font-size:11px;"><span style="width:10px;height:10px;background:#1a1a1a;border-radius:2px;flex-shrink:0;display:inline-block;"></span><span style="color:#888;">Text, labels, names → <strong>left-aligned</strong>, Manrope</span></div>
+            <div style="display:flex;gap:8px;align-items:center;font-size:11px;"><span style="width:10px;height:10px;background:#888;border-radius:2px;flex-shrink:0;display:inline-block;"></span><span style="color:#888;">IDs, codes → <strong>right-aligned</strong>, Inconsolata, #bbb</span></div>
+            <div style="display:flex;gap:8px;align-items:center;font-size:11px;"><span style="width:10px;height:10px;background:#444;border-radius:2px;flex-shrink:0;display:inline-block;"></span><span style="color:#888;">Amounts → <strong>right-aligned</strong>, Inconsolata, #1a1a1a</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" style="margin:28px 0;">
+  <div class="sub-label" style="margin-top:0;">Table A — General Ledger</div>
+
+  <div class="note" style="margin-bottom:16px;">
+    <b>Why all GL numbers are plain black:</b> Debit does not mean "bad." A debit to cash increases your balance — it's a positive event. A debit to payroll is normal business operation. The balance column is a running computed figure with no inherent good/bad meaning — blue would add no semantic value there either. <b>Xero and QuickBooks use plain black for all GL values</b> — the column header labels ("Debit" / "Credit") carry the structural distinction, not the numbers themselves. Clickable references (INV-, REC-) use underline rather than blue — so the link affordance doesn't mimic or compete with the number color system.
+  </div>
+
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:#bbb;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px;">Closed state</div>
+      <div class="selected-card" style="margin-bottom:0;overflow:hidden;">
+        <table class="tbl">
+          <thead><tr><th style="width:56px;">Date</th><th style="width:84px;">Ref</th><th>Description</th><th class="dr" style="width:96px;">Debit (Rp)</th><th class="cr" style="width:96px;">Credit (Rp)</th><th class="r" style="width:108px;">Balance (Rp)</th></tr></thead>
+          <tbody>
+            <tr><td class="dim">02 Jan</td><td class="tbl-link"><span class="chevron">▶</span>INV-0412</td><td>PT Maju Jaya — Invoice</td><td class="dr">11.100.000,00</td><td class="em">—</td><td class="bal">391.100.000,00</td></tr>
+            <tr><td class="dim">05 Jan</td><td class="tbl-link"><span class="chevron">▶</span>REC-0088</td><td>PT Sentosa — Payment</td><td class="em">—</td><td class="cr">50.000.000,00</td><td class="bal">341.100.000,00</td></tr>
+            <tr><td class="dim">08 Jan</td><td class="tbl-link"><span class="chevron">▶</span>INV-0419</td><td>CV Harapan — Invoice</td><td class="dr">8.880.000,00</td><td class="em">—</td><td class="bal">349.980.000,00</td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="3" style="font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:#bbb;font-weight:600;">Period total</td><td class="dr">19.980.000,00</td><td class="cr">50.000.000,00</td><td class="bal">349.980.000,00</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:#bbb;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px;">Open state — side drawer overlay</div>
+      <div class="selected-card" style="margin-bottom:0;overflow:visible;position:relative;">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th style="width:56px;">Date</th><th style="width:84px;">Ref</th><th>Description</th><th class="dr" style="width:96px;">Debit (Rp)</th><th class="cr" style="width:96px;">Credit (Rp)</th><th class="r" style="width:108px;">Balance (Rp)</th></tr></thead>
+            <tbody>
+              <tr class="expanded"><td class="dim">02 Jan</td><td class="tbl-link"><span class="chevron open">▶</span>INV-0412</td><td>PT Maju Jaya — Invoice</td><td class="dr">11.100.000,00</td><td class="em">—</td><td class="bal">391.100.000,00</td></tr>
+              <tr><td class="dim">05 Jan</td><td class="tbl-link"><span class="chevron">▶</span>REC-0088</td><td>PT Sentosa — Payment</td><td class="em">—</td><td class="cr">50.000.000,00</td><td class="bal">341.100.000,00</td></tr>
+            </tbody>
+          </table>
+          <!-- Drawer overlay -->
+          <div class="drawer-overlay open">
+            <div class="drawer-overlay-head">
+              <span class="drawer-overlay-title">INV-0412</span>
+              <span class="drawer-overlay-close">✕</span>
+            </div>
+            <div class="drawer-field"><label>Journal type</label><span>Sales Invoice</span></div>
+            <div class="drawer-field"><label>Account</label><span>1200 · Piutang Usaha</span></div>
+            <div class="drawer-field"><label>Tax</label><span class="tax-text" style="font-size:12px;">PPN 11% · Rp 1.100.000,00</span></div>
+            <div class="drawer-field"><label>Created by</label><span>Dewi R.</span></div>
+            <div class="drawer-field"><label>e-Faktur</label><span class="st-green" style="font-size:12px;">Uploaded ✓</span></div>
+            <div class="drawer-field"><label>Memo</label><span style="color:#999;font-size:12px;">Konsultasi ERP Q1</span></div>
+            <div class="drawer-cta"><span class="btn-sm btn-primary">Open Invoice</span><span class="btn-sm btn-ghost">View Journal</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" style="margin:28px 0;">
+
+  <!-- Table B: COA -->
+  <div class="sub-label">Table B — Chart of Accounts</div>
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:#bbb;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px;">Closed state — 2-level tree</div>
+      <div class="selected-card" style="margin-bottom:0;overflow:hidden;">
+        <div class="search-bar"><span style="font-size:13px;color:#ccc;">🔍</span><span>Search by name or code…</span><span class="kbd">⌘K</span></div>
+        <table class="tbl">
+          <thead><tr><th style="width:56px;">Code</th><th>Account name</th><th>Type</th><th class="r">Normal bal.</th></tr></thead>
+          <tbody>
+            <tr class="coa-group">
+              <td class="coa-code" style="font-weight:700;">1xxx</td>
+              <td class="coa-l0"><span class="chevron open">▶</span>Assets</td>
+              <td class="dim">—</td><td class="dim r">—</td>
+            </tr>
+            <tr>
+              <td class="coa-code" style="padding-left:14px;">11xx</td>
+              <td><span class="coa-l1"><span class="chevron open" style="font-size:8px;">▶</span>Aset Lancar</span></td>
+              <td class="dim">Group</td><td class="dim r">Debit</td>
+            </tr>
+            <tr>
+              <td class="coa-code" style="padding-left:26px;">1100</td>
+              <td><span class="coa-l2">Kas &amp; Setara Kas</span></td>
+              <td class="dim">Current Asset</td><td class="dim r">Debit</td>
+            </tr>
+            <tr>
+              <td class="coa-code" style="padding-left:26px;">1200</td>
+              <td><span class="coa-l2">Piutang Usaha</span></td>
+              <td class="dim">Receivable</td><td class="dim r">Debit</td>
+            </tr>
+            <tr>
+              <td class="coa-code" style="padding-left:26px;">1300</td>
+              <td><span class="coa-l2">Persediaan</span></td>
+              <td class="dim">Inventory</td><td class="dim r">Debit</td>
+            </tr>
+            <tr class="coa-group">
+              <td class="coa-code" style="font-weight:700;">2xxx</td>
+              <td class="coa-l0"><span class="chevron">▶</span>Liabilities</td>
+              <td class="dim">—</td><td class="dim r">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:#bbb;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px;">Open state — side drawer overlay</div>
+      <div class="selected-card" style="margin-bottom:0;overflow:visible;position:relative;">
+        <div class="tbl-wrap">
+          <div class="search-bar"><span style="font-size:13px;color:#ccc;">🔍</span><span>Search by name or code…</span><span class="kbd">⌘K</span></div>
+          <table class="tbl">
+            <thead><tr><th style="width:56px;">Code</th><th>Account name</th><th>Type</th><th class="r">Normal bal.</th></tr></thead>
+            <tbody>
+              <tr class="coa-group">
+                <td class="coa-code" style="font-weight:700;">1xxx</td>
+                <td class="coa-l0"><span class="chevron open">▶</span>Assets</td>
+                <td class="dim">—</td><td class="dim r">—</td>
+              </tr>
+              <tr>
+                <td class="coa-code" style="padding-left:14px;">11xx</td>
+                <td><span class="coa-l1"><span class="chevron open" style="font-size:8px;">▶</span>Aset Lancar</span></td>
+                <td class="dim">Group</td><td class="dim r">Debit</td>
+              </tr>
+              <tr class="expanded">
+                <td class="coa-code" style="padding-left:26px;">1200</td>
+                <td><span class="coa-l2"><span class="chevron open" style="font-size:8px;">▶</span>Piutang Usaha</span></td>
+                <td class="dim">Receivable</td><td class="dim r">Debit</td>
+              </tr>
+              <tr>
+                <td class="coa-code" style="padding-left:26px;">1300</td>
+                <td><span class="coa-l2">Persediaan</span></td>
+                <td class="dim">Inventory</td><td class="dim r">Debit</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="drawer-overlay open">
+            <div class="drawer-overlay-head">
+              <span class="drawer-overlay-title">1200 · Piutang Usaha</span>
+              <span class="drawer-overlay-close">✕</span>
+            </div>
+            <div class="drawer-field"><label>Full code</label><span style="font-family:'Inconsolata',monospace;font-size:13px;">1200</span></div>
+            <div class="drawer-field"><label>Account type</label><span>Accounts Receivable</span></div>
+            <div class="drawer-field"><label>Normal balance</label><span>Debit</span></div>
+            <div class="drawer-field"><label>Tax line</label><span class="tax-text" style="font-size:12px;">No PPN</span></div>
+            <div class="drawer-field"><label>Description</label><span style="color:#999;font-size:12px;">Tagihan ke pelanggan yang belum dibayar</span></div>
+            <div class="drawer-cta"><span class="btn-sm btn-primary">View GL</span><span class="btn-sm btn-ghost">Edit Account</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" style="margin:28px 0;">
+
+  <!-- Table C: Vendors -->
+  <div class="sub-label">Table C — Vendor List</div>
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:#bbb;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px;">Closed state</div>
+      <div class="selected-card" style="margin-bottom:0;overflow:hidden;">
+        <table class="tbl">
+          <thead><tr><th>Vendor</th><th>NPWP</th><th>Tax config</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><span class="chevron">▶</span><strong>PT Maju Jaya Sentosa</strong></td><td class="mono dim">01.234.567.8-091</td><td><span class="tax-text">PPN 11% · PPh 23 / 2%</span></td><td><span class="dot dot-green" style="display:inline-block;margin-right:5px;"></span><span class="st-green" style="font-size:11px;">Tax ready</span></td></tr>
+            <tr><td><span class="chevron">▶</span><strong>CV Sumber Berkah</strong></td><td class="mono dim" style="color:#e0400a;">Missing</td><td><span class="tax-text">PPN 11%</span></td><td><span class="dot dot-amber" style="display:inline-block;margin-right:5px;"></span><span class="st-amber" style="font-size:11px;">Incomplete</span></td></tr>
+            <tr><td><span class="chevron">▶</span><strong>PT Harapan Utama</strong></td><td class="mono dim">04.567.890.1-023</td><td><span class="tax-text">No PPN</span></td><td><span class="dot dot-mid" style="display:inline-block;margin-right:5px;"></span><span class="st-mid" style="font-size:11px;">Non-PKP</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:#bbb;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px;">Open state — side drawer overlay</div>
+      <div class="selected-card" style="margin-bottom:0;overflow:visible;position:relative;">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Vendor</th><th>NPWP</th><th>Tax config</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr class="expanded"><td><span class="chevron open">▶</span><strong>PT Maju Jaya Sentosa</strong></td><td class="mono dim">01.234.567.8-091</td><td><span class="tax-text">PPN 11% · PPh 23 / 2%</span></td><td><span class="dot dot-green" style="display:inline-block;margin-right:5px;"></span><span class="st-green" style="font-size:11px;">Tax ready</span></td></tr>
+              <tr><td><span class="chevron">▶</span><strong>CV Sumber Berkah</strong></td><td class="mono dim" style="color:#e0400a;">Missing</td><td><span class="tax-text">PPN 11%</span></td><td><span class="dot dot-amber" style="display:inline-block;margin-right:5px;"></span><span class="st-amber" style="font-size:11px;">Incomplete</span></td></tr>
+            </tbody>
+          </table>
+          <div class="drawer-overlay open">
+            <div class="drawer-overlay-head">
+              <span class="drawer-overlay-title">PT Maju Jaya Sentosa</span>
+              <span class="drawer-overlay-close">✕</span>
+            </div>
+            <div class="drawer-field"><label>PKP status</label><span class="st-green" style="font-size:12px;">✓ Terdaftar</span></div>
+            <div class="drawer-field"><label>Default tax</label><span class="tax-text" style="font-size:12px;">PPN 11% · PPh 23 / 2%</span></div>
+            <div class="drawer-field"><label>PPh basis</label><span>DPP (before PPN)</span></div>
+            <div class="drawer-field"><label>Payment terms</label><span>Net 30</span></div>
+            <div class="drawer-field"><label>Open bills</label><span style="font-family:'Inconsolata',monospace;font-size:13px;">Rp 44.500.000,00</span></div>
+            <div class="drawer-field"><label>Last transaction</label><span style="color:#999;font-size:12px;">08 Jan 2025</span></div>
+            <div class="drawer-cta"><span class="btn-sm btn-primary">Open Vendor</span><span class="btn-sm btn-ghost">New Bill</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" style="margin:28px 0;">
+
+  <!-- Table D: Bills -->
+  <div class="sub-label">Table D — Bills List</div>
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:#bbb;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px;">Closed state</div>
+      <div class="selected-card" style="margin-bottom:0;overflow:hidden;">
+        <table class="tbl">
+          <thead><tr><th>Bill</th><th>Vendor</th><th>Due</th><th class="r">Amount (Rp)</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="tbl-link"><span class="chevron">▶</span>BILL-0091</td><td>PT Maju Jaya</td><td class="dim" style="color:#d4580a;font-weight:600;">31 Jan</td><td class="r mono">10.900.000,00</td><td><span class="pill pill-amber" style="font-size:10px;">Pending</span></td></tr>
+            <tr><td class="tbl-link"><span class="chevron">▶</span>BILL-0088</td><td>CV Harapan</td><td class="dim amtred" style="font-size:11px;">12 Jan</td><td class="amtred r">5.300.000,00</td><td><span class="pill pill-red" style="font-size:10px;">Overdue</span></td></tr>
+            <tr><td class="tbl-link"><span class="chevron">▶</span>BILL-0085</td><td>PT Sentosa</td><td class="dim">28 Dec</td><td class="r mono">22.000.000,00</td><td><span class="pill pill-green" style="font-size:10px;">✓ Paid</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:#bbb;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px;">Open state — side drawer overlay</div>
+      <div class="selected-card" style="margin-bottom:0;overflow:visible;position:relative;">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Bill</th><th>Vendor</th><th>Due</th><th class="r">Amount (Rp)</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr class="expanded"><td class="tbl-link"><span class="chevron open">▶</span>BILL-0091</td><td>PT Maju Jaya</td><td class="dim" style="color:#d4580a;font-weight:600;">31 Jan</td><td class="r mono">10.900.000,00</td><td><span class="pill pill-amber" style="font-size:10px;">Pending</span></td></tr>
+              <tr><td class="tbl-link"><span class="chevron">▶</span>BILL-0088</td><td>CV Harapan</td><td class="dim amtred" style="font-size:11px;">12 Jan</td><td class="amtred r">5.300.000,00</td><td><span class="pill pill-red" style="font-size:10px;">Overdue</span></td></tr>
+            </tbody>
+          </table>
+          <div class="drawer-overlay open">
+            <div class="drawer-overlay-head">
+              <span class="drawer-overlay-title">BILL-0091</span>
+              <span class="drawer-overlay-close">✕</span>
+            </div>
+            <div class="drawer-field"><label>DPP</label><span style="font-family:'Inconsolata',monospace;font-size:13px;">Rp 10.000.000,00</span></div>
+            <div class="drawer-field"><label>PPN <span class="tax-text">11%</span></label><span style="font-family:'Inconsolata',monospace;font-size:13px;">Rp 1.100.000,00</span></div>
+            <div class="drawer-field"><label>PPh 23 withheld <span class="tax-text">2%</span></label><span style="font-family:'Inconsolata',monospace;font-size:13px;color:#e0400a;">(Rp 200.000,00)</span></div>
+            <div class="drawer-field"><label>Total to pay</label><span style="font-family:'Inconsolata',monospace;font-size:14px;font-weight:500;">Rp 10.900.000,00</span></div>
+            <div class="drawer-field"><label>e-Faktur</label><span class="st-amber" style="font-size:12px;">Pending upload</span></div>
+            <div class="drawer-field"><label>NSFP</label><span style="color:#bbb;font-size:12px;">Not assigned</span></div>
+            <div class="drawer-cta"><span class="btn-sm btn-primary">Approve &amp; Pay</span><span class="btn-sm btn-ghost">Upload e-Faktur</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px;" class="bp-list">
+    <div class="bp-item"><div class="bp-ico">📐</div><div><strong>Consistent base across all table types</strong><span>Dark header #2a2926 with white/45% label text. Row dividers #ede9e3. All numbers in Inconsolata. Column headers 10px uppercase. These never change regardless of table type.</span></div></div>
+    <div class="bp-item"><div class="bp-ico">◫</div><div><strong>Alternating row colors — white / #faf9f7</strong><span>Odd rows white, even rows #faf9f7. Contrast is intentionally subtle — enough to track a row across wide columns without visual noise. Never use strong color for zebra striping in data tables.</span></div></div>
+    <div class="bp-item"><div class="bp-ico">↕</div><div><strong>Hover and selected use indigo tint — text shifts accordingly</strong><span>Hover → #ddddf0 with dim text shifting to muted indigo. Selected/drawer open → #ddddf0 with text shifting to deep indigo #2a2860. Color alone never carries the state — font-weight: 500 is also applied on selected. The indigo family creates a clear "active zone" contrast against the warm neutral rows.</span></div></div>
+    <div class="bp-item"><div class="bp-ico">↔</div><div><strong>Text left, numbers right — no exceptions</strong><span>Names, descriptions, statuses → left-aligned, Manrope. Amounts, codes, IDs, dates → right-aligned, Inconsolata. Mixed columns (e.g. a ref code that's also clickable) follow the dominant content type — IDs are right, descriptions are left.</span></div></div>
+    <div class="bp-item"><div class="bp-ico">▷</div><div><strong>Drawer appears as a side overlay — table stays intact</strong><span>Clicking a row opens a floating panel anchored to the right edge of the table. Selected row highlights to #ddddf0 with text shifting to #2a2860. Closed with ✕ or by clicking another row. Only the "Open [record]" CTA navigates away from the table.</span></div></div>
+    <div class="bp-item"><div class="bp-ico">⚫</div><div><strong>All GL numbers plain black — Dr, Cr, and Balance</strong><span>Debit ≠ bad, credit ≠ good, balance has no polarity. All GL values are #1a1a1a. The column header labels carry structural distinction only. This matches Xero and QuickBooks — structure does the work, not color.</span></div></div>
+    <div class="bp-item"><div class="bp-ico">__</div><div><strong>Clickable references use underline, not blue</strong><span>INV-, REC-, JE- references signal clickability through text-decoration underline with a muted underline color (#ccc). Blue is reserved for the number color system only.</span></div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     04 MODULES
+══════════════════════════════════ -->
+
+<div class="section" id="modules">
+  <div class="section-meta"><span class="section-num">02</span><span class="section-name">Modules</span></div>
+  <div class="section-title">Modules</div>
+  <div class="section-desc">Recurring UI patterns — tax display, AI insights, and the actionable feed.</div>
+
+  <!-- Module A: Tax -->
+  <div class="sub-label" style="margin-top:0;">Module A — Tax display</div>
+
+  <div class="note" style="margin-bottom:16px;">
+    <b>Why tax withholding uses parentheses + red:</b> The accounting standard globally — IFRS, Indonesian PSAK, IRS — uses parentheses <span style="font-family:'Inconsolata',monospace;">(200.000,00)</span> to indicate deductions, not a minus sign. Parentheses are unambiguous and print-safe. Red is applied <b>only to the withheld amount</b> (PPh 23) because it represents money that genuinely leaves the payer's hand — a real cash reduction, not just an accounting entry. PPN is a passthrough (collected then remitted) so it stays black. This pattern matches modern SaaS tools like Stripe and FreshBooks.
+  </div>
+
+  <div class="three-col" style="margin-bottom:28px;">
+    <div class="selected-card">
+      <div class="card-head"><div class="card-head-left"><span class="card-head-title">In a field row</span></div><span class="badge badge-muted">Vendor · Bill</span></div>
+      <div class="card-col">
+        <div class="erp-panel">
+          <div class="erp-panel-title">Bill Details</div>
+          <div class="erp-row"><span class="erp-lbl">Vendor</span><span class="erp-val">PT Maju Jaya</span></div>
+          <div class="erp-row"><span class="erp-lbl">Amount</span><span class="erp-amount">Rp 10.000.000,00</span></div>
+          <div class="erp-row"><span class="erp-lbl">Tax</span><span class="tax-text">PPN 11% · PPh 23 / 2%</span></div>
+          <div class="erp-row"><span class="erp-lbl">Total bayar</span><span class="erp-amount" style="font-size:15px;">Rp 10.900.000,00</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="selected-card">
+      <div class="card-head"><div class="card-head-left"><span class="card-head-title">In breakdown preview</span></div><span class="badge badge-muted">Bill · Invoice</span></div>
+      <div class="card-col">
+        <div class="erp-panel">
+          <div class="erp-panel-title">Tax Breakdown</div>
+          <div class="erp-row"><span class="erp-lbl">DPP</span><span class="erp-amount">10.000.000,00</span></div>
+          <div class="erp-row"><span class="erp-lbl">PPN</span><span style="display:flex;align-items:baseline;gap:8px;"><span class="tax-text">11%</span><span class="erp-amount">1.100.000,00</span></span></div>
+          <div class="erp-row"><span class="erp-lbl">PPh 23 withheld</span><span style="display:flex;align-items:baseline;gap:8px;"><span class="tax-text">2%</span><span class="erp-amount" style="color:#e0400a;">(200.000,00)</span></span></div>
+          <hr class="divider">
+          <div class="erp-row"><span class="erp-lbl">Total</span><span class="erp-amount" style="font-size:16px;">10.900.000,00</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="selected-card">
+      <div class="card-head"><div class="card-head-left"><span class="card-head-title">In vendor list cell</span></div><span class="badge badge-muted">Table cell</span></div>
+      <div class="card-col">
+        <div class="col-label">Tax config column — no chip, no icon</div>
+        <div class="erp-panel">
+          <div class="erp-row"><span class="erp-lbl">PT Maju</span><span class="tax-text">PPN 11% · PPh 23 / 2%</span></div>
+          <div class="erp-row"><span class="erp-lbl">CV Harapan</span><span class="tax-text">PPN 11%</span></div>
+          <div class="erp-row"><span class="erp-lbl">PT Sentosa</span><span class="tax-text">No PPN</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bp-list" style="margin-bottom:28px;">
+    <div class="bp-item"><div class="bp-ico">( )</div><div><strong>Parentheses for deductions, not minus signs</strong><span>The accounting standard for negative/deduction amounts is (200.000,00) — not -200.000,00. Parentheses are internationally recognized (PSAK, IFRS, IRS), print-safe, and visually distinct from a zero. Stay consistent across all tax breakdowns.</span></div></div>
+    <div class="bp-item"><div class="bp-ico">🔴</div><div><strong>Red only on the withheld (PPh) line — not on PPN</strong><span>PPh 23 withholding is money that leaves the payer's pocket immediately — a real cash deduction. Red here means "less money you receive," which is accurate. PPN is a passthrough collected on behalf of the government and remitted separately — it's not a loss, so it stays black.</span></div></div>
+    <div class="bp-item"><div class="bp-ico">⚫</div><div><strong>Never use red for Dr/Cr values in the GL</strong><span>Debit is not inherently negative. Reserve red only for: (1) PPh withholding in tax breakdowns, (2) overdue amounts in bill lists, (3) negative deltas in dashboards. Anywhere else, red would mislead.</span></div></div>
+  </div>
+
+  <!-- Module B: AI Insight -->
+  <div class="sub-label">Module B — AI insight card</div>
+  <div class="two-col" style="margin-bottom:28px;align-items:start;">
+    <div>
+      <p style="font-size:13px;color:#999;line-height:1.7;margin-bottom:16px;">The insight card uses a dark background — distinct from all other surfaces. Body text stays in Manrope (not a serif), but the dark surface and eyebrow treatment create enough separation. AI voice leads with interpretation, not raw data.</p>
+      <div class="insight-card">
+        <div class="insight-eyebrow">✦ TradeOS AI · Insight</div>
+        <div class="insight-body">Revenue is up <strong>Rp 52 jt</strong> vs last month, mainly from PT Maju Jaya. But your <strong>AR is aging</strong> — 3 invoices totaling Rp 92 jt are overdue by more than 30 days.</div>
+      </div>
+    </div>
+    <div class="bp-list">
+      <div class="bp-item"><div class="bp-ico">⬛</div><div><strong>Dark surface separates AI from UI</strong><span>The #1a1a1a background is the only element in the product that uses this inversion. It creates an immediate visual signal: this is the system speaking, not a data field.</span></div></div>
+      <div class="bp-item"><div class="bp-ico">🎯</div><div><strong>Lead with the takeaway, not the data</strong><span>"AR is aging" before the count. The interpretation comes first so users understand the implication before reading numbers.</span></div></div>
+      <div class="bp-item"><div class="bp-ico">✦</div><div><strong>Amber for key figures inside the insight</strong><span>The most critical number or phrase renders in amber (#c07a00) — same token used for warnings in the number color system, consistent across contexts.</span></div></div>
+    </div>
+  </div>
+
+  <!-- Module C: Actionable feed -->
+  <div class="sub-label">Module C — Actionable feed</div>
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <div class="action-item urgent">
+        <span class="dot dot-red"></span>
+        <div style="flex:1;"><div class="action-title">3 invoices overdue — PT Maju Jaya</div><div class="action-desc">Oldest: 42 days · Total exposure Rp 92 jt</div></div>
+        <div style="text-align:right;flex-shrink:0;"><div class="action-amt" style="color:#e0400a;">Rp 92 jt</div><div class="action-time">42 days</div></div>
+        <span class="action-cta">Remind</span>
+      </div>
+      <div class="action-item warn">
+        <span class="dot dot-orange"></span>
+        <div style="flex:1;"><div class="action-title">SPT PPN due in 4 days</div><div class="action-desc">Jan 2025 · 12 of 15 faktur uploaded</div></div>
+        <div style="text-align:right;flex-shrink:0;"><div class="action-time">Due 31 Jan</div></div>
+        <span class="action-cta">Review</span>
+      </div>
+      <div class="action-item warn">
+        <span class="dot dot-orange"></span>
+        <div style="flex:1;"><div class="action-title">5 bills pending approval</div><div class="action-desc">PT Sentosa, CV Harapan +3</div></div>
+        <div style="text-align:right;flex-shrink:0;"><div class="action-amt">Rp 44.5 jt</div></div>
+        <span class="action-cta">Approve</span>
+      </div>
+      <div class="action-item">
+        <span class="dot dot-blue"></span>
+        <div style="flex:1;"><div class="action-title">8 unmatched bank transactions</div><div class="action-desc">BCA Account · Jan 1–15</div></div>
+        <div style="text-align:right;flex-shrink:0;"><div class="action-time">8 items</div></div>
+        <span class="action-cta">Match</span>
+      </div>
+    </div>
+    <div class="bp-list">
+      <div class="bp-item"><div class="bp-ico">🚦</div><div><strong>3 urgency levels — driven by the dot color</strong><span>Red = overdue or at risk. Amber = due within 7 days. Blue = informational, no deadline pressure. The dot alone carries urgency — no text label needed.</span></div></div>
+      <div class="bp-item"><div class="bp-ico">⚡</div><div><strong>One CTA verb per item — always the same style</strong><span>Remind / Approve / Review / Match — a single action per row, always the same dark-border button. Never more than one CTA per item.</span></div></div>
+      <div class="bp-item"><div class="bp-ico">💰</div><div><strong>Amount exposure always visible on the right</strong><span>Show the monetary value at stake on every item where applicable. Accountants triage by financial impact — Rp 92 jt before Rp 5 jt.</span></div></div>
+      <div class="bp-item"><div class="bp-ico">🇮🇩</div><div><strong>Indonesian tax deadlines are first-class items</strong><span>SPT PPN, PPh 21, PPh 23, SPT Tahunan — always appear in the feed within 7 days of deadline, ranking equally with financial risk items.</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 05 — BUTTONS
+═══════════════════════════════════════════════════ -->
+
+<div style="text-align:center;font-size:12px;color:#ccc;padding:40px 0;border-top:1px solid #e5e4e0;margin-top:20px;">
+  TradeOS Design System · Components · v3.0 · 2025 &nbsp;·&nbsp;
+  <a href="tradeos-typography.html" style="color:#bbb;">00 Typography</a> &nbsp;·&nbsp;
+  <a href="tradeos-formatting.html" style="color:#bbb;">01 Formatting</a> &nbsp;·&nbsp;
+  <a href="tradeos-tokens.html" style="color:#bbb;">02 Colors</a>
+</div>
+
+</div>
+</body>
+</html>

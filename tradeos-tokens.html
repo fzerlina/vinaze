@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeOS — Design System · Colors</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Inconsolata:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f4f1; font-family: 'Manrope', sans-serif; color: #1a1a1a; }
+.page { max-width: 960px; margin: 0 auto; padding: 0 36px 100px; }
+
+/* ── SYSTEM NAV ── */
+.sys-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0 52px;
+}
+.sys-nav-brand { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #ccc; }
+.sys-nav-links { display: flex; gap: 6px; }
+.sys-nav-links a {
+  font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 6px;
+  border: 1px solid #e5e4e0; color: #999; text-decoration: none; letter-spacing: 0.07em; text-transform: uppercase;
+  transition: all 0.15s;
+}
+.sys-nav-links a:hover { border-color: #1a1a1a; color: #1a1a1a; }
+.sys-nav-links a.here { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+/* ── PAGE HEADER ── */
+.page-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 10px; }
+.page-title { font-family: 'Bebas Neue', sans-serif; font-size: 58px; letter-spacing: 0.03em; color: #1a1a1a; line-height: 1; margin-bottom: 8px; }
+.page-sub { font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 64px; max-width: 560px; }
+
+/* ── TOC ── */
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 64px; }
+.toc-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px; background: #fff;
+  border: 1px solid #e5e4e0; border-radius: 12px;
+  text-decoration: none; transition: all 0.15s;
+}
+.toc-item:hover { border-color: #1a1a1a; }
+.toc-num { font-family: 'Inconsolata', monospace; font-size: 11px; color: #ccc; width: 20px; flex-shrink: 0; }
+.toc-label { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+.toc-desc { font-size: 11px; color: #bbb; margin-left: auto; }
+
+/* ── SECTION ── */
+.section { margin-bottom: 72px; }
+.section-meta { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+.section-num { font-family: 'Inconsolata', monospace; font-size: 12px; color: #ccc; }
+.section-name { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.03em; color: #1a1a1a; margin-bottom: 6px; }
+.section-desc { font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 24px; max-width: 640px; }
+
+/* ── NOTE ── */
+.note {
+  background: #fff; border: 1px solid #e5e4e0; border-left: 3px solid #1a1a1a;
+  border-radius: 0 8px 8px 0; padding: 12px 16px;
+  font-size: 12px; color: #888; line-height: 1.7; margin-bottom: 24px;
+}
+.note b { color: #1a1a1a; font-weight: 600; }
+
+/* ── RULE LIST ── */
+.rule-list { display: flex; flex-direction: column; }
+.rule { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid #f0efe9; align-items: flex-start; }
+.rule:last-child { border-bottom: none; }
+.rb { font-family: 'Inconsolata', monospace; font-size: 11px; color: #bbb; flex-shrink: 0; width: 14px; margin-top: 2px; }
+.rt { font-size: 13px; color: #555; line-height: 1.6; }
+.rt b { color: #1a1a1a; font-weight: 600; }
+.rt code { font-family: 'Inconsolata', monospace; font-size: 11px; background: #f5f4f1; padding: 1px 5px; border-radius: 3px; color: #1a1a1a; }
+
+/* ── CARDS ── */
+.selected-card { background: #fff; border: 1px solid #e5e4e0; border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
+.card-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 22px; border-bottom: 1px solid #f0efe9; }
+.card-head-left { display: flex; align-items: baseline; gap: 10px; }
+.card-head-title { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+.card-head-meta { font-size: 11px; color: #ccc; }
+.badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.04em; }
+.badge-dark { background: #1a1a1a; color: #fff; }
+.badge-muted { background: #f0efe9; color: #999; }
+
+.card-grid { display: grid; }
+.card-grid.cols2 { grid-template-columns: 1fr 1fr; }
+.card-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.card-col { padding: 22px; border-right: 1px solid #f0efe9; }
+.card-col:last-child { border-right: none; }
+.col-label { font-family: 'Inconsolata', monospace; font-size: 10px; color: #ccc; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 16px; }
+
+/* ── GRID LAYOUTS ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+hr.divider { border: none; border-top: 1px solid #f0efe9; margin: 14px 0; }
+.sub-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #ccc; margin-bottom: 14px; margin-top: 32px; }
+
+/* ── ERP PANEL ── */
+.erp-panel { background: #f9f8f6; border-radius: 10px; padding: 18px 20px; }
+.erp-panel-title { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.03em; color: #1a1a1a; margin-bottom: 14px; }
+.erp-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 9px; }
+.erp-row:last-child { margin-bottom: 0; }
+.erp-lbl { font-size: 10px; font-weight: 500; color: #bbb; width: 88px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+.erp-val { font-family: 'Manrope', sans-serif; font-size: 13px; color: #1a1a1a; }
+.erp-mono { font-family: 'Inconsolata', monospace; font-size: 13px; color: #666; }
+.erp-amount { font-family: 'Inconsolata', monospace; font-size: 13px; color: #1a1a1a; font-weight: 500; }
+
+/* ── SWATCH ── */
+.swatch-group { margin-bottom: 28px; }
+.swatch-group-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #bbb; margin-bottom: 12px; }
+.swatch-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatch { display: flex; flex-direction: column; gap: 8px; padding: 14px; background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; min-width: 110px; }
+.swatch-dot { width: 36px; height: 36px; border-radius: 8px; }
+.swatch-name { font-size: 11px; font-weight: 600; color: #1a1a1a; }
+.swatch-hex { font-family: 'Inconsolata', monospace; font-size: 10px; color: #bbb; }
+.swatch-role { font-size: 10px; color: #bbb; line-height: 1.5; }
+
+/* ── NUMBERS ── */
+.num { font-family: 'Inconsolata', monospace; color: #1a1a1a; }
+.num.blue { color: #1a6bff; }
+.num.green { color: #00a870; }
+.num.red { color: #e0400a; }
+.num.amber { color: #c07a00; }
+.num.orange { color: #d4580a; }
+
+/* ── TAX TEXT ── */
+.tax-text { font-size: 11px; text-transform: uppercase; color: #a8a69f; font-weight: 400; letter-spacing: 0; font-family: 'Manrope', sans-serif; }
+
+/* ── INDICATOR PATTERNS ── */
+.ind-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid #f0efe9; }
+.ind-row:last-child { border-bottom: none; }
+.ind-meta { font-size: 11px; color: #bbb; width: 160px; flex-shrink: 0; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-red { background: #e0400a; }
+.dot-amber { background: #c07a00; }
+.dot-orange { background: #d4580a; }
+.dot-blue { background: #1a6bff; }
+.dot-mid { background: #bbb; }
+.dot-green { background: #00a870; }
+
+.pill { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 4px; font-size: 10px; font-weight: 600; font-family: 'Manrope', sans-serif; }
+.pill-green { background: #d1fae5; color: #065f46; }
+.pill-red { background: #fee2e2; color: #991b1b; }
+.pill-amber { background: #fef3c7; color: #92400e; }
+.pill-blue { background: #dbeafe; color: #1e40af; }
+.pill-neutral { background: #f0efe9; color: #888; }
+
+.st-green { font-size: 12px; font-weight: 600; color: #00a870; }
+.st-red { font-size: 12px; font-weight: 600; color: #e0400a; }
+.st-amber { font-size: 12px; font-weight: 600; color: #c07a00; }
+.st-orange { font-size: 12px; font-weight: 600; color: #d4580a; }
+.st-mid { font-size: 12px; color: #999; }
+
+/* ── TABLES ── */
+.tbl { width: 100%; border-collapse: collapse; font-size: 12px; font-family: 'Manrope', sans-serif; }
+
+/* Header — dark background, light text */
+.tbl thead tr { border-bottom: none; background: #1a1a1a; }
+.tbl th { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); padding: 10px 12px; text-align: left; }
+.tbl th.r  { text-align: right; }
+.tbl th.dr { color: rgba(255,255,255,0.45); text-align: right; }
+.tbl th.cr { color: rgba(255,255,255,0.45); text-align: right; }
+
+/* Alternating rows */
+.tbl tbody tr { border-bottom: 1px solid #ede9e3; transition: background 0.12s, color 0.12s; cursor: pointer; }
+.tbl tbody tr:nth-child(odd)  { background: #ffffff; }
+.tbl tbody tr:nth-child(even) { background: #faf9f7; }
+
+/* Hover state — soft blue tint */
+.tbl tbody tr:hover { background: #ddddf0; }
+.tbl tbody tr:hover td { color: #1a1a1a; }
+.tbl tbody tr:hover td.dim { color: #7a8aaa; }
+.tbl tbody tr:hover td.tbl-link { color: #1a1a1a; text-decoration-color: #a0a0cc; }
+
+/* Selected / active state — deeper blue, all text shifts */
+.tbl tbody tr.selected,
+.tbl tbody tr.expanded { background: #ddddf0; }
+.tbl tbody tr.selected td,
+.tbl tbody tr.expanded td { color: #2a2860; font-weight: 500; }
+.tbl tbody tr.selected td.dim,
+.tbl tbody tr.expanded td.dim { color: #6868a8; }
+.tbl tbody tr.selected td.tbl-link,
+.tbl tbody tr.expanded td.tbl-link { color: #2a2860; text-decoration-color: #9898cc; }
+.tbl tbody tr.selected td.dr,
+.tbl tbody tr.expanded td.dr,
+.tbl tbody tr.selected td.cr,
+.tbl tbody tr.expanded td.cr,
+.tbl tbody tr.selected td.bal,
+.tbl tbody tr.expanded td.bal,
+.tbl tbody tr.selected td.em,
+.tbl tbody tr.expanded td.em { color: #4a47a3; }
+.tbl tbody tr.selected .tax-text,
+.tbl tbody tr.expanded .tax-text { color: #7878b8; }
+.tbl tbody tr.selected .coa-code,
+.tbl tbody tr.expanded .coa-code { color: #7878b8; }
+
+/* Cells — alignment */
+.tbl td { padding: 10px 12px; color: #1a1a1a; vertical-align: middle; text-align: left; }
+.tbl td.r    { text-align: right; }
+.tbl td.dim  { color: #bbb; font-size: 11px; text-align: left; }
+.tbl td.mono { font-family: 'Inconsolata', monospace; font-size: 12px; text-align: left; }
+
+/* Numeric cells — always Inconsolata, always right-aligned */
+.tbl td.dr   { font-family: 'Inconsolata', monospace; color: #1a1a1a; text-align: right; }
+.tbl td.cr   { font-family: 'Inconsolata', monospace; color: #1a1a1a; text-align: right; }
+.tbl td.em   { font-family: 'Inconsolata', monospace; color: #ddd; text-align: right; }
+.tbl td.bal  { font-family: 'Inconsolata', monospace; color: #1a1a1a; text-align: right; font-weight: 500; }
+.tbl td.amtred { font-family: 'Inconsolata', monospace; color: #e0400a; text-align: right; }
+
+/* Clickable ref cell */
+.tbl td.tbl-link {
+  font-family: 'Inconsolata', monospace; font-size: 12px; color: #1a1a1a;
+  text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-color: #ccc; cursor: pointer; text-align: left;
+}
+
+/* Footer */
+.tbl tfoot tr { border-top: 2px solid #2a2926; background: #f5f4f1; }
+.tbl tfoot td { font-weight: 600; padding: 10px 12px; font-size: 12px; }
+
+/* ── COA INDENT ── */
+.coa-code { font-family: 'Inconsolata', monospace; font-size: 11px; color: #bbb; text-align: left; }
+/* Level 0 — account group (1xxx, 2xxx) */
+.coa-l0 { font-weight: 600; font-size: 12px; color: #1a1a1a; }
+/* Level 1 — sub-group (11xx) — indent 16px, left border connector */
+.coa-l1 { font-size: 12px; color: #555; padding-left: 16px; border-left: 2px solid #e5e4e0; margin-left: 6px; display: block; }
+/* Level 2 — leaf account (1100, 1200) — deeper indent */
+.coa-l2 { font-size: 12px; color: #888; padding-left: 32px; border-left: 2px solid #ede9e3; margin-left: 6px; display: block; }
+/* Group row background — structural, not state */
+.tbl tbody tr.coa-group { background: #f5f4f1 !important; }
+.tbl tbody tr.coa-group td { color: #1a1a1a; font-weight: 600; }
+
+/* ── DRAWER OVERLAY ── */
+.tbl-wrap { position: relative; }
+.drawer-overlay {
+  position: absolute; top: 0; right: -320px; width: 300px;
+  background: #fff; border: 1px solid #e5e4e0; border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 18px 20px; z-index: 10;
+  transition: right 0.2s ease;
+}
+.drawer-overlay.open { right: -316px; }
+.drawer-overlay-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #f0efe9;
+}
+.drawer-overlay-title { font-size: 12px; font-weight: 600; color: #1a1a1a; }
+.drawer-overlay-close { font-size: 14px; color: #bbb; cursor: pointer; line-height: 1; }
+.drawer-field { margin-bottom: 12px; }
+.drawer-field:last-of-type { margin-bottom: 0; }
+.drawer-field label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #bbb; display: block; margin-bottom: 3px; }
+.drawer-field span { font-size: 13px; color: #1a1a1a; }
+.drawer-cta { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #f0efe9; }
+.btn-sm { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; border: 1px solid; }
+.btn-primary { background: #4a47a3; color: #fff; border-color: #4a47a3; }
+.btn-ghost { background: transparent; color: #4a47a3; border-color: #4a47a3; }
+
+.chevron { display: inline-block; font-size: 9px; color: #ccc; margin-right: 5px; transition: transform 0.15s; }
+.chevron.open { transform: rotate(90deg); }
+
+/* ── AI INSIGHT ── */
+.insight-card { background: #1a1a1a; color: #f5f4f1; border-radius: 12px; padding: 22px; position: relative; overflow: hidden; }
+.insight-card::before { content: ''; position: absolute; top: -20px; right: -20px; width: 90px; height: 90px; background: #1a6bff; border-radius: 50%; opacity: 0.1; }
+.insight-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 10px; }
+.insight-body { font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.65; color: #f5f4f1; }
+.insight-body strong { color: #c07a00; font-weight: 600; }
+
+/* ── ACTION FEED ── */
+.action-item { display: flex; align-items: center; gap: 12px; padding: 13px 16px; background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; transition: all 0.15s; cursor: pointer; margin-bottom: 8px; }
+.action-item:last-child { margin-bottom: 0; }
+.action-item:hover { border-color: #1a1a1a; }
+.action-item.urgent { border-color: rgba(224,64,10,0.3); background: rgba(224,64,10,0.02); }
+.action-item.warn { border-color: rgba(192,122,0,0.3); background: rgba(192,122,0,0.02); }
+.action-title { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
+.action-desc { font-size: 11px; color: #999; }
+.action-cta { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; color: #4a47a3; padding: 5px 12px; border: 1px solid #4a47a3; border-radius: 5px; flex-shrink: 0; }
+.action-amt { font-family: 'Inconsolata', monospace; font-size: 12px; color: #1a1a1a; text-align: right; }
+.action-time { font-size: 10px; color: #bbb; text-align: right; }
+
+/* ── BP LIST ── */
+.bp-list { display: flex; flex-direction: column; gap: 10px; }
+.bp-item { display: flex; gap: 12px; align-items: flex-start; padding: 13px 16px; background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; }
+.bp-ico { font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+.bp-item strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.bp-item span { font-size: 12px; color: #999; line-height: 1.55; }
+
+/* ── DO/DON'T ── */
+.do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+.do-card { border-radius: 10px; padding: 16px; border: 1px solid; }
+.do-card.do { border-color: #86efac; background: rgba(209,250,229,0.3); }
+.do-card.dont { border-color: #fca5a5; background: rgba(254,226,226,0.3); }
+.do-card-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.do-card.do .do-card-lbl { color: #065f46; }
+.do-card.dont .do-card-lbl { color: #991b1b; }
+.do-card ul { padding-left: 14px; }
+.do-card li { font-size: 12px; color: #1a1a1a; margin-bottom: 6px; line-height: 1.5; }
+
+/* ── SEARCH BAR ── */
+.search-bar { padding: 10px 14px; border-bottom: 1px solid #f0efe9; display: flex; align-items: center; gap: 8px; background: #fff; }
+.search-bar span { font-size: 12px; color: #bbb; flex: 1; }
+.search-bar .kbd { font-family: 'Inconsolata', monospace; font-size: 10px; color: #e5e4e0; }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="sys-nav">
+  <a href="index.html" class="sys-nav-brand" style="text-decoration:none;color:#ccc;">TradeOS Design System</a>
+  <div class="sys-nav-links">
+    <a href="tradeos-typography.html">00 Typography</a>
+    <a href="tradeos-formatting.html">01 Formatting</a>
+    <a href="#" class="here">02 Colors</a>
+    <a href="tradeos-ui-reference.html">03–05 Components</a>
+    <a href="tradeos-forms.html">06 Forms</a>
+  </div>
+</div>
+
+<div class="page-eyebrow">02 — TradeOS Design System</div>
+<div class="page-title">Colors</div>
+<div class="page-sub">Color tokens and indicator patterns — the shared visual language used across every table, card, and module in the system.</div>
+
+<div class="toc" style="grid-template-columns:1fr 1fr;margin-bottom:64px;">
+  <a href="#colors" class="toc-item"><span class="toc-num">01</span><span class="toc-label">Color Tokens</span><span class="toc-desc">Neutrals · Numbers · Status</span></a>
+  <a href="#indicators" class="toc-item"><span class="toc-num">02</span><span class="toc-label">Indicators</span><span class="toc-desc">Dots · Pills · Text · Tax</span></a>
+</div>
+
+<div class="section" id="colors">
+  <div class="section-meta"><span class="section-num">01</span><span class="section-name">Color Tokens</span></div>
+  <div class="section-title">Color Tokens</div>
+  <div class="section-desc">Four families — each with a strict role. Never use colors decoratively or interchangeably across families.</div>
+
+  <div class="swatch-group">
+    <div class="swatch-group-label">Neutrals — structure, text, surface</div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-dot" style="background:#1a1a1a;"></div><div class="swatch-name">Ink</div><div class="swatch-hex">#1a1a1a</div><div class="swatch-role">Body text, headings, borders on dark</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#f5f4f1;border:1px solid #e5e4e0;"></div><div class="swatch-name">Paper</div><div class="swatch-hex">#f5f4f1</div><div class="swatch-role">Page background</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#ffffff;border:1px solid #e5e4e0;"></div><div class="swatch-name">White</div><div class="swatch-hex">#ffffff</div><div class="swatch-role">Cards, mocks, panels</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#f9f8f6;border:1px solid #e5e4e0;"></div><div class="swatch-name">Surface 2</div><div class="swatch-hex">#f9f8f6</div><div class="swatch-role">Hover states, drawer backgrounds</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#e5e4e0;border:1px solid #ddd;"></div><div class="swatch-name">Border</div><div class="swatch-hex">#e5e4e0</div><div class="swatch-role">All dividers, card edges</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#bbb;border:1px solid #e5e4e0;"></div><div class="swatch-name">Mid</div><div class="swatch-hex">#bbbbbb</div><div class="swatch-role">Labels, secondary text, column headers</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#a8a69f;border:1px solid #e5e4e0;"></div><div class="swatch-name">Tax text</div><div class="swatch-hex">#a8a69f</div><div class="swatch-role">Tax annotations only — 11px uppercase</div></div>
+    </div>
+  </div>
+
+  <div class="swatch-group">
+    <div class="swatch-group-label">Number colors — directional meaning only, never in GL</div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-dot" style="background:#1a6bff;"></div><div class="swatch-name">Blue</div><div class="swatch-hex">#1a6bff</div><div class="swatch-role">KPI figures, running balances (non-transactional dashboards only)</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#00a870;"></div><div class="swatch-name">Green</div><div class="swatch-hex">#00a870</div><div class="swatch-role">Positive variance, favorable delta, income growth</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#e0400a;"></div><div class="swatch-name">Red</div><div class="swatch-hex">#e0400a</div><div class="swatch-role">Negative amounts, overdue, unfavorable variance</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#c07a00;"></div><div class="swatch-name">Amber</div><div class="swatch-hex">#c07a00</div><div class="swatch-role">Incomplete data, pending process states, warning figures in AI insights</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#d4580a;"></div><div class="swatch-name">Orange</div><div class="swatch-hex">#d4580a</div><div class="swatch-role">Due soon — dots, date text, and time-urgency figures</div></div>
+    </div>
+    <div style="margin-top:16px;">
+      <div class="selected-card" style="margin-bottom:0;">
+        <div class="card-head"><div class="card-head-left"><span class="card-head-title">Number colors in context</span></div><span class="badge badge-muted">Inconsolata / financial values</span></div>
+        <div style="padding:20px 22px;border-bottom:1px solid #f0efe9;">
+          <div style="font-size:10px;font-weight:600;color:#bbb;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">GL / transactional views — all figures plain black</div>
+          <div style="display:flex;gap:40px;flex-wrap:wrap;margin-bottom:4px;">
+            <div><div style="font-size:10px;color:#bbb;margin-bottom:5px;">Debit</div><span class="num" style="font-size:22px;">11.100.000,00</span></div>
+            <div><div style="font-size:10px;color:#bbb;margin-bottom:5px;">Credit</div><span class="num" style="font-size:22px;">50.000.000,00</span></div>
+            <div><div style="font-size:10px;color:#bbb;margin-bottom:5px;">Balance</div><span class="num" style="font-size:22px;">391.100.000,00</span></div>
+          </div>
+          <div style="font-size:11px;color:#bbb;margin-top:8px;">Debit ≠ bad. Credit ≠ good. Column position carries that meaning. Color does not.</div>
+        </div>
+        <div style="padding:20px 22px;">
+          <div style="font-size:10px;font-weight:600;color:#bbb;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">Dashboard / KPI — color carries directional meaning</div>
+          <div style="display:flex;gap:40px;flex-wrap:wrap;">
+            <div><div style="font-size:10px;color:#bbb;margin-bottom:5px;">Favorable delta</div><span class="num green" style="font-size:22px;">+Rp 23.000.000</span></div>
+            <div><div style="font-size:10px;color:#bbb;margin-bottom:5px;">Unfavorable delta</div><span class="num red" style="font-size:22px;">-Rp 8.500.000</span></div>
+            <div><div style="font-size:10px;color:#bbb;margin-bottom:5px;">Due soon</div><span class="num" style="font-size:22px;color:#d4580a;">Rp 92.000.000</span></div>
+          </div>
+          <div style="font-size:11px;color:#bbb;margin-top:8px;">Color only when the number has a polarity that matters to the reader — variance, overdue exposure, risk. Never in GL rows.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="swatch-group">
+    <div class="swatch-group-label">Delta &amp; percentage indicators — insight blocks &amp; KPI cards</div>
+    <div class="selected-card" style="margin-bottom:0;">
+      <div class="card-head">
+        <div class="card-head-left"><span class="card-head-title">Rules for +/&#8211; delta chips</span></div>
+        <span class="badge badge-muted">KPI cards &middot; AI insights &middot; summary rows</span>
+      </div>
+
+      <div style="padding:20px 22px;border-bottom:1px solid #f0efe9;">
+        <div style="font-size:10px;font-weight:600;color:#bbb;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;">Anatomy of a delta chip</div>
+        <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:10px;color:#bbb;font-family:Manrope,sans-serif;">Favorable</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1.5L9 7.5H1L5 1.5Z" fill="#00a870"/></svg>
+              <span style="font-family:Inconsolata,monospace;font-size:12px;font-weight:500;color:#00a870;">+5,2%</span>
+              <span style="font-family:Manrope,sans-serif;font-size:10px;color:#bbb;">vs bln lalu</span>
+            </div>
+            <div style="font-size:10px;color:#bbb;line-height:1.6;">&#9650; icon &middot; green text only<br>no background</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:10px;color:#bbb;font-family:Manrope,sans-serif;">Unfavorable</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 8.5L9 2.5H1L5 8.5Z" fill="#e0400a"/></svg>
+              <span style="font-family:Inconsolata,monospace;font-size:12px;font-weight:500;color:#e0400a;">-3,1%</span>
+              <span style="font-family:Manrope,sans-serif;font-size:10px;color:#bbb;">vs bln lalu</span>
+            </div>
+            <div style="font-size:10px;color:#bbb;line-height:1.6;">&#9660; icon &middot; red text only<br>no background</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:10px;color:#bbb;font-family:Manrope,sans-serif;">Neutral / no data</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;">
+              <span style="font-family:Inconsolata,monospace;font-size:12px;font-weight:500;color:#bbb;">&#8212;</span>
+              <span style="font-family:Manrope,sans-serif;font-size:10px;color:#bbb;">vs bln lalu</span>
+            </div>
+            <div style="font-size:10px;color:#bbb;line-height:1.6;">em dash &middot; muted text<br>no background</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:10px;color:#bbb;font-family:Manrope,sans-serif;">Direction-aware &#9888;</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:inline-flex;align-items:center;gap:5px;">
+                <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1.5L9 7.5H1L5 1.5Z" fill="#00a870"/></svg>
+                <span style="font-family:Inconsolata,monospace;font-size:11px;font-weight:500;color:#00a870;">+Rp 12 jt</span>
+                <span style="font-family:Manrope,sans-serif;font-size:10px;color:#bbb;">pendapatan</span>
+              </div>
+              <div style="display:inline-flex;align-items:center;gap:5px;">
+                <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1.5L9 7.5H1L5 1.5Z" fill="#e0400a"/></svg>
+                <span style="font-family:Inconsolata,monospace;font-size:11px;font-weight:500;color:#e0400a;">+Rp 8 jt</span>
+                <span style="font-family:Manrope,sans-serif;font-size:10px;color:#bbb;">beban</span>
+              </div>
+            </div>
+            <div style="font-size:10px;color:#bbb;line-height:1.6;">Same &#9650; sign, different color<br>based on metric type</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid #f0efe9;">
+        <div style="padding:18px 22px;border-right:1px solid #f0efe9;">
+          <div style="font-size:10px;font-weight:600;color:#bbb;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">Format rules</div>
+          <div class="rule-list">
+            <div class="rule"><span class="rb">&middot;</span><span class="rt"><b>Arrow icon always leads</b> &#9650; for up, &#9660; for down. Never use + or &#8211; alone as the direction signal. Arrow always left of the number.</span></div>
+            <div class="rule"><span class="rb">&middot;</span><span class="rt"><b>Percentage in Inconsolata, comma decimal</b> &#8212; <code>+5,2%</code> not <code>+5.2%</code>. Matches the IDR number format convention.</span></div>
+            <div class="rule"><span class="rb">&middot;</span><span class="rt"><b>Comparison label in Manrope, smaller</b> &#8212; "vs bln lalu", "vs anggaran", "YTD". Always present. A percentage without a baseline is meaningless.</span></div>
+            <div class="rule"><span class="rb">&middot;</span><span class="rt"><b>No background</b> &#8212; color is carried by the text and arrow only. No pill, no chip background. Keeps delta indicators lightweight and unobtrusive beside figures.</span></div>
+            <div class="rule"><span class="rb">&middot;</span><span class="rt"><b>Absolute + relative when space allows</b> &#8212; e.g. <code>+Rp 23 jt &middot; +5,2%</code>. Absolute first, percentage second.</span></div>
+          </div>
+        </div>
+        <div style="padding:18px 22px;">
+          <div style="font-size:10px;font-weight:600;color:#bbb;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">Direction-awareness &#8212; the critical rule</div>
+          <div class="rule-list">
+            <div class="rule"><span class="rb">!</span><span class="rt"><b>Color encodes favorability, not sign.</b> A cost increase (+) is red. A revenue increase (+) is green. The same &#9650; can be green or red depending on what is being measured.</span></div>
+            <div class="rule"><span class="rb">!</span><span class="rt"><b>Never auto-apply green = up, red = down.</b> Expenses, DSO, overdue count &#8212; an increase is bad. The component must know the metric&#8217;s direction.</span></div>
+            <div class="rule"><span class="rb">&middot;</span><span class="rt">When directionality is ambiguous or unknown &#8212; use <b>neutral muted</b> (#888, no background). Do not guess.</span></div>
+            <div class="rule"><span class="rb">&middot;</span><span class="rt">Zero delta: show <code>0,0%</code> in neutral, no arrow. Nothing changed &#8212; no color, no icon.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:18px 22px;">
+        <div style="font-size:10px;font-weight:600;color:#bbb;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">In context &#8212; KPI card &amp; AI insight block</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="background:#f9f8f6;border:1px solid #e5e4e0;border-radius:10px;padding:18px 20px;">
+            <div style="font-size:10px;font-weight:600;color:#bbb;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Total Pendapatan</div>
+            <div style="font-family:Inconsolata,monospace;font-size:26px;color:#1a1a1a;margin-bottom:6px;">Rp 4,2 M</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;margin-bottom:4px;">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1.5L9 7.5H1L5 1.5Z" fill="#00a870"/></svg>
+              <span style="font-family:Inconsolata,monospace;font-size:11px;font-weight:500;color:#00a870;">+Rp 450 jt &middot; +12,0%</span>
+            </div>
+            <div style="font-family:Manrope,sans-serif;font-size:10px;color:#bbb;">vs Q1 2024</div>
+          </div>
+          <div style="background:#f9f8f6;border:1px solid #e5e4e0;border-radius:10px;padding:18px 20px;">
+            <div style="font-size:10px;font-weight:600;color:#bbb;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Total Beban HPP</div>
+            <div style="font-family:Inconsolata,monospace;font-size:26px;color:#1a1a1a;margin-bottom:6px;">Rp 2,9 M</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;margin-bottom:4px;">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1.5L9 7.5H1L5 1.5Z" fill="#e0400a"/></svg>
+              <span style="font-family:Inconsolata,monospace;font-size:11px;font-weight:500;color:#e0400a;">+Rp 315 jt &middot; +12,0%</span>
+            </div>
+            <div style="font-family:Manrope,sans-serif;font-size:10px;color:#bbb;">vs Q1 2024 &#8212; kenaikan beban</div>
+          </div>
+          <div style="background:#1a1a1a;border-radius:10px;padding:18px 20px;grid-column:span 2;">
+            <div style="font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#555;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.5 6H14.5L10.5 9.5L12 14.5L8 11L4 14.5L5.5 9.5L1.5 6H6.5L8 1Z" fill="#555"/></svg>
+              AI Insight
+            </div>
+            <div style="font-family:Manrope,sans-serif;font-size:14px;line-height:1.8;color:#f5f4f1;">
+              Penjualan bersih naik <span style="display:inline-flex;align-items:center;gap:4px;"><svg width="8" height="8" viewBox="0 0 10 10" fill="none"><path d="M5 1.5L9 7.5H1L5 1.5Z" fill="#00a870"/></svg><span style="font-family:Inconsolata,monospace;font-size:12px;font-weight:500;color:#00a870;">+12,0%</span></span> dibanding bulan lalu &#8212; namun HPP ikut naik <span style="display:inline-flex;align-items:center;gap:4px;"><svg width="8" height="8" viewBox="0 0 10 10" fill="none"><path d="M5 1.5L9 7.5H1L5 1.5Z" fill="#e0400a"/></svg><span style="font-family:Inconsolata,monospace;font-size:12px;font-weight:500;color:#e0400a;">+12,0%</span></span> sehingga margin bersih tidak bergerak.
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
+          <div class="do-card do">
+            <div class="do-card-lbl">&#10003; Do</div>
+            <ul>
+              <li>Always include a baseline label &#8212; "vs bln lalu", "vs anggaran", "YTD"</li>
+              <li>Text color only &#8212; no background, no border. Arrow + Inconsolata figure in green or red.</li>
+              <li>Show absolute + percentage when space allows: +Rp 23 jt &middot; +5,2%</li>
+              <li>Apply direction-awareness: cost up = red, revenue up = green</li>
+              <li>Inline chips in AI narrative use the same token colors as standalone chips</li>
+              <li>Zero delta: <code style="font-family:Inconsolata,monospace;font-size:10px;">0,0%</code> in neutral, no arrow</li>
+            </ul>
+          </div>
+          <div class="do-card dont">
+            <div class="do-card-lbl">&#10007; Don&#8217;t</div>
+            <ul>
+              <li>Auto-color every upward number green &#8212; an expense increase is unfavorable</li>
+              <li>Show a percentage without its baseline &#8212; no context, no meaning</li>
+              <li>Add a pill background to delta indicators &#8212; use text color only</li>
+              <li>Use + and &#8211; signs alone as the direction signal without an arrow</li>
+              <li>Apply delta chips inside GL rows or transactional tables</li>
+              <li>Show a chip when comparison period has no data &#8212; use neutral dash instead</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="swatch-group" style="margin-bottom:0;">
+    <div class="swatch-group-label">Status colors &#8212; semantic UI states only</div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-dot" style="background:#d1fae5;border:1px solid #86efac;"></div><div class="swatch-name">Success bg</div><div class="swatch-hex">#d1fae5</div><div class="swatch-role">Pill bg — paid / confirmed</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#fef3c7;border:1px solid #fde68a;"></div><div class="swatch-name">Warning bg</div><div class="swatch-hex">#fef3c7</div><div class="swatch-role">Pill bg — pending / due soon</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#fee2e2;border:1px solid #fca5a5;"></div><div class="swatch-name">Danger bg</div><div class="swatch-hex">#fee2e2</div><div class="swatch-role">Pill bg — overdue / error</div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#dbeafe;border:1px solid #93c5fd;"></div><div class="swatch-name">Info bg</div><div class="swatch-hex">#dbeafe</div><div class="swatch-role">Pill bg — draft / informational</div></div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:20px;margin-bottom:0;">
+    <b>Key rule:</b> Number colors (green/red/amber) encode <em>direction</em> — favorable, unfavorable, at-risk. They are never used on debit or credit entries in GL views, where column position already carries that meaning. Blue is reserved for running balances on non-GL dashboards. Status colors are for state pills only — never mix the two families.
+  </div>
+
+  <div style="margin-top:24px;">
+    <div class="swatch-group-label">How major ERPs handle color in financial tables</div>
+    <div class="selected-card" style="margin-bottom:0;">
+      <div class="card-head"><div class="card-head-left"><span class="card-head-title">Reference — color usage by system &amp; context</span></div><span class="badge badge-muted">GL · P&amp;L · Dashboard</span></div>
+      <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr style="background:#1a1a1a;">
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);white-space:nowrap;">System</th>
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);white-space:nowrap;">GL — Dr &amp; Cr</th>
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);white-space:nowrap;">Negative values</th>
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);white-space:nowrap;">Dashboard KPIs</th>
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);white-space:nowrap;">Source</th>
+        </tr></thead>
+        <tbody>
+          <tr style="background:#fff;border-bottom:1px solid #ede9e3;">
+            <td style="padding:11px 14px;font-weight:600;color:#1a1a1a;">Xero</td>
+            <td style="padding:11px 14px;color:#555;">Plain black — no color on Dr/Cr columns. Column label carries the meaning.</td>
+            <td style="padding:11px 14px;color:#555;">Red for amounts less than zero in reports. Configurable.</td>
+            <td style="padding:11px 14px;color:#555;">Green/red arrows for favorable/unfavorable variance vs prior period.</td>
+            <td style="padding:11px 14px;font-family:'Inconsolata',monospace;font-size:11px;color:#bbb;">Xero GL UI</td>
+          </tr>
+          <tr style="background:#faf9f7;border-bottom:1px solid #ede9e3;">
+            <td style="padding:11px 14px;font-weight:600;color:#1a1a1a;">QuickBooks Online</td>
+            <td style="padding:11px 14px;color:#555;">Plain black — no Dr/Cr color. Separate Debit and Credit columns, amounts in black.</td>
+            <td style="padding:11px 14px;color:#555;">Red for negative amounts — user-selectable in report settings alongside parentheses and minus sign.</td>
+            <td style="padding:11px 14px;color:#555;">Green for income, red for expenses on home dashboard charts. Not in transactional views.</td>
+            <td style="padding:11px 14px;font-family:'Inconsolata',monospace;font-size:11px;color:#bbb;">QBO Report Settings</td>
+          </tr>
+          <tr style="background:#fff;border-bottom:1px solid #ede9e3;">
+            <td style="padding:11px 14px;font-weight:600;color:#1a1a1a;">NetSuite</td>
+            <td style="padding:11px 14px;color:#555;">Plain black in GL Detail. No color distinction between Dr and Cr entries.</td>
+            <td style="padding:11px 14px;color:#555;">Parentheses as default for negative values in financial statements (GAAP convention). Red optional.</td>
+            <td style="padding:11px 14px;color:#555;">Color-coded KPI tiles: green for on-target, amber for warning, red for critical. Not applied to GL rows.</td>
+            <td style="padding:11px 14px;font-family:'Inconsolata',monospace;font-size:11px;color:#bbb;">NetSuite GL UI</td>
+          </tr>
+          <tr style="background:#faf9f7;border-bottom:1px solid #ede9e3;">
+            <td style="padding:11px 14px;font-weight:600;color:#1a1a1a;">SAP S/4HANA</td>
+            <td style="padding:11px 14px;color:#555;">Plain black in FI line items. Dr/Cr indicated by posting key and column header only.</td>
+            <td style="padding:11px 14px;color:#555;">Parentheses in financial reports (IFRS/GAAP). Red highlighting configurable at report level.</td>
+            <td style="padding:11px 14px;color:#555;">Fiori dashboards use semantic color: green/amber/red for KPI status. Strictly separated from transactional tables.</td>
+            <td style="padding:11px 14px;font-family:'Inconsolata',monospace;font-size:11px;color:#bbb;">SAP Fiori Design</td>
+          </tr>
+          <tr style="background:#fff;">
+            <td style="padding:11px 14px;font-weight:600;color:#1a1a1a;">Odoo 17</td>
+            <td style="padding:11px 14px;color:#555;">Plain black for Dr/Cr in journal entries. No color on transaction amounts.</td>
+            <td style="padding:11px 14px;color:#555;">Red for negative account balances in balance sheet views.</td>
+            <td style="padding:11px 14px;color:#555;">Green/red for profit/loss indicators on dashboard tiles.</td>
+            <td style="padding:11px 14px;font-family:'Inconsolata',monospace;font-size:11px;color:#bbb;">Odoo Accounting UI</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <div style="padding:12px 16px;background:#f9f8f6;border-top:1px solid #ede9e3;font-size:11px;font-family:'Manrope',sans-serif;color:#888;line-height:1.7;">
+        <b style="color:#1a1a1a;">The consistent pattern across all five:</b> GL and journal entry views use plain black for both Dr and Cr — no color. Color appears only at the reporting and dashboard layer, where it encodes <em>direction of variance</em> (favorable vs unfavorable) or <em>severity</em> (on-target / warning / critical). The separation is not stylistic — it prevents accountants from misreading structural accounting entries as directional signals.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     02 INDICATORS
+══════════════════════════════════ -->
+
+<div class="section" id="indicators">
+  <div class="section-meta"><span class="section-num">02</span><span class="section-name">Indicators</span></div>
+  <div class="section-title">Indicators</div>
+  <div class="section-desc">Four distinct patterns for communicating state, status, and metadata — each with a strict usage context.</div>
+
+  <div class="two-col">
+    <div>
+      <div class="selected-card">
+        <div class="card-head"><div class="card-head-left"><span class="card-head-title">Pattern 1 — Status dot</span></div><span class="badge badge-muted">List views · compact rows</span></div>
+        <div class="card-col">
+          <div class="col-label">8px circle · no text required · orange = due soon</div>
+          <div class="ind-row"><span class="ind-meta">Overdue / urgent</span><span class="dot dot-red"></span><span style="font-size:13px;">PT Maju Jaya · 3 invoices overdue</span></div>
+          <div class="ind-row"><span class="ind-meta">Due soon</span><span class="dot dot-orange"></span><span style="font-size:13px;">SPT PPN due in 4 days</span></div>
+          <div class="ind-row"><span class="ind-meta">Informational</span><span class="dot dot-blue"></span><span style="font-size:13px;">8 unmatched bank transactions</span></div>
+          <div class="ind-row"><span class="ind-meta">Inactive / none</span><span class="dot dot-mid"></span><span style="font-size:13px;color:#bbb;">PT Harapan Utama · Non-PKP</span></div>
+        </div>
+      </div>
+
+      <div class="selected-card" style="margin-top:14px;">
+        <div class="card-head"><div class="card-head-left"><span class="card-head-title">Pattern 2 — Status pill</span></div><span class="badge badge-muted">Document-level states</span></div>
+        <div class="card-col">
+          <div class="col-label">Low-opacity bg · max one per row</div>
+          <div class="ind-row"><span class="ind-meta">Invoice paid</span><span class="pill pill-green">✓ Paid</span></div>
+          <div class="ind-row"><span class="ind-meta">Awaiting payment</span><span class="pill pill-amber">Pending</span></div>
+          <div class="ind-row"><span class="ind-meta">Overdue</span><span class="pill pill-red">Overdue</span></div>
+          <div class="ind-row"><span class="ind-meta">Draft</span><span class="pill pill-blue">Draft</span></div>
+          <div class="ind-row"><span class="ind-meta">Void / cancelled</span><span class="pill pill-neutral">Void</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="selected-card">
+        <div class="card-head"><div class="card-head-left"><span class="card-head-title">Pattern 3 — Inline text status</span></div><span class="badge badge-muted">Field values with inherent state</span></div>
+        <div class="card-col">
+          <div class="col-label">Colored text · no background · no border</div>
+          <div class="ind-row"><span class="ind-meta">PKP confirmed</span><span class="st-green">✓ PKP Terdaftar</span></div>
+          <div class="ind-row"><span class="ind-meta">e-Faktur uploaded</span><span class="st-green">Uploaded ✓</span></div>
+          <div class="ind-row"><span class="ind-meta">NPWP missing</span><span class="st-red">Missing — required</span></div>
+          <div class="ind-row"><span class="ind-meta">Filing due soon</span><span style="font-size:12px;font-weight:600;color:#d4580a;">Due 31 Jan 2025</span></div>
+          <div class="ind-row"><span class="ind-meta">Not applicable</span><span class="st-mid">Non-PKP</span></div>
+        </div>
+      </div>
+
+      <div class="selected-card" style="margin-top:14px;">
+        <div class="card-head"><div class="card-head-left"><span class="card-head-title">Pattern 4 — Tax annotation</span></div><span class="badge badge-muted">Tax fields only</span></div>
+        <div class="card-col">
+          <div class="col-label">Manrope · 11px · uppercase · #a8a69f · no letter-spacing</div>
+          <div class="ind-row"><span class="ind-meta">Vendor default</span><span class="tax-text">PPN 11% · PPh 23 / 2%</span></div>
+          <div class="ind-row"><span class="ind-meta">Invoice line tax</span><span class="tax-text">PPN 11%</span></div>
+          <div class="ind-row"><span class="ind-meta">Bill withholding</span><span class="tax-text">PPh 23 / 2%</span></div>
+          <div class="ind-row"><span class="ind-meta">Non-taxable</span><span class="tax-text">No PPN</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="do-dont">
+    <div class="do-card do">
+      <div class="do-card-lbl">✓ Do</div>
+      <ul>
+        <li>Dot → compact list rows where space is tight</li>
+        <li>Pill → document-level state (invoice, bill header)</li>
+        <li>Text status → field values that carry inherent meaning</li>
+        <li>Tax text → tax codes and rates only, never other metadata</li>
+      </ul>
+    </div>
+    <div class="do-card dont">
+      <div class="do-card-lbl">✗ Don't</div>
+      <ul>
+        <li>Use pills for every type of metadata — they lose meaning fast</li>
+        <li>Stack multiple pills or dots in one row</li>
+        <li>Use number colors (blue/green/red) for status pills</li>
+        <li>Apply tax text style to non-tax annotations</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     03 TABLES SYSTEM
+══════════════════════════════════ -->
+
+<div style="text-align:center;font-size:12px;color:#ccc;padding:40px 0;border-top:1px solid #e5e4e0;margin-top:20px;">
+  TradeOS Design System · Colors · v1.0 · 2025 &nbsp;·&nbsp;
+  <a href="tradeos-typography.html" style="color:#bbb;">00 Typography</a> &nbsp;·&nbsp;
+  <a href="tradeos-formatting.html" style="color:#bbb;">01 Formatting</a> &nbsp;·&nbsp;
+  <a href="tradeos-ui-reference.html" style="color:#bbb;">03–05 Components</a>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeOS — Number & Currency Formatting</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Inconsolata:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f4f1; font-family: 'Manrope', sans-serif; color: #1a1a1a; line-height: 1.6; }
+.page { max-width: 1020px; margin: 0 auto; padding: 0 36px 100px; }
+
+.sys-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 52px; }
+.sys-nav-brand { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #ccc; }
+.sys-nav-links { display: flex; gap: 6px; }
+.sys-nav-links a { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 6px; border: 1px solid #e5e4e0; color: #999; text-decoration: none; letter-spacing: 0.07em; text-transform: uppercase; transition: all 0.15s; }
+.sys-nav-links a:hover { border-color: #1a1a1a; color: #1a1a1a; }
+.sys-nav-links a.here { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+.page-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 10px; }
+.page-title { font-family: 'Bebas Neue', sans-serif; font-size: 58px; letter-spacing: 0.03em; color: #1a1a1a; line-height: 1; margin-bottom: 8px; }
+.page-sub { font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 48px; max-width: 560px; }
+
+/* CONTEXT STRIP */
+.context-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #e5e4e0; border-radius: 10px; overflow: hidden; margin-bottom: 56px; }
+.ctx { background: #fff; padding: 16px 18px; }
+.ctx-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #bbb; margin-bottom: 6px; }
+.ctx-val { font-size: 12px; color: #555; line-height: 1.6; }
+.ctx-val b { color: #1a1a1a; font-weight: 600; }
+
+/* SECTION */
+.section { margin-bottom: 64px; }
+.section-meta { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+.section-num { font-family: 'Inconsolata', monospace; font-size: 12px; color: #ccc; }
+.section-name { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.03em; color: #1a1a1a; margin-bottom: 6px; }
+.section-desc { font-size: 13px; color: #888; line-height: 1.7; margin-bottom: 20px; max-width: 680px; }
+
+/* CARD */
+.card { background: #fff; border: 1px solid #e5e4e0; border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+.card-head { background: #2a2926; padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+.card-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+.card-body { padding: 18px 20px; }
+
+/* GRIDS */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.four-col { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+
+/* RULE LIST */
+.rule-list { display: flex; flex-direction: column; }
+.rule { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid #f0efe9; align-items: flex-start; }
+.rule:last-child { border-bottom: none; }
+.rb { font-family: 'Inconsolata', monospace; font-size: 11px; color: #bbb; flex-shrink: 0; width: 14px; margin-top: 2px; }
+.rt { font-size: 13px; color: #555; line-height: 1.6; }
+.rt b { color: #1a1a1a; font-weight: 600; }
+.rt code { font-family: 'Inconsolata', monospace; font-size: 11px; background: #f5f4f1; padding: 1px 5px; border-radius: 3px; color: #1a1a1a; }
+
+/* NOTE */
+.note { background: #fff; border: 1px solid #e5e4e0; border-left: 3px solid #1a1a1a; border-radius: 0 8px 8px 0; padding: 11px 16px; font-size: 13px; color: #888; line-height: 1.7; margin-bottom: 14px; }
+.note b { color: #1a1a1a; font-weight: 600; }
+.note code { font-family: 'Inconsolata', monospace; font-size: 11px; background: #f5f4f1; padding: 1px 5px; border-radius: 3px; color: #1a1a1a; }
+.note.warn { border-left-color: #c07a00; background: #fffbf0; }
+.note.warn b { color: #c07a00; }
+
+/* PRINCIPLE CARD */
+.pcrd { background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; padding: 18px 20px; }
+.pcrd-num { font-family: 'Inconsolata', monospace; font-size: 11px; color: #ccc; margin-bottom: 6px; }
+.pcrd-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+.pcrd-body { font-size: 12px; color: #888; line-height: 1.65; }
+.pcrd-body b { color: #555; font-weight: 600; }
+.pcrd-body code { font-family: 'Inconsolata', monospace; font-size: 11px; background: #f5f4f1; padding: 1px 5px; border-radius: 3px; color: #1a1a1a; }
+
+/* ERP-STYLE MOCK TABLES */
+.mock-wrap { border: 1px solid #c8c4bc; border-radius: 8px; overflow: hidden; font-family: 'Inconsolata', monospace; font-size: 12px; }
+.mock-title { background: #3a3734; color: rgba(255,255,255,0.7); padding: 8px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+.mock-title span { font-family: 'Manrope', sans-serif; }
+.mock-tbl { width: 100%; border-collapse: collapse; }
+.mock-tbl thead tr { background: #e8e5de; }
+.mock-tbl th { padding: 7px 12px; text-align: right; font-size: 10px; font-weight: 600; color: #555; letter-spacing: 0.06em; border-bottom: 2px solid #b8b4ac; white-space: nowrap; }
+.mock-tbl th.left { text-align: left; }
+.mock-tbl tbody tr:nth-child(odd) { background: #fff; }
+.mock-tbl tbody tr:nth-child(even) { background: #faf9f7; }
+.mock-tbl tbody tr { border-bottom: 1px solid #ede9e3; }
+.mock-tbl td { padding: 7px 12px; text-align: right; color: #1a1a1a; white-space: nowrap; }
+.mock-tbl td.left { text-align: left; color: #444; font-family: 'Manrope', sans-serif; font-size: 12px; }
+.mock-tbl td.neg { color: #c0392b; }
+.mock-tbl td.dim { color: #bbb; }
+.mock-tbl td.muted { color: #888; font-size: 11px; }
+.mock-tbl tr.subtotal td { border-top: 1px solid #1a1a1a; font-weight: 600; background: #f5f4f1; }
+.mock-tbl tr.grandtotal td { border-top: 2px solid #1a1a1a; border-bottom: 3px double #1a1a1a; font-weight: 600; background: #edeae3; }
+.mock-tbl tr.section-head td { background: #f0efe9; font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 11px; color: #555; text-align: left; padding: 5px 12px; letter-spacing: 0.04em; text-transform: uppercase; border-top: 1px solid #ddd; }
+
+/* DO / DON'T */
+.dd-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.dd { border-radius: 10px; padding: 16px 18px; border: 1px solid; }
+.dd.do { border-color: #86efac; background: rgba(209,250,229,0.25); }
+.dd.dont { border-color: #fca5a5; background: rgba(254,226,226,0.25); }
+.dd-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.dd.do .dd-lbl { color: #065f46; }
+.dd.dont .dd-lbl { color: #991b1b; }
+.dd-val { font-family: 'Inconsolata', monospace; font-size: 15px; color: #1a1a1a; margin-bottom: 6px; }
+.dd.dont .dd-val { text-decoration: line-through; text-decoration-color: rgba(224,64,10,0.4); color: #888; }
+.dd-note { font-size: 12px; color: #888; line-height: 1.5; }
+.dd-note b { color: #555; font-weight: 600; }
+
+/* GAP CARD */
+.gap-card { background: #fffbf0; border: 1px solid #fde68a; border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
+.gap-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #92400e; margin-bottom: 5px; }
+.gap-text { font-size: 13px; color: #555; line-height: 1.6; }
+.gap-text b { color: #1a1a1a; font-weight: 600; }
+.gap-text code { font-family: 'Inconsolata', monospace; font-size: 11px; background: rgba(255,255,255,0.7); padding: 1px 5px; border-radius: 3px; color: #1a1a1a; }
+
+/* FORMAT CONTEXT PAIR — shows table vs non-table side by side */
+.fmt-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.fmt-col-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+.fmt-col-label.tbl-label { color: #2a5c99; }
+.fmt-col-label.inline-label { color: #3a7a5c; }
+.fmt-col-label::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.tbl-label::before { background: #2a5c99; }
+.inline-label::before { background: #3a7a5c; }
+
+/* KPI / card mock */
+.kpi-mock { background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; padding: 18px 20px; }
+.kpi-mock-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #bbb; margin-bottom: 8px; font-family: 'Manrope', sans-serif; }
+.kpi-mock-val { font-family: 'Inconsolata', monospace; font-size: 28px; color: #1a1a1a; line-height: 1.2; }
+.kpi-mock-val.neg { color: #c0392b; }
+.kpi-mock-val.muted { color: #bbb; }
+.kpi-mock-sub { font-family: 'Manrope', sans-serif; font-size: 12px; color: #888; margin-top: 4px; }
+.kpi-mock-delta { font-family: 'Manrope', sans-serif; font-size: 12px; margin-top: 6px; display: flex; align-items: center; gap: 5px; }
+.kpi-mock-delta.up { color: #00a870; }
+.kpi-mock-delta.down { color: #c0392b; }
+
+/* Inline narrative mock */
+.narrative-mock { background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; padding: 16px 20px; font-family: 'Manrope', sans-serif; font-size: 13px; color: #555; line-height: 1.8; }
+.narrative-mock .num { font-family: 'Inconsolata', monospace; color: #1a1a1a; font-size: 14px; }
+.narrative-mock .num.neg { color: #c0392b; }
+
+/* Invoice header mock */
+.inv-mock { background: #fff; border: 1px solid #e5e4e0; border-radius: 10px; overflow: hidden; }
+.inv-mock-head { background: #2a2926; padding: 14px 18px; display: flex; justify-content: space-between; align-items: flex-start; }
+.inv-mock-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.06em; color: #fff; }
+.inv-mock-meta { text-align: right; font-family: 'Inconsolata', monospace; font-size: 11px; color: rgba(255,255,255,0.5); }
+.inv-mock-meta strong { color: rgba(255,255,255,0.85); font-size: 13px; display: block; margin-bottom: 2px; }
+.inv-mock-body { padding: 16px 18px; }
+.inv-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f0efe9; font-size: 13px; }
+.inv-row:last-child { border-bottom: none; }
+.inv-row .lbl { color: #888; font-family: 'Manrope', sans-serif; }
+.inv-row .val { font-family: 'Inconsolata', monospace; color: #1a1a1a; }
+.inv-row .val.neg { color: #c0392b; }
+.inv-row.total .lbl { color: #1a1a1a; font-weight: 600; font-family: 'Manrope', sans-serif; }
+.inv-row.total .val { font-size: 16px; font-weight: 500; }
+
+
+/* DIVIDER */
+hr.div { border: none; border-top: 1px solid #e5e4e0; margin: 22px 0; }
+
+/* FOOTER */
+.footer { text-align: center; font-size: 12px; color: #ccc; padding: 40px 0; border-top: 1px solid #e5e4e0; margin-top: 20px; }
+.footer a { color: #bbb; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- NAV -->
+<div class="sys-nav">
+  <a href="index.html" class="sys-nav-brand" style="text-decoration:none;color:#ccc;">TradeOS Design System</a>
+  <div class="sys-nav-links">
+    <a href="tradeos-typography.html">00 Typography</a>
+    <a href="#" class="here">01 Formatting</a>
+    <a href="tradeos-tokens.html">02 Colors</a>
+    <a href="tradeos-ui-reference.html">03–05 Components</a>
+    <a href="tradeos-forms.html">06 Forms</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="page-eyebrow">01 — TradeOS Design System</div>
+<div class="page-title">Number &amp; Currency Formatting</div>
+<div class="page-sub">Formatting rules for financial figures across ERP-context interfaces. IDR-first, PSAK-compliant, DJP-aware. Covers tables, KPI cards, multi-currency views, PPN/DPP splits, and edge cases.</div>
+
+<!-- CONTEXT STRIP -->
+<div class="context-strip">
+  <div class="ctx"><div class="ctx-label">System context</div><div class="ctx-val"><b>ERP / Finance</b><br>SAP · Oracle · Odoo-style<br>Indonesian companies</div></div>
+  <div class="ctx"><div class="ctx-label">Compliance</div><div class="ctx-val"><b>PSAK</b> accounting standards<br><b>DJP / e-Faktur</b> tax rules<br>BI Middle Rate for FX</div></div>
+  <div class="ctx"><div class="ctx-label">Users</div><div class="ctx-val">Local finance teams<br>Multinational controllers<br>Tax &amp; audit staff</div></div>
+  <div class="ctx"><div class="ctx-label">Primary currency</div><div class="ctx-val"><b>IDR (Rupiah)</b><br>Rp prefix · period thousands<br>Comma decimal</div></div>
+</div>
+
+
+<!-- ══════════════════ 01 PRINCIPLES ══════════════════ -->
+<div class="section" id="principles">
+  <div class="section-meta"><span class="section-num">01</span><span class="section-name">Principles</span></div>
+  <div class="section-title">Principles</div>
+  <div class="section-desc">Four rules that govern every formatting decision. When in doubt, come back to these.</div>
+  <div class="four-col">
+    <div class="pcrd"><div class="pcrd-num">01</div><div class="pcrd-title">Clarity over precision</div><div class="pcrd-body">Show only as many decimals as the context demands. <b>P&amp;L views</b> suppress trailing zeros. <b>Transaction views</b> always show two decimals. Never show more than two decimal places in user-facing IDR.</div></div>
+    <div class="pcrd"><div class="pcrd-num">02</div><div class="pcrd-title">Consistency within a view</div><div class="pcrd-body">Every number in the same table follows the same rules — same decimal count, same negative convention, same alignment. <b>Never mix formats</b> within a single table or screen.</div></div>
+    <div class="pcrd"><div class="pcrd-num">03</div><div class="pcrd-title">Context-driven format</div><div class="pcrd-body">Tabular views and KPI cards have different rules. A number that belongs in a column header belongs nowhere else in that column. <b>Match the format to the reading context,</b> not to a single universal rule.</div></div>
+    <div class="pcrd"><div class="pcrd-num">04</div><div class="pcrd-title">Indonesian-first</div><div class="pcrd-body">IDR uses <b>period as thousands separator</b> and <b>comma as decimal separator.</b> This is the inverse of USD/USD-influenced software defaults. Never apply US separators to IDR figures.</div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 02 IDR FORMAT ══════════════════ -->
+<div class="section" id="idr">
+  <div class="section-meta"><span class="section-num">02</span><span class="section-name">Default Format</span></div>
+  <div class="section-title">IDR — Default Format</div>
+  <div class="section-desc">The canonical format for all Rupiah figures. Context determines whether the symbol appears inline or only in the column header.</div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><span class="card-title">Canonical format</span><span class="card-tag">IDR</span></div>
+      <div class="card-body">
+        <div style="font-family:'Inconsolata',monospace;font-size:36px;color:#1a1a1a;padding:12px 0 16px;border-bottom:1px solid #f0efe9;">Rp 1.250.000,00</div>
+        <div class="rule-list" style="margin-top:12px;">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Symbol:</b> <code>Rp</code> followed by a single space, then the digits</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Thousands separator:</b> period <code>.</code> — e.g. <code>1.250.000</code></span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Decimal separator:</b> comma <code>,</code> — e.g. <code>1.250.000,00</code></span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Decimal places:</b> always 2 in transactional views; suppressed in P&L unless non-zero cents exist</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">In tables: <code>Rp</code> lives in the <b>column header only</b> — never repeated per cell</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Outside tables (cards, narrative): <code>Rp</code> inline as prefix — <code>Rp 1.250.000,00</code></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="dd-wrap" style="display:flex;flex-direction:column;gap:10px;">
+        <div class="dd do">
+          <div class="dd-lbl">✓ Do</div>
+          <div class="dd-val">Rp 1.250.000,00</div>
+          <div class="dd-note">Inline / KPI card context. Symbol + space + figure + 2 decimals.</div>
+        </div>
+        <div class="dd dont">
+          <div class="dd-lbl">✗ Don't</div>
+          <div class="dd-val">Rp1,250,000.00</div>
+          <div class="dd-note"><b>US separators applied to IDR.</b> Comma is not an IDR thousands separator. Period is not an IDR decimal separator.</div>
+        </div>
+        <div class="dd dont">
+          <div class="dd-lbl">✗ Don't</div>
+          <div class="dd-val">IDR 1.250.000</div>
+          <div class="dd-note"><b>ISO code in UI.</b> Use <code>Rp</code> in display; <code>IDR</code> is for APIs and data exports only.</div>
+        </div>
+        <div class="dd dont">
+          <div class="dd-lbl">✗ Don't</div>
+          <div class="dd-val">Rp1.250.000</div>
+          <div class="dd-note"><b>Missing space.</b> The standard is <code>Rp </code> (symbol + space) when used inline, per Indonesian convention.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table: symbol in header only -->
+  <div style="margin-top:20px;">
+    <div class="note"><b>In tables:</b> the <code>Rp</code> symbol belongs in the column header, not repeated on every cell. This reduces visual noise and follows ERP convention (SAP, Oracle, Odoo all do this).</div>
+
+    <div class="fmt-pair">
+      <div>
+        <div class="fmt-col-label tbl-label">In a table</div>
+        <div class="mock-wrap">
+          <div class="mock-title"><span>Accounts Payable — January 2025</span><span>Symbol in header · not per cell</span></div>
+          <table class="mock-tbl">
+            <thead><tr>
+              <th class="left">Vendor</th>
+              <th class="left">Invoice No.</th>
+              <th>DPP (Rp)</th>
+              <th>PPN 11% (Rp)</th>
+              <th>Total (Rp)</th>
+            </tr></thead>
+            <tbody>
+              <tr><td class="left">PT Maju Jaya Sentosa</td><td class="left">INV-2025-0041</td><td>10.000.000,00</td><td>1.100.000,00</td><td>11.100.000,00</td></tr>
+              <tr><td class="left">CV Harapan Utama</td><td class="left">INV-2025-0044</td><td>5.500.000,00</td><td>605.000,00</td><td>6.105.000,00</td></tr>
+              <tr><td class="left">PT Sumber Berkah</td><td class="left">INV-2025-0051</td><td>22.000.000,00</td><td>2.420.000,00</td><td>24.420.000,00</td></tr>
+              <tr class="subtotal"><td class="left" colspan="2">Total</td><td>37.500.000,00</td><td>4.125.000,00</td><td>41.625.000,00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">
+          ✓ <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#f0efe9;padding:1px 5px;border-radius:3px;color:#555;">(Rp)</code> in column header only — cells show bare number
+        </div>
+      </div>
+
+      <div>
+        <div class="fmt-col-label inline-label">Outside a table — KPI card &amp; narrative</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="kpi-mock">
+            <div class="kpi-mock-label">Total Hutang Usaha</div>
+            <div class="kpi-mock-val">Rp 41.625.000,00</div>
+            <div class="kpi-mock-sub">Per 31 Januari 2025</div>
+          </div>
+          <div class="narrative-mock">
+            Total kewajiban kepada vendor bulan Januari mencapai <span class="num">Rp 41.625.000,00</span>, termasuk PPN senilai <span class="num">Rp 4.125.000,00</span>.
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">
+          ✓ <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#f0efe9;padding:1px 5px;border-radius:3px;color:#555;">Rp </code> as inline prefix — symbol + space + figure
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 03 NEGATIVE VALUES ══════════════════ -->
+<div class="section" id="negative">
+  <div class="section-meta"><span class="section-num">03</span><span class="section-name">Negative Values</span></div>
+  <div class="section-title">Negative Values</div>
+  <div class="section-desc">PSAK and Indonesian accounting practice use parentheses for negative amounts — not the minus sign. The choice of convention must be consistent within any single view.</div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><span class="card-title">Convention by context</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Financial statements &amp; P&amp;L</b> → parentheses: <code>(1.250.000,00)</code> — PSAK convention</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Transactional views</b> (GL, journals, AR/AP) → parentheses preferred; minus sign acceptable if the system can't render parentheses</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>KPI cards &amp; dashboards</b> → minus sign <code>-Rp 1.250.000,00</code> with red color (#e0400a) — more immediately readable at a glance</span></div>
+          <div class="rule"><span class="rb">!</span><span class="rt"><b>Never mix</b> parentheses and minus signs within the same table — choose one and apply it to all rows</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Negative values are always rendered in <b>red (#e0400a)</b> regardless of convention used</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">In column headers, do not prefix the column with a minus — the cell value carries the sign</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="dd-wrap" style="display:flex;flex-direction:column;gap:10px;">
+        <div class="dd do">
+          <div class="dd-lbl">✓ Financial statements</div>
+          <div class="dd-val" style="color:#c0392b;">(1.250.000,00)</div>
+          <div class="dd-note">Parentheses, no Rp in cell (already in header). Red color.</div>
+        </div>
+        <div class="dd do">
+          <div class="dd-lbl">✓ Dashboard / KPI card</div>
+          <div class="dd-val" style="color:#c0392b;">-Rp 1.250.000,00</div>
+          <div class="dd-note">Minus sign with inline Rp. Red color. Easier to parse at a glance.</div>
+        </div>
+        <div class="dd dont">
+          <div class="dd-lbl">✗ Don't</div>
+          <div class="dd-val">-1.250.000,00</div>
+          <div class="dd-note"><b>Minus without color.</b> In a dense table, a minus sign without red color is easy to miss.</div>
+        </div>
+        <div class="dd dont">
+          <div class="dd-lbl">✗ Don't mix in same table</div>
+          <div class="dd-val" style="font-size:13px;color:#888;">(500.000,00) &nbsp; -800.000,00</div>
+          <div class="dd-note"><b>Inconsistent convention.</b> Two different negative formats in the same table breaks scannability.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fmt-pair" style="margin-top:20px;">
+    <div>
+      <div class="fmt-col-label tbl-label">In a table — financial statement (PSAK)</div>
+      <div class="mock-wrap">
+        <div class="mock-title"><span>Laporan Laba Rugi — Q1 2025</span><span>Parentheses · PSAK</span></div>
+        <table class="mock-tbl">
+          <thead><tr><th class="left">Keterangan</th><th>Q1 2025 (Rp)</th><th>Q1 2024 (Rp)</th><th>Var. (Rp)</th></tr></thead>
+          <tbody>
+            <tr class="section-head"><td colspan="4">Pendapatan</td></tr>
+            <tr><td class="left">Penjualan Bersih</td><td>4.200.000.000,00</td><td>3.750.000.000,00</td><td>450.000.000,00</td></tr>
+            <tr class="subtotal"><td class="left">Total Pendapatan</td><td>4.200.000.000,00</td><td>3.750.000.000,00</td><td>450.000.000,00</td></tr>
+            <tr class="section-head"><td colspan="4">Beban Operasional</td></tr>
+            <tr><td class="left">HPP</td><td class="neg">(2.940.000.000,00)</td><td class="neg">(2.625.000.000,00)</td><td class="neg">(315.000.000,00)</td></tr>
+            <tr><td class="left">Beban Gaji</td><td class="neg">(420.000.000,00)</td><td class="neg">(390.000.000,00)</td><td class="neg">(30.000.000,00)</td></tr>
+            <tr><td class="left">Beban Operasional Lain</td><td class="neg">(185.000.000,00)</td><td class="neg">(160.000.000,00)</td><td class="neg">(25.000.000,00)</td></tr>
+            <tr class="subtotal"><td class="left">Total Beban</td><td class="neg">(3.545.000.000,00)</td><td class="neg">(3.175.000.000,00)</td><td class="neg">(370.000.000,00)</td></tr>
+            <tr class="grandtotal"><td class="left">Laba Bersih</td><td>740.000.000,00</td><td>637.000.000,00</td><td>103.000.000,00</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ Parentheses <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#f0efe9;padding:1px 5px;border-radius:3px;">(2.940.000.000,00)</code> in red — PSAK convention for statements</div>
+    </div>
+    <div>
+      <div class="fmt-col-label inline-label">Outside a table — KPI card &amp; narrative</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-mock">
+          <div class="kpi-mock-label">Variance vs Last Year</div>
+          <div class="kpi-mock-val neg">-Rp 315.000.000,00</div>
+          <div class="kpi-mock-sub">HPP Q1 2025 vs Q1 2024</div>
+          <div class="kpi-mock-delta down">▼ 12,0% dari periode sebelumnya</div>
+        </div>
+        <div class="narrative-mock">
+          Beban HPP meningkat sebesar <span class="num neg">-Rp 315.000.000,00</span> dibanding Q1 tahun lalu, didorong oleh kenaikan harga bahan baku.
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ Minus sign <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#f0efe9;padding:1px 5px;border-radius:3px;">-Rp</code> in red — more readable at a glance in cards &amp; narrative</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 04 ZERO & MISSING ══════════════════ -->
+<div class="section" id="zero">
+  <div class="section-meta"><span class="section-num">04</span><span class="section-name">Zero &amp; Missing</span></div>
+  <div class="section-title">Zero &amp; Missing Values</div>
+  <div class="section-desc">Two separate concepts — zero is a real value; missing means no data exists. They must never look the same.</div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><span class="card-title">Zero values — by context</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>P&amp;L and financial statements:</b> display as <code>-</code> (en dash, muted color) — suppresses visual noise in summary views</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Transactional views</b> (GL, AP, AR, invoices): display as <code>0,00</code> — keeps decimal alignment consistent across all rows</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>KPI cards:</b> display as <code>Rp 0</code> — never <code>Rp 0,00</code>. Zero is zero; decimals add no information here.</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Zero values are rendered in <b>muted color (#bbb)</b> in all contexts</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-title">Missing / unavailable values</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt">Use <b>em dash</b> <code>—</code> for values that are genuinely not applicable or not yet available</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Never use a hyphen <code>-</code> for missing — it is visually identical to a minus sign in a table</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">During loading: show a <b>skeleton bar</b>, never <code>Rp 0</code> or <code>—</code></span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">If data fetch fails: show <code>—</code> with an error tooltip — not blank, not <code>Rp 0</code></span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Em dash is always <b>right-aligned and muted</b> in a numeric column — it occupies the same column space as a number</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fmt-pair" style="margin-top:14px;">
+    <div>
+      <div class="fmt-col-label tbl-label">In a table — transactional vs P&L</div>
+      <div class="mock-wrap">
+        <div class="mock-title"><span>Trial Balance — Period Comparison</span><span>Zero and missing value treatment</span></div>
+        <table class="mock-tbl">
+          <thead><tr><th class="left">Account</th><th>Jan 2025 (Rp)</th><th>Feb 2025 (Rp)</th><th>Mar 2025 (Rp)</th></tr></thead>
+          <tbody>
+            <tr><td class="left">Kas &amp; Setara Kas</td><td>234.500.000,00</td><td>198.200.000,00</td><td>245.800.000,00</td></tr>
+            <tr><td class="left">Piutang Usaha</td><td>420.000.000,00</td><td>385.000.000,00</td><td class="dim">—</td></tr>
+            <tr><td class="left">Persediaan</td><td>188.000.000,00</td><td>188.000.000,00</td><td class="dim">—</td></tr>
+            <tr><td class="left">Beban Dibayar Di Muka</td><td class="muted">0,00</td><td>12.500.000,00</td><td class="muted">0,00</td></tr>
+            <tr><td class="left">Investasi Jangka Pendek</td><td class="dim">—</td><td class="dim">—</td><td>500.000.000,00</td></tr>
+          </tbody>
+        </table>
+        <div style="padding:8px 14px;background:#f5f4f1;border-top:1px solid #ede9e3;font-size:11px;font-family:'Manrope',sans-serif;color:#888;">
+          <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#edeae3;padding:1px 5px;border-radius:3px;color:#555;">0,00</code> = real zero &nbsp;·&nbsp;
+          <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#edeae3;padding:1px 5px;border-radius:3px;color:#555;">—</code> = no data for this period
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="fmt-col-label inline-label">Outside a table — KPI cards</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-mock">
+          <div class="kpi-mock-label">Investasi Jangka Pendek</div>
+          <div class="kpi-mock-val muted">Rp 0</div>
+          <div class="kpi-mock-sub">Per 31 Januari 2025 · saldo kosong</div>
+        </div>
+        <div class="kpi-mock">
+          <div class="kpi-mock-label">Piutang Usaha — Mar 2025</div>
+          <div class="kpi-mock-val muted" style="font-size:32px;">—</div>
+          <div class="kpi-mock-sub">Data belum tersedia untuk periode ini</div>
+        </div>
+        <div class="narrative-mock">
+          Saldo kas per Januari adalah <span class="num">Rp 234.500.000,00</span>. Investasi jangka pendek tercatat <span class="num" style="color:#bbb;font-family:'Inconsolata',monospace;font-size:14px;">Rp 0</span> karena belum ada penempatan pada periode ini.
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#f0efe9;padding:1px 5px;border-radius:3px;">Rp 0</code> for confirmed zero · <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#f0efe9;padding:1px 5px;border-radius:3px;">—</code> for unavailable · never <code style="font-family:'Inconsolata',monospace;font-size:10px;background:#fee2e2;padding:1px 5px;border-radius:3px;color:#991b1b;">Rp 0</code> as loading state</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 05 TABLE ALIGNMENT & TOTALS ══════════════════ -->
+<div class="section" id="tables">
+  <div class="section-meta"><span class="section-num">05</span><span class="section-name">Table Rules</span></div>
+  <div class="section-title">Table Alignment &amp; Totals</div>
+  <div class="section-desc">Column alignment and total row styling are the two most commonly broken rules in ERP interfaces. Both are non-negotiable for financial readability.</div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><span class="card-title">Alignment rules</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>All numeric columns are right-aligned</b> — without exception. Left-aligning amounts breaks decimal scanning.</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Decimal alignment must be vertically consistent</b> — all rows in a column must show the same number of decimal places so commas stack in a vertical line</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Text / description columns are left-aligned</b> — account names, vendor names, reference numbers</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Use <b>Inconsolata (monospace)</b> for all numeric cells — ensures equal character width and perfect decimal stacking</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Column widths should be <b>wide enough to never truncate</b> a figure — figures that wrap or truncate are an audit risk</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-title">Total row styling</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Subtotals:</b> bold text + single top border (<code>border-top: 1px solid</code>). Slightly tinted background (#f5f4f1).</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Grand totals:</b> bold text + double bottom border (<code>border-bottom: 3px double</code>) + single top border. Darker tinted background (#edeae3). This is the PSAK / accounting convention for final totals.</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Never use background color alone to indicate a total — always pair with the border convention</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Section headers (Pendapatan, Beban, etc.) get a <b>light separator row</b> — not a total row style</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Indent sub-items 16px under their section header to create visual grouping without extra dividers</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alignment demo -->
+  <div style="margin-top:14px;" class="fmt-pair">
+    <div>
+      <div class="fmt-col-label tbl-label">In a table — right-aligned, decimals stack</div>
+      <div class="mock-wrap">
+        <table class="mock-tbl">
+          <thead><tr><th class="left">Account</th><th>Amount (Rp)</th></tr></thead>
+          <tbody>
+            <tr><td class="left">Penjualan A</td><td>1.250.000,00</td></tr>
+            <tr><td class="left">Penjualan B</td><td>24.750.000,00</td></tr>
+            <tr><td class="left">Penjualan C</td><td>850.000,00</td></tr>
+            <tr class="subtotal"><td class="left">Subtotal</td><td>26.850.000,00</td></tr>
+            <tr><td class="left">Diskon</td><td class="neg">(500.000,00)</td></tr>
+            <tr class="grandtotal"><td class="left">Total Bersih</td><td>26.350.000,00</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ Right-aligned · subtotal single border · grand total double bottom border</div>
+    </div>
+    <div>
+      <div class="fmt-col-label inline-label">Outside a table — invoice summary &amp; KPI</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="inv-mock">
+          <div class="inv-mock-head">
+            <div class="inv-mock-brand">TradeOS</div>
+            <div class="inv-mock-meta"><strong>INV-2025-0041</strong>Jatuh tempo: 31 Jan 2025</div>
+          </div>
+          <div class="inv-mock-body">
+            <div class="inv-row"><span class="lbl">Subtotal</span><span class="val">Rp 26.850.000,00</span></div>
+            <div class="inv-row"><span class="lbl">Diskon</span><span class="val neg">-Rp 500.000,00</span></div>
+            <div class="inv-row"><span class="lbl">PPN 11%</span><span class="val">Rp 2.893.500,00</span></div>
+            <div class="inv-row total"><span class="lbl">Total Tagihan</span><span class="val">Rp 29.243.500,00</span></div>
+          </div>
+        </div>
+        <div class="kpi-mock">
+          <div class="kpi-mock-label">Total Penjualan Bersih</div>
+          <div class="kpi-mock-val">Rp 26.350.000,00</div>
+          <div class="kpi-mock-delta up">▲ Rp 3.500.000,00 vs bulan lalu</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ Invoice: Rp inline prefix per row · KPI: single value, full format with symbol</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 06 PPN / DPP ══════════════════ -->
+<div class="section" id="ppn">
+  <div class="section-meta"><span class="section-num">06</span><span class="section-name">PPN / DPP</span></div>
+  <div class="section-title">PPN &amp; DPP Display</div>
+  <div class="section-desc">All tax-related tables must show DPP, PPN, and Total as separate columns — never collapsed into a single amount. This is required for e-Faktur compliance and DJP audit readiness.</div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><span class="card-title">Required columns</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>DPP (Rp)</b> — Dasar Pengenaan Pajak, the taxable base. Always shown separately.</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>PPN 11% (Rp)</b> — the VAT amount. Label must include the rate (11%) explicitly so users can verify the calculation.</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Total (Rp)</b> — DPP + PPN. This is the final invoice/payable amount.</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">For PPh withholding: add a <b>PPh (Rp)</b> column showing the withheld amount in parentheses, and a <b>Net Bayar (Rp)</b> column for the actual cash outflow</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">NSFP (Nomor Seri Faktur Pajak) should appear as a separate non-numeric column — left-aligned, Inconsolata font</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">PKP status of the vendor determines whether PPN applies — show <code>—</code> in the PPN column for non-PKP vendors</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-title">PPh withholding column pattern</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt">PPh 23 withholding is shown as <b>a deduction in parentheses</b> — e.g. <code>(200.000,00)</code> — red color</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Column header: <b>PPh 23/2% (Rp)</b> — include the rate in the header</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Net Bayar</b> = Total − PPh withheld. This is the actual bank transfer amount.</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">PPN and PPh are separate tax obligations — never combine them into a single "Tax" column</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fmt-pair" style="margin-top:14px;">
+    <div>
+      <div class="fmt-col-label tbl-label">In a table — Faktur Pembelian</div>
+      <div class="mock-wrap">
+        <div class="mock-title"><span>Faktur Pembelian — January 2025</span><span>DPP · PPN · PPh · Net Bayar</span></div>
+        <table class="mock-tbl">
+          <thead><tr>
+            <th class="left">Vendor</th>
+            <th class="left">NSFP</th>
+            <th>DPP (Rp)</th>
+            <th>PPN 11% (Rp)</th>
+            <th>Total (Rp)</th>
+            <th>PPh 23/2% (Rp)</th>
+            <th>Net Bayar (Rp)</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="left">PT Maju Jaya Sentosa</td>
+              <td class="left" style="font-family:'Inconsolata',monospace;font-size:11px;color:#666;">010.000-25.00000041</td>
+              <td>10.000.000,00</td><td>1.100.000,00</td><td>11.100.000,00</td>
+              <td class="neg">(200.000,00)</td><td>10.900.000,00</td>
+            </tr>
+            <tr>
+              <td class="left">CV Sumber Berkah</td>
+              <td class="left" style="font-family:'Inconsolata',monospace;font-size:11px;color:#666;">010.000-25.00000042</td>
+              <td>5.500.000,00</td><td>605.000,00</td><td>6.105.000,00</td>
+              <td class="dim">—</td><td>6.105.000,00</td>
+            </tr>
+            <tr>
+              <td class="left">PT Harapan Utama <span style="font-size:10px;color:#bbb;">(non-PKP)</span></td>
+              <td class="left dim">—</td>
+              <td>8.000.000,00</td><td class="dim">—</td><td>8.000.000,00</td>
+              <td class="neg">(160.000,00)</td><td>7.840.000,00</td>
+            </tr>
+            <tr class="subtotal">
+              <td class="left" colspan="2">Total</td>
+              <td>23.500.000,00</td><td>1.705.000,00</td><td>25.205.000,00</td>
+              <td class="neg">(360.000,00)</td><td>24.845.000,00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ DPP · PPN · Total as separate columns · PPh in parentheses red · no Rp in cells</div>
+    </div>
+    <div>
+      <div class="fmt-col-label inline-label">Outside a table — invoice breakdown &amp; KPI</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="inv-mock">
+          <div class="inv-mock-head">
+            <div class="inv-mock-brand">PT Maju Jaya</div>
+            <div class="inv-mock-meta"><strong>NSFP 010.000-25.00000041</strong>INV-2025-0041 · 03 Jan 2025</div>
+          </div>
+          <div class="inv-mock-body">
+            <div class="inv-row"><span class="lbl">DPP</span><span class="val">Rp 10.000.000,00</span></div>
+            <div class="inv-row"><span class="lbl">PPN 11%</span><span class="val">Rp 1.100.000,00</span></div>
+            <div class="inv-row"><span class="lbl">Total Invoice</span><span class="val">Rp 11.100.000,00</span></div>
+            <div class="inv-row"><span class="lbl">PPh 23 (2%) dipotong</span><span class="val neg">-Rp 200.000,00</span></div>
+            <div class="inv-row total"><span class="lbl">Net Bayar</span><span class="val">Rp 10.900.000,00</span></div>
+          </div>
+        </div>
+        <div class="kpi-mock">
+          <div class="kpi-mock-label">Total PPN Masukan — Jan 2025</div>
+          <div class="kpi-mock-val">Rp 1.705.000,00</div>
+          <div class="kpi-mock-sub">Dari 3 faktur · semua telah di-upload ke e-Faktur</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ Invoice: each tax line with Rp prefix · PPh as minus sign in red · KPI: full format with symbol</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 07 MULTI-CURRENCY ══════════════════ -->
+<div class="section" id="fx">
+  <div class="section-meta"><span class="section-num">07</span><span class="section-name">Multi-Currency</span></div>
+  <div class="section-title">Multi-Currency Tables</div>
+  <div class="section-desc">Foreign currency transactions must always show three columns: the original FCY amount, the BI Middle Rate (Kurs), and the IDR equivalent. Never collapse these into one.</div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><span class="card-title">Required columns — FCY transactions</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>FCY Amount:</b> native currency amount with its own format rules — e.g. <code>$12,500.00</code> for USD, <code>€10,000.00</code> for EUR</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Kurs (Rp):</b> BI Middle Rate used for the conversion — <code>15.750,00</code>. Date of rate must be disclosed in the table header or footnote.</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>IDR Equivalent (Rp):</b> FCY × Kurs, right-aligned, full IDR format with 2 decimals</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Currency column header must include the ISO code: <code>Nilai (USD)</code>, <code>Kurs BI (Rp/USD)</code>, <code>IDR Equiv. (Rp)</code></span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">If a table mixes multiple foreign currencies, add a <b>Currency</b> column (text, left-aligned) before the FCY amount</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-title">Currency format by locale</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>USD:</b> <code>$12,500.00</code> — comma thousands, period decimal, prefix symbol, no space</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>EUR:</b> <code>10.000,00 €</code> — period thousands, comma decimal, suffix symbol with space. European convention.</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>SGD:</b> <code>S$12,500.00</code> — use <code>S$</code> to distinguish from USD</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Never apply IDR separators to foreign currencies</b> — each currency follows its own locale rules</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Kurs (exchange rate) always uses <b>IDR format</b> — it is expressed as Rupiah per 1 unit of FCY</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fmt-pair" style="margin-top:14px;">
+    <div>
+      <div class="fmt-col-label tbl-label">In a table — FCY + Kurs + IDR Equivalent</div>
+      <div class="mock-wrap">
+        <div class="mock-title"><span>Transaksi Valuta Asing — Feb 2025</span><span>Kurs: BI Middle Rate per tanggal transaksi</span></div>
+        <table class="mock-tbl">
+          <thead><tr>
+            <th class="left">Tanggal</th>
+            <th class="left">Vendor</th>
+            <th class="left">CCY</th>
+            <th>Nilai (FCY)</th>
+            <th>Kurs BI (Rp/FCY)</th>
+            <th>IDR Equiv. (Rp)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="left">03 Feb</td><td class="left">Siemens AG</td><td class="left" style="font-family:'Inconsolata',monospace;">EUR</td><td style="font-family:'Inconsolata',monospace;text-align:right;">10.000,00 €</td><td>17.250,00</td><td>172.500.000,00</td></tr>
+            <tr><td class="left">07 Feb</td><td class="left">Acme Corp</td><td class="left" style="font-family:'Inconsolata',monospace;">USD</td><td style="font-family:'Inconsolata',monospace;text-align:right;">$25,000.00</td><td>15.780,00</td><td>394.500.000,00</td></tr>
+            <tr><td class="left">12 Feb</td><td class="left">Asia Pacific Ltd</td><td class="left" style="font-family:'Inconsolata',monospace;">SGD</td><td style="font-family:'Inconsolata',monospace;text-align:right;">S$8,500.00</td><td>11.650,00</td><td>99.025.000,00</td></tr>
+            <tr class="subtotal"><td class="left" colspan="5">Total IDR Equivalent</td><td>666.025.000,00</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ Each FCY in its own locale format · Kurs as IDR format · IDR Equiv. right-aligned</div>
+    </div>
+    <div>
+      <div class="fmt-col-label inline-label">Outside a table — KPI card &amp; narrative</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-mock">
+          <div class="kpi-mock-label">Tagihan Siemens AG</div>
+          <div class="kpi-mock-val" style="font-size:22px;font-family:'Inconsolata',monospace;">10.000,00 €</div>
+          <div class="kpi-mock-sub" style="font-family:'Inconsolata',monospace;color:#bbb;font-size:13px;">≈ Rp 172.500.000,00</div>
+          <div class="kpi-mock-sub">Kurs BI: Rp 17.250,00 per EUR · 03 Feb 2025</div>
+        </div>
+        <div class="narrative-mock">
+          Pembelian dari Acme Corp senilai <span class="num" style="font-family:'Inconsolata',monospace;">$25,000.00</span> dikonversi ke IDR sebesar <span class="num">Rp 394.500.000,00</span> menggunakan Kurs BI Middle Rate tanggal transaksi (Rp 15.780,00 per USD).
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ FCY primary · IDR equivalent secondary (muted, smaller) · kurs disclosed · never slash format</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 08 DISPLAY MODES ══════════════════ -->
+<div class="section" id="modes">
+  <div class="section-meta"><span class="section-num">08</span><span class="section-name">Display Modes</span></div>
+  <div class="section-title">Display Modes</div>
+  <div class="section-desc">Context determines how much of the number to show. ERP table views use full format. Dashboards and KPI cards use compact or rounded.</div>
+
+  <div class="card" style="margin-bottom:14px;">
+    <div class="card-head"><span class="card-title">Mode comparison</span></div>
+    <div class="card-body" style="padding:0;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr style="background:#2a2926;">
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Mode</th>
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Format</th>
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Use when</th>
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Never when</th>
+        </tr></thead>
+        <tbody>
+          <tr style="background:#fff;border-bottom:1px solid #ede9e3;">
+            <td style="padding:10px 14px;font-weight:600;color:#1a1a1a;">Standard</td>
+            <td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#1a1a1a;">1.250.000,00</td>
+            <td style="padding:10px 14px;color:#555;font-size:12px;">All ERP tables, GL, AP/AR, invoices, financial statements</td>
+            <td style="padding:10px 14px;color:#888;font-size:12px;">KPI cards, chart axis labels, mobile compact lists</td>
+          </tr>
+          <tr style="background:#faf9f7;border-bottom:1px solid #ede9e3;">
+            <td style="padding:10px 14px;font-weight:600;color:#1a1a1a;">Compact</td>
+            <td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#1a1a1a;">Rp 1,2 jt &nbsp;/&nbsp; Rp 3,4 M</td>
+            <td style="padding:10px 14px;color:#555;font-size:12px;">Dashboard KPI cards, summary widgets, chart labels, mobile</td>
+            <td style="padding:10px 14px;color:#888;font-size:12px;">Any table where precision matters — invoices, GL, tax views</td>
+          </tr>
+          <tr style="background:#fff;border-bottom:1px solid #ede9e3;">
+            <td style="padding:10px 14px;font-weight:600;color:#1a1a1a;">Rounded</td>
+            <td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#1a1a1a;">1.250.000</td>
+            <td style="padding:10px 14px;color:#555;font-size:12px;">When source has cents but context doesn't need them. Round, never truncate.</td>
+            <td style="padding:10px 14px;color:#888;font-size:12px;">Exchange rates, tax amounts, any value where cents are contractual</td>
+          </tr>
+          <tr style="background:#faf9f7;">
+            <td style="padding:10px 14px;font-weight:600;color:#1a1a1a;">High Precision</td>
+            <td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#1a1a1a;">15.750,2500</td>
+            <td style="padding:10px 14px;color:#555;font-size:12px;">Exchange rates (up to 4dp), unit prices in trade docs, API/export contexts</td>
+            <td style="padding:10px 14px;color:#888;font-size:12px;">Any user-facing dashboard, summary card, or compact display</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note warn"><b>⚠ Indonesian suffix: M = Miliar (10⁹), not Million (10⁶).</b> In Indonesian, <code>jt</code> = juta (million), <code>M</code> = miliar (billion). Do not use <code>M</code> where English speakers would read it as million — this causes a 1000× error. Use <code>jt</code> for millions, <code>M</code> for billions.</div>
+
+  <div class="fmt-pair" style="margin-top:14px;">
+    <div>
+      <div class="fmt-col-label tbl-label">In a table — always standard format</div>
+      <div class="mock-wrap">
+        <div class="mock-title"><span>General Ledger — Kas &amp; Setara Kas</span><span>Standard mode · full precision</span></div>
+        <table class="mock-tbl">
+          <thead><tr>
+            <th class="left">Tanggal</th>
+            <th class="left">Keterangan</th>
+            <th>Debit (Rp)</th>
+            <th>Kredit (Rp)</th>
+            <th>Saldo (Rp)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="left">01 Jan</td><td class="left">Saldo awal</td><td class="dim">—</td><td class="dim">—</td><td>234.500.000,00</td></tr>
+            <tr><td class="left">05 Jan</td><td class="left">Penerimaan — PT Maju Jaya</td><td>11.100.000,00</td><td class="dim">—</td><td>245.600.000,00</td></tr>
+            <tr><td class="left">08 Jan</td><td class="left">Pembayaran — CV Harapan</td><td class="dim">—</td><td>6.105.000,00</td><td>239.495.000,00</td></tr>
+            <tr><td class="left">15 Jan</td><td class="left">Pembayaran gaji Jan</td><td class="dim">—</td><td>42.000.000,00</td><td>197.495.000,00</td></tr>
+            <tr class="grandtotal"><td class="left" colspan="2">Saldo akhir</td><td>11.100.000,00</td><td>48.105.000,00</td><td>197.495.000,00</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ Standard mode always in GL and transactional tables — full number, 2 decimals, no compact</div>
+    </div>
+    <div>
+      <div class="fmt-col-label inline-label">Outside a table — compact mode for KPI &amp; summaries</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="kpi-mock">
+            <div class="kpi-mock-label">Total Aset</div>
+            <div class="kpi-mock-val" style="font-size:24px;">Rp 1,2 M</div>
+            <div class="kpi-mock-sub">Compact — ≥ 1 miliar</div>
+          </div>
+          <div class="kpi-mock">
+            <div class="kpi-mock-label">Piutang Usaha</div>
+            <div class="kpi-mock-val" style="font-size:24px;">Rp 420 jt</div>
+            <div class="kpi-mock-sub">Compact — juta range</div>
+          </div>
+          <div class="kpi-mock">
+            <div class="kpi-mock-label">Kas &amp; Setara Kas</div>
+            <div class="kpi-mock-val" style="font-size:24px;">Rp 197,5 jt</div>
+            <div class="kpi-mock-sub">Compact — 1 decimal</div>
+          </div>
+          <div class="kpi-mock">
+            <div class="kpi-mock-label">Kurs USD/IDR</div>
+            <div class="kpi-mock-val" style="font-size:20px;">Rp 15.780,00</div>
+            <div class="kpi-mock-sub">High precision — exchange rate</div>
+          </div>
+        </div>
+        <div class="narrative-mock">
+          Total aset mencapai <span class="num">Rp 1,2 M</span>, dengan piutang usaha <span class="num">Rp 420 jt</span> dan saldo kas <span class="num">Rp 197,5 jt</span>.
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;font-family:'Manrope',sans-serif;">✓ Compact in KPI cards &amp; narrative · 1 decimal · jt for juta · M for miliar · Rp inline</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 09 INTERACTION ══════════════════ -->
+<div class="section" id="interaction">
+  <div class="section-meta"><span class="section-num">09</span><span class="section-name">Interaction Rules</span></div>
+  <div class="section-title">Interaction Rules</div>
+
+  <div class="three-col">
+    <div class="card">
+      <div class="card-head"><span class="card-title">Input fields</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>User types raw digits</b> — no separators during typing</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Format on blur</b> — apply separators and symbol when field loses focus</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>On focus</b> — strip formatting, show raw digits for clean editing</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Placeholder: <code>e.g. 1.250.000</code> — never <code>Rp 0,00</code></span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Accept both separator styles on input; normalize to IDR on blur</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-title">Loading states</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Never show Rp 0</b> during loading — implies real zero balance</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Use a <b>skeleton bar</b> — 8–10 chars wide for standard IDR</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Never show <code>—</code> during loading — em dash means N/A, not pending</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">If data fetch fails: <code>—</code> with error tooltip</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-title">Live updates</span></div>
+      <div class="card-body">
+        <div class="rule-list">
+          <div class="rule"><span class="rb">·</span><span class="rt"><b>Debounce at 300–500ms</b> minimum for polling-updated figures</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Highlight briefly on change — fade from tint to neutral</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Direction indicator ↑ ↓ fades after 2s — never permanent</span></div>
+          <div class="rule"><span class="rb">·</span><span class="rt">Invoice builder running totals: <b>update immediately</b>, no debounce</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 10 COMPONENT SPEC ══════════════════ -->
+<div class="section" id="spec">
+  <div class="section-meta"><span class="section-num">10</span><span class="section-name">Component Spec</span></div>
+  <div class="section-title">Component Spec — Currency</div>
+  <div class="section-desc">A single <code>Currency</code> component centralises all formatting logic. Pass raw numbers and intent — never pre-formatted strings.</div>
+
+  <div class="card">
+    <div class="card-body" style="padding:0;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr style="background:#2a2926;">
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);width:140px;">Prop</th>
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);width:130px;">Type · Default</th>
+          <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Values / Notes</th>
+        </tr></thead>
+        <tbody>
+          <tr style="background:#fff;border-bottom:1px solid #ede9e3;"><td style="padding:10px 14px;font-family:'Inconsolata',monospace;font-weight:500;color:#1a1a1a;">value</td><td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#888;font-size:11px;">number · —</td><td style="padding:10px 14px;color:#555;">Raw numeric value. Never pass a pre-formatted string. Pass <code>1250000</code>, not <code>"Rp 1.250.000,00"</code>.</td></tr>
+          <tr style="background:#faf9f7;border-bottom:1px solid #ede9e3;"><td style="padding:10px 14px;font-family:'Inconsolata',monospace;font-weight:500;color:#1a1a1a;">currency</td><td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#888;font-size:11px;">string · 'IDR'</td><td style="padding:10px 14px;color:#555;">ISO 4217 code. Controls separator style, symbol, and symbol position. <code>IDR</code> <code>USD</code> <code>EUR</code> <code>SGD</code></td></tr>
+          <tr style="background:#fff;border-bottom:1px solid #ede9e3;"><td style="padding:10px 14px;font-family:'Inconsolata',monospace;font-weight:500;color:#1a1a1a;">format</td><td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#888;font-size:11px;">string · 'standard'</td><td style="padding:10px 14px;color:#555;"><code>standard</code> <code>compact</code> <code>rounded</code> <code>precision</code> — see §08 for when to use each.</td></tr>
+          <tr style="background:#faf9f7;border-bottom:1px solid #ede9e3;"><td style="padding:10px 14px;font-family:'Inconsolata',monospace;font-weight:500;color:#1a1a1a;">decimals</td><td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#888;font-size:11px;">number|'auto' · 'auto'</td><td style="padding:10px 14px;color:#555;"><code>auto</code> = show only when non-zero cents exist. <code>0</code> = no decimals. <code>2</code> = always 2dp. <code>4</code> = high precision.</td></tr>
+          <tr style="background:#fff;border-bottom:1px solid #ede9e3;"><td style="padding:10px 14px;font-family:'Inconsolata',monospace;font-weight:500;color:#1a1a1a;">showSymbol</td><td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#888;font-size:11px;">boolean · true</td><td style="padding:10px 14px;color:#555;">Set <code>false</code> when currency is already shown in the column header. Prevents symbol repetition in every table cell.</td></tr>
+          <tr style="background:#faf9f7;border-bottom:1px solid #ede9e3;"><td style="padding:10px 14px;font-family:'Inconsolata',monospace;font-weight:500;color:#1a1a1a;">negative</td><td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#888;font-size:11px;">string · 'parentheses'</td><td style="padding:10px 14px;color:#555;"><code>parentheses</code> = <code>(1.250.000,00)</code> for financial statements. <code>minus</code> = <code>-Rp 1.250.000,00</code> for dashboards.</td></tr>
+          <tr style="background:#fff;border-bottom:1px solid #ede9e3;"><td style="padding:10px 14px;font-family:'Inconsolata',monospace;font-weight:500;color:#1a1a1a;">zero</td><td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#888;font-size:11px;">string · 'value'</td><td style="padding:10px 14px;color:#555;"><code>value</code> = show <code>0,00</code>. <code>dash</code> = show <code>-</code> (for P&L views). Never use <code>dash</code> in transactional tables.</td></tr>
+          <tr style="background:#faf9f7;border-bottom:1px solid #ede9e3;"><td style="padding:10px 14px;font-family:'Inconsolata',monospace;font-weight:500;color:#1a1a1a;">loading</td><td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#888;font-size:11px;">boolean · false</td><td style="padding:10px 14px;color:#555;">When <code>true</code>, render a skeleton bar. Never render <code>Rp 0</code> or <code>—</code> during loading.</td></tr>
+          <tr style="background:#fff;"><td style="padding:10px 14px;font-family:'Inconsolata',monospace;font-weight:500;color:#1a1a1a;">empty</td><td style="padding:10px 14px;font-family:'Inconsolata',monospace;color:#888;font-size:11px;">string · '—'</td><td style="padding:10px 14px;color:#555;">Rendered when <code>value</code> is <code>null</code> or <code>undefined</code>. Default em dash. Never use <code>Rp 0</code> as a null fallback.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ 11 GAPS & ADDITIONAL RULES ══════════════════ -->
+<div class="section" id="gaps">
+  <div class="section-meta"><span class="section-num">11</span><span class="section-name">Gaps &amp; Additions</span></div>
+  <div class="section-title">Gaps &amp; Additional Rules to Consider</div>
+  <div class="section-desc">Rules not yet covered in this document that are commonly needed in ERP-context Indonesian finance interfaces.</div>
+
+  <div class="gap-card">
+    <div class="gap-label">⚠ Gap — Rounding method</div>
+    <div class="gap-text">The document does not yet define <b>which rounding method to use</b> when converting FCY to IDR or when rounding tax amounts. PSAK and DJP both require specific rounding — typically <b>half-up (commercial rounding)</b>. Confirm with your tax/accounting team whether half-up, half-even (banker's rounding), or floor rounding applies to PPN calculations. DJP often rounds PPN to the nearest whole Rupiah.</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">⚠ Gap — Date format for exchange rates</div>
+    <div class="gap-text">Multi-currency tables use BI Middle Rate, but <b>which date's rate</b> must be disclosed. Per PSAK 10, the transaction date rate is used for initial recognition; the period-end rate for balance sheet translation. Add a footnote or header annotation to every multi-currency table showing: <code>Kurs BI Middle Rate per [DD MMM YYYY]</code>.</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">⚠ Gap — Thousands display for amounts below 1.000</div>
+    <div class="gap-text">The document assumes values ≥ 1.000. For values below 1.000 (e.g. <code>850,00</code>), <b>no thousands separator is needed</b>. Confirm this is applied correctly — some systems erroneously show <code>0.850,00</code>. The correct form is simply <code>850,00</code>.</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">⚠ Gap — Print / PDF export formatting</div>
+    <div class="gap-text">Screen formatting rules don't always carry through to PDF exports. Define explicitly whether <b>PDF invoices and reports</b> follow the same rules, including the double-underline for grand totals, monospace font for numbers, and symbol-in-header convention. PDF/print often defaults to system fonts that break Inconsolata alignment.</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">⚠ Gap — Sorting behavior for formatted columns</div>
+    <div class="gap-text">If users can sort columns containing formatted IDR values, <b>sorting must operate on the raw numeric value</b>, not the formatted string. <code>Rp 1.250.000,00</code> sorted lexicographically will produce wrong results. Ensure the data layer passes raw numbers and formatting is display-only.</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">⚠ Gap — Accessibility for negative values</div>
+    <div class="gap-text">Parentheses alone are not accessible — screen readers may not announce them as negative. For accessibility compliance, <b>pair parentheses with a red color AND an <code>aria-label</code></b> attribute explicitly stating the value is negative: <code>aria-label="negative Rp 1.250.000,00"</code>. Color alone is never sufficient per WCAG 1.4.1.</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">⚠ Gap — Tax invoice number (NSFP) formatting</div>
+    <div class="gap-text">NSFP (Nomor Seri Faktur Pajak) has a DJP-defined format: <code>000.000-YY.XXXXXXXX</code> (e.g. <code>010.000-25.00000041</code>). This is a string, not a number — <b>never apply number formatting to NSFP</b>. Display left-aligned in Inconsolata. Validate against the DJP regex on input.</div>
+  </div>
+</div>
+
+
+<div class="footer">
+  TradeOS Design System · Number &amp; Currency Formatting · v2.0 · 2025 &nbsp;·&nbsp;
+  <a href="tradeos-typography.html">00 Typography</a> &nbsp;·&nbsp;
+  <a href="tradeos-tokens.html">02 Colors</a> &nbsp;·&nbsp;
+  <a href="tradeos-ui-reference.html">03–05 Components</a>
+</div>
+
+</div>
+</body>
+</html>
