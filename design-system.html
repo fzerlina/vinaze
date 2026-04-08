@@ -1,0 +1,3387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinaze — Design System Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@400;600&family=Manrope:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+<!-- vinaze-design-system.css — inlined for local file:// compatibility -->
+<!-- Source of truth: https://fzerlina.github.io/vinaze/vinaze-design-system.css -->
+<style>
+/* ============================================================
+   VINAZE DESIGN SYSTEM — v1.0
+   TradeOS / ERP Product Suite
+   ============================================================ */
+
+/* ── LAYER 1 · PRIMITIVE TOKENS ── */
+:root {
+  --primitive-tc-900:  #3D1200;
+  --primitive-tc-700:  #A03206;
+  --primitive-tc-500:  #B83D08;
+  --primitive-tc-400:  #D4622A;
+  --primitive-tc-200:  #EDD5C4;
+  --primitive-tc-150:  #F4E6DB;
+  --primitive-tc-100:  #F7EDE5;
+  --primitive-tc-50:   #FBF7F3;  /* barely-there warm tint — table hover */
+
+  --primitive-bl-900:  #0E2470;
+  --primitive-bl-700:  #1338A8;
+  --primitive-bl-500:  #1A46C8;
+  --primitive-bl-400:  #4D72E0;
+  --primitive-bl-200:  #C8D8FA;
+  --primitive-bl-100:  #EBF0FD;
+
+  --primitive-ink-950: #080706;
+  --primitive-ink-900: #1A1814;
+  --primitive-ink-800: #2E2B27;
+  --primitive-ink-400: #8C857C;
+  --primitive-ink-300: #C8C2BA;
+  --primitive-ink-200: #E2DDD7;
+  --primitive-ink-100: #F4F0EB;
+  --primitive-ink-50:  #FBF8F5;
+  --primitive-white:   #FFFFFF;
+
+  --primitive-go-700:  #166638;
+  --primitive-go-200:  #A8D9BC;
+  --primitive-go-100:  #E8F5EE;
+
+  --primitive-warn-800: #7A4D00;
+  --primitive-warn-300: #E8C870;
+  --primitive-warn-100: #FDF3E0;
+
+  --primitive-stop-700: #A02020;
+  --primitive-stop-300: #EAB8B8;
+  --primitive-stop-100: #FBF0F0;
+}
+
+/* ── LAYER 2 · SEMANTIC TOKENS ── */
+:root {
+  --color-brand:            var(--primitive-tc-500);
+  --color-brand-hover:      var(--primitive-tc-700);
+  --color-brand-mid:        var(--primitive-tc-400);
+  --color-brand-subtle:     var(--primitive-tc-150);
+  --color-brand-wash:       var(--primitive-tc-100);
+  --color-brand-deep:       var(--primitive-tc-900);
+
+  --color-action:           var(--primitive-bl-500);
+  --color-action-hover:     var(--primitive-bl-700);
+  --color-action-mid:       var(--primitive-bl-400);
+  --color-action-subtle:    var(--primitive-bl-200);
+  --color-action-wash:      var(--primitive-bl-100);
+
+  --color-text-primary:     var(--primitive-ink-950);
+  --color-text-secondary:   var(--primitive-ink-800);
+  --color-text-tertiary:    var(--primitive-ink-400);
+  --color-text-disabled:    var(--primitive-ink-300);
+  --color-text-inverse:     var(--primitive-white);
+  --color-text-on-brand:    var(--primitive-white);
+
+  --color-surface-base:     var(--primitive-ink-50);
+  --color-surface-raised:   var(--primitive-white);
+  --color-surface-sunken:   var(--primitive-ink-100);
+  --color-surface-overlay:  var(--primitive-ink-900);
+  --color-surface-deep:     var(--primitive-ink-950);
+
+  --color-border-default:   var(--primitive-ink-200);
+  --color-border-subtle:    var(--primitive-ink-100);
+  --color-border-strong:    var(--primitive-ink-300);
+
+  --color-success-text:     var(--primitive-go-700);
+  --color-success-border:   var(--primitive-go-200);
+  --color-success-surface:  var(--primitive-go-100);
+
+  --color-warning-text:     var(--primitive-warn-800);
+  --color-warning-border:   var(--primitive-warn-300);
+  --color-warning-surface:  var(--primitive-warn-100);
+
+  --color-danger-text:      var(--primitive-stop-700);
+  --color-danger-border:    var(--primitive-stop-300);
+  --color-danger-surface:   var(--primitive-stop-100);
+
+  --color-delta-positive:   var(--primitive-go-700);
+  --color-delta-negative:   var(--primitive-stop-700);
+
+  --font-display:    'Playfair Display', Georgia, serif;
+  --font-sans:       'Manrope', sans-serif;
+  --font-mono:       'Inconsolata', monospace;
+
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  --space-1:  4px;  --space-2:  8px;  --space-3:  12px;
+  --space-4:  16px; --space-5:  20px; --space-6:  24px;
+  --space-8:  32px; --space-10: 40px; --space-12: 48px;
+  --space-14: 56px; --space-16: 64px; --space-18: 72px;
+  --space-20: 80px; --space-24: 96px; --space-26: 104px;
+
+  --transition-fast: 0.1s ease;
+  --transition-base: 0.15s ease;
+  --transition-slow: 0.2s ease;
+}
+
+/* ── LAYER 3 · COMPONENT TOKENS ── */
+:root {
+  --nav-height:             64px;
+  --nav-bg:                 var(--color-surface-base);
+  --nav-border:             var(--color-border-default);
+  --nav-link-color:         var(--color-text-tertiary);
+  --nav-link-hover-color:   var(--color-action);
+  --nav-link-hover-bg:      var(--color-action-wash);
+  --nav-logo-bg:            var(--color-brand);
+
+  --btn-primary-bg:         var(--color-action);
+  --btn-primary-bg-hover:   var(--color-action-hover);
+  --btn-primary-color:      var(--color-text-inverse);
+
+  --btn-secondary-bg:       var(--color-action-wash);
+  --btn-secondary-bg-hover: var(--color-action-subtle);
+  --btn-secondary-color:    var(--color-action);
+  --btn-secondary-border:   var(--color-action-subtle);
+
+  --btn-ghost-color:        var(--color-text-tertiary);
+  --btn-ghost-border:       var(--color-border-default);
+  --btn-ghost-hover-color:  var(--color-action);
+  --btn-ghost-hover-border: var(--color-action-subtle);
+
+  --hero-bg:                var(--color-brand);
+  --hero-heading-color:     var(--color-text-inverse);
+  --hero-heading-accent:    var(--color-brand-subtle);
+  --hero-sub-color:         rgba(255,255,255,0.68);
+  --hero-proof-border:      rgba(255,255,255,0.12);
+  --hero-proof-text:        rgba(255,255,255,0.6);
+
+  --card-bg:                var(--color-surface-raised);
+  --card-topbar-bg:         var(--color-surface-base);
+  --card-tab-active-bg:     var(--color-brand);
+  --card-tab-active-color:  var(--color-text-inverse);
+  --card-kpi-bg:            var(--color-surface-sunken);
+  --card-kpi-border:        var(--color-border-default);
+  --card-kpi-accent-brand:  var(--color-brand);
+  --card-kpi-accent-action: var(--color-action);
+
+  --insight-bg:             var(--color-brand-wash);
+  --insight-border:         var(--color-brand-subtle);
+  --insight-orb-bg:         var(--color-brand);
+  --insight-text-color:     var(--color-brand-deep);
+
+  --table-header-color:     var(--color-text-tertiary);
+  --table-row-color:        var(--color-text-secondary);
+  --table-row-strong:       var(--color-text-primary);
+  --table-border:           var(--color-border-default);
+
+  --badge-success-bg:       var(--color-success-surface);
+  --badge-success-color:    var(--color-success-text);
+  --badge-success-border:   var(--color-success-border);
+  --badge-warning-bg:       var(--color-warning-surface);
+  --badge-warning-color:    var(--color-warning-text);
+  --badge-warning-border:   var(--color-warning-border);
+  --badge-info-bg:          var(--color-action-wash);
+  --badge-info-color:       var(--color-action);
+  --badge-info-border:      var(--color-action-subtle);
+
+  --feat-card-bg:           var(--color-surface-raised);
+  --feat-card-hover-bg:     var(--color-surface-base);
+  --feat-card-grid-gap-bg:  var(--color-border-default);
+  --feat-card-border:       var(--color-border-default);
+  --feat-card-index-color:  var(--color-text-disabled);
+  --feat-card-title-color:  var(--color-text-primary);
+  --feat-card-desc-color:   var(--color-text-tertiary);
+  --feat-card-link-color:   var(--color-action);
+
+  --ai-section-bg:          var(--color-brand);
+  --ai-step-border:         rgba(255,255,255,0.10);
+  --ai-step-num-default:    rgba(255,255,255,0.20);
+  --ai-step-num-active:     rgba(255,255,255,0.90);
+  --ai-step-title-default:  rgba(255,255,255,0.55);
+  --ai-step-title-active:   rgba(255,255,255,1);
+  --ai-step-desc-default:   rgba(255,255,255,0.30);
+  --ai-step-desc-active:    rgba(255,255,255,0.55);
+
+  --chat-bg:                var(--color-surface-base);
+  --chat-head-bg:           var(--color-surface-raised);
+  --chat-messages-bg:       var(--color-surface-sunken);
+  --chat-input-bg:          var(--color-surface-raised);
+  --chat-msg-user-bg:       var(--color-action);
+  --chat-msg-user-color:    var(--color-text-inverse);
+  --chat-msg-ai-bg:         var(--color-surface-raised);
+  --chat-msg-ai-color:      var(--color-text-secondary);
+  --chat-send-bg:           var(--color-action);
+  --chat-send-hover-bg:     var(--color-action-hover);
+
+  --cmp-legacy-bg:          var(--color-surface-raised);
+  --cmp-legacy-text:        var(--color-text-tertiary);
+  --cmp-legacy-name-color:  var(--color-text-primary);
+  --cmp-legacy-icon-color:  var(--color-text-disabled);
+  --cmp-legacy-badge-bg:    var(--color-surface-sunken);
+  --cmp-legacy-badge-color: var(--color-text-tertiary);
+  --cmp-legacy-badge-border:var(--color-border-default);
+  --cmp-ours-bg:            var(--color-surface-overlay);
+  --cmp-ours-text:          rgba(255,255,255,0.50);
+  --cmp-ours-name-color:    var(--color-text-inverse);
+  --cmp-ours-icon-color:    var(--color-brand-mid);
+  --cmp-ours-badge-bg:      rgba(184,61,8,0.15);
+  --cmp-ours-badge-color:   var(--color-brand-mid);
+  --cmp-ours-badge-border:  rgba(184,61,8,0.25);
+
+  --test-card-bg:           var(--color-surface-raised);
+  --test-card-border:       var(--color-border-default);
+  --test-card-hover-border: var(--color-text-disabled);
+  --test-featured-bg:       var(--color-brand);
+  --test-featured-border:   var(--color-brand);
+  --test-quote-color:       var(--color-text-secondary);
+  --test-featured-quote:    rgba(255,255,255,0.85);
+  --test-av-bg:             var(--color-surface-sunken);
+  --test-av-color:          var(--color-text-tertiary);
+  --test-featured-av-bg:    rgba(255,255,255,0.20);
+  --test-featured-av-color: var(--color-text-inverse);
+
+  --cta-bg:                 var(--color-surface-deep);
+  --cta-heading-color:      var(--color-text-inverse);
+  --cta-heading-accent:     var(--color-brand-subtle);
+  --cta-sub-color:          rgba(255,255,255,0.40);
+  --cta-check-bg:           rgba(26,70,200,0.25);
+  --cta-check-border:       rgba(77,114,224,0.40);
+  --cta-check-icon:         var(--color-action-mid);
+
+  --footer-bg:              var(--color-surface-deep);
+  --footer-border:          rgba(255,255,255,0.05);
+  --footer-mark-bg:         var(--color-brand);
+  --footer-name-color:      var(--color-text-inverse);
+  --footer-link-color:      rgba(255,255,255,0.30);
+  --footer-link-hover:      var(--color-action-mid);
+  --footer-copy-color:      rgba(255,255,255,0.20);
+}
+
+/* ── LAYER 4 · BASE / RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-sans); background: var(--color-surface-base); color: var(--color-text-primary); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+/* ── LAYER 5 · TYPOGRAPHY ── */
+.t-display-xl { font-family: var(--font-display); font-size: clamp(52px,6.5vw,82px); line-height: 1.02; letter-spacing: -0.02em; font-weight: 900; }
+.t-display-lg { font-family: var(--font-display); font-size: clamp(40px,4.5vw,62px); line-height: 1.05; letter-spacing: -0.02em; font-weight: 900; }
+.t-display-md { font-family: var(--font-display); font-size: clamp(44px,5.5vw,74px); line-height: 1.02; letter-spacing: -0.02em; font-weight: 900; }
+.t-body-lg  { font-size: 18px; font-weight: 300; line-height: 1.65; }
+.t-body-md  { font-size: 16px; font-weight: 300; line-height: 1.65; }
+.t-body-sm  { font-size: 13px; font-weight: 300; line-height: 1.6; }
+.t-body-xs  { font-size: 12px; font-weight: 300; line-height: 1.55; }
+.t-label-md { font-size: 13px; font-weight: 600; letter-spacing: 0.01em; }
+.t-label-sm { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.t-label-xs { font-size: 10px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; }
+.t-mono-lg  { font-family: var(--font-mono); font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+.t-mono-md  { font-family: var(--font-mono); font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+.t-mono-sm  { font-family: var(--font-mono); font-size: 10px; }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-brand); display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-4); }
+.eyebrow::before { content: ''; width: 16px; height: 2px; background: var(--color-brand); display: block; }
+.eyebrow.light { color: rgba(255,255,255,0.55); }
+.eyebrow.light::before { background: rgba(255,255,255,0.40); }
+
+/* ── LAYER 6 · COMPONENTS ── */
+
+/* Nav */
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--space-14); height: var(--nav-height); background: var(--nav-bg); border-bottom: 1px solid var(--nav-border); position: sticky; top: 0; z-index: 200; }
+.nav-logo { display: flex; align-items: center; gap: var(--space-3); text-decoration: none; }
+.logo-sq { width: 30px; height: 30px; border-radius: 7px; background: var(--nav-logo-bg); display: flex; align-items: center; justify-content: center; }
+.logo-sq svg { width: 14px; height: 14px; fill: #fff; }
+.logo-name { font-family: var(--font-sans); font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-text-primary); line-height: 1; }
+.nav-center { display: flex; gap: var(--space-1); }
+.nav-link { font-size: 13px; font-weight: 400; color: var(--nav-link-color); padding: 6px 14px; border-radius: var(--radius-sm); text-decoration: none; transition: color var(--transition-base), background var(--transition-base); }
+.nav-link:hover { color: var(--nav-link-hover-color); background: var(--nav-link-hover-bg); }
+.nav-right { display: flex; align-items: center; gap: var(--space-3); }
+.nav-login { font-size: 13px; font-weight: 400; color: var(--nav-link-color); background: none; border: none; cursor: pointer; font-family: var(--font-sans); padding: 6px 12px; border-radius: var(--radius-sm); transition: color var(--transition-base); }
+.nav-login:hover { color: var(--color-action); }
+
+/* Buttons */
+.btn-base { display: inline-flex; align-items: center; gap: var(--space-2); font-family: var(--font-sans); cursor: pointer; border: none; letter-spacing: 0.01em; transition: background var(--transition-base), transform var(--transition-fast); }
+.btn-base:active { transform: scale(0.98); }
+.btn-primary { font-size: 13px; font-weight: 600; padding: 10px 22px; background: var(--btn-primary-bg); color: var(--btn-primary-color); border-radius: var(--radius-md); }
+.btn-primary:hover { background: var(--btn-primary-bg-hover); }
+.btn-hero { font-size: 15px; font-weight: 600; padding: 15px 32px; background: var(--btn-primary-bg); color: var(--btn-primary-color); border-radius: var(--radius-md); }
+.btn-hero:hover { background: var(--btn-primary-bg-hover); }
+.btn-xl { font-size: 16px; font-weight: 700; padding: 17px 36px; background: var(--btn-primary-bg); color: var(--btn-primary-color); border-radius: var(--radius-lg); }
+.btn-xl:hover { background: var(--btn-primary-bg-hover); }
+.btn-hero-ghost { font-size: 15px; font-weight: 400; padding: 15px 26px; background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.90); border: 1px solid rgba(255,255,255,0.25); border-radius: var(--radius-md); font-family: var(--font-sans); cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-3); transition: background var(--transition-base); }
+.btn-hero-ghost:hover { background: rgba(255,255,255,0.16); }
+.btn-xl-ghost { font-size: 15px; font-weight: 400; padding: 16px 30px; background: transparent; color: var(--color-action-mid); border: 1px solid rgba(77,114,224,0.35); border-radius: var(--radius-lg); font-family: var(--font-sans); cursor: pointer; transition: border-color var(--transition-base), color var(--transition-base), background var(--transition-base); }
+.btn-xl-ghost:hover { border-color: var(--color-action-mid); background: rgba(26,70,200,0.08); color: var(--color-text-inverse); }
+.btn-secondary { font-size: 13px; font-weight: 500; padding: 11px 22px; background: var(--btn-secondary-bg); color: var(--btn-secondary-color); border: 1px solid var(--btn-secondary-border); border-radius: var(--radius-md); font-family: var(--font-sans); cursor: pointer; transition: background var(--transition-base); }
+.btn-secondary:hover { background: var(--btn-secondary-bg-hover); }
+.btn-ghost { font-size: 13px; font-weight: 400; padding: 11px 20px; background: transparent; color: var(--btn-ghost-color); border: 1px solid var(--btn-ghost-border); border-radius: var(--radius-md); font-family: var(--font-sans); cursor: pointer; transition: border-color var(--transition-base), color var(--transition-base); }
+.btn-ghost:hover { border-color: var(--btn-ghost-hover-border); color: var(--btn-ghost-hover-color); }
+.play-btn { width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.20); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.play-btn svg { width: 8px; height: 8px; fill: #fff; margin-left: 1px; }
+
+/* Hero */
+.hero { background: var(--hero-bg); padding: var(--space-24) var(--space-14) var(--space-20); display: grid; grid-template-columns: 1fr 480px; gap: var(--space-18); align-items: center; position: relative; overflow: hidden; }
+.hero-kicker { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.70); margin-bottom: 28px; }
+.kicker-rule { width: 24px; height: 1px; background: rgba(255,255,255,0.40); }
+.hero h1 { font-family: var(--font-display); font-size: clamp(52px,6.5vw,82px); line-height: 1.02; letter-spacing: -0.02em; color: var(--hero-heading-color); font-weight: 900; margin-bottom: 28px; }
+.hero h1 .accent { color: var(--hero-heading-accent); display: block; font-style: italic; }
+.hero-sub { font-size: 18px; font-weight: 300; color: var(--hero-sub-color); line-height: 1.65; max-width: 460px; margin-bottom: var(--space-10); }
+.hero-actions { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
+.hero-proof { margin-top: 44px; display: flex; align-items: center; gap: var(--space-4); padding-top: 36px; border-top: 1px solid var(--hero-proof-border); }
+.avatar-stack { display: flex; }
+.av { width: 32px; height: 32px; border-radius: 50%; border: 2.5px solid var(--color-brand); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-left: -9px; flex-shrink: 0; }
+.av:first-child { margin-left: 0; }
+.av-a { background: #D4C5B5; color: #5A3D28; }
+.av-b { background: #B5C5D4; color: #1E3D5A; }
+.av-c { background: #C5D4B5; color: #2E5A1E; }
+.av-d { background: #D4B5C5; color: #5A1E3D; }
+.proof-text { font-size: 13px; color: var(--hero-proof-text); line-height: 1.4; font-weight: 300; }
+.proof-text strong { color: var(--color-text-inverse); font-weight: 600; display: block; }
+
+/* Product Card */
+.hero-card { background: var(--card-bg); border-radius: var(--radius-xl); overflow: hidden; border: 1px solid rgba(0,0,0,0.08); position: relative; z-index: 1; }
+.card-topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--color-border-default); background: var(--card-topbar-bg); }
+.card-dots { display: flex; gap: 6px; }
+.card-dot { width: 10px; height: 10px; border-radius: 50%; }
+.card-tabs { display: flex; gap: 1px; background: var(--color-surface-sunken); border-radius: var(--radius-sm); padding: 3px; border: 1px solid var(--color-border-default); }
+.ctab { font-size: 11px; font-weight: 400; color: var(--color-text-tertiary); padding: 4px 11px; border-radius: 4px; cursor: pointer; font-family: var(--font-sans); border: none; background: transparent; }
+.ctab.on { background: var(--card-tab-active-bg); color: var(--card-tab-active-color); font-weight: 600; }
+.card-body { padding: 18px; }
+.card-section-lbl { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 12px; font-weight: 500; }
+.mini-kpis { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-2); margin-bottom: 14px; }
+.mk { padding: 12px 13px; background: var(--card-kpi-bg); border-radius: var(--radius-md); border: 1px solid var(--card-kpi-border); }
+.mk.tc-bar { border-top: 2px solid var(--card-kpi-accent-brand); }
+.mk.bl-bar { border-top: 2px solid var(--card-kpi-accent-action); }
+.mk-val { font-family: var(--font-mono); font-size: 17px; font-weight: 600; color: var(--color-text-primary); letter-spacing: -0.02em; line-height: 1; }
+.mk-lbl { font-size: 9px; color: var(--color-text-tertiary); margin-top: 4px; letter-spacing: 0.03em; font-weight: 400; }
+.mk-delta { font-family: var(--font-mono); font-size: 10px; margin-top: 3px; }
+
+/* Insight Strip */
+.insight-strip { display: flex; gap: 9px; align-items: flex-start; background: var(--insight-bg); border: 1px solid var(--insight-border); border-radius: var(--radius-md); padding: 10px 12px; margin-bottom: 14px; }
+.insight-orb { width: 20px; height: 20px; flex-shrink: 0; border-radius: 5px; background: var(--insight-orb-bg); display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+.insight-orb svg { width: 10px; height: 10px; fill: #fff; }
+.insight-text { font-size: 11px; color: var(--insight-text-color); line-height: 1.45; font-weight: 400; }
+.insight-text strong { font-weight: 700; }
+
+/* Section layout */
+.section { padding: var(--space-26) var(--space-14); }
+.section.alt  { background: var(--color-surface-sunken); }
+.section.dark { background: var(--color-surface-deep); }
+.section.tc-bg{ background: var(--color-brand); }
+.section-h2 { font-family: var(--font-display); font-size: clamp(40px,4.5vw,62px); line-height: 1.05; letter-spacing: -0.02em; color: var(--color-text-primary); margin-bottom: 20px; font-weight: 900; }
+.section-h2 em { color: var(--color-brand); font-style: italic; }
+.section-h2.light { color: var(--color-text-inverse); }
+.section-h2.light em { color: var(--color-brand-subtle); font-style: italic; }
+.section-sub { font-size: 16px; font-weight: 300; color: var(--color-text-tertiary); line-height: 1.65; max-width: 480px; }
+.section-sub.light { color: rgba(255,255,255,0.55); }
+.feat-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; margin-bottom: 64px; }
+.feat-cta-row { display: flex; gap: var(--space-3); }
+
+/* Feature Cards */
+.feat-cards { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid var(--feat-card-border); border-radius: var(--radius-xl); overflow: hidden; background: var(--feat-card-grid-gap-bg); gap: 1px; }
+.feat-card { background: var(--feat-card-bg); padding: 32px 28px; transition: background var(--transition-slow); }
+.feat-card:hover { background: var(--feat-card-hover-bg); }
+.fc-index { font-family: var(--font-sans); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--feat-card-index-color); margin-bottom: 16px; text-transform: uppercase; }
+.fc-title { font-size: 16px; font-weight: 700; color: var(--feat-card-title-color); margin-bottom: 10px; line-height: 1.2; }
+.fc-desc { font-size: 13px; font-weight: 300; color: var(--feat-card-desc-color); line-height: 1.6; }
+.fc-more { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--feat-card-link-color); margin-top: 16px; cursor: pointer; text-decoration: none; }
+.fc-more svg { width: 12px; height: 12px; stroke: var(--feat-card-link-color); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+/* AI Steps */
+.ai-layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-18); align-items: start; }
+.ai-steps { margin-top: var(--space-10); display: flex; flex-direction: column; gap: 0; }
+.ai-step { display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--ai-step-border); cursor: pointer; }
+.ai-step:last-child { border-bottom: none; }
+.step-num { font-family: var(--font-sans); font-size: 13px; font-weight: 700; line-height: 1; letter-spacing: 0.04em; color: var(--ai-step-num-default); flex-shrink: 0; margin-top: 3px; min-width: 28px; }
+.ai-step.on .step-num { color: var(--ai-step-num-active); }
+.step-title { font-size: 15px; font-weight: 600; color: var(--ai-step-title-default); margin-bottom: 5px; }
+.ai-step.on .step-title { color: var(--ai-step-title-active); }
+.step-desc { font-size: 13px; font-weight: 300; color: var(--ai-step-desc-default); line-height: 1.55; }
+.ai-step.on .step-desc { color: var(--ai-step-desc-active); }
+
+/* Chat Panel */
+.chat-wrap { background: var(--chat-bg); border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--color-border-default); }
+.chat-head { padding: 14px 20px; border-bottom: 1px solid var(--color-border-default); display: flex; align-items: center; gap: var(--space-2); background: var(--chat-head-bg); }
+.chat-agent { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--color-text-tertiary); font-weight: 400; }
+.agent-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-success-text); animation: pulse 2s infinite; }
+.chat-messages { padding: 20px 18px; display: flex; flex-direction: column; gap: 14px; background: var(--chat-messages-bg); }
+.msg-user { align-self: flex-end; max-width: 78%; background: var(--chat-msg-user-bg); color: var(--chat-msg-user-color); padding: 11px 15px; border-radius: 12px 12px 3px 12px; font-size: 13px; line-height: 1.45; font-weight: 400; }
+.msg-ai { align-self: flex-start; max-width: 92%; background: var(--chat-msg-ai-bg); border: 1px solid var(--color-border-default); padding: 13px 15px; border-radius: 3px 12px 12px 12px; font-size: 12px; color: var(--chat-msg-ai-color); line-height: 1.55; font-weight: 300; }
+.msg-ai strong { color: var(--color-text-primary); font-weight: 700; }
+.msg-num { font-family: var(--font-mono); font-size: 26px; font-weight: 600; color: var(--color-text-primary); display: block; margin: 10px 0 4px; letter-spacing: -0.02em; }
+.msg-action { display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; font-size: 11px; font-weight: 600; color: var(--color-action); background: var(--color-action-wash); border: 1px solid var(--color-action-subtle); padding: 6px 12px; border-radius: var(--radius-full); cursor: pointer; }
+.chat-input-row { padding: 12px 16px; border-top: 1px solid var(--color-border-default); display: flex; gap: var(--space-2); background: var(--chat-input-bg); }
+.chat-input { flex: 1; background: var(--color-surface-sunken); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); padding: 9px 14px; font-size: 12px; color: var(--color-text-tertiary); font-family: var(--font-sans); font-weight: 300; outline: none; }
+.chat-send { width: 34px; height: 34px; border-radius: var(--radius-md); background: var(--chat-send-bg); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background var(--transition-base); }
+.chat-send:hover { background: var(--chat-send-hover-bg); }
+.chat-send svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cursor { display: inline-block; width: 2px; height: 12px; background: var(--color-action); border-radius: 1px; margin-left: 2px; vertical-align: middle; animation: blink 1.1s infinite; }
+
+/* Compare */
+.compare-center { text-align: center; margin-bottom: 60px; }
+.compare-cols { display: grid; grid-template-columns: 1fr 1fr; max-width: 860px; margin: 0 auto; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--color-border-default); }
+.cmp { padding: 40px 36px; }
+.cmp.legacy { background: var(--cmp-legacy-bg); }
+.cmp.ours   { background: var(--cmp-ours-bg); border-left: 1px solid rgba(255,255,255,0.06); }
+.cmp-badge { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 11px; border-radius: var(--radius-full); margin-bottom: 18px; }
+.cmp.legacy .cmp-badge { background: var(--cmp-legacy-badge-bg); color: var(--cmp-legacy-badge-color); border: 1px solid var(--cmp-legacy-badge-border); }
+.cmp.ours   .cmp-badge { background: var(--cmp-ours-badge-bg); color: var(--cmp-ours-badge-color); border: 1px solid var(--cmp-ours-badge-border); }
+.cmp-name { font-family: var(--font-sans); font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 28px; line-height: 1.1; }
+.cmp.legacy .cmp-name { color: var(--cmp-legacy-name-color); }
+.cmp.ours   .cmp-name { color: var(--cmp-ours-name-color); }
+.cmp-list { display: flex; flex-direction: column; gap: 14px; }
+.cmp-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; font-weight: 300; }
+.cmp.legacy .cmp-row { color: var(--cmp-legacy-text); }
+.cmp.ours   .cmp-row { color: var(--cmp-ours-text); }
+.cmp-icon { flex-shrink: 0; font-size: 13px; margin-top: 1px; font-weight: 600; }
+.cmp.legacy .cmp-icon { color: var(--cmp-legacy-icon-color); }
+.cmp.ours   .cmp-icon { color: var(--cmp-ours-icon-color); }
+
+/* Testimonials */
+.test-header { margin-bottom: 56px; }
+.test-grid   { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.test-card { background: var(--test-card-bg); border: 1px solid var(--test-card-border); border-radius: var(--radius-xl); padding: 32px 28px; display: flex; flex-direction: column; transition: border-color var(--transition-slow); }
+.test-card:hover { border-color: var(--test-card-hover-border); }
+.test-card.featured { background: var(--test-featured-bg); border-color: var(--test-featured-border); }
+.test-quote { font-size: 15px; font-weight: 300; line-height: 1.65; flex: 1; margin-bottom: 28px; }
+.test-card:not(.featured) .test-quote { color: var(--test-quote-color); }
+.test-card.featured       .test-quote { color: var(--test-featured-quote); }
+.test-author { display: flex; align-items: center; gap: 12px; }
+.test-av { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.test-card:not(.featured) .test-av { background: var(--test-av-bg); color: var(--test-av-color); border: 1px solid var(--color-border-default); }
+.test-card.featured       .test-av { background: var(--test-featured-av-bg); color: var(--test-featured-av-color); }
+.test-name { font-size: 13px; font-weight: 700; }
+.test-card:not(.featured) .test-name { color: var(--color-text-primary); }
+.test-card.featured       .test-name { color: var(--color-text-inverse); }
+.test-role { font-size: 11px; font-weight: 300; margin-top: 2px; }
+.test-card:not(.featured) .test-role { color: var(--color-text-tertiary); }
+.test-card.featured       .test-role { color: rgba(255,255,255,0.60); }
+
+/* CTA */
+.section.cta-section { background: var(--cta-bg); }
+.cta-layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-24); align-items: center; }
+.cta-h2 { font-family: var(--font-display); font-size: clamp(44px,5.5vw,74px); line-height: 1.02; letter-spacing: -0.02em; color: var(--cta-heading-color); margin-bottom: 20px; font-weight: 900; }
+.cta-h2 em { color: var(--cta-heading-accent); font-style: italic; }
+.cta-sub { font-size: 16px; font-weight: 300; color: var(--cta-sub-color); line-height: 1.65; }
+.cta-right { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.cta-proof { display: flex; flex-direction: column; gap: 10px; margin-top: var(--space-2); }
+.proof-row { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 300; color: var(--cta-sub-color); }
+.proof-check { width: 18px; height: 18px; border-radius: 5px; background: var(--cta-check-bg); border: 1px solid var(--cta-check-border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.proof-check svg { width: 9px; height: 9px; stroke: var(--cta-check-icon); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Logo Strip */
+.logo-strip { padding: 28px var(--space-14); border-bottom: 1px solid var(--color-border-default); background: var(--color-surface-raised); }
+.ls-label { font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-text-disabled); margin-bottom: 16px; font-weight: 500; }
+.ls-logos { display: flex; align-items: center; gap: 0; }
+.ls-logo { flex: 1; text-align: center; padding: 0 24px; font-family: var(--font-display); font-size: 17px; letter-spacing: 0.06em; color: var(--color-border-default); border-right: 1px solid var(--color-border-default); }
+.ls-logo:last-child { border-right: none; }
+
+/* Footer */
+.footer { background: var(--footer-bg); border-top: 1px solid var(--footer-border); padding: var(--space-12) var(--space-14); display: flex; align-items: center; justify-content: space-between; }
+.footer-brand { display: flex; align-items: center; gap: 10px; }
+.footer-mark { width: 26px; height: 26px; border-radius: 6px; background: var(--footer-mark-bg); display: flex; align-items: center; justify-content: center; }
+.footer-mark svg { width: 12px; height: 12px; fill: #fff; }
+.footer-name { font-family: var(--font-sans); font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--footer-name-color); }
+.footer-links { display: flex; gap: 28px; }
+.footer-links a { font-size: 12px; font-weight: 300; color: var(--footer-link-color); text-decoration: none; transition: color var(--transition-base); }
+.footer-links a:hover { color: var(--footer-link-hover); }
+.footer-copy { font-size: 11px; font-weight: 300; color: var(--footer-copy-color); }
+
+/* ── LAYER 7 · UTILITIES ── */
+.mini-table { width: 100%; border-collapse: collapse; }
+.mini-table th { font-size: 9px; color: var(--table-header-color, var(--color-text-tertiary)); letter-spacing: 0.07em; text-transform: uppercase; font-weight: 500; padding: 0 10px 7px; text-align: left; border-bottom: 1px solid var(--table-border, var(--color-border-default)); }
+.mini-table td { font-size: 11px; color: var(--table-row-color, var(--color-text-secondary)); padding: 8px 10px; border-bottom: 1px solid var(--table-border, var(--color-border-default)); font-weight: 300; }
+.mini-table tr:last-child td { border-bottom: none; }
+.td-strong { font-weight: 600; color: var(--table-row-strong, var(--color-text-primary)) !important; }
+.status { display: inline-block; padding: 2px 8px; border-radius: var(--radius-full); font-size: 9px; font-weight: 600; }
+.s-go   { background: var(--badge-success-bg); color: var(--badge-success-color); border: 1px solid var(--badge-success-border); }
+.s-warn { background: var(--badge-warning-bg); color: var(--badge-warning-color); border: 1px solid var(--badge-warning-border); }
+.s-bl   { background: var(--badge-info-bg);    color: var(--badge-info-color);    border: 1px solid var(--badge-info-border); }
+.delta-up { color: var(--color-delta-positive); }
+.delta-dn { color: var(--color-delta-negative); }
+
+/* ── LAYER 8 · MOTION ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse  { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes blink  { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.hero-left > * { animation: fadeUp 0.6s ease both; }
+.hero-kicker   { animation-delay: 0.05s; }
+.hero h1       { animation-delay: 0.10s; }
+.hero-sub      { animation-delay: 0.18s; }
+.hero-actions  { animation-delay: 0.26s; }
+.hero-proof    { animation-delay: 0.34s; }
+.hero-card     { animation: fadeUp 0.7s 0.15s ease both; }
+
+/* ── ERP EXTENSION · PRIMITIVE TOKENS ── */
+:root {
+  /* ERP interactive — terracotta (no indigo) */
+  --primitive-amber-800:  #c07a00;
+  --primitive-amber-200:  #f5e4b0;
+  --primitive-amber-100:  #fdf8ec;
+  --primitive-table-header: #2a2926;
+  --primitive-table-odd:    #ffffff;
+  --primitive-table-even:   #faf9f7;
+  --primitive-table-border: #ede9e3;
+  --primitive-table-total:  #edeae3;
+  --primitive-table-subtot: #f5f4f1;
+  --primitive-erp-ink:      #1a1a1a;
+  --primitive-erp-muted:    #bbbbbb;
+  --primitive-erp-disabled: #e5e4e0;
+}
+
+/* ── ERP EXTENSION · SEMANTIC TOKENS ── */
+:root {
+  --color-erp-interactive:      var(--primitive-tc-700);
+  --color-erp-interactive-deep: var(--primitive-tc-900);
+  --color-erp-interactive-wash: var(--primitive-tc-200);
+  --color-erp-interactive-tint: var(--primitive-tc-100);
+  --color-erp-urgency-text:     var(--primitive-amber-800);
+  --color-erp-urgency-surface:  var(--primitive-amber-100);
+  --color-erp-urgency-border:   var(--primitive-amber-200);
+  --color-erp-text:             var(--primitive-erp-ink);
+  --color-erp-text-muted:       var(--primitive-erp-muted);
+  --color-erp-text-code:        var(--primitive-erp-muted);
+  --color-erp-surface-readonly: #faf9f7;
+  --color-erp-surface-disabled: #f5f4f1;
+  --color-erp-border-field:     #d8d6d0;
+  --color-erp-border-disabled:  var(--primitive-erp-disabled);
+  --color-erp-focus-border:     var(--primitive-tc-700);
+  --color-erp-focus-ring:       rgba(160,50,6,0.10);
+  --color-erp-error:            #e0400a;
+  --color-erp-error-ring:       rgba(224,64,10,0.10);
+  --color-erp-error-surface:    #fff5f2;
+  --color-table-header-bg:      var(--primitive-table-header);
+  --color-table-header-text:    rgba(255,255,255,0.45);
+  --color-table-odd:            var(--primitive-table-odd);
+  --color-table-even:           var(--primitive-table-even);
+  --color-table-border:         var(--primitive-table-border);
+  --color-table-hover:          var(--primitive-tc-50);
+  --color-table-selected:       var(--primitive-tc-100);
+  --color-table-selected-text:  var(--primitive-tc-900);
+  --color-table-total-bg:       var(--primitive-table-total);
+  --color-table-subtotal-bg:    var(--primitive-table-subtot);
+  --color-tax-pph-text:         var(--color-erp-error);
+  --color-tax-ppn-text:         var(--primitive-erp-ink);
+  --color-tax-dpp-text:         var(--primitive-erp-ink);
+}
+
+/* ── ERP EXTENSION · COMPONENT TOKENS ── */
+:root {
+  --badge-paid-bg:         var(--color-success-surface);
+  --badge-paid-color:      var(--color-success-text);
+  --badge-paid-border:     var(--color-success-border);
+  --badge-overdue-bg:      var(--color-danger-surface);
+  --badge-overdue-color:   var(--color-danger-text);
+  --badge-overdue-border:  var(--color-danger-border);
+  --badge-pending-bg:      var(--color-erp-urgency-surface);
+  --badge-pending-color:   var(--color-erp-urgency-text);
+  --badge-pending-border:  var(--color-erp-urgency-border);
+  --badge-info-bg:         var(--color-erp-interactive-tint);
+  --badge-info-color:      var(--color-erp-interactive);
+  --badge-info-border:     var(--color-erp-interactive-wash);
+  --badge-nonpkp-bg:       var(--color-surface-sunken);
+  --badge-nonpkp-color:    var(--color-text-tertiary);
+  --badge-nonpkp-border:   var(--color-border-default);
+  --drawer-width:          320px;
+  --drawer-bg:             var(--color-surface-raised);
+  --drawer-border:         var(--color-table-border);
+  --drawer-header-bg:      var(--color-surface-sunken);
+  --drawer-label-color:    var(--color-text-disabled);
+  --drawer-value-color:    var(--color-erp-text);
+  --field-height:          38px;
+  --field-radius:          6px;
+  --field-border:          var(--color-erp-border-field);
+  --field-bg:              var(--color-surface-raised);
+  --field-font-size:       13px;
+  --field-label-size:      11px;
+  --field-label-color:     #555555;
+  --field-hint-color:      var(--color-erp-text-muted);
+  --field-placeholder:     var(--color-erp-text-muted);
+  --feed-dot-red:          var(--color-erp-error);
+  --feed-dot-amber:        var(--color-erp-urgency-text);
+  --feed-dot-blue:         var(--color-action);
+  --feed-item-border:      var(--color-table-border);
+  --feed-amount-color:     var(--color-erp-text);
+}
+
+/* ── STATUS BADGES · OVERRIDE ── */
+.status { display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--radius-full);font-size:9px;font-weight:600;font-family:var(--font-sans);letter-spacing:0.04em;white-space:nowrap; }
+.s-go   { background:var(--badge-paid-bg);    color:var(--badge-paid-color);    border:1px solid var(--badge-paid-border); }
+.s-stop { background:var(--badge-overdue-bg); color:var(--badge-overdue-color); border:1px solid var(--badge-overdue-border); }
+.s-warn { background:var(--badge-pending-bg); color:var(--badge-pending-color); border:1px solid var(--badge-pending-border); }
+.s-bl   { background:var(--badge-info-bg);    color:var(--badge-info-color);    border:1px solid var(--badge-info-border); }
+.s-muted{ background:var(--badge-nonpkp-bg);  color:var(--badge-nonpkp-color);  border:1px solid var(--badge-nonpkp-border); }
+
+/* ── ERP TYPOGRAPHY ── */
+.t-erp-display-lg { font-family:'Bebas Neue',sans-serif;font-size:28px;font-weight:400;letter-spacing:0.04em;color:var(--color-erp-text); }
+.t-erp-display-md { font-family:'Bebas Neue',sans-serif;font-size:22px;font-weight:400;letter-spacing:0.04em;color:var(--color-erp-text); }
+.t-erp-display-sm { font-family:'Bebas Neue',sans-serif;font-size:16px;font-weight:400;letter-spacing:0.06em;color:var(--color-erp-text); }
+.t-erp-body-lg  { font-family:var(--font-sans);font-size:14px;font-weight:400;line-height:1.6;color:var(--color-erp-text); }
+.t-erp-body-md  { font-family:var(--font-sans);font-size:13px;font-weight:400;line-height:1.55;color:var(--color-erp-text); }
+.t-erp-body-sm  { font-family:var(--font-sans);font-size:12px;font-weight:400;line-height:1.5;color:var(--color-erp-text); }
+.t-erp-label    { font-family:var(--font-sans);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--color-erp-text-muted); }
+.t-erp-hint     { font-family:var(--font-sans);font-size:11px;font-weight:400;color:var(--color-erp-text-muted); }
+.t-erp-num-lg   { font-family:var(--font-mono);font-size:20px;font-weight:500;letter-spacing:-0.01em;color:var(--color-erp-text); }
+.t-erp-num-md   { font-family:var(--font-mono);font-size:14px;font-weight:400;color:var(--color-erp-text); }
+.t-erp-num-sm   { font-family:var(--font-mono);font-size:12px;font-weight:400;color:var(--color-erp-text); }
+.t-erp-code     { font-family:var(--font-mono);font-size:12px;font-weight:400;color:var(--color-erp-text-code);text-decoration:underline;text-decoration-color:#cccccc;text-underline-offset:2px;cursor:pointer; }
+.t-erp-id       { font-family:var(--font-mono);font-size:12px;font-weight:400;color:var(--color-erp-text-code); }
+.num-right  { text-align:right;font-family:var(--font-mono); }
+.num-muted  { color:var(--color-erp-text-muted); }
+.num-pph    { color:var(--color-tax-pph-text); }
+.num-overdue{ color:var(--color-erp-error);font-weight:500; }
+
+/* ── ERP TABLE BASE ── */
+.erp-table { width:100%;border-collapse:collapse;font-family:var(--font-sans); }
+.erp-table thead tr { background:var(--color-table-header-bg); }
+.erp-table thead th { font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--color-table-header-text);padding:10px 12px;text-align:left;white-space:nowrap; }
+.erp-table thead th.col-num { text-align:right; }
+.erp-table tbody tr:nth-child(odd)  { background:var(--color-table-odd); }
+.erp-table tbody tr:nth-child(even) { background:var(--color-table-even); }
+.erp-table tbody tr { border-bottom:1px solid var(--color-table-border);transition:background 0.1s;cursor:pointer; }
+.erp-table tbody tr:hover    { background:var(--color-table-hover); }
+.erp-table tbody tr.selected { background:var(--color-table-selected); }
+.erp-table tbody tr.selected td { color:var(--color-table-selected-text);font-weight:500; }
+.erp-table tbody td { font-size:13px;color:var(--color-erp-text);padding:9px 12px;vertical-align:middle; }
+.erp-table tbody td.col-num  { font-family:var(--font-mono);font-size:13px;text-align:right;white-space:nowrap; }
+.erp-table tbody td.col-code { font-family:var(--font-mono);font-size:12px;color:var(--color-erp-text-code);text-align:right; }
+.erp-table .row-subtotal td  { background:var(--color-table-subtotal-bg);font-weight:600;border-top:1px solid var(--color-table-border); }
+.erp-table .row-total td     { background:var(--color-table-total-bg);font-weight:700;border-top:1px solid var(--color-erp-text);border-bottom:3px double var(--color-erp-text); }
+.erp-table .row-group td:first-child  { font-weight:600; }
+.erp-table .row-child td:first-child  { padding-left:28px; }
+.erp-table .row-group-header td { background:var(--color-surface-sunken);font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--color-text-tertiary);padding:6px 12px;cursor:default; }
+.erp-table .row-group-header:hover { background:var(--color-surface-sunken) !important; }
+
+/* ── TABLE VARIANTS ── */
+.table-gl .col-debit,.table-gl .col-credit,.table-gl .col-balance { font-family:var(--font-mono);text-align:right;color:var(--color-erp-text); }
+.table-gl .col-ref  { font-family:var(--font-mono);font-size:12px;color:var(--color-erp-text-code);text-decoration:underline;text-decoration-color:#cccccc;text-underline-offset:2px; }
+.table-gl .col-dash { font-family:var(--font-mono);color:var(--color-erp-text-muted);text-align:right; }
+.table-coa .col-code { font-family:var(--font-mono);font-size:12px;color:var(--color-erp-text-code);font-weight:500; }
+.table-coa .col-type,.table-coa .col-bal { font-size:11px;color:var(--color-text-tertiary); }
+.erp-search { display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--color-surface-raised);border:1px solid var(--color-erp-border-field);border-radius:var(--radius-md);margin-bottom:8px; }
+.erp-search input { flex:1;border:none;outline:none;font-family:var(--font-sans);font-size:13px;color:var(--color-erp-text);background:transparent; }
+.erp-search input::placeholder { color:var(--color-erp-text-muted); }
+.erp-search-kbd { font-family:var(--font-mono);font-size:10px;color:var(--color-erp-text-muted);background:var(--color-surface-sunken);border:1px solid var(--color-border-default);border-radius:4px;padding:1px 5px; }
+.table-vendor .col-npwp { font-family:var(--font-mono);font-size:12px;color:var(--color-erp-text-code); }
+.table-vendor .col-npwp.missing { color:var(--color-erp-error);font-weight:500; }
+.table-vendor .col-tax  { font-size:11px;color:var(--color-text-tertiary); }
+.table-bills .col-due         { font-family:var(--font-mono);font-size:12px; }
+.table-bills .col-due.overdue { color:var(--color-erp-error);font-weight:500; }
+.table-bills .col-due.soon    { color:var(--color-erp-urgency-text); }
+.table-bills .col-amount      { font-family:var(--font-mono);text-align:right; }
+
+/* ── DRAWER OVERLAY ── */
+.erp-drawer-wrap { position:relative;overflow:hidden; }
+.erp-drawer { position:absolute;top:0;right:-100%;width:var(--drawer-width);height:100%;background:var(--drawer-bg);border-left:1px solid var(--drawer-border);display:flex;flex-direction:column;transition:right 0.2s ease;z-index:10;box-shadow:-4px 0 16px rgba(0,0,0,0.06); }
+.erp-drawer.open { right:0; }
+.erp-drawer-header { display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--drawer-border);background:var(--drawer-header-bg); }
+.erp-drawer-title { font-family:var(--font-sans);font-size:13px;font-weight:600;color:var(--color-erp-text); }
+.erp-drawer-close { background:none;border:none;cursor:pointer;font-size:14px;color:var(--color-text-tertiary);padding:2px 6px;border-radius:var(--radius-sm);transition:color 0.1s,background 0.1s; }
+.erp-drawer-close:hover { color:var(--color-erp-text);background:var(--color-border-default); }
+.erp-drawer-body { flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px; }
+.erp-drawer-field { display:flex;flex-direction:column;gap:3px; }
+.erp-drawer-label { font-family:var(--font-sans);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--drawer-label-color); }
+.erp-drawer-value { font-family:var(--font-sans);font-size:13px;color:var(--drawer-value-color); }
+.erp-drawer-value.num { font-family:var(--font-mono); }
+.erp-drawer-actions { padding:12px 16px;border-top:1px solid var(--drawer-border);display:flex;gap:8px; }
+
+/* ── TAX DISPLAY ── */
+.tax-breakdown { display:flex;flex-direction:column;gap:0;border:1px solid var(--color-table-border);border-radius:var(--radius-md);overflow:hidden;font-family:var(--font-sans); }
+.tax-breakdown-row { display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--color-table-border);background:var(--color-surface-raised); }
+.tax-breakdown-row:last-child { border-bottom:none; }
+.tax-breakdown-row.total-row { background:var(--color-table-subtotal-bg);border-top:1px solid var(--color-erp-text);font-weight:600; }
+.tax-row-label { font-size:12px;color:var(--color-text-tertiary); }
+.tax-row-label .tax-rate { font-size:10px;color:var(--color-erp-text-muted);margin-left:4px; }
+.tax-row-value { font-family:var(--font-mono);font-size:13px;color:var(--color-tax-dpp-text); }
+.tax-row-value.pph   { color:var(--color-tax-pph-text); }
+.tax-row-value.ppn   { color:var(--color-tax-ppn-text); }
+.tax-row-value.total { color:var(--color-erp-text);font-weight:700; }
+.tax-tag     { font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-sans); }
+.tax-tag .sep{ margin:0 4px;color:var(--color-border-strong); }
+
+/* ── ACTIONABLE FEED ── */
+.feed { display:flex;flex-direction:column;gap:0;border:1px solid var(--feed-item-border);border-radius:var(--radius-lg);overflow:hidden;background:var(--color-surface-raised); }
+.feed-item { display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--feed-item-border);transition:background 0.1s; }
+.feed-item:last-child { border-bottom:none; }
+.feed-item:hover { background:var(--color-surface-sunken); }
+.feed-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:2px; }
+.feed-dot.red   { background:var(--feed-dot-red); }
+.feed-dot.amber { background:var(--feed-dot-amber); }
+.feed-dot.blue  { background:var(--feed-dot-blue); }
+.feed-body { flex:1;min-width:0; }
+.feed-title { font-size:13px;font-weight:500;color:var(--color-erp-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.feed-sub   { font-size:11px;color:var(--color-text-tertiary);margin-top:2px; }
+.feed-meta  { display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0; }
+.feed-amount{ font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--feed-amount-color); }
+.feed-cta   { font-family:var(--font-sans);font-size:11px;font-weight:500;color:var(--color-erp-text);background:none;border:1px solid var(--color-erp-border-field);border-radius:var(--radius-sm);padding:4px 12px;cursor:pointer;white-space:nowrap;transition:border-color 0.1s,background 0.1s;flex-shrink:0; }
+.feed-cta:hover { border-color:var(--color-erp-interactive);background:var(--color-erp-interactive-tint); }
+
+/* ── FORM SYSTEM ── */
+.field { display:flex;flex-direction:column;gap:4px;position:relative; }
+.field-label { font-family:var(--font-sans);font-size:var(--field-label-size);font-weight:600;color:var(--field-label-color);line-height:1.3; }
+.field-label .req { color:var(--color-erp-error);margin-left:2px; }
+.field-label .opt { color:var(--color-erp-text-muted);font-weight:400;margin-left:4px;font-size:10px; }
+.field-input { height:var(--field-height);padding:0 12px;border:1px solid var(--field-border);border-radius:var(--field-radius);background:var(--field-bg);font-family:var(--font-sans);font-size:var(--field-font-size);color:var(--color-erp-text);outline:none;transition:border-color 0.15s,box-shadow 0.15s;width:100%; }
+.field-input::placeholder { color:var(--field-placeholder); }
+.field-input:focus   { border-color:var(--color-erp-focus-border);box-shadow:0 0 0 3px var(--color-erp-focus-ring); }
+.field-input.filled  { border-color:var(--color-erp-border-field); }
+.field-input.error   { border-color:var(--color-erp-error);box-shadow:0 0 0 3px var(--color-erp-error-ring);background:var(--color-erp-error-surface); }
+.field-input:disabled{ background:var(--color-erp-surface-disabled);border-color:var(--color-erp-border-disabled);color:var(--color-text-disabled);cursor:not-allowed; }
+.field-input.readonly{ background:var(--color-erp-surface-readonly);border-color:var(--color-erp-border-disabled);color:var(--color-text-secondary);cursor:default; }
+.field-currency { position:relative; }
+.field-currency .currency-prefix { position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:var(--font-mono);font-size:13px;color:var(--color-erp-text-muted);pointer-events:none;user-select:none; }
+.field-currency .field-input { padding-left:36px;font-family:var(--font-mono);font-size:14px;text-align:right; }
+.field-affixed { display:flex; }
+.field-affixed .field-affix { display:flex;align-items:center;padding:0 10px;background:var(--color-surface-sunken);border:1px solid var(--field-border);font-family:var(--font-mono);font-size:12px;color:var(--color-text-tertiary);white-space:nowrap; }
+.field-affixed .field-affix.prefix { border-right:none;border-radius:var(--field-radius) 0 0 var(--field-radius); }
+.field-affixed .field-affix.suffix { border-left:none;border-radius:0 var(--field-radius) var(--field-radius) 0; }
+.field-affixed .field-input { border-radius:0;flex:1; }
+.field-textarea { min-height:72px;height:auto;padding:10px 12px;resize:vertical;line-height:1.5; }
+.field-select { appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238C857C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer; }
+.field-hint  { font-family:var(--font-sans);font-size:11px;color:var(--field-hint-color);line-height:1.4; }
+.field-error { font-family:var(--font-sans);font-size:11px;color:var(--color-erp-error);line-height:1.4;display:none; }
+.field.has-error .field-error { display:block; }
+.field.has-error .field-hint  { display:none; }
+.control { display:flex;align-items:flex-start;gap:9px;cursor:pointer; }
+.control input[type="checkbox"],.control input[type="radio"] { display:none; }
+.control-box { width:16px;height:16px;min-width:16px;border:1px solid var(--color-erp-border-field);border-radius:4px;background:var(--field-bg);display:flex;align-items:center;justify-content:center;margin-top:1px;transition:background 0.1s,border-color 0.1s; }
+.control input[type="checkbox"]:checked + .control-box { background:var(--color-erp-interactive);border-color:var(--color-erp-interactive); }
+.control input[type="checkbox"]:checked + .control-box::after { content:'';width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px); }
+.control input[type="checkbox"]:disabled + .control-box { background:var(--color-erp-surface-disabled);border-color:var(--color-erp-border-disabled); }
+.control-label { font-family:var(--font-sans);font-size:13px;color:var(--color-erp-text);line-height:1.4; }
+.control-label .hint { display:block;font-size:11px;color:var(--color-erp-text-muted);margin-top:1px; }
+.control-radio { border-radius:50%; }
+.control input[type="radio"]:checked + .control-radio { border-color:var(--color-erp-interactive);background:var(--color-erp-interactive);box-shadow:inset 0 0 0 3px #fff; }
+.toggle { display:flex;align-items:center;justify-content:space-between;gap:12px; }
+.toggle-track { width:36px;height:20px;border-radius:10px;background:var(--color-erp-border-disabled);position:relative;cursor:pointer;transition:background 0.15s;flex-shrink:0; }
+.toggle-track.on { background:var(--color-erp-interactive); }
+.toggle-track.disabled { opacity:0.4;cursor:not-allowed; }
+.toggle-thumb { width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left 0.15s;box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+.toggle-track.on .toggle-thumb { left:19px; }
+.toggle-label { font-family:var(--font-sans);font-size:13px;color:var(--color-erp-text);flex:1; }
+.toggle-label .hint { display:block;font-size:11px;color:var(--color-erp-text-muted);margin-top:1px; }
+.form-section-label { font-family:var(--font-sans);font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-erp-text-muted);margin-bottom:12px;margin-top:4px; }
+.form-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
+.form-grid-3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px; }
+.form-full   { grid-column:1 / -1; }
+.form-actions { display:flex;align-items:center;gap:10px;margin-top:24px;padding-top:16px;border-top:1px solid var(--color-table-border); }
+.form-actions .form-cancel { font-family:var(--font-sans);font-size:13px;color:var(--color-erp-interactive);background:none;border:none;cursor:pointer;padding:0 4px;text-decoration:underline;text-underline-offset:2px; }
+.field-npwp .field-input { font-family:var(--font-mono);letter-spacing:0.04em; }
+.field-npwp .char-count { font-family:var(--font-mono);font-size:10px;color:var(--color-erp-text-muted);position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none; }
+.field-trio { display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px; }
+.field-trio .field-input.readonly { font-family:var(--font-mono);text-align:right; }
+.lookup-results { position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--color-surface-raised);border:1px solid var(--color-erp-border-field);border-radius:var(--radius-md);box-shadow:0 4px 16px rgba(0,0,0,0.10);z-index:50;overflow:hidden;max-height:220px;overflow-y:auto; }
+.lookup-item { display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--color-table-border);transition:background 0.1s; }
+.lookup-item:last-child { border-bottom:none; }
+.lookup-item:hover,.lookup-item.selected { background:var(--color-erp-interactive-tint); }
+.lookup-code { font-family:var(--font-mono);font-size:12px;color:var(--color-erp-text-code);min-width:40px; }
+.lookup-name { font-family:var(--font-sans);font-size:13px;color:var(--color-erp-text);flex:1; }
+.lookup-meta { font-family:var(--font-sans);font-size:11px;color:var(--color-text-tertiary); }
+
+
+/* ============================================================
+   ERP EXTENSION — v1.0
+   TradeOS / Indonesian finance context
+   Added on top of Vinaze DS base.
+
+   WHAT'S IN HERE
+   ──────────────
+   Layer 1 ext  · ERP primitive tokens (terracotta-mapped, amber, table neutrals)
+   Layer 2 ext  · ERP semantic tokens
+   Layer 3 ext  · ERP component tokens
+   Override     · Status badges (.s-go / .s-warn / .s-bl / .s-stop) —
+                  replaces landing-page badge definitions above
+   New L6       · Typography scale spec
+                  Table system variants (GL, CoA, Vendor, Bills) + drawer
+                  Tax display module
+                  Actionable feed
+                  Form system (inputs, controls, validation, ERP patterns)
+   ============================================================ */
+
+
+/* ============================================================
+   LAYER 1 EXT · ERP PRIMITIVE TOKENS
+   ============================================================ */
+:root {
+  /*/* ERP interactive — terracotta */
+  /* ERP interactive — terracotta (no indigo) */
+
+  /* Amber — ERP warnings, due-soon, urgency */
+  --primitive-amber-800: #c07a00;
+  --primitive-amber-200: #f5e4b0;
+  --primitive-amber-100: #fdf8ec;
+
+  /* Table neutrals */
+  --primitive-table-header: #2a2926;
+  --primitive-table-odd:    #ffffff;
+  --primitive-table-even:   #faf9f7;
+  --primitive-table-border: #ede9e3;
+  --primitive-table-total:  #edeae3;
+  --primitive-table-subtot: #f5f4f1;
+
+  /* ERP text */
+  --primitive-erp-ink:      #1a1a1a;
+  --primitive-erp-muted:    #bbbbbb;
+  --primitive-erp-disabled: #e5e4e0;
+}
+
+
+/* ============================================================
+   LAYER 2 EXT · ERP SEMANTIC TOKENS
+   ============================================================ */
+:root {
+  /* ERP interactive — terracotta mapped (no indigo) */
+  --color-erp-interactive:      var(--primitive-tc-700);
+  --color-erp-interactive-deep: var(--primitive-tc-900);
+  --color-erp-interactive-wash: var(--primitive-tc-200);
+  --color-erp-interactive-tint: var(--primitive-tc-100);
+
+  /* ERP urgency */
+  --color-erp-urgency-text:     var(--primitive-amber-800);
+  --color-erp-urgency-surface:  var(--primitive-amber-100);
+  --color-erp-urgency-border:   var(--primitive-amber-200);
+
+  /* ERP surface & text */
+  --color-erp-text:             var(--primitive-erp-ink);
+  --color-erp-text-muted:       var(--primitive-erp-muted);
+  --color-erp-text-code:        var(--primitive-erp-muted);   /* IDs, ref codes */
+  --color-erp-surface-readonly: #faf9f7;
+  --color-erp-surface-disabled: #f5f4f1;
+  --color-erp-border-field:     #d8d6d0;
+  --color-erp-border-disabled:  var(--primitive-erp-disabled);
+
+  /* ERP focus ring */
+  --color-erp-focus-border:     var(--primitive-tc-700);
+  --color-erp-focus-ring:       rgba(160,50,6,0.10);
+
+  /* ERP validation */
+  --color-erp-error:            #e0400a;
+  --color-erp-error-ring:       rgba(224,64,10,0.10);
+  --color-erp-error-surface:    #fff5f2;
+
+  /* Table */
+  --color-table-header-bg:      var(--primitive-table-header);
+  --color-table-header-text:    rgba(255,255,255,0.45);
+  --color-table-odd:            var(--primitive-table-odd);
+  --color-table-even:           var(--primitive-table-even);
+  --color-table-border:         var(--primitive-table-border);
+  --color-table-hover:          var(--primitive-tc-50);
+  --color-table-selected:       var(--primitive-tc-100);
+  --color-table-selected-text:  var(--primitive-tc-900);
+  --color-table-total-bg:       var(--primitive-table-total);
+  --color-table-subtotal-bg:    var(--primitive-table-subtot);
+
+  /* Tax */
+  --color-tax-pph-text:         var(--color-erp-error);      /* PPh deduction — red */
+  --color-tax-ppn-text:         var(--primitive-erp-ink);    /* PPN — plain black */
+  --color-tax-dpp-text:         var(--primitive-erp-ink);
+}
+
+
+/* ============================================================
+   LAYER 3 EXT · ERP COMPONENT TOKENS
+   ============================================================ */
+:root {
+  /* ── Status badges (TradeOS override) ── */
+  --badge-paid-bg:         var(--color-success-surface);
+  --badge-paid-color:      var(--color-success-text);
+  --badge-paid-border:     var(--color-success-border);
+
+  --badge-overdue-bg:      var(--color-danger-surface);
+  --badge-overdue-color:   var(--color-danger-text);
+  --badge-overdue-border:  var(--color-danger-border);
+
+  --badge-pending-bg:      var(--color-erp-urgency-surface);
+  --badge-pending-color:   var(--color-erp-urgency-text);
+  --badge-pending-border:  var(--color-erp-urgency-border);
+
+  --badge-info-bg:         var(--color-erp-interactive-tint);
+  --badge-info-color:      var(--color-erp-interactive);
+  --badge-info-border:     var(--color-erp-interactive-wash);
+
+  --badge-nonpkp-bg:       var(--color-surface-sunken);
+  --badge-nonpkp-color:    var(--color-text-tertiary);
+  --badge-nonpkp-border:   var(--color-border-default);
+
+  /* ── Drawer overlay ── */
+  --drawer-width:          320px;
+  --drawer-bg:             var(--color-surface-raised);
+  --drawer-border:         var(--color-table-border);
+  --drawer-header-bg:      var(--color-surface-sunken);
+  --drawer-label-color:    var(--color-text-disabled);
+  --drawer-value-color:    var(--color-erp-text);
+
+  /* ── Form fields ── */
+  --field-height:          38px;
+  --field-radius:          6px;
+  --field-border:          var(--color-erp-border-field);
+  --field-bg:              var(--color-surface-raised);
+  --field-font-size:       13px;
+  --field-label-size:      11px;
+  --field-label-color:     #555555;
+  --field-hint-color:      var(--color-erp-text-muted);
+  --field-placeholder:     var(--color-erp-text-muted);
+
+  /* ── Actionable feed ── */
+  --feed-dot-red:          var(--color-erp-error);
+  --feed-dot-amber:        var(--color-erp-urgency-text);
+  --feed-dot-blue:         var(--color-action);
+  --feed-item-border:      var(--color-table-border);
+  --feed-amount-color:     var(--color-erp-text);
+}
+
+
+/* ============================================================
+   OVERRIDE · STATUS BADGES
+   Replaces the landing-page .s-go / .s-warn / .s-bl definitions.
+   Now maps to ERP semantics: Paid / Overdue / Pending / Info / Non-PKP.
+   Class names are unchanged so existing HTML keeps working.
+   ============================================================ */
+
+/* Base — shape only, unchanged */
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 9px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* .s-go → Paid / Tax ready / Approved */
+.s-go {
+  background: var(--badge-paid-bg);
+  color:      var(--badge-paid-color);
+  border: 1px solid var(--badge-paid-border);
+}
+
+/* .s-stop → Overdue / Error / Rejected  (new class) */
+.s-stop {
+  background: var(--badge-overdue-bg);
+  color:      var(--badge-overdue-color);
+  border: 1px solid var(--badge-overdue-border);
+}
+
+/* .s-warn → Pending / Due soon / Incomplete */
+.s-warn {
+  background: var(--badge-pending-bg);
+  color:      var(--badge-pending-color);
+  border: 1px solid var(--badge-pending-border);
+}
+
+/* .s-bl → Informational / Review / In transit */
+.s-bl {
+  background: var(--badge-info-bg);
+  color:      var(--badge-info-color);
+  border: 1px solid var(--badge-info-border);
+}
+
+/* .s-muted → Non-PKP / Disabled / N/A */
+.s-muted {
+  background: var(--badge-nonpkp-bg);
+  color:      var(--badge-nonpkp-color);
+  border: 1px solid var(--badge-nonpkp-border);
+}
+
+
+/* ============================================================
+   LAYER 5 EXT · TYPOGRAPHY SCALE SPEC
+   Role assignments and size rules for ERP context.
+   ============================================================ */
+
+/* ERP display — Bebas Neue (section/page titles only) */
+.t-erp-display-lg { font-family: 'Bebas Neue', sans-serif; font-size: 28px; font-weight: 400; letter-spacing: 0.04em; color: var(--color-erp-text); }
+.t-erp-display-md { font-family: 'Bebas Neue', sans-serif; font-size: 22px; font-weight: 400; letter-spacing: 0.04em; color: var(--color-erp-text); }
+.t-erp-display-sm { font-family: 'Bebas Neue', sans-serif; font-size: 16px; font-weight: 400; letter-spacing: 0.06em; color: var(--color-erp-text); }
+
+/* ERP body — Manrope */
+.t-erp-body-lg  { font-family: var(--font-sans); font-size: 14px; font-weight: 400; line-height: 1.6; color: var(--color-erp-text); }
+.t-erp-body-md  { font-family: var(--font-sans); font-size: 13px; font-weight: 400; line-height: 1.55; color: var(--color-erp-text); }
+.t-erp-body-sm  { font-family: var(--font-sans); font-size: 12px; font-weight: 400; line-height: 1.5;  color: var(--color-erp-text); }
+.t-erp-label    { font-family: var(--font-sans); font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--color-erp-text-muted); }
+.t-erp-hint     { font-family: var(--font-sans); font-size: 11px; font-weight: 400; color: var(--color-erp-text-muted); }
+
+/* ERP numbers — Inconsolata */
+.t-erp-num-lg   { font-family: var(--font-mono); font-size: 20px; font-weight: 500; letter-spacing: -0.01em; color: var(--color-erp-text); }
+.t-erp-num-md   { font-family: var(--font-mono); font-size: 14px; font-weight: 400; color: var(--color-erp-text); }
+.t-erp-num-sm   { font-family: var(--font-mono); font-size: 12px; font-weight: 400; color: var(--color-erp-text); }
+.t-erp-code     { font-family: var(--font-mono); font-size: 12px; font-weight: 400; color: var(--color-erp-text-code); text-decoration: underline; text-decoration-color: #cccccc; text-underline-offset: 2px; cursor: pointer; } /* clickable refs: INV-, JE- */
+.t-erp-id       { font-family: var(--font-mono); font-size: 12px; font-weight: 400; color: var(--color-erp-text-code); } /* non-clickable IDs */
+
+/* Number formatting helpers */
+.num-right      { text-align: right; font-family: var(--font-mono); }
+.num-muted      { color: var(--color-erp-text-muted); }          /* zero values */
+.num-pph        { color: var(--color-tax-pph-text); }            /* PPh deduction — red */
+.num-overdue    { color: var(--color-erp-error); font-weight: 500; }
+
+
+/* ============================================================
+   LAYER 6 EXT · TABLE SYSTEM
+   Four variants share a common base (.erp-table).
+   Each variant adds only the deltas.
+   Drawer overlay is documented after the table variants.
+   ============================================================ */
+
+/* ── Shared ERP table base ── */
+.erp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+}
+
+.erp-table thead tr {
+  background: var(--color-table-header-bg);
+}
+.erp-table thead th {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-table-header-text);
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+.erp-table thead th.col-num { text-align: right; }
+
+.erp-table tbody tr:nth-child(odd)  { background: var(--color-table-odd); }
+.erp-table tbody tr:nth-child(even) { background: var(--color-table-even); }
+.erp-table tbody tr { border-bottom: 1px solid var(--color-table-border); transition: background 0.1s; cursor: pointer; }
+.erp-table tbody tr:hover    { background: var(--color-table-hover); }
+.erp-table tbody tr.selected { background: var(--color-table-selected); }
+.erp-table tbody tr.selected td { color: var(--color-table-selected-text); font-weight: 500; }
+
+.erp-table tbody td {
+  font-size: 13px;
+  color: var(--color-erp-text);
+  padding: 9px 12px;
+  vertical-align: middle;
+}
+.erp-table tbody td.col-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: right;
+  white-space: nowrap;
+}
+.erp-table tbody td.col-code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-erp-text-code);
+  text-align: right;
+}
+
+/* Total / subtotal rows */
+.erp-table .row-subtotal td {
+  background: var(--color-table-subtotal-bg);
+  font-weight: 600;
+  border-top: 1px solid var(--color-table-border);
+}
+.erp-table .row-total td {
+  background: var(--color-table-total-bg);
+  font-weight: 700;
+  border-top: 1px solid var(--color-erp-text);
+  border-bottom: 3px double var(--color-erp-text);
+}
+
+/* Tree indent (CoA) */
+.erp-table .row-group td:first-child  { font-weight: 600; }
+.erp-table .row-child td:first-child  { padding-left: 28px; }
+.erp-table .row-group-header td { background: var(--color-surface-sunken); font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--color-text-tertiary); padding: 6px 12px; cursor: default; }
+.erp-table .row-group-header:hover { background: var(--color-surface-sunken) !important; }
+
+
+/* ── Table A: General Ledger ── */
+/* GL: all amounts plain black — no color semantics on Dr/Cr */
+.table-gl .col-debit,
+.table-gl .col-credit,
+.table-gl .col-balance { font-family: var(--font-mono); text-align: right; color: var(--color-erp-text); }
+.table-gl .col-ref { font-family: var(--font-mono); font-size: 12px; color: var(--color-erp-text-code); text-decoration: underline; text-decoration-color: #cccccc; text-underline-offset: 2px; }
+.table-gl .col-dash { font-family: var(--font-mono); color: var(--color-erp-text-muted); text-align: right; }
+
+
+/* ── Table B: Chart of Accounts ── */
+.table-coa .col-code  { font-family: var(--font-mono); font-size: 12px; color: var(--color-erp-text-code); font-weight: 500; }
+.table-coa .col-type  { font-size: 11px; color: var(--color-text-tertiary); }
+.table-coa .col-bal   { font-size: 11px; color: var(--color-text-tertiary); }
+/* Search bar above CoA */
+.erp-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-erp-border-field);
+  border-radius: var(--radius-md);
+  margin-bottom: 8px;
+}
+.erp-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-erp-text);
+  background: transparent;
+}
+.erp-search input::placeholder { color: var(--color-erp-text-muted); }
+.erp-search-kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-erp-text-muted);
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-default);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+
+/* ── Table C: Vendor List ── */
+.table-vendor .col-npwp { font-family: var(--font-mono); font-size: 12px; color: var(--color-erp-text-code); }
+.table-vendor .col-npwp.missing { color: var(--color-erp-error); font-weight: 500; }
+.table-vendor .col-tax  { font-size: 11px; color: var(--color-text-tertiary); }
+
+
+/* ── Table D: Bills ── */
+.table-bills .col-due         { font-family: var(--font-mono); font-size: 12px; }
+.table-bills .col-due.overdue { color: var(--color-erp-error); font-weight: 500; }
+.table-bills .col-due.soon    { color: var(--color-erp-urgency-text); }
+.table-bills .col-amount      { font-family: var(--font-mono); text-align: right; }
+
+
+/* ── Drawer overlay ── */
+.erp-drawer-wrap {
+  position: relative; /* set on the table container */
+  overflow: hidden;
+}
+.erp-drawer {
+  position: absolute;
+  top: 0;
+  right: -100%;
+  width: var(--drawer-width);
+  height: 100%;
+  background: var(--drawer-bg);
+  border-left: 1px solid var(--drawer-border);
+  display: flex;
+  flex-direction: column;
+  transition: right 0.2s ease;
+  z-index: 10;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.06);
+}
+.erp-drawer.open { right: 0; }
+
+.erp-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--drawer-border);
+  background: var(--drawer-header-bg);
+}
+.erp-drawer-title {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-erp-text);
+}
+.erp-drawer-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--color-text-tertiary);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  transition: color 0.1s, background 0.1s;
+}
+.erp-drawer-close:hover { color: var(--color-erp-text); background: var(--color-border-default); }
+
+.erp-drawer-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+
+.erp-drawer-field { display: flex; flex-direction: column; gap: 3px; }
+.erp-drawer-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--drawer-label-color);
+}
+.erp-drawer-value {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--drawer-value-color);
+}
+.erp-drawer-value.num { font-family: var(--font-mono); }
+
+.erp-drawer-actions {
+  padding: 12px 16px;
+  border-top: 1px solid var(--drawer-border);
+  display: flex;
+  gap: 8px;
+}
+
+
+/* ============================================================
+   LAYER 6 EXT · TAX DISPLAY MODULE
+   DPP / PPN / PPh breakdown used in bill detail, drawer, forms.
+   ============================================================ */
+
+.tax-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--color-table-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  font-family: var(--font-sans);
+}
+.tax-breakdown-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--color-table-border);
+  background: var(--color-surface-raised);
+}
+.tax-breakdown-row:last-child { border-bottom: none; }
+.tax-breakdown-row.total-row {
+  background: var(--color-table-subtotal-bg);
+  border-top: 1px solid var(--color-erp-text);
+  font-weight: 600;
+}
+.tax-row-label {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+.tax-row-label .tax-rate {
+  font-size: 10px;
+  color: var(--color-erp-text-muted);
+  margin-left: 4px;
+}
+.tax-row-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-tax-dpp-text);
+}
+.tax-row-value.pph  { color: var(--color-tax-pph-text); } /* red — PPh deduction */
+.tax-row-value.ppn  { color: var(--color-tax-ppn-text); } /* black — PPN passthrough */
+.tax-row-value.total{ color: var(--color-erp-text); font-weight: 700; }
+
+/* Inline tax annotation (used in table cells / field rows) */
+.tax-tag {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-sans);
+}
+.tax-tag .sep { margin: 0 4px; color: var(--color-border-strong); }
+
+
+/* ============================================================
+   LAYER 6 EXT · ACTIONABLE FEED
+   Urgency-driven task list. Red/amber/blue dot signals priority.
+   ============================================================ */
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--feed-item-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface-raised);
+}
+.feed-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--feed-item-border);
+  transition: background 0.1s;
+}
+.feed-item:last-child { border-bottom: none; }
+.feed-item:hover { background: var(--color-surface-sunken); }
+
+.feed-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.feed-dot.red   { background: var(--feed-dot-red); }
+.feed-dot.amber { background: var(--feed-dot-amber); }
+.feed-dot.blue  { background: var(--feed-dot-blue); }
+
+.feed-body { flex: 1; min-width: 0; }
+.feed-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-erp-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.feed-sub {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  margin-top: 2px;
+}
+
+.feed-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.feed-amount {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--feed-amount-color);
+}
+.feed-badge { } /* uses .status utility */
+
+.feed-cta {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-erp-text);
+  background: none;
+  border: 1px solid var(--color-erp-border-field);
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.1s, background 0.1s;
+  flex-shrink: 0;
+}
+.feed-cta:hover { border-color: var(--color-erp-interactive); background: var(--color-erp-interactive-tint); }
+
+
+/* ============================================================
+   LAYER 6 EXT · FORM SYSTEM
+   Floating label input system. All states, types, ERP patterns.
+   ============================================================ */
+
+/* ── Field wrapper ── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+/* ── Label ── */
+.field-label {
+  font-family: var(--font-sans);
+  font-size: var(--field-label-size);
+  font-weight: 600;
+  color: var(--field-label-color);
+  line-height: 1.3;
+}
+.field-label .req { color: var(--color-erp-error); margin-left: 2px; }
+.field-label .opt { color: var(--color-erp-text-muted); font-weight: 400; margin-left: 4px; font-size: 10px; }
+
+/* ── Base input ── */
+.field-input {
+  height: var(--field-height);
+  padding: 0 12px;
+  border: 1px solid var(--field-border);
+  border-radius: var(--field-radius);
+  background: var(--field-bg);
+  font-family: var(--font-sans);
+  font-size: var(--field-font-size);
+  color: var(--color-erp-text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+.field-input::placeholder { color: var(--field-placeholder); }
+
+/* States */
+.field-input:focus {
+  border-color: var(--color-erp-focus-border);
+  box-shadow: 0 0 0 3px var(--color-erp-focus-ring);
+}
+.field-input.filled { border-color: var(--color-erp-border-field); }
+.field-input.error  {
+  border-color: var(--color-erp-error);
+  box-shadow: 0 0 0 3px var(--color-erp-error-ring);
+  background: var(--color-erp-error-surface);
+}
+.field-input:disabled {
+  background: var(--color-erp-surface-disabled);
+  border-color: var(--color-erp-border-disabled);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+.field-input.readonly {
+  background: var(--color-erp-surface-readonly);
+  border-color: var(--color-erp-border-disabled);
+  color: var(--color-text-secondary);
+  cursor: default;
+}
+
+/* ── Currency input ── */
+.field-currency { position: relative; }
+.field-currency .currency-prefix {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-erp-text-muted);
+  pointer-events: none;
+  user-select: none;
+}
+.field-currency .field-input {
+  padding-left: 36px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  text-align: right;
+}
+
+/* ── Prefixed / suffixed fields ── */
+.field-affixed { display: flex; }
+.field-affixed .field-affix {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--field-border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+.field-affixed .field-affix.prefix { border-right: none; border-radius: var(--field-radius) 0 0 var(--field-radius); }
+.field-affixed .field-affix.suffix { border-left: none;  border-radius: 0 var(--field-radius) var(--field-radius) 0; }
+.field-affixed .field-input { border-radius: 0; flex: 1; }
+.field-affixed .field-input:first-of-type { border-radius: var(--field-radius) 0 0 var(--field-radius); }
+.field-affixed .field-input:last-of-type  { border-radius: 0 var(--field-radius) var(--field-radius) 0; }
+
+/* ── Textarea ── */
+.field-textarea {
+  min-height: 72px;
+  height: auto;
+  padding: 10px 12px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* ── Select ── */
+.field-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238C857C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+/* ── Hint and error messages ── */
+.field-hint {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--field-hint-color);
+  line-height: 1.4;
+}
+.field-error {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-erp-error);
+  line-height: 1.4;
+  display: none;
+}
+.field.has-error .field-error { display: block; }
+.field.has-error .field-hint  { display: none; }
+
+/* ── Controls: Checkbox ── */
+.control { display: flex; align-items: flex-start; gap: 9px; cursor: pointer; }
+.control input[type="checkbox"],
+.control input[type="radio"] { display: none; }
+.control-box {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1px solid var(--color-erp-border-field);
+  border-radius: 4px;
+  background: var(--field-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  transition: background 0.1s, border-color 0.1s;
+}
+.control input[type="checkbox"]:checked + .control-box {
+  background: var(--color-erp-interactive);
+  border-color: var(--color-erp-interactive);
+}
+.control input[type="checkbox"]:checked + .control-box::after {
+  content: '';
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+}
+.control input[type="checkbox"]:disabled + .control-box {
+  background: var(--color-erp-surface-disabled);
+  border-color: var(--color-erp-border-disabled);
+}
+.control-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-erp-text);
+  line-height: 1.4;
+}
+.control-label .hint { display: block; font-size: 11px; color: var(--color-erp-text-muted); margin-top: 1px; }
+
+/* ── Controls: Radio ── */
+.control-radio { border-radius: 50%; }
+.control input[type="radio"]:checked + .control-radio {
+  border-color: var(--color-erp-interactive);
+  background: var(--color-erp-interactive);
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+/* ── Controls: Toggle ── */
+.toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.toggle-track {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--color-erp-border-disabled);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.toggle-track.on { background: var(--color-erp-interactive); }
+.toggle-track.disabled { opacity: 0.4; cursor: not-allowed; }
+.toggle-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.15s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-track.on .toggle-thumb { left: 19px; }
+.toggle-label { font-family: var(--font-sans); font-size: 13px; color: var(--color-erp-text); flex: 1; }
+.toggle-label .hint { display: block; font-size: 11px; color: var(--color-erp-text-muted); margin-top: 1px; }
+
+/* ── Form layout ── */
+.form-section-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-erp-text-muted);
+  margin-bottom: 12px;
+  margin-top: 4px;
+}
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.form-full   { grid-column: 1 / -1; }
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-table-border);
+}
+.form-actions .form-cancel {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-erp-interactive);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── ERP-specific: NPWP field ── */
+.field-npwp .field-input {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+.field-npwp .char-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-erp-text-muted);
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* ── ERP-specific: DPP / PPN / Total trio ── */
+.field-trio { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.field-trio .field-input.readonly { font-family: var(--font-mono); text-align: right; }
+
+/* ── ERP-specific: CoA / Vendor lookup dropdown ── */
+.lookup-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-erp-border-field);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  z-index: 50;
+  overflow: hidden;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.lookup-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-table-border);
+  transition: background 0.1s;
+}
+.lookup-item:last-child { border-bottom: none; }
+.lookup-item:hover,
+.lookup-item.selected { background: var(--color-erp-interactive-tint); }
+.lookup-code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-erp-text-code);
+  min-width: 40px;
+}
+.lookup-name  { font-family: var(--font-sans); font-size: 13px; color: var(--color-erp-text); flex: 1; }
+.lookup-meta  { font-family: var(--font-sans); font-size: 11px; color: var(--color-text-tertiary); }
+
+
+
+/* ============================================================
+   COMPONENTS — v1.1
+   Summary blocks, Action item blocks, Steppers,
+   Tabs, Table row states, Buttons-in-table, File upload
+   ============================================================ */
+
+
+/* ──────────────────────────────────────
+   COMPONENT: Summary Block
+   3-up stat cards, left border = severity
+   ────────────────────────────────────── */
+.summary-block-group {
+  display: flex;
+  gap: var(--space-4);
+}
+.summary-block {
+  flex: 1;
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-default);
+  border-left: 4px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.summary-block.sb-danger  { border-left-color: var(--color-danger-text); }
+.summary-block.sb-warning { border-left-color: var(--color-warning-text); }
+.summary-block.sb-neutral { border-left-color: var(--color-border-strong); }
+.summary-block.sb-success { border-left-color: var(--color-success-text); }
+.sb-count {
+  font-family: var(--font-sans);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+.sb-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+}
+.sb-sub {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-text-tertiary);
+}
+
+
+/* ──────────────────────────────────────
+   COMPONENT: Action Item Block
+   Actionable card, left border = urgency
+   ────────────────────────────────────── */
+.action-block {
+  background: var(--color-warning-surface);
+  border: 1px solid var(--color-warning-border);
+  border-left: 4px solid var(--color-warning-text);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.action-block.ab-danger  {
+  background: var(--color-danger-surface);
+  border-color: var(--color-danger-border);
+  border-left-color: var(--color-danger-text);
+}
+.action-block.ab-success {
+  background: var(--color-success-surface);
+  border-color: var(--color-success-border);
+  border-left-color: var(--color-success-text);
+}
+.action-block.ab-neutral {
+  background: var(--color-surface-sunken);
+  border-color: var(--color-border-default);
+  border-left-color: var(--color-border-strong);
+}
+.ab-title {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+.ab-impact {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+.ab-rec {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+.ab-footnote {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-1);
+}
+.ab-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+/* action block uses standard buttons — .btn-primary / .btn-secondary / ghost text */
+.ab-ghost {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 var(--space-2);
+  transition: color var(--transition-base);
+}
+.ab-ghost:hover { color: var(--color-text-primary); }
+
+
+/* ──────────────────────────────────────
+   COMPONENT: Stepper — Horizontal
+   ────────────────────────────────────── */
+.stepper-h {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+}
+.step-h {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+/* connector line between steps */
+.step-h:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--color-border-default);
+  z-index: 0;
+}
+.step-h.done:not(:last-child)::after   { background: var(--color-brand); }
+.step-h.active:not(:last-child)::after { background: var(--color-border-default); }
+
+.step-h-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-default);
+  background: var(--color-surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  position: relative;
+  z-index: 1;
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+}
+.step-h.done   .step-h-dot {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: #fff;
+}
+.step-h.active .step-h-dot {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+  box-shadow: 0 0 0 4px var(--color-brand-wash);
+}
+.step-h-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-2);
+  text-align: center;
+  line-height: 1.3;
+}
+.step-h.done   .step-h-label { color: var(--color-text-secondary); }
+.step-h.active .step-h-label { color: var(--color-brand); font-weight: 600; }
+.step-h-sub {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  color: var(--color-text-disabled);
+  text-align: center;
+  margin-top: 2px;
+}
+
+
+/* ──────────────────────────────────────
+   COMPONENT: Stepper — Vertical
+   ────────────────────────────────────── */
+.stepper-v {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.step-v {
+  display: flex;
+  gap: var(--space-4);
+  position: relative;
+}
+/* vertical connector */
+.step-v:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  width: 2px;
+  height: calc(100% - 4px);
+  background: var(--color-border-default);
+  z-index: 0;
+}
+.step-v.done:not(:last-child)::before { background: var(--color-brand); }
+
+.step-v-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-default);
+  background: var(--color-surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  transition: all var(--transition-base);
+}
+.step-v.done   .step-v-dot { background: var(--color-brand); border-color: var(--color-brand); color: #fff; }
+.step-v.active .step-v-dot { border-color: var(--color-brand); color: var(--color-brand); box-shadow: 0 0 0 4px var(--color-brand-wash); }
+
+.step-v-content { padding-bottom: var(--space-6); flex: 1; }
+.step-v-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  line-height: 1.6;
+}
+.step-v.done   .step-v-label { color: var(--color-text-secondary); }
+.step-v.active .step-v-label { color: var(--color-text-primary); }
+.step-v-sub {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  line-height: 1.5;
+  margin-top: 2px;
+}
+.step-v-body {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+
+/* ──────────────────────────────────────
+   COMPONENT: Tabs
+   ────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--color-border-default);
+}
+.tab {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-tertiary);
+  padding: var(--space-3) var(--space-5);
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--transition-base), border-color var(--transition-base);
+  white-space: nowrap;
+}
+.tab:hover { color: var(--color-text-secondary); }
+.tab.active {
+  color: var(--color-brand);
+  border-bottom-color: var(--color-brand);
+  font-weight: 600;
+}
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  background: var(--color-brand-subtle);
+  color: var(--color-brand);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 0 5px;
+  margin-left: var(--space-2);
+}
+.tab.active .tab-badge {
+  background: var(--color-brand);
+  color: #fff;
+}
+/* Pill variant */
+.tabs.tabs-pill {
+  border-bottom: none;
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 2px;
+  display: inline-flex;
+}
+.tabs.tabs-pill .tab {
+  border-radius: var(--radius-full);
+  border-bottom: none;
+  margin-bottom: 0;
+  padding: var(--space-2) var(--space-4);
+  font-size: 12px;
+}
+.tabs.tabs-pill .tab.active {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+
+/* ──────────────────────────────────────
+   COMPONENT: Table Row States
+   Applied as modifier classes on <tr>
+   ────────────────────────────────────── */
+/* Neutral: existing .erp-table alternating rows (unchanged) */
+
+/* Needs attention — amber */
+.erp-table .row-attention td {
+  background: var(--color-warning-surface) !important;
+}
+.erp-table .row-attention:hover td { background: #fdf0cc !important; }
+
+/* Good to go — green */
+.erp-table .row-ok td {
+  background: var(--color-success-surface) !important;
+}
+.erp-table .row-ok:hover td { background: #d8f0e4 !important; }
+
+/* Flagged / error — red */
+.erp-table .row-flagged td {
+  background: var(--color-danger-surface) !important;
+}
+.erp-table .row-flagged:hover td { background: #f7e0e0 !important; }
+
+/* Muted / inactive — grey */
+.erp-table .row-muted td {
+  background: var(--color-surface-sunken) !important;
+  color: var(--color-text-disabled) !important;
+}
+.erp-table .row-muted:hover td { background: var(--color-surface-sunken) !important; }
+
+/* Labels for row state — inline chip inside td */
+.row-state-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.row-state-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.row-state-tag.attention { color: var(--color-warning-text); }
+.row-state-tag.attention::before { background: var(--color-warning-text); }
+.row-state-tag.ok        { color: var(--color-success-text); }
+.row-state-tag.ok::before        { background: var(--color-success-text); }
+.row-state-tag.flagged   { color: var(--color-danger-text); }
+.row-state-tag.flagged::before   { background: var(--color-danger-text); }
+.row-state-tag.muted     { color: var(--color-text-disabled); }
+.row-state-tag.muted::before     { background: var(--color-border-strong); }
+
+
+/* ──────────────────────────────────────
+   COMPONENT: Buttons in Table
+   Compact action button for td cells
+   ────────────────────────────────────── */
+.td-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+.btn-table {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.btn-table.primary {
+  background: var(--color-action);
+  color: #fff;
+  border-color: var(--color-action);
+}
+.btn-table.primary:hover { background: var(--color-action-hover); border-color: var(--color-action-hover); }
+.btn-table.ghost {
+  background: none;
+  color: var(--color-text-tertiary);
+  border-color: var(--color-border-default);
+}
+.btn-table.ghost:hover { color: var(--color-text-primary); border-color: var(--color-border-strong); }
+.btn-table.danger {
+  background: none;
+  color: var(--color-danger-text);
+  border-color: var(--color-danger-border);
+}
+.btn-table.danger:hover { background: var(--color-danger-surface); }
+/* icon-only button */
+.btn-table.icon-only {
+  padding: 4px 7px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+
+/* ──────────────────────────────────────
+   COMPONENT: File Upload Area
+   ────────────────────────────────────── */
+.upload-zone {
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-sunken);
+  padding: var(--space-10) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  transition: border-color var(--transition-base), background var(--transition-base);
+  text-align: center;
+}
+.upload-zone:hover,
+.upload-zone.drag-over {
+  border-color: var(--color-brand);
+  background: var(--color-brand-wash);
+}
+.upload-zone-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.upload-zone-title {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.upload-zone-title span {
+  color: var(--color-action);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.upload-zone-hint {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+}
+/* uploaded file row */
+.upload-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.upload-file-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+}
+.upload-file-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.upload-file-info { flex: 1; min-width: 0; }
+.upload-file-name {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.upload-file-meta {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  margin-top: 1px;
+}
+.upload-file-progress {
+  height: 3px;
+  background: var(--color-border-default);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: var(--space-1);
+}
+.upload-file-progress-bar {
+  height: 100%;
+  background: var(--color-action);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+.upload-file-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
+  flex-shrink: 0;
+}
+.upload-file-remove:hover { color: var(--color-danger-text); background: var(--color-danger-surface); }
+
+</style>
+<style>
+  /* ── Reference page chrome only — not part of the design system ── */
+  :root {
+    --ref-sidebar-w: 220px;
+    --ref-chrome: #0F0F0F;
+    --ref-chrome-border: #2A2A2A;
+    --ref-tag-bg: #1E1E1E;
+    --ref-tag-color: #7DD3A8;
+    --ref-tag-font: 'Inconsolata', monospace;
+    --ref-section-gap: 80px;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    display: flex;
+    background: var(--color-surface-base);
+  }
+
+  /* Sidebar nav */
+  .ref-sidebar {
+    width: var(--ref-sidebar-w);
+    min-width: var(--ref-sidebar-w);
+    background: var(--ref-chrome);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    padding: 28px 0 40px;
+    border-right: 1px solid var(--ref-chrome-border);
+    flex-shrink: 0;
+  }
+  .ref-sidebar-logo {
+    padding: 0 20px 24px;
+    border-bottom: 1px solid var(--ref-chrome-border);
+    margin-bottom: 20px;
+  }
+  .ref-sidebar-logo span {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+  .ref-sidebar-logo small {
+    display: block;
+    font-size: 10px;
+    color: #555;
+    margin-top: 3px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .ref-nav-group { margin-bottom: 6px; }
+  .ref-nav-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #444;
+    padding: 8px 20px 4px;
+  }
+  .ref-nav-link {
+    display: block;
+    font-size: 12px;
+    color: #777;
+    padding: 6px 20px;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    transition: color 0.1s, background 0.1s;
+  }
+  .ref-nav-link:hover { color: #fff; background: #1A1A1A; }
+
+  /* Main content */
+  .ref-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 56px 64px 120px;
+    max-width: 960px;
+  }
+
+  /* Section headers */
+  .ref-page-title {
+    font-family: var(--font-sans);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .ref-page-sub {
+    font-size: 14px;
+    color: var(--color-text-tertiary);
+    font-weight: 300;
+    margin-bottom: 56px;
+    line-height: 1.6;
+  }
+  .ref-section {
+    margin-bottom: var(--ref-section-gap);
+    padding-top: 40px;
+    border-top: 1px solid var(--color-border-default);
+  }
+  .ref-section:first-of-type { border-top: none; padding-top: 0; }
+  .ref-section-title {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-disabled);
+    margin-bottom: 28px;
+  }
+
+  /* Row: class tag + rendered output */
+  .ref-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .ref-row.top { align-items: flex-start; }
+  .ref-tag {
+    font-family: var(--ref-tag-font);
+    font-size: 11px;
+    color: var(--ref-tag-color);
+    background: var(--ref-tag-bg);
+    padding: 4px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #2A2A2A;
+    line-height: 1.5;
+  }
+  .ref-tag.modifier { color: #C9A96E; } /* amber — modifier/state classes */
+  .ref-tag.utility  { color: #9DB8F4; } /* blue — utility classes */
+
+  .ref-output {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .ref-output.block { display: block; }
+
+  /* Swatch for color tokens */
+  .ref-swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .ref-swatch {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--color-border-default);
+  }
+  .ref-swatch-color {
+    height: 48px;
+  }
+  .ref-swatch-info {
+    padding: 8px 10px;
+    background: var(--color-surface-raised);
+  }
+  .ref-swatch-name {
+    font-family: var(--ref-tag-font);
+    font-size: 9px;
+    color: var(--color-text-tertiary);
+    line-height: 1.4;
+  }
+  .ref-swatch-hex {
+    font-family: var(--ref-tag-font);
+    font-size: 10px;
+    color: var(--color-text-primary);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* Dark surface wrapper for components that live on dark/brand bg */
+  .ref-on-brand {
+    background: var(--color-brand);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+  .ref-on-dark {
+    background: var(--color-surface-overlay);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+
+  /* Spacing tokens visual */
+  .ref-space-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+  .ref-space-bar {
+    height: 20px;
+    background: var(--color-brand);
+    border-radius: 3px;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+  .ref-space-label {
+    font-family: var(--ref-tag-font);
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    min-width: 160px;
+  }
+  .ref-space-val {
+    font-family: var(--ref-tag-font);
+    font-size: 11px;
+    color: var(--color-text-primary);
+  }
+
+  /* Card container for hero-card demo */
+  .ref-card-wrap {
+    max-width: 420px;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  /* Divider between sub-groups */
+  .ref-divider {
+    height: 1px;
+    background: var(--color-border-subtle);
+    margin: 24px 0;
+  }
+
+  .ref-note {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    font-weight: 300;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: var(--color-surface-sunken);
+    border-left: 3px solid var(--color-border-strong);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+
+  /* ── Section headings ── */
+  .ref-section-heading {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #1A1814;
+    margin: 0 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #E2DDD7;
+    line-height: 1.1;
+  }
+  .ref-group-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #8C857C;
+    margin: 28px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #E2DDD7;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Sidebar ───────────────────────────────────── -->
+
+<aside class="ref-sidebar">
+  <div class="ref-sidebar-logo">
+    <span>Vinaze DS</span>
+    <small>Reference · v1.1</small>
+  </div>
+
+  <div class="ref-nav-group">
+    <div class="ref-nav-label">Foundations</div>
+    <a href="#colors" class="ref-nav-link">Color</a>
+    <a href="#typography" class="ref-nav-link">Typography</a>
+    <a href="#spacing" class="ref-nav-link">Spacing</a>
+    <a href="#radius" class="ref-nav-link">Border &amp; Radius</a>
+    <a href="#motion" class="ref-nav-link">Motion &amp; Easing</a>
+  </div>
+
+  <div class="ref-nav-group">
+    <div class="ref-nav-label">Components</div>
+    <a href="#buttons" class="ref-nav-link">Buttons</a>
+    <a href="#summary-blocks" class="ref-nav-link">Summary Blocks</a>
+    <a href="#action-blocks" class="ref-nav-link">Action Item Blocks</a>
+    <a href="#steppers" class="ref-nav-link">Steppers</a>
+    <a href="#tabs" class="ref-nav-link">Tabs</a>
+    <a href="#table-row-states" class="ref-nav-link">Table Row States</a>
+    <a href="#table-buttons" class="ref-nav-link">Buttons in Table</a>
+    <a href="#file-upload" class="ref-nav-link">File Upload</a>
+  </div>
+
+  <div class="ref-nav-group">
+    <div class="ref-nav-label">Labels &amp; Badges</div>
+    <a href="#badges" class="ref-nav-link">Badges &amp; Labels</a>
+  </div>
+
+  <div class="ref-nav-group">
+    <div class="ref-nav-label">Tables</div>
+    <a href="#tables" class="ref-nav-link">Base &amp; Row States</a>
+    <a href="#tables" class="ref-nav-link">Drawer Overlay</a>
+    <a href="#tables" class="ref-nav-link">GL · CoA · Vendor · Bills</a>
+  </div>
+
+  <div class="ref-nav-group">
+    <div class="ref-nav-label">Forms</div>
+    <a href="#forms" class="ref-nav-link">Input Base, Types, States</a>
+    <a href="#forms" class="ref-nav-link">Controls</a>
+    <a href="#forms" class="ref-nav-link">Form Layout</a>
+    <a href="#forms" class="ref-nav-link">ERP Patterns</a>
+  </div>
+</aside>
+
+<main class="ref-main">
+
+  <h1 class="ref-page-title">Vinaze Design System</h1>
+  <p class="ref-page-sub">Component and token reference. Foundations first, then components, then ERP-specific patterns. Each section shows class names on the left and rendered output on the right.</p>
+
+
+  <section class="ref-section" id="colors">
+    <h2 class="ref-section-heading">Color</h2>
+    <div class="ref-note">These are the values to use day-to-day. They resolve through Layer 1 primitives. Never reference primitives directly in component work.</div>
+
+    <div style="margin-bottom:16px;font-size:11px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:0.06em;text-transform:uppercase;">Brand</div>
+    <div class="ref-swatch-grid">
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-brand)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-brand</div><div class="ref-swatch-hex">#B83D08</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-brand-hover)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-brand-hover</div><div class="ref-swatch-hex">#A03206</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-brand-mid)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-brand-mid</div><div class="ref-swatch-hex">#D4622A</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-brand-subtle)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-brand-subtle</div><div class="ref-swatch-hex">#F4E6DB</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-brand-wash)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-brand-wash</div><div class="ref-swatch-hex">#F7EDE5</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-brand-deep)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-brand-deep</div><div class="ref-swatch-hex">#3D1200</div></div></div>
+    </div>
+
+    <div style="margin-bottom:16px;font-size:11px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:0.06em;text-transform:uppercase;">Action</div>
+    <div class="ref-swatch-grid">
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-action)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-action</div><div class="ref-swatch-hex">#1A46C8</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-action-hover)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-action-hover</div><div class="ref-swatch-hex">#1338A8</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-action-mid)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-action-mid</div><div class="ref-swatch-hex">#4D72E0</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-action-subtle)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-action-subtle</div><div class="ref-swatch-hex">#C8D8FA</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-action-wash)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-action-wash</div><div class="ref-swatch-hex">#EBF0FD</div></div></div>
+    </div>
+
+    <div style="margin-bottom:16px;font-size:11px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:0.06em;text-transform:uppercase;">Surface</div>
+    <div class="ref-swatch-grid">
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-surface-base);border-bottom:1px solid var(--color-border-default)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-surface-base</div><div class="ref-swatch-hex">#FBF8F5</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-surface-raised);border-bottom:1px solid var(--color-border-default)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-surface-raised</div><div class="ref-swatch-hex">#FFFFFF</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-surface-sunken)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-surface-sunken</div><div class="ref-swatch-hex">#F4F0EB</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-surface-overlay)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-surface-overlay</div><div class="ref-swatch-hex">#1A1814</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-surface-deep)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-surface-deep</div><div class="ref-swatch-hex">#080706</div></div></div>
+    </div>
+
+    <div style="margin-bottom:16px;font-size:11px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:0.06em;text-transform:uppercase;">Status</div>
+    <div class="ref-swatch-grid">
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-success-surface)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-success-surface</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-success-border)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-success-border</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-success-text)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-success-text</div><div class="ref-swatch-hex">#166638</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-warning-surface)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-warning-surface</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-warning-border)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-warning-border</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-warning-text)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-warning-text</div><div class="ref-swatch-hex">#7A4D00</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-danger-surface)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-danger-surface</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-danger-border)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-danger-border</div></div></div>
+      <div class="ref-swatch"><div class="ref-swatch-color" style="background:var(--color-danger-text)"></div><div class="ref-swatch-info"><div class="ref-swatch-name">--color-danger-text</div><div class="ref-swatch-hex">#A02020</div></div></div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="typography">
+    <h2 class="ref-section-heading">Typography</h2>
+    <h2 class="ref-section-heading">Typography</h2>
+
+    <div class="ref-note" style="margin-bottom:16px;"><strong>Tokens</strong> — font family, size scale, weights. <strong>Display</strong> — Playfair Display headings. <strong>Body / UI</strong> — Manrope. <strong>Mono / Data</strong> — Inconsolata.</div>
+
+    <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:12px;margin-top:4px;">Tokens</div>
+    <div class="ref-row">
+      <div class="ref-tag">--font-display</div>
+      <div class="ref-output" style="font-family:var(--font-display);font-size:20px;font-weight:900;">Playfair Display</div>
+    </div>
+    <div class="ref-row">
+      <div class="ref-tag">--font-sans</div>
+      <div class="ref-output" style="font-family:var(--font-sans);font-size:16px;font-weight:400;">Manrope — the primary UI font</div>
+    </div>
+    <div class="ref-row">
+      <div class="ref-tag">--font-mono</div>
+      <div class="ref-output" style="font-family:var(--font-mono);font-size:16px;">Inconsolata — numbers & data</div>
+    </div>
+
+    <div class="ref-divider" style="margin:20px 0;"></div>
+    <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:12px;">Display</div>
+    <div class="ref-row top">
+      <div class="ref-tag">.t-display-xl</div>
+      <div class="ref-output block"><span class="t-display-xl" style="color:var(--color-text-primary)">Operations.</span></div>
+    </div>
+    <div class="ref-row top">
+      <div class="ref-tag">.t-display-lg</div>
+      <div class="ref-output block"><span class="t-display-lg" style="color:var(--color-text-primary)">Zero busy work.</span></div>
+    </div>
+    <div class="ref-row top">
+      <div class="ref-tag">.t-display-md</div>
+      <div class="ref-output block"><span class="t-display-md" style="color:var(--color-text-primary)">Close the gap.</span></div>
+    </div>
+    <div class="ref-row top" style="margin-top:16px;">
+      <div class="ref-tag modifier">em — italic accent</div>
+      <div class="ref-output block"><span class="t-display-lg" style="color:var(--color-text-primary)">Zero <em style="color:var(--color-brand);font-style:italic;">busy work.</em></span></div>
+    </div>
+
+    <div class="ref-divider" style="margin:20px 0;"></div>
+    <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:12px;">Body / UI</div>
+    <div class="ref-row"><div class="ref-tag">.t-body-lg</div><div class="ref-output block"><span class="t-body-lg" style="color:var(--color-text-primary)">Replace disconnected tools and manual processes with one intelligent system.</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-body-md</div><div class="ref-output block"><span class="t-body-md" style="color:var(--color-text-primary)">Replace disconnected tools and manual processes with one intelligent system.</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-body-sm</div><div class="ref-output block"><span class="t-body-sm" style="color:var(--color-text-primary)">Replace disconnected tools and manual processes with one intelligent system.</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-body-xs</div><div class="ref-output block"><span class="t-body-xs" style="color:var(--color-text-primary)">Replace disconnected tools and manual processes with one intelligent system.</span></div></div>
+    <div class="ref-divider"></div>
+    <div class="ref-row"><div class="ref-tag">.t-label-md</div><div class="ref-output"><span class="t-label-md" style="color:var(--color-text-primary)">Request a demo</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-label-sm</div><div class="ref-output"><span class="t-label-sm" style="color:var(--color-text-tertiary)">Section label</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-label-xs</div><div class="ref-output"><span class="t-label-xs" style="color:var(--color-text-tertiary)">Trusted by teams at</span></div></div>
+
+    <div class="ref-divider" style="margin:20px 0;"></div>
+    <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:12px;">Mono / Data</div>
+    <div class="ref-row"><div class="ref-tag">.t-mono-lg</div><div class="ref-output"><span class="t-mono-lg" style="color:var(--color-text-primary)">$87,400</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-mono-md</div><div class="ref-output"><span class="t-mono-md" style="color:var(--color-text-primary)">Rp 4.2M</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-mono-sm</div><div class="ref-output"><span class="t-mono-sm" style="color:var(--color-text-tertiary)">+18.4%</span></div></div>
+    <div class="ref-row">
+      <div class="ref-tag utility">.delta-up</div>
+      <div class="ref-output"><span class="t-mono-sm delta-up">+18.4%</span></div>
+    </div>
+    <div class="ref-row">
+      <div class="ref-tag utility">.delta-dn</div>
+      <div class="ref-output"><span class="t-mono-sm delta-dn">−4 days</span></div>
+    </div>
+
+    <div class="ref-group-label">ERP Typography — Scale & Roles</div>
+<div class="ref-note">Three font roles. Bebas Neue for ERP section/page titles only. Manrope for all UI text. Inconsolata for all numbers, IDs, codes. Never mix within a single element.</div>
+
+    <div style="margin-bottom:12px;font-size:11px;font-weight:600;color:var(--color-text-disabled);letter-spacing:0.06em;text-transform:uppercase;">Display — Bebas Neue (titles only)</div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-display-lg</div><div class="ref-output block"><span class="t-erp-display-lg">Shipment Overview</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-display-md</div><div class="ref-output block"><span class="t-erp-display-md">Active Trade Routes</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-display-sm</div><div class="ref-output block"><span class="t-erp-display-sm">Pending Clearance</span></div></div>
+    <div class="ref-divider"></div>
+
+    <div style="margin-bottom:12px;font-size:11px;font-weight:600;color:var(--color-text-disabled);letter-spacing:0.06em;text-transform:uppercase;">Body — Manrope</div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-body-lg</div><div class="ref-output block"><span class="t-erp-body-lg">14 active shipments across 6 trade corridors this week.</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-body-md</div><div class="ref-output block"><span class="t-erp-body-md">Rotterdam–Shanghai remains the highest-volume route.</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-body-sm</div><div class="ref-output block"><span class="t-erp-body-sm">Last updated 2 minutes ago · Auto-refreshes every 5 min</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-label</div><div class="ref-output block"><span class="t-erp-label">Vendor</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-hint</div><div class="ref-output block"><span class="t-erp-hint">Format: 00.000.000.0-000.000 (15 digit)</span></div></div>
+    <div class="ref-divider"></div>
+
+    <div style="margin-bottom:12px;font-size:11px;font-weight:600;color:var(--color-text-disabled);letter-spacing:0.06em;text-transform:uppercase;">Numbers — Inconsolata</div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-num-lg</div><div class="ref-output"><span class="t-erp-num-lg">Rp 1.250.000,00</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-num-md</div><div class="ref-output"><span class="t-erp-num-md">11.100.000,00</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-num-sm</div><div class="ref-output"><span class="t-erp-num-sm">+18,4%</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-code</div><div class="ref-output"><span class="t-erp-code">INV-0412</span></div></div>
+    <div class="ref-row"><div class="ref-tag">.t-erp-id</div><div class="ref-output"><span class="t-erp-id">010.000-25.00000041</span></div></div>
+    <div class="ref-group-label">ERP Number Helpers</div>
+<div class="ref-note">Utility modifiers for number semantics. Compose on top of any Inconsolata class. Never use color on GL values — only on PPh deductions, overdue amounts, and zero/missing states.</div>
+    <div class="ref-row"><div class="ref-tag utility">.num-right</div><div class="ref-output"><span style="display:block;width:160px;text-align:right;font-family:var(--font-mono);font-size:13px;border:1px dashed var(--color-border-default);padding:4px 8px;">1.250.000,00</span></div></div>
+    <div class="ref-row"><div class="ref-tag utility">.num-muted</div><div class="ref-output"><span class="t-erp-num-md num-muted">0,00</span><span style="font-size:11px;color:var(--color-text-tertiary);margin-left:8px;">zero value</span></div></div>
+    <div class="ref-row"><div class="ref-tag utility">.num-pph</div><div class="ref-output"><span class="t-erp-num-md num-pph">(200.000,00)</span><span style="font-size:11px;color:var(--color-text-tertiary);margin-left:8px;">PPh deduction — red</span></div></div>
+    <div class="ref-row"><div class="ref-tag utility">.num-overdue</div><div class="ref-output"><span class="t-erp-num-md num-overdue">Rp 44.500.000,00</span><span style="font-size:11px;color:var(--color-text-tertiary);margin-left:8px;">overdue amount</span></div></div>
+  </section>
+
+  <section class="ref-section" id="spacing">
+    <h2 class="ref-section-heading">Spacing</h2>
+    <div class="ref-note">Use these tokens for all margin, padding, and gap values. Never hardcode a px value that maps to one of these.</div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-1</div><div class="ref-space-bar" style="width:4px"></div><div class="ref-space-val">4px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-2</div><div class="ref-space-bar" style="width:8px"></div><div class="ref-space-val">8px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-3</div><div class="ref-space-bar" style="width:12px"></div><div class="ref-space-val">12px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-4</div><div class="ref-space-bar" style="width:16px"></div><div class="ref-space-val">16px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-5</div><div class="ref-space-bar" style="width:20px"></div><div class="ref-space-val">20px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-6</div><div class="ref-space-bar" style="width:24px"></div><div class="ref-space-val">24px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-8</div><div class="ref-space-bar" style="width:32px"></div><div class="ref-space-val">32px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-10</div><div class="ref-space-bar" style="width:40px"></div><div class="ref-space-val">40px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-12</div><div class="ref-space-bar" style="width:48px"></div><div class="ref-space-val">48px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-14</div><div class="ref-space-bar" style="width:56px"></div><div class="ref-space-val">56px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-16</div><div class="ref-space-bar" style="width:64px"></div><div class="ref-space-val">64px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-18</div><div class="ref-space-bar" style="width:72px"></div><div class="ref-space-val">72px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-20</div><div class="ref-space-bar" style="width:80px"></div><div class="ref-space-val">80px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-24</div><div class="ref-space-bar" style="width:96px"></div><div class="ref-space-val">96px</div></div>
+    <div class="ref-space-row"><div class="ref-space-label ref-tag">--space-26</div><div class="ref-space-bar" style="width:104px"></div><div class="ref-space-val">104px</div></div>
+  </section>
+
+  <section class="ref-section" id="radius">
+    <h2 class="ref-section-heading">Border &amp; Radius</h2>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end;">
+      <div style="text-align:center;">
+        <div style="width:56px;height:56px;background:var(--color-brand);border-radius:var(--radius-sm);margin-bottom:8px;"></div>
+        <div class="ref-tag">--radius-sm<br>6px</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:56px;height:56px;background:var(--color-brand);border-radius:var(--radius-md);margin-bottom:8px;"></div>
+        <div class="ref-tag">--radius-md<br>10px</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:56px;height:56px;background:var(--color-brand);border-radius:var(--radius-lg);margin-bottom:8px;"></div>
+        <div class="ref-tag">--radius-lg<br>14px</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:56px;height:56px;background:var(--color-brand);border-radius:var(--radius-xl);margin-bottom:8px;"></div>
+        <div class="ref-tag">--radius-xl<br>20px</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:56px;height:56px;background:var(--color-brand);border-radius:var(--radius-full);margin-bottom:8px;"></div>
+        <div class="ref-tag">--radius-full<br>9999px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="motion">
+    <h2 class="ref-section-heading">Motion &amp; Easing</h2>
+    <div class="ref-note">All keyframes live in Layer 8. Adjust timing globally here without touching component code.</div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="ref-row"><div class="ref-tag">@keyframes fadeUp</div><div style="font-size:12px;color:var(--color-text-tertiary);">opacity 0→1 + translateY 20px→0. Hero entrance stagger.</div></div>
+      <div class="ref-row"><div class="ref-tag">@keyframes pulse</div><div style="font-size:12px;color:var(--color-text-tertiary);">opacity 1→0.4→1 at 2s. Used by .agent-dot.</div></div>
+      <div class="ref-row"><div class="ref-tag">@keyframes blink</div><div style="font-size:12px;color:var(--color-text-tertiary);">opacity 1→0→1 at 1.1s. Used by .cursor.</div></div>
+    </div>
+    <div style="margin-top:24px;display:flex;gap:32px;align-items:center;">
+      <div style="text-align:center;">
+        <div style="width:40px;height:40px;background:var(--color-brand);border-radius:var(--radius-md);animation:fadeUp 1.5s ease infinite alternate;margin:0 auto 8px;"></div>
+        <div class="ref-tag">fadeUp</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--color-success-text);animation:pulse 2s infinite;margin:0 auto 8px;margin-top:15px;"></div>
+        <div class="ref-tag">pulse</div>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+        <span style="font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);margin-bottom:8px;margin-top:10px;">Typing<span class="cursor"></span></span>
+        <div class="ref-tag">blink</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="buttons">
+    <h2 class="ref-section-heading">Buttons</h2>
+    <div class="ref-note">Three variants. <strong>Primary</strong> — solid blue, main CTAs. <strong>Secondary</strong> — blue outline, supportive actions. <strong>Outline-white</strong> — white border for use on coloured or dark surfaces.</div>
+
+    <div style="display:flex;flex-direction:column;gap:20px;">
+
+      <!-- Primary -->
+      <div class="ref-row">
+        <div class="ref-tag">.btn-primary</div>
+        <div class="ref-output" style="display:flex;align-items:center;gap:12px;">
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--color-action);color:#fff;border:none;border-radius:var(--radius-full);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:pointer;transition:background 0.15s;">Get started</button>
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:var(--color-action);color:#fff;border:none;border-radius:var(--radius-full);font-family:var(--font-sans);font-size:12px;font-weight:600;cursor:pointer;">Small</button>
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:var(--color-action);color:#fff;border:none;border-radius:var(--radius-full);font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;">Large</button>
+        </div>
+      </div>
+
+      <!-- Secondary -->
+      <div class="ref-row">
+        <div class="ref-tag">.btn-secondary</div>
+        <div class="ref-output" style="display:flex;align-items:center;gap:12px;">
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:transparent;color:var(--color-action);border:1.5px solid var(--color-action);border-radius:var(--radius-full);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:pointer;transition:background 0.15s;">Learn more</button>
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:transparent;color:var(--color-action);border:1.5px solid var(--color-action);border-radius:var(--radius-full);font-family:var(--font-sans);font-size:12px;font-weight:600;cursor:pointer;">Small</button>
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:transparent;color:var(--color-action);border:1.5px solid var(--color-action);border-radius:var(--radius-full);font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;">Large</button>
+        </div>
+      </div>
+
+      <!-- White outline — on dark/coloured bg -->
+      <div class="ref-row">
+        <div class="ref-tag">.btn-outline-white</div>
+        <div class="ref-output" style="display:flex;align-items:center;gap:12px;background:var(--color-brand);padding:16px;border-radius:var(--radius-md);">
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.75);border-radius:var(--radius-full);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:pointer;">Watch demo</button>
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.75);border-radius:var(--radius-full);font-family:var(--font-sans);font-size:12px;font-weight:600;cursor:pointer;">Small</button>
+          <span style="font-size:11px;color:rgba(255,255,255,0.5);font-family:var(--font-sans);">On coloured/dark surface</span>
+        </div>
+      </div>
+
+      <!-- Disabled state -->
+      <div class="ref-row">
+        <div class="ref-tag modifier">disabled</div>
+        <div class="ref-output" style="display:flex;align-items:center;gap:12px;">
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--color-border-default);color:var(--color-text-disabled);border:none;border-radius:var(--radius-full);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:not-allowed;" disabled>Disabled primary</button>
+          <button style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:transparent;color:var(--color-text-disabled);border:1.5px solid var(--color-border-default);border-radius:var(--radius-full);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:not-allowed;" disabled>Disabled secondary</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
+      <div class="ref-row"><div class="ref-tag">.btn-primary</div><div style="font-size:12px;color:var(--color-text-tertiary);">--color-action (#1A46C8) fill · white text · pill radius</div></div>
+      <div class="ref-row"><div class="ref-tag">.btn-secondary</div><div style="font-size:12px;color:var(--color-text-tertiary);">Transparent fill · --color-action border + text · same radius</div></div>
+      <div class="ref-row"><div class="ref-tag">.btn-outline-white</div><div style="font-size:12px;color:var(--color-text-tertiary);">White border 75% opacity · white text · for brand/dark surfaces</div></div>
+      <div class="ref-row"><div class="ref-tag modifier">:disabled</div><div style="font-size:12px;color:var(--color-text-tertiary);">Border default fill, text-disabled color — both variants</div></div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="badges">
+    <h2 class="ref-section-heading">Labels &amp; Badges</h2>
+    <div class="ref-note">Compose as <code style="font-family:var(--font-mono);font-size:11px;">.status.s-go</code> — base class sets shape, modifier sets colour.</div>
+    <div class="ref-row"><div class="ref-tag utility">.status.s-go</div><div class="ref-output"><span class="status s-go">Approved</span></div></div>
+    <div class="ref-row"><div class="ref-tag utility">.status.s-warn</div><div class="ref-output"><span class="status s-warn">Pending</span></div></div>
+    <div class="ref-row"><div class="ref-tag utility">.status.s-bl</div><div class="ref-output"><span class="status s-bl">Review</span></div></div>
+    <div class="ref-group-label">ERP Override — Paid / Overdue / Pending / Review / Non-PKP</div>
+<div class="ref-note">Same class names as the landing-page badges, now remapped to ERP semantics. Old: Approved/Pending/Review. New: Paid/Pending/Info/Overdue/Non-PKP.</div>
+    <div class="ref-row"><div class="ref-tag utility">.status.s-go</div><div class="ref-output"><span class="status s-go">Paid</span><span class="status s-go" style="margin-left:8px;">Tax ready</span><span class="status s-go" style="margin-left:8px;">Approved</span></div></div>
+    <div class="ref-row"><div class="ref-tag utility">.status.s-warn</div><div class="ref-output"><span class="status s-warn">Pending</span><span class="status s-warn" style="margin-left:8px;">Due soon</span><span class="status s-warn" style="margin-left:8px;">Incomplete</span></div></div>
+    <div class="ref-row"><div class="ref-tag utility">.status.s-stop</div><div class="ref-output"><span class="status s-stop">Overdue</span><span class="status s-stop" style="margin-left:8px;">Rejected</span></div></div>
+    <div class="ref-row"><div class="ref-tag utility">.status.s-bl → Review / In transit — terracotta tint</div></div>
+    <div class="ref-row"><div class="ref-tag utility">.status.s-muted</div><div class="ref-output"><span class="status s-muted">Non-PKP</span><span class="status s-muted" style="margin-left:8px;">N/A</span></div></div>
+    <div class="ref-group-label">Delta Indicators</div>
+<div class="ref-row"><div class="ref-tag utility">.delta-up</div><div class="ref-output"><span class="mk-delta delta-up">+18.4%</span></div></div>
+    <div class="ref-row"><div class="ref-tag utility">.delta-dn</div><div class="ref-output"><span class="mk-delta delta-dn">−4 days</span></div></div>
+  </section>
+
+  <section class="ref-section" id="tables">
+    <h2 class="ref-section-heading">Tables</h2>
+    
+    <div class="ref-group-label">Base & Row States</div>
+<div class="ref-note">All four table variants share this base. Dark header, alternating rows, terracotta hover/selected. Add a variant class (.table-gl, .table-coa, etc.) for column-specific rules.</div>
+    <div style="border:1px solid var(--color-table-border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;">
+      <table class="erp-table">
+        <thead><tr><th>Description</th><th class="col-num">Amount (Rp)</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>PT Maju Jaya Sentosa — Invoice</td><td class="col-num">11.100.000,00</td><td><span class="status s-go">Paid</span></td></tr>
+          <tr class="selected"><td>CV Harapan Utama — Invoice <em style="font-size:10px;color:var(--color-table-selected-text);margin-left:6px;">← selected row</em></td><td class="col-num">6.105.000,00</td><td><span class="status s-stop">Overdue</span></td></tr>
+          <tr><td>PT Sumber Berkah — Invoice</td><td class="col-num">24.420.000,00</td><td><span class="status s-warn">Pending</span></td></tr>
+          <tr class="row-subtotal"><td>Period total</td><td class="col-num">41.625.000,00</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.erp-table</div><div style="font-size:12px;color:var(--color-text-tertiary);">Base class. Full-width, dark header (#2a2926), white/45% header text</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-num</div><div style="font-size:12px;color:var(--color-text-tertiary);">Right-aligned, Inconsolata — on both th and td</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-code</div><div style="font-size:12px;color:var(--color-text-tertiary);">Right-aligned, Inconsolata, muted — for IDs and ref codes</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">tr:hover</div><div style="font-size:12px;color:var(--color-text-tertiary);">Terracotta tint var(--color-erp-interactive-wash)</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">tr.selected</div><div style="font-size:12px;color:var(--color-text-tertiary);">Terracotta tint bg + deep terracotta var(--color-erp-interactive-deep) text, weight 500</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.row-subtotal</div><div style="font-size:12px;color:var(--color-text-tertiary);">Subtotal row — tinted bg #f5f4f1, single top border, weight 600</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.row-total</div><div style="font-size:12px;color:var(--color-text-tertiary);">Grand total — darker tint, single top + double bottom border (PSAK convention)</div></div>
+    <div class="ref-group-label">Drawer Overlay</div>
+<div class="ref-note">Anchored to the right edge of the table container. Selected row highlights to terracotta tint. Only the "Open [record]" CTA navigates away from the table.</div>
+    <div style="position:relative;height:220px;border:1px solid var(--color-table-border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;">
+      <table class="erp-table" style="border-radius:0;">
+        <thead><tr><th>Bill</th><th>Vendor</th><th class="col-num">Amount (Rp)</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="t-erp-code">BILL-0091</td><td>PT Maju Jaya</td><td class="col-num">10.900.000,00</td><td><span class="status s-warn">Pending</span></td></tr>
+          <tr class="selected"><td class="t-erp-code">BILL-0088</td><td>CV Harapan</td><td class="col-num">5.300.000,00</td><td><span class="status s-stop">Overdue</span></td></tr>
+        </tbody>
+      </table>
+      <div class="erp-drawer open" style="width:280px;">
+        <div class="erp-drawer-header">
+          <span class="erp-drawer-title">BILL-0088</span>
+          <button class="erp-drawer-close">✕</button>
+        </div>
+        <div class="erp-drawer-body">
+          <div class="erp-drawer-field"><span class="erp-drawer-label">DPP</span><span class="erp-drawer-value num">5.000.000,00</span></div>
+          <div class="erp-drawer-field"><span class="erp-drawer-label">PPN 11%</span><span class="erp-drawer-value num">550.000,00</span></div>
+          <div class="erp-drawer-field"><span class="erp-drawer-label">PPh 23 withheld</span><span class="erp-drawer-value num num-pph">(100.000,00)</span></div>
+          <div class="erp-drawer-field"><span class="erp-drawer-label">Status</span><span class="erp-drawer-value"><span class="status s-stop">Overdue</span></span></div>
+        </div>
+        <div class="erp-drawer-actions">
+          <button class="btn-primary btn-base" style="font-size:12px;padding:8px 16px;">Approve &amp; Pay</button>
+        </div>
+      </div>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.erp-drawer-wrap</div><div style="font-size:12px;color:var(--color-text-tertiary);">Set on table container — position:relative, overflow:hidden</div></div>
+    <div class="ref-row"><div class="ref-tag">.erp-drawer</div><div style="font-size:12px;color:var(--color-text-tertiary);">Absolute, right:-100% by default — slides in via .open</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.erp-drawer.open</div><div style="font-size:12px;color:var(--color-text-tertiary);">right:0 — triggers slide-in transition</div></div>
+    <div class="ref-row"><div class="ref-tag">.erp-drawer-header / .erp-drawer-title / .erp-drawer-close</div><div style="font-size:12px;color:var(--color-text-tertiary);">Sunken bg header, title 13px/600, close button hover</div></div>
+    <div class="ref-row"><div class="ref-tag">.erp-drawer-field / .erp-drawer-label / .erp-drawer-value</div><div style="font-size:12px;color:var(--color-text-tertiary);">Label 10px uppercase muted, value 13px. Add .num for Inconsolata</div></div>
+    <div class="ref-row"><div class="ref-tag">.erp-drawer-actions</div><div style="font-size:12px;color:var(--color-text-tertiary);">Sticky footer, top border, CTAs here</div></div>
+    <div class="ref-group-label">Example — General Ledger</div>
+<div class="ref-note">All GL values plain black — Debit ≠ bad, Credit ≠ good. Column headers carry the structural distinction. Clickable refs use underline, not blue color.</div>
+    <div style="border:1px solid var(--color-table-border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;">
+      <table class="erp-table table-gl">
+        <thead><tr><th>Date</th><th>Ref</th><th>Description</th><th class="col-num">Debit (Rp)</th><th class="col-num">Credit (Rp)</th><th class="col-num">Balance (Rp)</th></tr></thead>
+        <tbody>
+          <tr><td class="t-erp-id">02 Jan</td><td class="col-ref t-erp-code">INV-0412</td><td>PT Maju Jaya — Invoice</td><td class="col-debit col-num">11.100.000,00</td><td class="col-credit col-dash col-num">—</td><td class="col-balance col-num">391.100.000,00</td></tr>
+          <tr><td class="t-erp-id">05 Jan</td><td class="col-ref t-erp-code">REC-0088</td><td>PT Sentosa — Payment</td><td class="col-debit col-dash col-num">—</td><td class="col-credit col-num">50.000.000,00</td><td class="col-balance col-num">341.100.000,00</td></tr>
+          <tr><td class="t-erp-id">08 Jan</td><td class="col-ref t-erp-code">INV-0419</td><td>CV Harapan — Invoice</td><td class="col-debit col-num">8.880.000,00</td><td class="col-credit col-dash col-num">—</td><td class="col-balance col-num">349.980.000,00</td></tr>
+          <tr class="row-subtotal"><td colspan="3">Period total</td><td class="col-num">19.980.000,00</td><td class="col-num">50.000.000,00</td><td class="col-num">349.980.000,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.table-gl</div><div style="font-size:12px;color:var(--color-text-tertiary);">Variant modifier — scopes GL-specific column rules</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-debit / .col-credit / .col-balance</div><div style="font-size:12px;color:var(--color-text-tertiary);">All Inconsolata, right-aligned, plain black — no color semantics</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-ref / .t-erp-code</div><div style="font-size:12px;color:var(--color-text-tertiary);">Muted underline affordance — not blue, underline signals clickability</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-dash</div><div style="font-size:12px;color:var(--color-text-tertiary);">Em dash for empty Dr/Cr cell — muted color, right-aligned</div></div>
+    <div class="ref-group-label">Example — Chart of Accounts</div>
+<div style="border:1px solid var(--color-table-border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;">
+      <div class="erp-search"><input placeholder="🔍 Search by name or code…" readonly><span class="erp-search-kbd">⌘K</span></div>
+      <table class="erp-table table-coa">
+        <thead><tr><th>Code</th><th>Account name</th><th>Type</th><th>Normal bal.</th></tr></thead>
+        <tbody>
+          <tr class="row-group-header"><td colspan="4">Assets</td></tr>
+          <tr class="row-group"><td class="col-code">11xx</td><td>Aset Lancar</td><td class="col-type">Group</td><td class="col-bal">Debit</td></tr>
+          <tr class="row-child"><td class="col-code">1100</td><td>Kas &amp; Setara Kas</td><td class="col-type">Current Asset</td><td class="col-bal">Debit</td></tr>
+          <tr class="row-child selected"><td class="col-code">1200</td><td>Piutang Usaha</td><td class="col-type">Receivable</td><td class="col-bal">Debit</td></tr>
+          <tr class="row-child"><td class="col-code">1300</td><td>Persediaan</td><td class="col-type">Inventory</td><td class="col-bal">Debit</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.table-coa</div><div style="font-size:12px;color:var(--color-text-tertiary);">CoA variant — scopes code, type, and balance column styles</div></div>
+    <div class="ref-row"><div class="ref-tag">.row-group-header</div><div style="font-size:12px;color:var(--color-text-tertiary);">Section header row — sunken bg, 10px uppercase label, no hover</div></div>
+    <div class="ref-row"><div class="ref-tag">.row-group / .row-child</div><div style="font-size:12px;color:var(--color-text-tertiary);">Group bold, child indented 28px left padding</div></div>
+    <div class="ref-row"><div class="ref-tag">.erp-search / .erp-search-kbd</div><div style="font-size:12px;color:var(--color-text-tertiary);">Search bar above table — field border, ⌘K kbd hint</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-code / .col-type / .col-bal</div><div style="font-size:12px;color:var(--color-text-tertiary);">Code: Inconsolata muted. Type/bal: 11px tertiary</div></div>
+    <div class="ref-group-label">Example — Vendor List</div>
+<div style="border:1px solid var(--color-table-border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;">
+      <table class="erp-table table-vendor">
+        <thead><tr><th>Vendor</th><th>NPWP</th><th>Tax config</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><strong>PT Maju Jaya Sentosa</strong></td><td class="col-npwp">01.234.567.8-091</td><td class="col-tax">PPN 11% · PPh 23 / 2%</td><td><span class="status s-go">Tax ready</span></td></tr>
+          <tr><td><strong>CV Sumber Berkah</strong></td><td class="col-npwp missing">Missing</td><td class="col-tax">PPN 11%</td><td><span class="status s-warn">Incomplete</span></td></tr>
+          <tr><td><strong>PT Harapan Utama</strong></td><td class="col-npwp">04.567.890.1-023</td><td class="col-tax">No PPN</td><td><span class="status s-muted">Non-PKP</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.table-vendor</div><div style="font-size:12px;color:var(--color-text-tertiary);">Vendor variant — scopes NPWP and tax config column rules</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-npwp</div><div style="font-size:12px;color:var(--color-text-tertiary);">Inconsolata, muted — NPWP is an ID string, not a number</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.col-npwp.missing</div><div style="font-size:12px;color:var(--color-text-tertiary);">Error red + weight 500 — flags missing NPWP</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-tax</div><div style="font-size:12px;color:var(--color-text-tertiary);">11px tertiary — plain text, no chip</div></div>
+    <div class="ref-group-label">Example — Bills</div>
+<div style="border:1px solid var(--color-table-border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;">
+      <table class="erp-table table-bills">
+        <thead><tr><th>Bill</th><th>Vendor</th><th>Due</th><th class="col-num">Amount (Rp)</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="t-erp-code">BILL-0091</td><td>PT Maju Jaya</td><td class="col-due">31 Jan</td><td class="col-amount">10.900.000,00</td><td><span class="status s-warn">Pending</span></td></tr>
+          <tr><td class="t-erp-code">BILL-0088</td><td>CV Harapan</td><td class="col-due overdue">12 Jan</td><td class="col-amount num-overdue">5.300.000,00</td><td><span class="status s-stop">Overdue</span></td></tr>
+          <tr><td class="t-erp-code">BILL-0085</td><td>PT Sentosa</td><td class="col-due">28 Dec</td><td class="col-amount">22.000.000,00</td><td><span class="status s-go">Paid</span></td></tr>
+          <tr class="row-total"><td colspan="3"></td><td class="col-num">38.200.000,00</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.table-bills</div><div style="font-size:12px;color:var(--color-text-tertiary);">Bills variant — scopes due date and amount column rules</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-due</div><div style="font-size:12px;color:var(--color-text-tertiary);">Inconsolata date — neutral color by default</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.col-due.overdue</div><div style="font-size:12px;color:var(--color-text-tertiary);">Error red + weight 500 — past due date</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.col-due.soon</div><div style="font-size:12px;color:var(--color-text-tertiary);">Amber — due within 7 days</div></div>
+    <div class="ref-row"><div class="ref-tag">.col-amount</div><div style="font-size:12px;color:var(--color-text-tertiary);">Inconsolata, right-aligned</div></div>
+    <div class="ref-row"><div class="ref-tag">.row-total</div><div style="font-size:12px;color:var(--color-text-tertiary);">PSAK double bottom border convention</div></div>
+  </section>
+
+  <section class="ref-section" id="forms">
+    <h2 class="ref-section-heading">Forms</h2>
+    
+    <div class="ref-group-label">Field Anatomy</div>
+<div class="ref-note">Every field has four layers: label, input, hint, error. All four are always structurally present — hint and error toggle via .has-error on the .field wrapper.</div>
+    <div style="max-width:320px;margin-bottom:20px;display:flex;flex-direction:column;gap:16px;">
+      <div class="field">
+        <label class="field-label">Nama vendor <span class="req">*</span></label>
+        <input class="field-input" placeholder="Masukkan nama sesuai dokumen legal" readonly>
+        <span class="field-hint">Nama sesuai akta atau NPWP</span>
+      </div>
+      <div class="field">
+        <label class="field-label">Keterangan <span class="opt">optional</span></label>
+        <input class="field-input" placeholder="Keterangan tambahan" readonly>
+        <span class="field-hint">Maks 200 karakter</span>
+      </div>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.field</div><div style="font-size:12px;color:var(--color-text-tertiary);">Wrapper — flex column, relative (for char-count positioning)</div></div>
+    <div class="ref-row"><div class="ref-tag">.field-label</div><div style="font-size:12px;color:var(--color-text-tertiary);">11px/600, #555 — always above input, never as placeholder</div></div>
+    <div class="ref-row"><div class="ref-tag">.field-label .req / .opt</div><div style="font-size:12px;color:var(--color-text-tertiary);">Required asterisk red, optional label 10px muted</div></div>
+    <div class="ref-row"><div class="ref-tag">.field-hint</div><div style="font-size:12px;color:var(--color-text-tertiary);">11px muted — format guidance, never repeats the label</div></div>
+    <div class="ref-row"><div class="ref-tag">.field-error</div><div style="font-size:12px;color:var(--color-text-tertiary);">Hidden by default — shown when .field.has-error, replaces hint</div></div>
+    <div class="ref-group-label">Input States</div>
+<div class="ref-note">Validate on blur, never on keystroke. Disabled = not applicable (cursor: not-allowed). Read-only = fixed but copyable (selectable text).</div>
+    <div style="max-width:320px;display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
+      <div class="field"><label class="field-label">Default</label><input class="field-input" placeholder="Masukkan nama vendor" readonly><span class="field-hint">Border #d8d6d0</span></div>
+      <div class="field"><label class="field-label">Filled</label><input class="field-input filled" value="PT Maju Jaya Sentosa" readonly><span class="field-hint">Same border — value present</span></div>
+      <div class="field has-error"><label class="field-label">Error</label><input class="field-input error" value="0123456" readonly><span class="field-hint">Hidden when error</span><span class="field-error">Format NPWP tidak valid — gunakan 00.000.000.0-000.000</span></div>
+      <div class="field"><label class="field-label">Disabled</label><input class="field-input" disabled placeholder="Ditetapkan oleh sistem" readonly><span class="field-hint">bg #f5f4f1 · not-allowed cursor</span></div>
+      <div class="field"><label class="field-label">Read-only</label><input class="field-input readonly" value="INV-2025-0041" readonly><span class="field-hint">bg #faf9f7 · selectable, not editable</span></div>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.field-input</div><div style="font-size:12px;color:var(--color-text-tertiary);">38px height, 6px radius, #d8d6d0 border</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.field-input:focus</div><div style="font-size:12px;color:var(--color-text-tertiary);">Terracotta border + 3px ring rgba(74,71,163,0.12)</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.field-input.error</div><div style="font-size:12px;color:var(--color-text-tertiary);">Red border + ring, error-surface bg</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.field-input:disabled</div><div style="font-size:12px;color:var(--color-text-tertiary);">Disabled bg, not-allowed cursor</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.field-input.readonly</div><div style="font-size:12px;color:var(--color-text-tertiary);">Readonly bg, selectable text</div></div>
+    <div class="ref-row"><div class="ref-tag">.field.has-error</div><div style="font-size:12px;color:var(--color-text-tertiary);">Toggle on wrapper — hides hint, shows error message</div></div>
+    <div class="ref-group-label">Input Types</div>
+<div style="max-width:400px;display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
+      <div class="field">
+        <label class="field-label">Text</label>
+        <input class="field-input" placeholder="Nama vendor" readonly>
+        <span class="field-hint">Manrope · left-aligned</span>
+      </div>
+      <div class="field">
+        <label class="field-label">Currency (IDR)</label>
+        <div class="field-currency">
+          <span class="currency-prefix">Rp</span>
+          <input class="field-input" value="10.000.000,00" readonly>
+        </div>
+        <span class="field-hint">Inconsolata · right-aligned · format on blur</span>
+      </div>
+      <div class="field">
+        <label class="field-label">Select</label>
+        <select class="field-input field-select"><option>Aset Lancar</option><option>Aset Tetap</option><option>Kewajiban Lancar</option></select>
+        <span class="field-hint">Chevron via background-image</span>
+      </div>
+      <div class="field">
+        <label class="field-label">Textarea</label>
+        <textarea class="field-input field-textarea" placeholder="Keterangan tambahan…" readonly></textarea>
+        <span class="field-hint">Vertical resize only, min 2 rows</span>
+      </div>
+      <div class="field">
+        <label class="field-label">Kurs (per 1 USD)</label>
+        <div class="field-affixed">
+          <span class="field-affix prefix">Rp</span>
+          <input class="field-input" value="15.780,00" readonly>
+        </div>
+        <span class="field-hint">Static prefix inside box — not typed by user</span>
+      </div>
+      <div class="field">
+        <label class="field-label">PPN rate</label>
+        <div class="field-affixed">
+          <input class="field-input" value="11" readonly>
+          <span class="field-affix suffix">%</span>
+        </div>
+        <span class="field-hint">Static suffix</span>
+      </div>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.field-currency / .currency-prefix</div><div style="font-size:12px;color:var(--color-text-tertiary);">Rp prefix absolute-positioned left — input padding-left 36px</div></div>
+    <div class="ref-row"><div class="ref-tag">.field-select</div><div style="font-size:12px;color:var(--color-text-tertiary);">Appearance none + SVG chevron via background-image</div></div>
+    <div class="ref-row"><div class="ref-tag">.field-textarea</div><div style="font-size:12px;color:var(--color-text-tertiary);">Min-height 72px, vertical resize, height auto</div></div>
+    <div class="ref-row"><div class="ref-tag">.field-affixed / .field-affix.prefix / .suffix</div><div style="font-size:12px;color:var(--color-text-tertiary);">Attached static label — sunken bg, field border, Inconsolata</div></div>
+    <div class="ref-group-label">Controls — Checkbox, Radio, Toggle</div>
+<div style="display:flex;gap:48px;flex-wrap:wrap;margin-bottom:20px;">
+      <div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:12px;">Checkbox</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <label class="control"><input type="checkbox" checked><span class="control-box"></span><span class="control-label">PPN 11%</span></label>
+          <label class="control"><input type="checkbox" checked><span class="control-box"></span><span class="control-label">PPh 23 / 2%</span></label>
+          <label class="control"><input type="checkbox"><span class="control-box"></span><span class="control-label">PPh 4(2)</span></label>
+          <label class="control"><input type="checkbox" disabled><span class="control-box"></span><span class="control-label" style="opacity:0.4;">PPh 21 (disabled)</span></label>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:12px;">Radio</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <label class="control"><input type="radio" name="pkp" checked><span class="control-box control-radio"></span><span class="control-label">PKP</span></label>
+          <label class="control"><input type="radio" name="pkp"><span class="control-box control-radio"></span><span class="control-label">Non-PKP</span></label>
+          <label class="control"><input type="radio" name="pkp"><span class="control-box control-radio"></span><span class="control-label">Belum dikonfirmasi</span></label>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:12px;">Toggle</div>
+        <div style="display:flex;flex-direction:column;gap:14px;max-width:280px;">
+          <div class="toggle"><span class="toggle-label">Kirim notifikasi email<span class="hint">Saat invoice diterima</span></span><div class="toggle-track on"><div class="toggle-thumb"></div></div></div>
+          <div class="toggle"><span class="toggle-label">Terapkan PPh 23 otomatis</span><div class="toggle-track"><div class="toggle-thumb"></div></div></div>
+          <div class="toggle"><span class="toggle-label">Sinkronisasi e-Faktur<span class="hint">Tidak tersedia</span></span><div class="toggle-track disabled"><div class="toggle-thumb"></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.control / .control-box</div><div style="font-size:12px;color:var(--color-text-tertiary);">Flex row — hidden native input, custom box with terracotta checked state</div></div>
+    <div class="ref-row"><div class="ref-tag">.control-radio</div><div style="font-size:12px;color:var(--color-text-tertiary);">Add to .control-box — border-radius 50%, inset dot via box-shadow</div></div>
+    <div class="ref-row"><div class="ref-tag">.toggle / .toggle-track / .toggle-thumb</div><div style="font-size:12px;color:var(--color-text-tertiary);">36×20px track. Off: neutral. On: terracotta. Thumb slides via left:3→19px</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.toggle-track.on</div><div style="font-size:12px;color:var(--color-text-tertiary);">terracotta bg, thumb at left:19px</div></div>
+    <div class="ref-row"><div class="ref-tag modifier">.toggle-track.disabled</div><div style="font-size:12px;color:var(--color-text-tertiary);">40% opacity, not-allowed cursor</div></div>
+    <div class="ref-group-label">Form Layout</div>
+<div class="ref-note">2-col grid default. 3-col for short related fields (DPP/PPN/Total). Single-col for long text. Primary CTA leftmost — Cancel is a text link, never a button.</div>
+    <div style="max-width:540px;background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:var(--radius-lg);padding:24px;margin-bottom:16px;">
+      <div class="form-section-label">Informasi vendor</div>
+      <div class="form-grid-2" style="margin-bottom:16px;">
+        <div class="field"><label class="field-label">Vendor <span class="req">*</span></label><input class="field-input" placeholder="Pilih vendor…" readonly></div>
+        <div class="field"><label class="field-label">NPWP vendor</label><input class="field-input" placeholder="00.000.000.0-000.000" readonly></div>
+      </div>
+      <div class="form-section-label">Detail tagihan</div>
+      <div class="form-grid-3" style="margin-bottom:16px;">
+        <div class="field"><label class="field-label">DPP <span class="req">*</span></label><div class="field-currency"><span class="currency-prefix">Rp</span><input class="field-input" value="10.000.000,00" readonly></div></div>
+        <div class="field"><label class="field-label">PPN 11%</label><input class="field-input readonly" value="1.100.000,00" readonly></div>
+        <div class="field"><label class="field-label">Total</label><input class="field-input readonly" value="11.100.000,00" readonly></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary btn-base" style="font-size:13px;padding:10px 20px;">Simpan Faktur</button>
+        <button class="btn-secondary" style="font-size:13px;">Simpan sebagai Draft</button>
+        <button class="form-cancel">Batal</button>
+      </div>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.form-grid-2 / .form-grid-3</div><div style="font-size:12px;color:var(--color-text-tertiary);">2-col default / 3-col for short related fields. Max 3 cols.</div></div>
+    <div class="ref-row"><div class="ref-tag">.form-full</div><div style="font-size:12px;color:var(--color-text-tertiary);">Spans all columns — grid-column: 1 / -1</div></div>
+    <div class="ref-row"><div class="ref-tag">.form-section-label</div><div style="font-size:12px;color:var(--color-text-tertiary);">10px uppercase muted — groups related fields, no divider line</div></div>
+    <div class="ref-row"><div class="ref-tag">.form-actions</div><div style="font-size:12px;color:var(--color-text-tertiary);">Flex row, top border, primary CTA leftmost</div></div>
+    <div class="ref-row"><div class="ref-tag">.form-cancel</div><div style="font-size:12px;color:var(--color-text-tertiary);">Text link style — Cancel has no consequence, no button weight needed</div></div>
+    <div class="ref-group-label">Examples — ERP-Specific Patterns</div>
+<div class="ref-note">Field patterns unique to Indonesian ERP and tax contexts. NPWP and NSFP are strings, never numbers. DPP is the only editable field in the trio — PPN and Total are computed read-only.</div>
+    <div style="max-width:400px;display:flex;flex-direction:column;gap:20px;margin-bottom:16px;">
+      <div class="field field-npwp">
+        <label class="field-label">NPWP <span class="req">*</span></label>
+        <div style="position:relative;">
+          <input class="field-input" value="01.234.567.8-091.000" readonly>
+          <span class="char-count">15/15</span>
+        </div>
+        <span class="field-hint">Format: 00.000.000.0-000.000 · auto-formatted as you type</span>
+      </div>
+      <div class="field">
+        <label class="field-label">NSFP <span class="opt">optional</span></label>
+        <input class="field-input" placeholder="010.000-25.00000041" readonly style="font-family:var(--font-mono);letter-spacing:0.04em;">
+        <span class="field-hint">DJP format: 000.000-YY.XXXXXXXX · filled from e-Faktur upload</span>
+      </div>
+      <div>
+        <div class="form-section-label">DPP / PPN / Total</div>
+        <div class="field-trio">
+          <div class="field"><label class="field-label">DPP <span class="req">*</span></label><div class="field-currency"><span class="currency-prefix">Rp</span><input class="field-input" value="10.000.000,00" readonly></div></div>
+          <div class="field"><label class="field-label">PPN 11%</label><input class="field-input readonly" value="1.100.000,00" readonly></div>
+          <div class="field"><label class="field-label">Total</label><input class="field-input readonly" value="11.100.000,00" readonly></div>
+        </div>
+        <span class="field-hint" style="margin-top:4px;display:block;">DPP only is editable — PPN and Total are computed</span>
+      </div>
+      <div class="field" style="position:relative;">
+        <label class="field-label">Akun GL</label>
+        <input class="field-input" value="1200 — Piutang Usaha" readonly>
+        <div class="lookup-results" style="position:relative;top:auto;box-shadow:none;max-height:none;">
+          <div class="lookup-item selected"><span class="lookup-code">1200</span><span class="lookup-name">Piutang Usaha</span><span class="lookup-meta">Receivable · Debit</span></div>
+          <div class="lookup-item"><span class="lookup-code">1201</span><span class="lookup-name">Piutang Lain-lain</span><span class="lookup-meta">Receivable · Debit</span></div>
+          <div class="lookup-item"><span class="lookup-code">1250</span><span class="lookup-name">Uang Muka Pembelian</span><span class="lookup-meta">Asset · Debit</span></div>
+        </div>
+        <span class="field-hint">Cari berdasarkan kode atau nama akun</span>
+      </div>
+    </div>
+    <div class="ref-row"><div class="ref-tag">.field-npwp / .char-count</div><div style="font-size:12px;color:var(--color-text-tertiary);">NPWP: Inconsolata + letter-spacing 0.04em. Char count absolute right</div></div>
+    <div class="ref-row"><div class="ref-tag">.field-trio</div><div style="font-size:12px;color:var(--color-text-tertiary);">3-col grid for DPP/PPN/Total — always together, always this order</div></div>
+    <div class="ref-row"><div class="ref-tag">.lookup-results / .lookup-item / .lookup-item.selected</div><div style="font-size:12px;color:var(--color-text-tertiary);">Dropdown: absolute, z-50, max 5 results. Selected = terracotta tint</div></div>
+    <div class="ref-row"><div class="ref-tag">.lookup-code / .lookup-name / .lookup-meta</div><div style="font-size:12px;color:var(--color-text-tertiary);">Code Inconsolata muted / name sans / meta 11px tertiary</div></div>
+  </section>
+
+
+  <section class="ref-section" id="summary-blocks">
+    <h2 class="ref-section-heading">Summary Blocks</h2>
+    <div class="ref-note">3-up stat cards placed at the top of a page to surface counts by severity. Left border color signals urgency — no need to read the label. Count is the hero element.</div>
+    <div class="ref-group-label">All severity variants</div>
+    <div class="summary-block-group" style="margin-bottom:24px;">
+      <div class="summary-block sb-danger"><div class="sb-count">1</div><div class="sb-label">Hard blocks</div><div class="sb-sub">Must resolve</div></div>
+      <div class="summary-block sb-warning"><div class="sb-count">2</div><div class="sb-label">Soft blocks</div><div class="sb-sub">Decision required</div></div>
+      <div class="summary-block sb-neutral"><div class="sb-count">2</div><div class="sb-label">Warnings</div><div class="sb-sub">No action needed</div></div>
+      <div class="summary-block sb-success"><div class="sb-count">14</div><div class="sb-label">Passed</div><div class="sb-sub">Good to go</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="ref-row"><div class="ref-tag">.summary-block</div><div style="font-size:12px;color:var(--color-text-tertiary);">Base — sunken bg, 4px left border, rounded</div></div>
+      <div class="ref-row"><div class="ref-tag modifier">.sb-danger / .sb-warning / .sb-success / .sb-neutral</div><div style="font-size:12px;color:var(--color-text-tertiary);">Left border color only — bg stays sunken</div></div>
+      <div class="ref-row"><div class="ref-tag">.sb-count / .sb-label / .sb-sub</div><div style="font-size:12px;color:var(--color-text-tertiary);">32px bold count · 13px label · 11px muted sub</div></div>
+      <div class="ref-row"><div class="ref-tag">.summary-block-group</div><div style="font-size:12px;color:var(--color-text-tertiary);">flex row wrapper — equal-width children</div></div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="action-blocks">
+    <h2 class="ref-section-heading">Action Item Blocks</h2>
+    <div class="ref-note">Full-width card for actionable items. Left border + surface tint signals state. Hierarchy: title &rarr; impact &rarr; recommendation &rarr; footnote. Actions inline at bottom.</div>
+    <div class="ref-group-label">Warning (decision required)</div>
+    <div class="action-block" style="max-width:700px;margin-bottom:16px;">
+      <div class="ab-title">Unbalanced entries below IDR 1M &mdash; 8 entries</div>
+      <div class="ab-impact">Impact: Rounding or minor error &mdash; total exposure: Rp 3,240,000</div>
+      <div class="ab-rec">TradeOS recommendation: Post auto-rounding adjustment entry on migration</div>
+      <div class="ab-footnote">Your sign-off is recorded in the migration audit trail.</div>
+      <div class="ab-actions">
+        <button style="padding:8px 18px;background:var(--color-action);color:#fff;border:none;border-radius:var(--radius-full);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:pointer;">Accept</button>
+        <button style="padding:8px 18px;background:transparent;color:var(--color-action);border:1.5px solid var(--color-action);border-radius:var(--radius-full);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:pointer;">Choose alternative</button>
+        <button class="ab-ghost">Ask IA</button>
+      </div>
+    </div>
+    <div class="ref-group-label">Danger (hard block)</div>
+    <div class="action-block ab-danger" style="max-width:700px;margin-bottom:16px;">
+      <div class="ab-title">Duplicate GL account codes detected &mdash; 3 conflicts</div>
+      <div class="ab-impact">Impact: Migration will fail at journal entry import step</div>
+      <div class="ab-rec">TradeOS recommendation: Merge or rename conflicting accounts before proceeding</div>
+      <div class="ab-actions">
+        <button style="padding:8px 18px;background:var(--color-danger-text);color:#fff;border:none;border-radius:var(--radius-full);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:pointer;">Resolve now</button>
+        <button class="ab-ghost">View details</button>
+      </div>
+    </div>
+    <div class="ref-group-label">Success (confirmed)</div>
+    <div class="action-block ab-success" style="max-width:700px;margin-bottom:24px;">
+      <div class="ab-title">Opening balances verified &mdash; all accounts matched</div>
+      <div class="ab-impact">14 accounts &middot; Total: Rp 892,400,000</div>
+      <div class="ab-footnote">Verified against trial balance export dated 31 Dec 2024.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="ref-row"><div class="ref-tag">.action-block</div><div style="font-size:12px;color:var(--color-text-tertiary);">Base — warning surface/border/left-accent</div></div>
+      <div class="ref-row"><div class="ref-tag modifier">.ab-danger / .ab-success / .ab-neutral</div><div style="font-size:12px;color:var(--color-text-tertiary);">Swaps surface, border, and left border color</div></div>
+      <div class="ref-row"><div class="ref-tag">.ab-title / .ab-impact / .ab-rec / .ab-footnote</div><div style="font-size:12px;color:var(--color-text-tertiary);">14px bold &rarr; 13px body &rarr; 13px body &rarr; 11px muted</div></div>
+      <div class="ref-row"><div class="ref-tag">.ab-actions / .ab-ghost</div><div style="font-size:12px;color:var(--color-text-tertiary);">Inline button row. Primary + secondary + ghost text-only CTA</div></div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="steppers">
+    <h2 class="ref-section-heading">Steppers</h2>
+    <div class="ref-note">Linear progress through a sequence. Terracotta brand for done/active states. Connector line fills when step is complete. Dot ring on active step.</div>
+    <div class="ref-group-label">Horizontal &mdash; 4 steps</div>
+    <div style="padding:24px;background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:var(--radius-lg);margin-bottom:24px;">
+      <div class="stepper-h">
+        <div class="step-h done"><div class="step-h-dot">&#10003;</div><div class="step-h-label">Data export</div><div class="step-h-sub">Completed</div></div>
+        <div class="step-h done"><div class="step-h-dot">&#10003;</div><div class="step-h-label">Validation</div><div class="step-h-sub">Completed</div></div>
+        <div class="step-h active"><div class="step-h-dot">3</div><div class="step-h-label">Mapping</div><div class="step-h-sub">In progress</div></div>
+        <div class="step-h"><div class="step-h-dot">4</div><div class="step-h-label">Import</div><div class="step-h-sub">Upcoming</div></div>
+      </div>
+    </div>
+    <div class="ref-group-label">Vertical &mdash; with content body</div>
+    <div style="padding:24px;background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:var(--radius-lg);max-width:400px;margin-bottom:24px;">
+      <div class="stepper-v">
+        <div class="step-v done"><div class="step-v-dot">&#10003;</div><div class="step-v-content"><div class="step-v-label">Export source data</div><div class="step-v-sub">Completed 12 Jan</div></div></div>
+        <div class="step-v active"><div class="step-v-dot">2</div><div class="step-v-content"><div class="step-v-label">Map Chart of Accounts</div><div class="step-v-sub">Review mapping before proceeding</div><div class="step-v-body">14 accounts ready &middot; 3 need manual mapping</div></div></div>
+        <div class="step-v"><div class="step-v-dot">3</div><div class="step-v-content"><div class="step-v-label">Import journal entries</div><div class="step-v-sub">Upcoming</div></div></div>
+        <div class="step-v"><div class="step-v-dot">4</div><div class="step-v-content"><div class="step-v-label">Verify opening balances</div><div class="step-v-sub">Upcoming</div></div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="ref-row"><div class="ref-tag">.stepper-h / .step-h</div><div style="font-size:12px;color:var(--color-text-tertiary);">Horizontal — flex row, equal-width, connector via ::after</div></div>
+      <div class="ref-row"><div class="ref-tag">.stepper-v / .step-v</div><div style="font-size:12px;color:var(--color-text-tertiary);">Vertical — flex column, connector via ::before on left edge</div></div>
+      <div class="ref-row"><div class="ref-tag modifier">.done / .active</div><div style="font-size:12px;color:var(--color-text-tertiary);">done = filled terracotta dot + filled connector. active = terracotta border + wash ring.</div></div>
+      <div class="ref-row"><div class="ref-tag">.step-v-body</div><div style="font-size:12px;color:var(--color-text-tertiary);">Optional inline content — vertical only, active step only</div></div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="tabs">
+    <h2 class="ref-section-heading">Tabs</h2>
+    <div class="ref-note">Two variants — underline for page-level navigation, pill for in-panel toggles. Badge shows count. Active state uses terracotta brand, not blue.</div>
+    <div class="ref-group-label">Underline tabs</div>
+    <div style="margin-bottom:24px;">
+      <div class="tabs">
+        <button class="tab active">Overview</button>
+        <button class="tab">Journal Entries <span class="tab-badge">14</span></button>
+        <button class="tab">Chart of Accounts</button>
+        <button class="tab">Vendors <span class="tab-badge">3</span></button>
+        <button class="tab">Settings</button>
+      </div>
+    </div>
+    <div class="ref-group-label">Pill tabs</div>
+    <div style="margin-bottom:24px;">
+      <div class="tabs tabs-pill">
+        <button class="tab">All</button>
+        <button class="tab active">Pending</button>
+        <button class="tab">Paid</button>
+        <button class="tab">Overdue</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="ref-row"><div class="ref-tag">.tabs / .tab</div><div style="font-size:12px;color:var(--color-text-tertiary);">Underline — 2px active bottom border, terracotta</div></div>
+      <div class="ref-row"><div class="ref-tag">.tab-badge</div><div style="font-size:12px;color:var(--color-text-tertiary);">Count chip — terracotta tint default, white fill on active</div></div>
+      <div class="ref-row"><div class="ref-tag">.tabs.tabs-pill</div><div style="font-size:12px;color:var(--color-text-tertiary);">Sunken track, raised white active chip</div></div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="table-row-states">
+    <h2 class="ref-section-heading">Table Row States</h2>
+    <div class="ref-note">Row background signals condition without relying on a badge alone. Applied as modifier class on tr. Only color rows that need attention — not every row should be tinted.</div>
+    <div style="border:1px solid var(--color-table-border);border-radius:var(--radius-lg);overflow:hidden;max-width:640px;margin-bottom:24px;">
+      <table class="erp-table">
+        <thead><tr><th>Account</th><th>Description</th><th class="col-num">Balance (Rp)</th><th>State</th></tr></thead>
+        <tbody>
+          <tr><td class="t-erp-code">1100</td><td>Kas &amp; Setara Kas</td><td class="col-num t-erp-num-sm">142.500.000,00</td><td><span class="row-state-tag ok">Good to go</span></td></tr>
+          <tr class="row-ok"><td class="t-erp-code">1200</td><td>Piutang Usaha</td><td class="col-num t-erp-num-sm">87.000.000,00</td><td><span class="row-state-tag ok">Good to go</span></td></tr>
+          <tr class="row-attention"><td class="t-erp-code">1300</td><td>Persediaan</td><td class="col-num t-erp-num-sm">33.200.000,00</td><td><span class="row-state-tag attention">Needs attention</span></td></tr>
+          <tr class="row-flagged"><td class="t-erp-code">2100</td><td>Hutang Usaha</td><td class="col-num t-erp-num-sm">55.000.000,00</td><td><span class="row-state-tag flagged">Flagged</span></td></tr>
+          <tr class="row-muted"><td class="t-erp-code">9900</td><td>Akun Penutup (inactive)</td><td class="col-num t-erp-num-sm num-muted">0,00</td><td><span class="row-state-tag muted">Inactive</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="ref-row"><div class="ref-tag modifier">tr.row-ok</div><div style="font-size:12px;color:var(--color-text-tertiary);">Green surface — confirmed, verified</div></div>
+      <div class="ref-row"><div class="ref-tag modifier">tr.row-attention</div><div style="font-size:12px;color:var(--color-text-tertiary);">Amber surface — needs review or decision</div></div>
+      <div class="ref-row"><div class="ref-tag modifier">tr.row-flagged</div><div style="font-size:12px;color:var(--color-text-tertiary);">Red surface — error, blocked, must fix</div></div>
+      <div class="ref-row"><div class="ref-tag modifier">tr.row-muted</div><div style="font-size:12px;color:var(--color-text-tertiary);">Sunken bg, text-disabled — inactive or excluded</div></div>
+      <div class="ref-row"><div class="ref-tag">.row-state-tag</div><div style="font-size:12px;color:var(--color-text-tertiary);">Dot + label inline — place inside the status cell</div></div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="table-buttons">
+    <h2 class="ref-section-heading">Buttons in Table</h2>
+    <div class="ref-note">Compact pill buttons scaled for table cells. Never use full-size buttons inside rows. Keep to 1&ndash;2 actions max per row; overflow into a &hellip; menu.</div>
+    <div style="border:1px solid var(--color-table-border);border-radius:var(--radius-lg);overflow:hidden;max-width:680px;margin-bottom:24px;">
+      <table class="erp-table table-bills">
+        <thead><tr><th>Bill</th><th>Vendor</th><th class="col-num">Amount (Rp)</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="t-erp-code">BILL-0091</td><td>PT Maju Jaya</td>
+            <td class="col-num t-erp-num-sm">10.900.000,00</td>
+            <td><span class="status s-warn">Pending</span></td>
+            <td><div class="td-actions"><button class="btn-table primary">Approve</button><button class="btn-table ghost">View</button></div></td>
+          </tr>
+          <tr class="row-attention">
+            <td class="t-erp-code">BILL-0088</td><td>CV Harapan</td>
+            <td class="col-num t-erp-num-sm num-overdue">5.300.000,00</td>
+            <td><span class="status s-stop">Overdue</span></td>
+            <td><div class="td-actions"><button class="btn-table primary">Pay now</button><button class="btn-table danger">Dispute</button></div></td>
+          </tr>
+          <tr class="row-ok">
+            <td class="t-erp-code">BILL-0085</td><td>PT Sentosa</td>
+            <td class="col-num t-erp-num-sm">22.000.000,00</td>
+            <td><span class="status s-go">Paid</span></td>
+            <td><div class="td-actions"><button class="btn-table ghost">Receipt</button><button class="btn-table icon-only ghost">&hellip;</button></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="ref-row"><div class="ref-tag">.td-actions</div><div style="font-size:12px;color:var(--color-text-tertiary);">Flex wrapper — gap 8px, nowrap</div></div>
+      <div class="ref-row"><div class="ref-tag">.btn-table.primary / .ghost / .danger</div><div style="font-size:12px;color:var(--color-text-tertiary);">11px/600, 4px 10px, pill — 3 semantic variants</div></div>
+      <div class="ref-row"><div class="ref-tag">.btn-table.icon-only</div><div style="font-size:12px;color:var(--color-text-tertiary);">Square-ish — for &hellip; overflow or icon actions</div></div>
+    </div>
+  </section>
+
+  <section class="ref-section" id="file-upload">
+    <h2 class="ref-section-heading">File Upload</h2>
+    <div class="ref-note">Drop zone + file list. Zone border shifts to terracotta on drag-over. Uploaded files show name, size, and removal. Progress bar for in-flight uploads.</div>
+    <div class="ref-group-label">Empty state</div>
+    <div class="upload-zone" style="max-width:480px;margin-bottom:16px;">
+      <div class="upload-zone-icon">&#128196;</div>
+      <div class="upload-zone-title"><span>Click to upload</span> or drag and drop</div>
+      <div class="upload-zone-hint">CSV, XLSX, PDF &middot; Max 10 MB per file</div>
+    </div>
+    <div class="ref-group-label">With uploaded files</div>
+    <div style="max-width:480px;margin-bottom:24px;">
+      <div class="upload-zone" style="padding:16px 20px;">
+        <div class="upload-zone-icon">&#128196;</div>
+        <div class="upload-zone-title"><span>Add more files</span></div>
+        <div class="upload-zone-hint">CSV, XLSX &middot; Max 10 MB</div>
+      </div>
+      <div class="upload-file-list">
+        <div class="upload-file-row">
+          <div class="upload-file-icon">&#128202;</div>
+          <div class="upload-file-info">
+            <div class="upload-file-name">chart-of-accounts-2024.xlsx</div>
+            <div class="upload-file-meta">42 KB &middot; Uploaded</div>
+          </div>
+          <button class="upload-file-remove">&#10005;</button>
+        </div>
+        <div class="upload-file-row">
+          <div class="upload-file-icon">&#128196;</div>
+          <div class="upload-file-info">
+            <div class="upload-file-name">journal-entries-jan-2025.csv</div>
+            <div class="upload-file-meta">1.2 MB &middot; Uploading&hellip;</div>
+            <div class="upload-file-progress"><div class="upload-file-progress-bar" style="width:65%;"></div></div>
+          </div>
+          <button class="upload-file-remove">&#10005;</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="ref-row"><div class="ref-tag">.upload-zone</div><div style="font-size:12px;color:var(--color-text-tertiary);">Dashed border, sunken bg — terracotta on hover/drag-over</div></div>
+      <div class="ref-row"><div class="ref-tag modifier">.upload-zone.drag-over</div><div style="font-size:12px;color:var(--color-text-tertiary);">Add via JS on dragover event</div></div>
+      <div class="ref-row"><div class="ref-tag">.upload-file-row</div><div style="font-size:12px;color:var(--color-text-tertiary);">Raised card — icon &middot; name/meta &middot; progress &middot; remove</div></div>
+      <div class="ref-row"><div class="ref-tag">.upload-file-progress-bar</div><div style="font-size:12px;color:var(--color-text-tertiary);">3px bar — set width inline during upload</div></div>
+      <div class="ref-row"><div class="ref-tag">.upload-file-remove:hover</div><div style="font-size:12px;color:var(--color-text-tertiary);">Danger red on hover</div></div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
