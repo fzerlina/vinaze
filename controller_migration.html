@@ -675,6 +675,39 @@ h1{font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:
 .btn-begin{width:100%;background:var(--color-action);color:var(--color-text-inverse);border:none;border-radius:var(--radius-md);padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:background var(--transition-base);display:flex;align-items:center;justify-content:center;gap:8px;}
 .btn-begin:hover{background:var(--color-action-hover);}
 .p0-clock-note{font-size:11px;color:var(--color-text-tertiary);font-weight:300;text-align:center;margin-top:8px;}
+
+/* ── AUTH0-STYLE LOGIN ── */
+.login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#3D1200 0%,#B83D08 45%,#D4622A 75%,#A03206 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
+.login-overlay::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 20%,rgba(255,255,255,.07) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(0,0,0,.25) 0%,transparent 55%);pointer-events:none;}
+.login-card{background:#fff;border-radius:8px;padding:40px 40px 32px;width:100%;max-width:400px;box-shadow:0 4px 32px rgba(0,0,0,.18);}
+.login-logo{display:flex;justify-content:center;margin-bottom:24px;}
+.login-logo-mark{width:44px;height:44px;display:flex;align-items:center;justify-content:center;}
+/* Terracotta shield SVG inline */
+.login-title{font-family:var(--font-sans);font-size:24px;font-weight:600;color:#1a1814;text-align:center;margin-bottom:8px;letter-spacing:-0.01em;}
+.login-sub{font-size:14px;color:#8C857C;text-align:center;margin-bottom:24px;font-weight:300;line-height:1.5;}
+.login-sub strong{color:#1a1814;font-weight:500;}
+.login-field{margin-bottom:14px;}
+.login-field label{display:block;font-size:13px;font-weight:500;color:#2E2B27;margin-bottom:6px;}
+.login-field input{width:100%;height:44px;border:1px solid #E2DDD7;border-radius:6px;padding:0 14px;font-size:14px;font-family:var(--font-sans);color:#080706;outline:none;transition:border-color .15s;}
+.login-field input:focus{border-color:#1A46C8;box-shadow:0 0 0 3px rgba(26,70,200,.1);}
+.login-field input::placeholder{color:#C8C2BA;}
+.login-pw-wrap{position:relative;}
+.login-pw-wrap input{padding-right:44px;}
+.login-pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#8C857C;padding:4px;display:flex;align-items:center;}
+.login-pw-eye:hover{color:#1a1814;}
+.login-reset{font-size:13px;color:#1A46C8;font-weight:500;text-decoration:none;display:inline-block;margin-bottom:20px;cursor:pointer;background:none;border:none;font-family:var(--font-sans);padding:0;}
+.login-reset:hover{text-decoration:underline;}
+.btn-login-continue{width:100%;height:44px;background:#1A46C8;color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font-sans);transition:background .15s;margin-bottom:20px;}
+.btn-login-continue:hover{background:#1338A8;}
+.login-divider{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:#E2DDD7;}
+.login-divider span{font-size:12px;color:#8C857C;font-weight:400;letter-spacing:.04em;}
+.btn-login-google{width:100%;height:44px;background:#fff;color:#2E2B27;border:1px solid #E2DDD7;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:10px;transition:background .15s,border-color .15s;}
+.btn-login-google:hover{background:#F4F0EB;border-color:#C8C2BA;}
+.login-footer{display:flex;justify-content:center;margin-top:24px;}
+.login-footer-mark{width:24px;height:24px;opacity:.25;}
+.login-error{background:#FBF0F0;border:1px solid #EAB8B8;border-radius:6px;padding:10px 14px;font-size:13px;color:#A02020;margin-bottom:16px;display:none;}
+.login-error.show{display:block;}
 </style>
 </head>
 <body>
@@ -1108,7 +1141,7 @@ function jumpToStage(s){
 /* ═══════════════════════════════════════
    INIT
 ═══════════════════════════════════════ */
-rPhase0();
+window.addEventListener("load",function(){rLogin();});
 
 
 /* ═══════════════════════════════════════
@@ -2406,6 +2439,88 @@ function beginMigration(){
   updStageBar();updDay();
   updS1Sidebar();
   renderS1();
+}
+
+
+/* ═══════════════════════════════════════
+   LOGIN SCREEN
+═══════════════════════════════════════ */
+function rLogin(){
+  // inject login overlay over everything
+  var el=document.getElementById('login-overlay');
+  if(!el){
+    el=document.createElement('div');
+    el.id='login-overlay';
+    el.className='login-overlay';
+    document.body.appendChild(el);
+  }
+  el.style.display='flex';
+  el.innerHTML=''
+    +'<div class="login-card">'
+      // Logo
+      +'<div class="login-logo">'
+        +'<div class="login-logo-mark">'
+          +'<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">'
+            +'<path d="M22 4L6 10V22C6 31 13 38.5 22 41C31 38.5 38 31 38 22V10L22 4Z" fill="#B83D08"/>'
+            +'<path d="M22 4L6 10V22C6 31 13 38.5 22 41V4Z" fill="#A03206"/>'
+          +'</svg>'
+        +'</div>'
+      +'</div>'
+      // Title
+      +'<div class="login-title">Welcome</div>'
+      +'<div class="login-sub">Log in to continue to <strong>TradeOS</strong>.</div>'
+      // Error
+      +'<div class="login-error" id="login-error">Wrong email or password. Please try again.</div>'
+      // Email
+      +'<div class="login-field"><label>Email address *</label><input type="email" id="login-email" placeholder="you@company.com" autocomplete="email"/></div>'
+      // Password
+      +'<div class="login-field"><label>Password *</label><div class="login-pw-wrap"><input type="password" id="login-pw" placeholder="Your password" autocomplete="current-password"/><button class="login-pw-eye" onclick="togglePw()" tabindex="-1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>'
+      // Reset
+      +'<button class="login-reset" onclick="void(0)">Reset password</button>'
+      // CTA
+      +'<button class="btn-login-continue" onclick="submitLogin()">Continue</button>'
+      // Divider
+      +'<div class="login-divider"><span>OR</span></div>'
+      // Google
+      +'<button class="btn-login-google" onclick="submitLogin()">'
+        +'<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>'
+        +'Continue with Google'
+      +'</button>'
+    +'</div>'
+    // Footer logo
+    +'<div class="login-footer">'
+      +'<svg class="login-footer-mark" width="24" height="24" viewBox="0 0 44 44" fill="none"><path d="M22 4L6 10V22C6 31 13 38.5 22 41C31 38.5 38 31 38 22V10L22 4Z" fill="white"/><path d="M22 4L6 10V22C6 31 13 38.5 22 41V4Z" fill="rgba(255,255,255,.6)"/></svg>'
+    +'</div>';
+
+  // allow Enter key to submit
+  setTimeout(function(){
+    var pw=document.getElementById('login-pw');
+    if(pw)pw.addEventListener('keydown',function(e){if(e.key==='Enter')submitLogin();});
+    var em=document.getElementById('login-email');
+    if(em)em.addEventListener('keydown',function(e){if(e.key==='Enter')submitLogin();});
+  },50);
+}
+
+function togglePw(){
+  var inp=document.getElementById('login-pw');
+  if(inp)inp.type=inp.type==='password'?'text':'password';
+}
+
+function submitLogin(){
+  var email=document.getElementById('login-email');
+  var pw=document.getElementById('login-pw');
+  var err=document.getElementById('login-error');
+  // demo: any non-empty input works; wrong = show error once
+  var e=email?email.value.trim():'';
+  var p=pw?pw.value.trim():'';
+  if(!e||!p){
+    if(err){err.textContent='Please enter your email and password.';err.classList.add('show');}
+    return;
+  }
+  // demo auth: accept any input
+  var overlay=document.getElementById('login-overlay');
+  if(overlay){overlay.style.display='none';}
+  rPhase0();
 }
 
 </script>
