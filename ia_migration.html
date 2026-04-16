@@ -1,0 +1,2537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Vinaze IA — Migration Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Inconsolata:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fzerlina.github.io/vinaze/vinaze-design-system.css">
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'Manrope', sans-serif; background: #F4F0EB; color: #080706; font-size: 13px; -webkit-font-smoothing: antialiased; }
+
+/* ── SHELL ── */
+.shell { display: flex; flex-direction: column; height: 100vh; min-height: 0; }
+
+/* ── TOP NAV ── */
+.topnav {
+  height: 50px; background: #1A1814; display: flex; align-items: center;
+  padding: 0 20px; gap: 10px; flex-shrink: 0; z-index: 100;
+}
+.tn-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.tn-mark { width: 24px; height: 24px; border-radius: 5px; background: #B83D08; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tn-mark svg { width: 11px; height: 11px; fill: #fff; }
+.tn-name { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+.tn-div { width: 1px; height: 18px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+.client-pills { display: flex; gap: 6px; }
+.cpill {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 20px; padding: 4px 10px 4px 7px; cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.cpill:hover { background: rgba(255,255,255,0.12); }
+.cpill.active { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); }
+.cpill-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.cpill-dot.g { background: #166638; } .cpill-dot.a { background: #E8C870; } .cpill-dot.r { background: #A02020; }
+.cpill-name { font-size: 11px; font-weight: 600; color: #fff; }
+.cpill-day { font-family: 'Inconsolata', monospace; font-size: 10px; color: rgba(255,255,255,0.35); margin-left: 2px; }
+.tn-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.cb-tag { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.cb-tag.on-track { color: #166638; background: rgba(22,102,56,0.2); border: 1px solid rgba(22,102,56,0.25); }
+.cb-tag.at-risk { color: #7A4D00; background: rgba(232,200,112,0.2); border: 1px solid rgba(232,200,112,0.3); }
+.cb-tag.blocked { color: #A02020; background: rgba(160,32,32,0.15); border: 1px solid rgba(160,32,32,0.25); }
+.tn-avatar { width: 26px; height: 26px; border-radius: 50%; background: #2E2B27; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.4); }
+
+/* ── BODY ── */
+.body { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+
+/* ── VERTICAL PHASE SIDEBAR ── */
+.phase-sidebar {
+  width: 196px; flex-shrink: 0; background: #FBF8F5;
+  border-right: 1px solid #E2DDD7; display: flex; flex-direction: column; overflow: hidden; min-height: 0;
+}
+.psc-header { padding: 14px 14px 12px; border-bottom: 1px solid #E2DDD7; flex-shrink: 0; }
+.psc-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #C8C2BA; }
+.psc-timer { font-family: 'Inconsolata', monospace; font-size: 24px; font-weight: 600; color: #080706; letter-spacing: -0.02em; margin-top: 4px; line-height: 1; }
+.psc-timer span { font-size: 13px; color: #8C857C; font-weight: 400; }
+.psc-sub { font-size: 10px; color: #8C857C; margin-top: 2px; font-weight: 300; }
+.psc-cashback { margin-top: 8px; font-size: 10px; font-weight: 600; display: inline-block; padding: 2px 8px; border-radius: 20px; }
+.psc-cashback.on { color: #166638; background: #E8F5EE; border: 1px solid #A8D9BC; }
+.psc-cashback.risk { color: #7A4D00; background: #FDF3E0; border: 1px solid #E8C870; }
+
+.ps-phases { overflow-y: auto; flex: 1; padding: 8px 0; }
+.psi {
+  position: relative; padding: 9px 12px 9px 34px; cursor: pointer;
+  border-left: 2px solid transparent; transition: background 0.12s;
+}
+.psi::before {
+  content: ''; position: absolute; left: 18px; top: 0; bottom: 0;
+  width: 1px; background: #E2DDD7; z-index: 0;
+}
+.psi:first-child::before { top: 50%; }
+.psi:last-child::before { bottom: 50%; }
+.psi-dot {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  width: 13px; height: 13px; border-radius: 50%; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+.psi-dot.done { background: #166638; }
+.psi-dot.done svg { width: 7px; height: 7px; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.psi-dot.active { background: #B83D08; box-shadow: 0 0 0 3px rgba(184,61,8,0.15); }
+.psi-dot.warn { background: #FDF3E0; border: 2px solid #E8C870; }
+.psi-dot.pending { background: #fff; border: 1.5px solid #C8C2BA; }
+.psi.done { border-left-color: #E2DDD7; }
+.psi.active { background: #F4F0EB; border-left-color: #B83D08; }
+.psi:hover:not(.active) { background: #F4F0EB; }
+.psi-name { font-size: 11px; font-weight: 600; line-height: 1.2; }
+.psi.done .psi-name { color: #166638; }
+.psi.active .psi-name { color: #B83D08; }
+.psi:not(.done):not(.active) .psi-name { color: #8C857C; }
+.psi-meta { font-size: 10px; color: #C8C2BA; margin-top: 2px; font-weight: 300; line-height: 1.3; }
+.psi.active .psi-meta { color: #8C857C; }
+.psi-pill {
+  display: inline-flex; font-size: 9px; font-weight: 700;
+  padding: 2px 6px; border-radius: 20px; margin-top: 4px;
+}
+.pp-a { background: #FDF3E0; color: #7A4D00; border: 1px solid #E8C870; }
+.pp-r { background: #FBF0F0; color: #A02020; border: 1px solid #EAB8B8; }
+.pp-g { background: #E8F5EE; color: #166638; border: 1px solid #A8D9BC; }
+.pp-gr { background: #F4F0EB; color: #C8C2BA; border: 1px solid #E2DDD7; }
+
+/* ── MAIN AREA ── */
+.main-area { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.main-topbar {
+  height: 44px; background: #fff; border-bottom: 1px solid #E2DDD7;
+  display: flex; align-items: center; padding: 0 20px; gap: 8px; flex-shrink: 0;
+}
+.mt-title { font-size: 13px; font-weight: 700; color: #080706; }
+.mt-title em { color: #B83D08; font-style: normal; }
+.mt-sep { color: #E2DDD7; }
+.mt-sub { font-size: 11px; color: #8C857C; }
+.mt-right { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+
+.main-body { flex: 1; display: flex; min-height: 0; overflow: hidden; }
+.main-content { flex: 1; overflow-y: auto; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.aside-col { width: 214px; flex-shrink: 0; border-left: 1px solid #E2DDD7; background: #FBF8F5; overflow-y: auto; padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0; transition: width 0.2s ease, padding 0.2s ease; position: relative; }
+.aside-col.collapsed { width: 32px; padding: 0; overflow: hidden; }
+.aside-col.collapsed .aside-inner { opacity: 0; pointer-events: none; }
+.aside-inner { flex: 1; display: flex; flex-direction: column; gap: 10px; transition: opacity 0.15s ease; }
+.aside-toggle {
+  position: absolute; top: 14px; left: -13px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #fff; border: 1px solid #E2DDD7;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 20;
+  transition: background 0.12s, border-color 0.12s;
+  flex-shrink: 0;
+}
+.aside-toggle:hover { background: #F4F0EB; border-color: #C8C2BA; }
+.aside-toggle svg { width: 10px; height: 10px; stroke: #8C857C; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s ease; }
+.aside-col.collapsed .aside-toggle { left: 4px; top: 14px; }
+.aside-col.collapsed .aside-toggle svg { transform: rotate(180deg); }
+.aside-collapsed-label {
+  display: none; writing-mode: vertical-rl; text-orientation: mixed;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #C8C2BA; margin: 48px auto 0; transform: rotate(180deg);
+  user-select: none;
+}
+.aside-col.collapsed .aside-collapsed-label { display: block; }
+
+/* ── CARDS ── */
+.card { background: #fff; border: 1px solid #E2DDD7; border-radius: 9px; padding: 14px 16px; }
+.card.sunken { background: #F4F0EB; border-color: #E2DDD7; }
+.card-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.card-t { font-size: 9px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8C857C; }
+
+/* ── BADGES ── */
+.bdg { display: inline-flex; align-items: center; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+.bdg.g { background: #E8F5EE; color: #166638; border: 1px solid #A8D9BC; }
+.bdg.a { background: #FDF3E0; color: #7A4D00; border: 1px solid #E8C870; }
+.bdg.r { background: #FBF0F0; color: #A02020; border: 1px solid #EAB8B8; }
+.bdg.b { background: #EBF0FD; color: #1A46C8; border: 1px solid #C8D8FA; }
+.bdg.gr { background: #F4F0EB; color: #8C857C; border: 1px solid #E2DDD7; }
+
+/* ── STATS GRID ── */
+.stats-grid { display: grid; gap: 8px; }
+.sg-4 { grid-template-columns: repeat(4,1fr); }
+.sg-3 { grid-template-columns: repeat(3,1fr); }
+.sg-2 { grid-template-columns: repeat(2,1fr); }
+.stat-t { background: #fff; border: 1px solid #E2DDD7; border-radius: 7px; padding: 10px 12px; }
+.sv { font-family: 'Inconsolata', monospace; font-size: 18px; font-weight: 600; line-height: 1; }
+.sl { font-size: 9px; color: #8C857C; margin-top: 3px; }
+.sv.g { color: #166638; } .sv.a { color: #7A4D00; } .sv.r { color: #A02020; } .sv.k { color: #080706; }
+
+/* ── FORM ── */
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.frow.full { grid-template-columns: 1fr; }
+.field label { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8C857C; display: block; margin-bottom: 3px; }
+.field input, .field select {
+  width: 100%; padding: 7px 10px; border: 1px solid #E2DDD7; border-radius: 6px;
+  font-size: 12px; font-family: 'Manrope', sans-serif; color: #080706; background: #fff; outline: none;
+}
+.seg { display: flex; gap: 1px; background: #F4F0EB; border-radius: 6px; padding: 2px; border: 1px solid #E2DDD7; }
+.seg-b { flex: 1; padding: 5px 6px; font-size: 11px; font-weight: 500; border-radius: 4px; border: none; cursor: pointer; font-family: 'Manrope', sans-serif; color: #8C857C; background: transparent; white-space: nowrap; }
+.seg-b.on { background: #fff; color: #080706; font-weight: 700; }
+
+/* ── TABLE ── */
+.mt-tbl { width: 100%; border-collapse: collapse; }
+.mt-tbl th { font-size: 9px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #8C857C; padding: 0 8px 7px; text-align: left; border-bottom: 1px solid #E2DDD7; }
+.mt-tbl td { font-size: 11px; color: #2E2B27; padding: 7px 8px; border-bottom: 1px solid #F4F0EB; vertical-align: middle; }
+.mt-tbl tr:last-child td { border-bottom: none; }
+.td-s { font-weight: 700; color: #080706; }
+.td-m { font-family: 'Inconsolata', monospace; font-size: 12px; font-weight: 600; }
+
+/* ── CHECKLIST ── */
+.cl-item { display: flex; align-items: flex-start; gap: 9px; padding: 8px 11px; border-radius: 7px; border: 1px solid #E2DDD7; background: #fff; margin-bottom: 6px; }
+.cl-item:last-child { margin-bottom: 0; }
+.cl-item.pass { border-color: #A8D9BC; background: #E8F5EE; }
+.cl-item.warn { border-color: #E8C870; background: #FDF3E0; }
+.cl-item.fail { border-color: #EAB8B8; background: #FBF0F0; }
+.cl-ic { width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.cl-ic.pass { background: #166638; color: #fff; }
+.cl-ic.warn { background: #7A4D00; color: #fff; }
+.cl-ic.fail { background: #A02020; color: #fff; }
+.cl-lbl { font-size: 11px; font-weight: 600; color: #080706; }
+.cl-sub { font-size: 10px; color: #8C857C; margin-top: 2px; line-height: 1.4; }
+.cl-act { font-size: 10px; font-weight: 600; color: #1A46C8; margin-top: 3px; }
+
+/* ── MAP ITEMS ── */
+.map-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; border-bottom: 1px solid #F4F0EB; }
+.map-item:last-child { border-bottom: none; }
+.map-from { flex: 1; min-width: 0; }
+.map-arr { color: #C8C2BA; font-size: 11px; flex-shrink: 0; margin-top: 2px; }
+.map-to { flex: 1; min-width: 0; }
+.map-code { font-family: 'Inconsolata', monospace; font-size: 11px; font-weight: 600; color: #080706; }
+.map-name { font-size: 10px; color: #8C857C; margin-top: 1px; }
+.map-pct { font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+.map-pct.hi { color: #166638; } .map-pct.mid { color: #7A4D00; } .map-pct.lo { color: #A02020; }
+
+/* ── EXCEPTION QUEUE ── */
+.exc-wrap { border: 1px solid #E2DDD7; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+.exc-wrap:last-child { margin-bottom: 0; }
+.exc-top { padding: 10px 13px; background: #fff; display: flex; align-items: flex-start; gap: 10px; }
+.exc-cands { padding: 10px 13px; background: #F4F0EB; }
+.exc-cand-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #8C857C; margin-bottom: 7px; }
+.cand { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: #fff; border-radius: 6px; border: 1px solid #E2DDD7; margin-bottom: 5px; cursor: pointer; transition: border-color 0.1s; }
+.cand:last-child { margin-bottom: 0; }
+.cand.sel { border-color: #1A46C8; border-width: 1.5px; }
+.cand:hover { border-color: #C8D8FA; }
+.cand-info { flex: 1; min-width: 0; }
+.cand-name { font-size: 11px; font-weight: 600; color: #080706; }
+.cand-why { font-size: 10px; color: #8C857C; margin-top: 1px; }
+.cand-pct { font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.exc-batch { padding: 8px 13px; background: #EBF0FD; border-top: 1px solid #C8D8FA; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.exc-resolved { padding: 10px 13px; background: #E8F5EE; border-top: 1px solid #A8D9BC; display: flex; align-items: center; gap: 8px; }
+
+/* ── VARIANCE TABLE ── */
+.var-row { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 7px; border: 1px solid #E2DDD7; background: #fff; margin-bottom: 5px; }
+.var-row:last-child { margin-bottom: 0; }
+.var-lbl { flex: 1; font-size: 11px; color: #2E2B27; }
+.var-leg { font-family: 'Inconsolata', monospace; font-size: 11px; color: #8C857C; width: 96px; text-align: right; flex-shrink: 0; }
+.var-ours { font-family: 'Inconsolata', monospace; font-size: 11px; font-weight: 600; color: #080706; width: 96px; text-align: right; flex-shrink: 0; }
+.var-diff { font-family: 'Inconsolata', monospace; font-size: 11px; font-weight: 700; width: 76px; text-align: right; flex-shrink: 0; }
+.var-diff.z { color: #166638; } .var-diff.nz { color: #A02020; }
+
+/* ── UAT ── */
+.uat-i { display: flex; align-items: center; gap: 9px; padding: 8px 11px; border-radius: 7px; border: 1px solid #E2DDD7; background: #fff; margin-bottom: 5px; cursor: pointer; transition: background 0.1s; }
+.uat-i:last-child { margin-bottom: 0; }
+.uat-i:hover { background: #FBF8F5; }
+.uat-i.flagged { border-color: #EAB8B8; background: #FBF0F0; }
+.uat-i.done { border-color: #A8D9BC; background: #E8F5EE; }
+.uat-cb { width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid #C8C2BA; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; }
+.uat-cb.done { background: #166638; border-color: #166638; color: #fff; }
+.uat-cb.flag { background: #FBF0F0; border-color: #A02020; color: #A02020; font-size: 10px; }
+.uat-lbl { flex: 1; font-size: 11px; color: #2E2B27; line-height: 1.4; }
+
+/* ── SIGN-OFF ASIDE ── */
+.so-item { display: flex; align-items: center; gap: 7px; padding: 7px 9px; border-radius: 6px; border: 1px solid #E2DDD7; background: #fff; margin-bottom: 4px; }
+.so-item:last-child { margin-bottom: 0; }
+.so-item.done { background: #E8F5EE; border-color: #A8D9BC; }
+.so-item.active-so { background: #FDF3E0; border-color: #E8C870; }
+.so-item.locked { opacity: 0.4; }
+.so-n { font-size: 9px; font-weight: 700; color: #C8C2BA; width: 11px; flex-shrink: 0; }
+.so-lbl { flex: 1; font-size: 10px; font-weight: 500; color: #080706; }
+.so-st { font-size: 9px; font-weight: 700; }
+.so-st.done { color: #166638; } .so-st.wait { color: #7A4D00; } .so-st.lock { color: #C8C2BA; }
+.so-t { font-size: 9px; color: #C8C2BA; margin-left: 2px; }
+
+/* ── BUTTONS ── */
+.btn-primary { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: #1A46C8; color: #fff; font-size: 12px; font-weight: 600; border-radius: 7px; border: none; cursor: pointer; font-family: 'Manrope', sans-serif; transition: background 0.12s; }
+.btn-primary:hover { background: #1338A8; }
+.btn-secondary { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: #EBF0FD; color: #1A46C8; font-size: 12px; font-weight: 600; border-radius: 7px; border: 1px solid #C8D8FA; cursor: pointer; font-family: 'Manrope', sans-serif; transition: background 0.12s; }
+.btn-secondary:hover { background: #C8D8FA; }
+.btn-ghost { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: transparent; color: #8C857C; font-size: 12px; font-weight: 500; border-radius: 7px; border: 1px solid #E2DDD7; cursor: pointer; font-family: 'Manrope', sans-serif; transition: border-color 0.12s, color 0.12s; }
+.btn-ghost:hover { border-color: #C8C2BA; color: #2E2B27; }
+.btn-warn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: #FDF3E0; color: #7A4D00; font-size: 11px; font-weight: 700; border-radius: 7px; border: 1px solid #E8C870; cursor: pointer; font-family: 'Manrope', sans-serif; width: 100%; justify-content: center; }
+.btn-brand { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: #B83D08; color: #fff; font-size: 13px; font-weight: 700; border-radius: 8px; border: none; cursor: pointer; font-family: 'Manrope', sans-serif; transition: background 0.12s; }
+.btn-brand:hover { background: #A03206; }
+.btn-brand:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── GO LIVE BLOCK ── */
+.golive-block { background: #1A1814; border-radius: 9px; padding: 18px 20px; }
+.gl-pre { font-size: 9px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 10px; }
+.gl-i { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); margin-bottom: 5px; }
+.gl-i.done { background: rgba(22,102,56,0.12); border-color: rgba(22,102,56,0.2); }
+.gl-i.pend { background: rgba(184,61,8,0.08); border-color: rgba(184,61,8,0.15); }
+.gl-lbl { flex: 1; font-size: 11px; color: rgba(255,255,255,0.45); }
+.gl-lbl.done { color: rgba(255,255,255,0.75); }
+.gl-switch { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.gl-sw-title { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.85); }
+.gl-sw-sub { font-size: 10px; color: rgba(255,255,255,0.28); margin-top: 2px; }
+
+/* ── ASIDE LABELS ── */
+.aside-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #C8C2BA; padding: 2px 0 6px; }
+
+/* ── COMM LOG ── */
+.comm-i { display: flex; align-items: flex-start; gap: 7px; padding: 6px 0; border-bottom: 1px solid #F4F0EB; }
+.comm-i:last-child { border-bottom: none; }
+.comm-t { font-family: 'Inconsolata', monospace; font-size: 10px; color: #C8C2BA; width: 24px; flex-shrink: 0; margin-top: 1px; }
+.comm-l { font-size: 11px; font-weight: 600; color: #080706; }
+.comm-to { font-size: 10px; color: #8C857C; }
+.comm-s { font-size: 9px; font-weight: 700; margin-top: 1px; }
+.comm-s.op { color: #166638; } .comm-s.snt { color: #8C857C; }
+
+/* ── BENCH ── */
+.bench-r { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; }
+.bench-bar { height: 4px; background: #F4F0EB; border-radius: 2px; margin-top: 6px; }
+.bench-fill { height: 100%; border-radius: 2px; }
+
+/* ── PHASE SCREENS ── */
+.phase-screen { display: none; flex-direction: column; height: 100%; }
+.phase-screen.visible { display: flex; }
+
+/* ── COLS ── */
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: #1A1814; color: #fff; font-size: 12px; font-weight: 500;
+  padding: 10px 18px; border-radius: 8px; z-index: 999;
+  transition: transform 0.3s ease; pointer-events: none; white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(26,24,20,0.6);
+  z-index: 500; display: none; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 12px; padding: 24px; width: 480px;
+  max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-title { font-size: 16px; font-weight: 700; color: #080706; margin-bottom: 8px; }
+.modal-body { font-size: 13px; color: #2E2B27; line-height: 1.6; margin-bottom: 20px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ── LOCKED OVERLAY ── */
+.locked-notice {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex: 1; gap: 10px; padding: 40px;
+}
+.locked-icon { width: 40px; height: 40px; border-radius: 50%; background: #F4F0EB; display: flex; align-items: center; justify-content: center; }
+.locked-icon svg { width: 18px; height: 18px; stroke: #C8C2BA; fill: none; stroke-width: 2; }
+.locked-title { font-size: 14px; font-weight: 600; color: #8C857C; }
+.locked-sub { font-size: 12px; color: #C8C2BA; text-align: center; max-width: 280px; line-height: 1.5; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #E2DDD7; border-radius: 2px; }
+
+/* ── COLS LAYOUT ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ── PHASE SIDEBAR SIGN-OFF INLINE ── */
+.psi-signoff { display: flex; align-items: center; gap: 5px; margin-top: 4px; }
+.psi-so-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.psi-so-dot.done { background: #166638; }
+.psi-so-dot.wait { background: #E8C870; }
+.psi-so-dot.lock { background: #E2DDD7; }
+.psi-so-label { font-size: 10px; font-weight: 500; }
+.psi-so-label.done { color: #166638; }
+.psi-so-label.wait { color: #7A4D00; }
+.psi-so-label.lock { color: #C8C2BA; }
+
+/* ── DIMENSION ROWS ── */
+.dim-row { transition: background 0.15s; }
+.dim-name { font-size: 12px; font-weight: 700; color: #080706; }
+.dim-tag {
+  display: inline-flex; align-items: center; gap: 4px; background: #fff;
+  border: 1px solid #E2DDD7; border-radius: 20px; padding: 3px 8px 3px 10px;
+  font-size: 11px; font-weight: 500; color: #080706;
+}
+.dim-tag button {
+  background: none; border: none; cursor: pointer; color: #8C857C;
+  font-size: 12px; line-height: 1; padding: 0; margin-left: 2px; font-family: 'Manrope', sans-serif;
+}
+.dim-tag button:hover { color: #A02020; }
+.dim-add-tag {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%; border: 1.5px dashed #C8C2BA;
+  background: transparent; cursor: pointer; font-size: 13px; color: #8C857C;
+  line-height: 1; font-family: 'Manrope', sans-serif; transition: border-color 0.1s, color 0.1s;
+  flex-shrink: 0;
+}
+.dim-add-tag:hover { border-color: #1A46C8; color: #1A46C8; }
+.dim-inline-add { animation: fadeInQuick 0.1s ease; }
+@keyframes fadeInQuick { from { opacity: 0; } to { opacity: 1; } }
+.dim-row.rejected { opacity: 0.5; background: #FBF0F0 !important; }
+.dim-badge { flex-shrink: 0; }
+/* ── COA MAPPING TABLE ── */
+.coa-header {
+  display:grid;
+  grid-template-columns:160px 20px 150px 130px 46px 1fr 100px 90px;
+  gap:10px;
+  padding:8px 14px;
+  background:#F4F0EB;
+  border-bottom:1px solid #E2DDD7;
+  position:sticky;
+  top:0;
+  z-index:10;
+  border-radius:9px 9px 0 0;
+}
+.coa-header > div { font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8C857C; }
+.coa-cells {
+  display:grid;
+  grid-template-columns:160px 20px 150px 130px 46px 1fr 100px 90px;
+  gap:10px;
+  padding:10px 14px;
+  align-items:start;
+}
+.coa-row { border-bottom:1px solid #F4F0EB; transition:background 0.12s; }
+.coa-row:last-child { border-bottom:none; }
+.coa-override-panel { margin:0 14px 12px;padding:12px 14px;background:#EBF0FD;border:1px solid #C8D8FA;border-radius:8px; }
+.coa-override-opt { display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:6px;cursor:pointer;transition:background 0.1s; }
+.coa-override-opt:hover { background:#fff; }
+.coa-batch-banner { display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 14px 10px;padding:9px 14px;background:#EBF0FD;border:1px solid #C8D8FA;border-radius:8px; }
+.coa-filter-btn { font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid #E2DDD7;background:#fff;cursor:pointer;font-family:'Manrope',sans-serif;color:#8C857C;transition:background 0.1s,border-color 0.1s,color 0.1s; }
+.coa-filter-btn:hover { border-color:#C8C2BA;color:#2E2B27; }
+.coa-filter-btn.active { background:#080706;color:#fff;border-color:#080706; }
+
+/* ── AUDIT TRAIL ── */
+.audit-i:last-child { border-bottom: none; }
+.audit-t { font-family: 'Inconsolata', monospace; font-size: 10px; color: #C8C2BA; width: 28px; flex-shrink: 0; margin-top: 1px; }
+.audit-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.audit-dot.client { background: #1A46C8; }
+.audit-dot.ia { background: #B83D08; }
+.audit-dot.sys { background: #C8C2BA; }
+.active-ver-label { display:flex;align-items:center;gap:4px;cursor:pointer;font-size:10px;font-weight:600;flex-shrink:0;padding:3px 8px;border-radius:5px;border:1px solid #E2DDD7;background:#fff;transition:background 0.1s; }
+.active-ver-label:hover { background:#E8F5EE;border-color:#A8D9BC; }
+.active-ver-label.is-active { color:#166638;border-color:#A8D9BC;background:#E8F5EE; }
+.active-ver-label:not(.is-active) { color:#8C857C; }
+.audit-dot.email { background: #166638; }
+.audit-b .audit-l { font-size: 11px; font-weight: 600; color: #080706; }
+.audit-b .audit-who { font-size: 10px; color: #8C857C; margin-top: 1px; }
+
+/* ── FILE UPLOAD BLOCKS ── */
+.file-block { background: #fff; border: 1px solid #E2DDD7; border-radius: 9px; overflow: visible; }
+.file-hd { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; user-select: none; transition: background 0.1s; }
+.file-hd:hover { background: #FBF8F5; }
+.file-icon { width: 32px; height: 32px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.file-icon.csv { background: #EBF0FD; }
+.file-icon.xlsx { background: #E8F5EE; }
+.file-icon svg { width: 16px; height: 16px; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.file-icon.csv svg { stroke: #1A46C8; }
+.file-icon.xlsx svg { stroke: #166638; }
+.file-nm { font-size: 12px; font-weight: 700; color: #080706; flex: 1; }
+.file-meta-sm { font-size: 10px; color: #8C857C; margin-top: 1px; }
+.file-chevron { font-size: 11px; color: #C8C2BA; transition: transform 0.15s; flex-shrink: 0; }
+.file-chevron.open { transform: rotate(180deg); }
+.version-list { border-top: 1px solid #F4F0EB; overflow: visible; }
+.version-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; border-bottom: 1px solid #F4F0EB; }
+.version-item:last-child { border-bottom: none; }
+.version-item.latest { background: #FBF8F5; }
+.v-num { font-family: 'Inconsolata', monospace; font-size: 10px; font-weight: 600; color: #C8C2BA; width: 20px; flex-shrink: 0; }
+.v-who { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; flex-shrink: 0; }
+.v-who.client { background: #EBF0FD; color: #1A46C8; }
+.v-who.ia { background: #2E2B27; color: rgba(255,255,255,0.8); }
+.v-info { flex: 1; min-width: 0; }
+.v-filename { font-size: 11px; font-weight: 600; color: #080706; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.v-detail { font-size: 10px; color: #8C857C; margin-top: 1px; }
+.v-time { font-size: 10px; color: #C8C2BA; flex-shrink: 0; white-space: nowrap; }
+.v-actions { display: flex; gap: 5px; flex-shrink: 0; }
+.v-btn { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 5px; border: 1px solid #E2DDD7; background: #fff; cursor: pointer; font-family: 'Manrope', sans-serif; color: #8C857C; }
+.v-btn:hover { border-color: #C8C2BA; color: #2E2B27; }
+.v-btn.revert { color: #7A4D00; border-color: #E8C870; background: #FDF3E0; }
+.health-section { padding: 12px 16px 14px; border-top: 1px solid #F4F0EB; background: #FBF8F5; border-radius: 0 0 9px 9px; }
+.health-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8C857C; margin-bottom: 8px; }
+.add-file-row { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-top: 1px solid #F4F0EB; background: #FBF8F5; flex-wrap: wrap; border-radius: 0 0 9px 9px; }
+.add-file-btn { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #1A46C8; background: #EBF0FD; border: 1px solid #C8D8FA; border-radius: 6px; padding: 5px 11px; cursor: pointer; font-family: 'Manrope', sans-serif; }
+.add-file-btn:hover { background: #C8D8FA; }
+.bdg-ia { display: inline-flex; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; background: #2E2B27; color: rgba(255,255,255,0.8); }
+.upload-area { border: 1.5px dashed #C8D8FA; border-radius: 8px; padding: 16px; text-align: center; background: #EBF0FD; cursor: pointer; transition: background 0.15s; }
+.upload-area:hover { background: #C8D8FA; }
+.ua-icon { width: 28px; height: 28px; border-radius: 6px; background: #1A46C8; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
+.ua-icon svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ua-title { font-size: 12px; font-weight: 600; color: #1A46C8; }
+.ua-sub { font-size: 10px; color: #4D72E0; margin-top: 2px; }
+.upload-progress { background: #EBF0FD; border: 1px solid #C8D8FA; border-radius: 8px; padding: 12px 14px; }
+.up-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.up-name { font-size: 11px; font-weight: 600; color: #080706; flex: 1; }
+.up-pct { font-family: 'Inconsolata', monospace; font-size: 11px; font-weight: 600; color: #1A46C8; }
+.progress-bar { height: 4px; background: #C8D8FA; border-radius: 2px; }
+.progress-fill { height: 100%; background: #1A46C8; border-radius: 2px; transition: width 0.3s; }
+.summary-banner { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; border: 1px solid #A8D9BC; background: #E8F5EE; }
+.summary-banner.warn { border-color: #E8C870; background: #FDF3E0; }
+.sb-icon { font-size: 14px; flex-shrink: 0; }
+.sb-text { flex: 1; font-size: 11px; font-weight: 500; color: #080706; }
+.sb-action { font-size: 11px; font-weight: 700; color: #1A46C8; cursor: pointer; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <div class="tn-logo">
+      <div class="tn-mark"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+      <span class="tn-name">Vinaze IA</span>
+    </div>
+    <div class="tn-div"></div>
+    <div class="client-pills">
+      <div class="cpill active" onclick="switchClient('makmur')">
+        <div class="cpill-dot g"></div>
+        <span class="cpill-name">PT Makmur Jaya</span>
+        <span class="cpill-day">D14</span>
+      </div>
+      <div class="cpill" onclick="switchClient('sumber')">
+        <div class="cpill-dot a"></div>
+        <span class="cpill-name">CV Sumber Alam</span>
+        <span class="cpill-day">D6</span>
+      </div>
+      <div class="cpill" onclick="switchClient('artha')">
+        <div class="cpill-dot r"></div>
+        <span class="cpill-name">PT Artha Niaga</span>
+        <span class="cpill-day">D3</span>
+      </div>
+    </div>
+    <div class="tn-right">
+      <span class="cb-tag on-track" id="cb-tag">PT Makmur Jaya · full cashback on track</span>
+      <div class="tn-avatar">RM</div>
+    </div>
+  </nav>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- VERTICAL PHASE SIDEBAR -->
+    <div class="phase-sidebar">
+      <div class="psc-header">
+        <div class="psc-lbl">Active client</div>
+        <div class="psc-timer" id="sidebar-timer">14<span>/30</span></div>
+        <div class="psc-sub" id="sidebar-client">PT Makmur Jaya · days</div>
+        <div class="psc-cashback on" id="sidebar-cashback">Full cashback on track</div>
+      </div>
+      <div class="ps-phases" id="phase-nav"></div>
+    </div>
+
+    <!-- MAIN AREA -->
+    <div class="main-area">
+      <div class="main-topbar">
+        <span class="mt-title" id="main-phase-title">Phase 0 — Client <em>Setup</em></span>
+        <span class="mt-sep">·</span>
+        <span class="mt-sub" id="main-phase-sub">Day 1</span>
+        <div class="mt-right" id="main-phase-badges"></div>
+      </div>
+      <div class="main-body">
+        <div class="main-content" id="main-content"></div>
+        <div class="aside-col" id="aside-col">
+          <button class="aside-toggle" onclick="toggleAside()" title="Collapse audit trail">
+            <svg viewBox="0 0 12 12"><polyline points="8,2 4,6 8,10"/></svg>
+          </button>
+          <span class="aside-collapsed-label">Audit trail</span>
+          <div class="aside-inner" id="aside-inner"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+const clients = {
+  makmur: {
+    name: 'PT Makmur Jaya',
+    day: 14, total: 30,
+    cashback: 'Full cashback on track',
+    cashbackClass: 'on',
+    cbTagClass: 'on-track',
+    cbTagText: 'PT Makmur Jaya · Day 14 · on track',
+    activePhase: 3,
+    phases: [
+      { id:0, name:'Setup', meta:'Done · Day 1', state:'done', pill:null },
+      { id:1, name:'Upload & Health Check', meta:'Done · Day 4', state:'done', pill:null },
+      { id:2, name:'Dimension Discovery', meta:'Locked · Day 7', state:'done', pill:null },
+      { id:3, name:'CoA Mapping', meta:'Day 6 → now', state:'active', pill:{text:'In progress', cls:'pp-a'} },
+      { id:4, name:'GL Mapping', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+      { id:5, name:'Trial Balance', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+      { id:6, name:'UAT', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+      { id:7, name:'Go-Live', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+    ]
+  },
+  sumber: {
+    name: 'CV Sumber Alam',
+    day: 6, total: 30,
+    cashback: 'Full cashback on track',
+    cashbackClass: 'on',
+    cbTagClass: 'on-track',
+    cbTagText: 'CV Sumber Alam · full cashback on track',
+    activePhase: 2,
+    phases: [
+      { id:0, name:'Setup', meta:'Done · Day 1', state:'done', pill:null },
+      { id:1, name:'Upload & Health Check', meta:'Done · Day 3', state:'done', pill:null },
+      { id:2, name:'Dimension Discovery', meta:'Day 3 → now', state:'active', pill:{text:'Session today', cls:'pp-a'} },
+      { id:3, name:'CoA Mapping', meta:'Awaiting Phase 2', state:'pending', pill:{text:'Locked', cls:'pp-gr'} },
+      { id:4, name:'GL Mapping', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+      { id:5, name:'Trial Balance', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+      { id:6, name:'UAT', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+      { id:7, name:'Go-Live', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+    ]
+  },
+  artha: {
+    name: 'PT Artha Niaga',
+    day: 3, total: 30,
+    cashback: 'At risk — blocked',
+    cashbackClass: 'risk',
+    cbTagClass: 'blocked',
+    cbTagText: 'PT Artha Niaga · blocked — hard prerequisite failed',
+    activePhase: 1,
+    phases: [
+      { id:0, name:'Setup', meta:'Done · Day 1', state:'done', pill:null },
+      { id:1, name:'Upload & Health Check', meta:'Day 2 → now', state:'active', pill:{text:'Hard block', cls:'pp-r'} },
+      { id:2, name:'Dimension Discovery', meta:'Awaiting Phase 1', state:'pending', pill:{text:'Locked', cls:'pp-gr'} },
+      { id:3, name:'CoA Mapping', meta:'Awaiting Phase 2', state:'pending', pill:{text:'Locked', cls:'pp-gr'} },
+      { id:4, name:'GL Mapping', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+      { id:5, name:'Trial Balance', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+      { id:6, name:'UAT', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+      { id:7, name:'Go-Live', meta:'Coming soon', state:'pending', pill:{text:'Coming soon', cls:'pp-gr'} },
+    ]
+  }
+};
+
+let currentClient = 'makmur';
+let currentPhase = 4;
+let excResolved = false;
+let batchApplied = false;
+let glSignoffSent = false;
+let goLiveReady = false;
+
+// ── SIGN-OFF DATA PER PHASE ──
+const phaseSignoffs = {
+  0: null,
+  1: { label: 'Health check sign-off', state: 'done', time: 'D4' },
+  2: { label: 'Dimension sign-off', state: 'done', time: 'D7' },
+  3: { label: 'CoA mapping sign-off', state: 'done', time: 'D12' },
+  4: null,
+  5: null,
+  6: null,
+  7: null,
+};
+
+// ── RENDER PHASE NAV ──
+function renderPhaseNav() {
+  const c = clients[currentClient];
+  const nav = document.getElementById('phase-nav');
+  nav.innerHTML = c.phases.map(p => {
+    const dotClass = p.state === 'done' ? 'done' : p.state === 'active' ? 'active' : 'pending';
+    const dotInner = p.state === 'done'
+      ? `<svg viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2"/></svg>`
+      : '';
+    const pill = p.pill ? `<div><span class="psi-pill ${p.pill.cls}">${p.pill.text}</span></div>` : '';
+    const activeClass = currentPhase === p.id ? 'active' : p.state;
+    const so = phaseSignoffs[p.id];
+    const signoffHtml = so ? `<div class="psi-signoff">
+      <div class="psi-so-dot ${so.state}"></div>
+      <span class="psi-so-label ${so.state}">${so.state === 'done' ? '✓ ' + so.time : so.state === 'wait' ? so.time : 'Sign-off locked'}</span>
+    </div>` : '';
+    const isComingSoon = p.id >= 4;
+    return `<div class="psi ${activeClass}${isComingSoon ? ' coming-soon' : ''}" onclick="goToPhase(${p.id})" style="${isComingSoon ? 'opacity:0.4;cursor:default;' : ''}">
+      <div class="psi-dot ${dotClass}">${dotInner}</div>
+      <div class="psi-name">${p.name}</div>
+      <div class="psi-meta">${p.meta}</div>
+      ${signoffHtml}
+      ${pill}
+    </div>`;
+  }).join('');
+}
+
+// ── SWITCH CLIENT ──
+function switchClient(id) {
+  currentClient = id;
+  currentPhase = Math.min(clients[id].activePhase, 3);
+  document.querySelectorAll('.cpill').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  const c = clients[id];
+  document.getElementById('sidebar-timer').innerHTML = `${c.day}<span>/${c.total}</span>`;
+  document.getElementById('sidebar-client').textContent = `${c.name} · days`;
+  const cb = document.getElementById('sidebar-cashback');
+  cb.textContent = c.cashback;
+  cb.className = `psc-cashback ${c.cashbackClass}`;
+  const cbTag = document.getElementById('cb-tag');
+  cbTag.textContent = c.cbTagText;
+  cbTag.className = `cb-tag ${c.cbTagClass}`;
+  renderPhaseNav();
+  renderPhase(currentPhase);
+  showToast(`Switched to ${c.name}`);
+}
+
+// ── GO TO PHASE ──
+function goToPhase(id) {
+  if (id >= 4) {
+    showToast('Phase coming soon — prototype shows phases 0–3');
+    return;
+  }
+  currentPhase = id;
+  renderPhaseNav();
+  renderPhase(id);
+}
+
+// ── RENDER PHASE ──
+function renderPhase(id) {
+  const phases = [p0, p1, p2, p3, p4, p5, p6, p7];
+  const data = phaseData[id];
+  document.getElementById('main-phase-title').innerHTML = data.title;
+  document.getElementById('main-phase-sub').textContent = data.sub;
+  document.getElementById('main-phase-badges').innerHTML = data.badges;
+  document.getElementById('main-content').innerHTML = phases[id]();
+  document.getElementById('aside-inner').innerHTML = renderAside(id);
+}
+
+const phaseData = [
+  { title: 'Phase 0 — Client <em>Setup</em>', sub: 'Day 1', badges: '<span class="bdg g">Complete</span>' },
+  { title: 'Phase 1 — Upload & <em>Health Check</em>', sub: 'Day 2–5', badges: '<span class="bdg g">Complete · Day 4</span>' },
+  { title: 'Phase 2 — Dimension <em>Discovery</em>', sub: 'Day 3–7', badges: '<span class="bdg g">Locked · Day 7</span>' },
+  { title: 'Phase 3 — CoA <em>Mapping</em>', sub: 'Day 6–12', badges: '<span class="bdg a">In progress · Day 14</span>' },
+  { title: 'Phase 4 — GL Transaction <em>Mapping</em>', sub: 'Coming soon', badges: '<span class="bdg gr">Coming soon</span>' },
+  { title: 'Phase 5 — Trial Balance <em>Reconciliation</em>', sub: 'Coming soon', badges: '<span class="bdg gr">Coming soon</span>' },
+  { title: 'Phase 6 — UAT & <em>Final Review</em>', sub: 'Coming soon', badges: '<span class="bdg gr">Coming soon</span>' },
+  { title: 'Phase 7 — <em>Go-Live</em>', sub: 'Coming soon', badges: '<span class="bdg gr">Coming soon</span>' },
+];
+
+// ── PHASE 0 ──
+function p0() {
+  return `
+
+  <!-- SECTION 1: MIGRATION SETUP -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+    <div style="font-size:11px;font-weight:700;color:#080706;">Migration setup</div>
+    <div style="flex:1;height:1px;background:#E2DDD7;"></div>
+  </div>
+  <div class="two-col" style="align-items:start;margin-bottom:20px;">
+    <div class="card">
+      <div class="card-hd"><span class="card-t">Entity details</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="field"><label>Entity name</label><input value="PT Makmur Jaya Sentosa" style="margin-top:4px;"/></div>
+        <div class="field"><label>Legal type</label>
+          <select style="margin-top:4px;"><option>Perseroan Terbatas (PT)</option><option>CV</option><option>UD</option><option>Firma</option></select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="field"><label>Fiscal year start</label><input value="1 January 2024" style="margin-top:4px;"/></div>
+          <div class="field"><label>Cut-off date</label><input value="31 March 2025" style="margin-top:4px;"/></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="card-t">Source system & accounting</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="field"><label>Source system</label>
+          <div class="seg" style="margin-top:4px;"><button class="seg-b on" onclick="segSelect(this)">Accurate</button><button class="seg-b" onclick="segSelect(this)">Zahir</button><button class="seg-b" onclick="segSelect(this)">Excel / CSV</button></div>
+        </div>
+        <div class="field"><label>Accounting basis</label>
+          <div class="seg" style="margin-top:4px;"><button class="seg-b on" onclick="segSelect(this)">Accrual</button><button class="seg-b" onclick="segSelect(this)">Cash-basis (+15 days)</button></div>
+          <div style="margin-top:6px;font-size:10px;color:#8C857C;line-height:1.5;">Cash-basis clients require accrual restatement. Timer extends to 45 days automatically.</div>
+        </div>
+        <div class="field"><label>Migration tier</label>
+          <div class="seg" style="margin-top:4px;"><button class="seg-b on" onclick="segSelect(this)">Standard ≤30 days</button><button class="seg-b" onclick="segSelect(this)">Complex ≤45 days</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: CLIENT ACCESS -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+    <div style="font-size:11px;font-weight:700;color:#080706;">Client access</div>
+    <div style="flex:1;height:1px;background:#E2DDD7;"></div>
+  </div>
+
+  <!-- CONTROLLERS -->
+  <div class="card" style="margin-bottom:12px;">
+    <div class="card-hd">
+      <div>
+        <span class="card-t">Controllers</span>
+        <div style="font-size:10px;color:#8C857C;margin-top:3px;font-weight:300;">Full sign-off access. Receive all action items and daily status emails.</div>
+      </div>
+      <button class="add-file-btn" onclick="addController()" style="font-size:10px;padding:4px 10px;flex-shrink:0;">
+        <svg viewBox="0 0 14 14" style="width:10px;height:10px;stroke:#1A46C8;fill:none;stroke-width:2;stroke-linecap:round;"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+        Add controller
+      </button>
+    </div>
+    <div id="controllers-list">
+      <div class="contact-row" id="ctrl-1">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#EBF0FD;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#1A46C8;">BS</div>
+            <span style="font-size:11px;font-weight:600;color:#080706;">Controller 1</span>
+            <span class="bdg b" style="font-size:8px;">Primary PIC</span>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span class="bdg g" style="font-size:8px;" id="ctrl-1-status">Invited · D1</span>
+            <button class="v-btn" style="font-size:9px;padding:2px 7px;" onclick="removeContact('ctrl-1','controller')">Remove</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div class="field"><label>Full name</label><input value="Budi Santoso" style="margin-top:3px;font-size:12px;"/></div>
+          <div class="field"><label>Email</label><input value="budi@makmurjaya.co.id" style="margin-top:3px;font-size:12px;"/></div>
+          <div class="field"><label>Role / title</label><input value="Finance Controller" style="margin-top:3px;font-size:12px;"/></div>
+        </div>
+      </div>
+      <div class="contact-row" id="ctrl-2" style="margin-top:10px;padding-top:10px;border-top:1px solid #F4F0EB;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#EBF0FD;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#1A46C8;">SR</div>
+            <span style="font-size:11px;font-weight:600;color:#080706;">Controller 2</span>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span class="bdg a" style="font-size:8px;" id="ctrl-2-status">Pending invite</span>
+            <button class="v-btn" style="font-size:9px;padding:2px 7px;" onclick="sendInvite('ctrl-2','Sari Rahayu')">Send invite</button>
+            <button class="v-btn" style="font-size:9px;padding:2px 7px;" onclick="removeContact('ctrl-2','controller')">Remove</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div class="field"><label>Full name</label><input value="Sari Rahayu" style="margin-top:3px;font-size:12px;"/></div>
+          <div class="field"><label>Email</label><input value="sari@makmurjaya.co.id" style="margin-top:3px;font-size:12px;"/></div>
+          <div class="field"><label>Role / title</label><input placeholder="e.g. CFO" style="margin-top:3px;font-size:12px;"/></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIRECTOR SPONSORS -->
+  <div class="card" style="margin-bottom:12px;">
+    <div class="card-hd">
+      <div>
+        <span class="card-t">Director sponsors</span>
+        <div style="font-size:10px;color:#8C857C;margin-top:3px;font-weight:300;">View-only access. Receive email updates and milestone notifications. Cannot action sign-offs.</div>
+      </div>
+      <button class="add-file-btn" onclick="addSponsor()" style="font-size:10px;padding:4px 10px;flex-shrink:0;">
+        <svg viewBox="0 0 14 14" style="width:10px;height:10px;stroke:#1A46C8;fill:none;stroke-width:2;stroke-linecap:round;"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+        Add sponsor
+      </button>
+    </div>
+    <div id="sponsors-list">
+      <div class="contact-row" id="spon-1">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#F7EDE5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#B83D08;">HW</div>
+            <span style="font-size:11px;font-weight:600;color:#080706;">Director Sponsor 1</span>
+            <span class="bdg gr" style="font-size:8px;">View only</span>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span class="bdg g" style="font-size:8px;" id="spon-1-status">Invited · D1</span>
+            <button class="v-btn" style="font-size:9px;padding:2px 7px;" onclick="removeContact('spon-1','sponsor')">Remove</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div class="field"><label>Full name</label><input value="Pak Hendra Wijaya" style="margin-top:3px;font-size:12px;"/></div>
+          <div class="field"><label>Email</label><input value="hendra@makmurjaya.co.id" style="margin-top:3px;font-size:12px;"/></div>
+          <div class="field"><label>Role / title</label><input value="Director" style="margin-top:3px;font-size:12px;"/></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVE & INVITE -->
+  <div class="card" style="background:#F4F0EB;border-color:#E2DDD7;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px;">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#080706;margin-bottom:3px;">On save, all contacts will be emailed</div>
+        <div style="font-size:10px;color:#8C857C;line-height:1.5;">Controllers receive a registration invite with sign-off access. Director Sponsors receive a view-only link. The 30-day timer starts on first file upload — not on save.</div>
+      </div>
+    </div>
+    <div id="invite-preview" style="background:#fff;border:1px solid #E2DDD7;border-radius:7px;padding:10px 12px;margin-bottom:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8C857C;margin-bottom:7px;">Invites to send</div>
+      <div style="display:flex;flex-direction:column;gap:5px;" id="invite-list">
+        <div style="display:flex;align-items:center;gap:7px;font-size:11px;">
+          <div class="audit-dot client"></div>
+          <span style="flex:1;color:#080706;font-weight:500;">budi@makmurjaya.co.id</span>
+          <span class="bdg b" style="font-size:8px;">Controller · sign-off access</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;font-size:11px;">
+          <div class="audit-dot sys"></div>
+          <span style="flex:1;color:#8C857C;">sari@makmurjaya.co.id</span>
+          <span class="bdg a" style="font-size:8px;">Controller · pending save</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;font-size:11px;">
+          <div class="audit-dot client"></div>
+          <span style="flex:1;color:#080706;font-weight:500;">hendra@makmurjaya.co.id</span>
+          <span class="bdg gr" style="font-size:8px;">Sponsor · view only</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;justify-content:center;padding:10px;" onclick="saveAndInvite()">
+      Save & send invites →
+    </button>
+  </div>`;
+}
+
+// ── PHASE 1 ──
+function p1() {
+  const isArtha = currentClient === 'artha';
+  return `
+  <div class="summary-banner warn">
+    <span class="sb-icon">⚠</span>
+    <span class="sb-text">${isArtha ? '2 files uploaded · 1 hard block — GL format invalid · 30-day timer not started' : '3 files uploaded · 1 warning requires Controller decision · all hard prerequisites passed'}</span>
+    <span class="sb-action" onclick="showSignoffModal()">Request sign-off →</span>
+  </div>
+
+  <!-- FILE 1: GL EXPORT -->
+  <div class="file-block">
+    <div class="file-hd" onclick="toggleFileBlock('gl')">
+      <div class="file-icon csv"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+      <div style="flex:1;min-width:0;">
+        <div class="file-nm">GL Export</div>
+        <div class="file-meta-sm">${isArtha ? 'Accurate_GL_Export.csv · 18,432 records · 1 version' : 'Accurate_GL_Export_v2.csv · 18,432 records · 2 versions'}</div>
+      </div>
+      <span class="bdg ${isArtha ? 'r' : 'g'}">${isArtha ? 'Hard block' : 'Clean'}</span>
+      <span class="bdg gr" style="margin-left:4px;">${isArtha ? '1 version' : '2 versions'}</span>
+      <span class="file-chevron open" id="chev-gl">▾</span>
+    </div>
+    <div id="fbody-gl">
+      <div class="version-list">
+        ${!isArtha ? `
+        <div class="version-item latest">
+          <span class="v-num">v2</span>
+          <div class="v-who client" title="Client upload">C</div>
+          <div class="v-info"><div class="v-filename">Accurate_GL_Export_v2.csv</div><div class="v-detail">18,432 records · Jan 2024 – Mar 2025 · 4.2 MB</div></div>
+          <label class="active-ver-label is-active" title="Active version for migration — traceability label only">
+            <input type="radio" name="gl-active" checked style="accent-color:#166638;" onchange="setActiveVersion(this,'gl','v2')"/> Active
+          </label>
+          <span class="bdg gr" style="flex-shrink:0;margin-left:4px;">Latest</span>
+          <span class="v-time">Day 3 · 09:14</span>
+          <div class="v-actions"><button class="v-btn" onclick="showToast('Downloading v2')">Download</button></div>
+        </div>` : ''}
+        <div class="version-item ${isArtha ? 'latest' : ''}">
+          <span class="v-num">v1</span>
+          <div class="v-who client" title="Client upload">C</div>
+          <div class="v-info"><div class="v-filename">Accurate_GL_Export.csv</div><div class="v-detail">${isArtha ? '18,432 records — monthly summary format · 1.1 MB' : 'Monthly summary format — failed hard prerequisite · 1.1 MB'}</div></div>
+          <label class="active-ver-label ${isArtha ? 'is-active' : ''}" title="${isArtha ? 'Active version for migration — traceability label only' : 'Cannot set active — this version failed health check'}" style="${isArtha ? '' : 'opacity:0.35;cursor:not-allowed;'}">
+            <input type="radio" name="gl-active" ${isArtha ? 'checked' : 'disabled'} style="accent-color:#166638;" ${isArtha ? 'onchange="setActiveVersion(this,\'gl\',\'v1\')"' : ''}/> ${isArtha ? 'Active' : 'Failed'}
+          </label>
+          <span class="bdg r" style="flex-shrink:0;margin-left:4px;">Failed</span>
+          <span class="v-time">Day 2 · 14:32</span>
+          <div class="v-actions"><button class="v-btn" onclick="showToast('Downloading v1')">Download</button></div>
+        </div>
+      </div>
+      <div class="health-section">
+        <div class="health-lbl">Health check — ${isArtha ? 'v1' : 'v2'} results</div>
+        ${isArtha ? `
+        <div class="cl-item fail"><div class="cl-ic fail">✕</div><div><div class="cl-lbl">GL not at invoice-line level — HARD BLOCK</div><div class="cl-sub">Monthly summary format detected. Invoice-line granularity required. 30-day timer not started.</div><div class="cl-act" onclick="showHardBlockModal()">View instructions to send client →</div></div></div>
+        <div class="cl-item pass"><div class="cl-ic pass">✓</div><div><div class="cl-lbl">Date range present</div><div class="cl-sub">Jan 2024 – Mar 2025 detected</div></div></div>
+        ` : `
+        <div class="cl-item pass"><div class="cl-ic pass">✓</div><div><div class="cl-lbl">Invoice-line level confirmed</div><div class="cl-sub">18,432 lines — granularity sufficient for AR/AP aging reconstruction</div></div></div>
+        <div class="cl-item pass"><div class="cl-ic pass">✓</div><div><div class="cl-lbl">Full fiscal year coverage</div><div class="cl-sub">Jan 1 2024 – Mar 31 2025 — matches declared cut-off date</div></div></div>
+        <div class="cl-item pass"><div class="cl-ic pass">✓</div><div><div class="cl-lbl">No duplicate transaction references</div><div class="cl-sub">All 18,432 invoice references are unique</div></div></div>
+        <div class="cl-item info"><div class="cl-ic info" style="background:#1A46C8;">i</div><div><div class="cl-lbl">4 accounts in GL not found in CoA</div><div class="cl-sub">Accounts 6030, 6031, 6032, 6099 — see CoA section below</div></div></div>
+        `}
+      </div>
+      <div class="add-file-row">
+        <span style="font-size:10px;color:#8C857C;">Upload new version on behalf of client:</span>
+        <button class="add-file-btn" onclick="simulateUpload('gl','Accurate_GL_Export_v${isArtha ? 2 : 3}.csv')">
+          <svg viewBox="0 0 14 14" style="width:12px;height:12px;stroke:#1A46C8;fill:none;stroke-width:2;stroke-linecap:round;"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          Upload ${isArtha ? 'v2' : 'v3'}
+        </button>
+        <span class="bdg-ia">IA upload</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILE 2: COA -->
+  <div class="file-block">
+    <div class="file-hd" onclick="toggleFileBlock('coa')">
+      <div class="file-icon csv"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+      <div style="flex:1;min-width:0;">
+        <div class="file-nm">Chart of Accounts</div>
+        <div class="file-meta-sm">Accurate_CoA.csv · 847 accounts · 1 version</div>
+      </div>
+      <span class="bdg a">1 warning</span>
+      <span class="bdg gr" style="margin-left:4px;">1 version</span>
+      <span class="file-chevron" id="chev-coa">▾</span>
+    </div>
+    <div id="fbody-coa" style="display:none;">
+      <div class="version-list">
+        <div class="version-item latest">
+          <span class="v-num">v1</span>
+          <div class="v-who client" title="Client upload">C</div>
+          <div class="v-info"><div class="v-filename">Accurate_CoA.csv</div><div class="v-detail">847 accounts · 218 KB</div></div>
+          <label class="active-ver-label is-active" title="Active version for migration — traceability label only">
+            <input type="radio" name="coa-active" checked style="accent-color:#166638;" onchange="setActiveVersion(this,'coa','v1')"/> Active
+          </label>
+          <span class="bdg a" style="flex-shrink:0;margin-left:4px;">Warning</span>
+          <span class="v-time">Day 2 · 14:28</span>
+          <div class="v-actions"><button class="v-btn" onclick="showToast('Downloading CoA v1')">Download</button></div>
+        </div>
+      </div>
+      <div class="health-section">
+        <div class="health-lbl">Health check — v1 results</div>
+        <div class="cl-item pass"><div class="cl-ic pass">✓</div><div><div class="cl-lbl">847 accounts detected</div><div class="cl-sub">All standard account types present</div></div></div>
+        <div class="cl-item warn"><div class="cl-ic warn">!</div><div><div class="cl-lbl">4 accounts in GL not in CoA export</div><div class="cl-sub">6030, 6031, 6032, 6099 — likely deleted accounts still in historical GL</div><div class="cl-act" onclick="showSoftBlockModal()">Review soft block — Controller decision required →</div></div></div>
+        <div class="cl-item pass"><div class="cl-ic pass">✓</div><div><div class="cl-lbl">No circular account references</div><div class="cl-sub">Account hierarchy validated</div></div></div>
+      </div>
+      <div class="add-file-row">
+        <span style="font-size:10px;color:#8C857C;">Upload new version on behalf of client:</span>
+        <button class="add-file-btn" onclick="simulateUpload('coa','Accurate_CoA_v2.csv')">
+          <svg viewBox="0 0 14 14" style="width:12px;height:12px;stroke:#1A46C8;fill:none;stroke-width:2;stroke-linecap:round;"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          Upload v2
+        </button>
+        <span class="bdg-ia">IA upload</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILE 3: TRIAL BALANCE -->
+  <div class="file-block">
+    <div class="file-hd" onclick="toggleFileBlock('tb')">
+      <div class="file-icon xlsx"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="17"/><line x1="16" y1="13" x2="8" y2="17"/></svg></div>
+      <div style="flex:1;min-width:0;">
+        <div class="file-nm">Trial Balance</div>
+        <div class="file-meta-sm">Trial_Balance_Q1.xlsx · 847 rows · Mar 2025 · <span style="color:#B83D08;font-weight:600;">IA uploaded</span></div>
+      </div>
+      <span class="bdg g">Clean</span>
+      <span class="bdg gr" style="margin-left:4px;">1 version</span>
+      <span class="file-chevron" id="chev-tb">▾</span>
+    </div>
+    <div id="fbody-tb" style="display:none;">
+      <div style="padding:7px 16px;background:#FDF3E0;border-top:1px solid #F4F0EB;display:flex;align-items:center;gap:6px;">
+        <span class="bdg-ia">IA upload</span>
+        <span style="font-size:10px;color:#7A4D00;">Uploaded by Reza Maulana (IA) on behalf of client · logged separately in audit trail</span>
+      </div>
+      <div class="version-list">
+        <div class="version-item latest">
+          <span class="v-num">v1</span>
+          <div class="v-who ia" title="IA upload on behalf of client">IA</div>
+          <div class="v-info"><div class="v-filename">Trial_Balance_Q1.xlsx</div><div class="v-detail">847 rows · as of Mar 31 2025 · 312 KB</div></div>
+          <label class="active-ver-label is-active" title="Active version for migration — traceability label only">
+            <input type="radio" name="tb-active" checked style="accent-color:#166638;" onchange="setActiveVersion(this,'tb','v1')"/> Active
+          </label>
+          <span class="bdg gr" style="flex-shrink:0;margin-left:4px;">Latest</span>
+          <span class="v-time">Day 3 · 11:05</span>
+          <div class="v-actions"><button class="v-btn" onclick="showToast('Downloading Trial Balance v1')">Download</button></div>
+        </div>
+      </div>
+      <div class="health-section">
+        <div class="health-lbl">Health check — v1 results</div>
+        <div class="cl-item pass"><div class="cl-ic pass">✓</div><div><div class="cl-lbl">847 account rows detected — matches CoA count</div></div></div>
+        <div class="cl-item pass"><div class="cl-ic pass">✓</div><div><div class="cl-lbl">Balance sheet balances</div><div class="cl-sub">Assets = Liabilities + Equity · Rp 84.2B = Rp 84.2B</div></div></div>
+        <div class="cl-item pass"><div class="cl-ic pass">✓</div><div><div class="cl-lbl">Cut-off date confirmed</div><div class="cl-sub">Mar 31 2025 matches declared cut-off</div></div></div>
+      </div>
+      <div class="add-file-row">
+        <span style="font-size:10px;color:#8C857C;">Upload new version on behalf of client:</span>
+        <button class="add-file-btn" onclick="simulateUpload('tb','Trial_Balance_Q1_v2.xlsx')">
+          <svg viewBox="0 0 14 14" style="width:12px;height:12px;stroke:#1A46C8;fill:none;stroke-width:2;stroke-linecap:round;"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          Upload v2
+        </button>
+        <span class="bdg-ia">IA upload</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPLOAD NEW FILE -->
+  <div class="upload-area" onclick="simulateUpload('new','Vendor_Master_Export.csv')">
+    <div class="ua-icon"><svg viewBox="0 0 24 24"><polyline points="16,16 12,12 8,16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg></div>
+    <div class="ua-title">Upload additional file on behalf of client</div>
+    <div class="ua-sub">CSV or XLSX · GL export, CoA, Trial Balance, Vendor master</div>
+    <div style="margin-top:6px;"><span class="bdg-ia">Logged as IA upload in audit trail</span></div>
+  </div>
+
+  <!-- UPLOAD PROGRESS -->
+  <div class="upload-progress" id="upload-progress" style="display:none;">
+    <div class="up-row">
+      <svg style="width:14px;height:14px;stroke:#1A46C8;fill:none;stroke-width:2;flex-shrink:0;" viewBox="0 0 24 24"><polyline points="16,16 12,12 8,16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+      <span class="up-name" id="upload-filename">Uploading…</span>
+      <span class="up-pct" id="upload-pct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%;"></div></div>
+    <div style="font-size:10px;color:#8C857C;margin-top:5px;" id="upload-status">Uploading file…</div>
+  </div>`;
+}
+
+// ── PHASE 2 ──
+function p2() {
+  return `
+
+  <!-- STATUS SUMMARY -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+    <div class="stat-t" style="border-left:3px solid #166638;">
+      <div class="sv g" id="dim-confirmed-count">3</div>
+      <div class="sl">Confirmed</div>
+    </div>
+    <div class="stat-t" style="border-left:3px solid #E8C870;">
+      <div class="sv a" id="dim-review-count">1</div>
+      <div class="sl">Needs review</div>
+    </div>
+    <div class="stat-t" style="border-left:3px solid #A02020;">
+      <div class="sv r" id="dim-rejected-count">0</div>
+      <div class="sl">Rejected</div>
+    </div>
+    <div class="stat-t" style="border-left:3px solid #C8C2BA;">
+      <div class="sv k" id="dim-values-count">14</div>
+      <div class="sl">Total values</div>
+    </div>
+  </div>
+
+  <!-- AI RECOMMENDATIONS TABLE -->
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="card-t">AI recommendations — from GL analysis</span>
+        <div style="font-size:10px;color:#8C857C;margin-top:2px;">Detected from transaction descriptions, vendor names, and account patterns</div>
+      </div>
+      <button class="add-file-btn" onclick="addDimension()" style="font-size:10px;padding:4px 10px;flex-shrink:0;">
+        <svg viewBox="0 0 14 14" style="width:10px;height:10px;stroke:#1A46C8;fill:none;stroke-width:2;stroke-linecap:round;"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+        Add dimension
+      </button>
+    </div>
+
+    <!-- TABLE HEADER -->
+    <div style="display:grid;grid-template-columns:140px 1fr 160px 44px 110px;gap:12px;padding:0 14px 8px;border-bottom:1px solid #E2DDD7;">
+      <span style="font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8C857C;">Dimension</span>
+      <span style="font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8C857C;">Values — click × to remove · + to add</span>
+      <span style="font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8C857C;">AI rationale</span>
+      <span style="font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8C857C;">Conf.</span>
+      <span style="font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8C857C;">Status & actions</span>
+    </div>
+
+    <div id="dim-list">
+
+      <!-- LOCATION — confirmed -->
+      <div class="dim-row" id="dim-location" data-status="confirmed">
+        <div style="display:grid;grid-template-columns:140px 1fr 160px 44px 110px;gap:12px;padding:12px 14px;align-items:start;">
+          <div>
+            <div class="dim-name">Location</div>
+            <div style="font-size:9px;color:#C8C2BA;margin-top:2px;font-style:italic;">AI detected</div>
+          </div>
+          <div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;" id="tags-location">
+              <span class="dim-tag">Jakarta <button onclick="removeTag(this,'location')">×</button></span>
+              <span class="dim-tag">Surabaya <button onclick="removeTag(this,'location')">×</button></span>
+              <span class="dim-tag">Bandung Warehouse <button onclick="removeTag(this,'location')">×</button></span>
+              <button class="dim-add-tag" onclick="toggleInlineAdd('location')">+</button>
+            </div>
+            <div class="dim-inline-add" id="add-location" style="display:none;margin-top:6px;">
+              <div style="display:flex;gap:5px;">
+                <input id="new-tag-location" placeholder="New value…" style="flex:1;max-width:160px;padding:4px 8px;border:1px solid #C8D8FA;border-radius:5px;font-size:11px;font-family:'Manrope',sans-serif;outline:none;" onkeydown="if(event.key==='Enter')addTag('location');if(event.key==='Escape')toggleInlineAdd('location')"/>
+                <button class="btn-secondary" style="padding:4px 9px;font-size:10px;" onclick="addTag('location')">Add</button>
+                <button class="btn-ghost" style="padding:4px 9px;font-size:10px;" onclick="toggleInlineAdd('location')">Done</button>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#8C857C;line-height:1.5;">Transaction descriptions and branch cost codes across 847 GL lines</div>
+          <div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;color:#166638;">87%</div>
+          <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-start;">
+            <span class="bdg g dim-badge" id="badge-location">Confirmed</span>
+            <button class="v-btn" onclick="rejectDimension('location')" style="font-size:9px;padding:2px 7px;">Reject</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEPARTMENT — confirmed -->
+      <div class="dim-row" id="dim-department" data-status="confirmed" style="border-top:1px solid #F4F0EB;">
+        <div style="display:grid;grid-template-columns:140px 1fr 160px 44px 110px;gap:12px;padding:12px 14px;align-items:start;">
+          <div>
+            <div class="dim-name">Department</div>
+            <div style="font-size:9px;color:#C8C2BA;margin-top:2px;font-style:italic;">AI detected</div>
+          </div>
+          <div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;" id="tags-department">
+              <span class="dim-tag">Sales <button onclick="removeTag(this,'department')">×</button></span>
+              <span class="dim-tag">Operations <button onclick="removeTag(this,'department')">×</button></span>
+              <span class="dim-tag">Finance <button onclick="removeTag(this,'department')">×</button></span>
+              <span class="dim-tag">Admin <button onclick="removeTag(this,'department')">×</button></span>
+              <button class="dim-add-tag" onclick="toggleInlineAdd('department')">+</button>
+            </div>
+            <div class="dim-inline-add" id="add-department" style="display:none;margin-top:6px;">
+              <div style="display:flex;gap:5px;">
+                <input id="new-tag-department" placeholder="New value…" style="flex:1;max-width:160px;padding:4px 8px;border:1px solid #C8D8FA;border-radius:5px;font-size:11px;font-family:'Manrope',sans-serif;outline:none;" onkeydown="if(event.key==='Enter')addTag('department');if(event.key==='Escape')toggleInlineAdd('department')"/>
+                <button class="btn-secondary" style="padding:4px 9px;font-size:10px;" onclick="addTag('department')">Add</button>
+                <button class="btn-ghost" style="padding:4px 9px;font-size:10px;" onclick="toggleInlineAdd('department')">Done</button>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#8C857C;line-height:1.5;">Cost center prefixes in GL account descriptions — 4 distinct patterns</div>
+          <div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;color:#166638;">91%</div>
+          <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-start;">
+            <span class="bdg g dim-badge" id="badge-department">Confirmed</span>
+            <button class="v-btn" onclick="rejectDimension('department')" style="font-size:9px;padding:2px 7px;">Reject</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT LINE — confirmed -->
+      <div class="dim-row" id="dim-productline" data-status="confirmed" style="border-top:1px solid #F4F0EB;">
+        <div style="display:grid;grid-template-columns:140px 1fr 160px 44px 110px;gap:12px;padding:12px 14px;align-items:start;">
+          <div>
+            <div class="dim-name">Product line</div>
+            <div style="font-size:9px;color:#C8C2BA;margin-top:2px;font-style:italic;">AI detected</div>
+          </div>
+          <div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;" id="tags-productline">
+              <span class="dim-tag">Electronics <button onclick="removeTag(this,'productline')">×</button></span>
+              <span class="dim-tag">Textiles <button onclick="removeTag(this,'productline')">×</button></span>
+              <span class="dim-tag">FMCG <button onclick="removeTag(this,'productline')">×</button></span>
+              <button class="dim-add-tag" onclick="toggleInlineAdd('productline')">+</button>
+            </div>
+            <div class="dim-inline-add" id="add-productline" style="display:none;margin-top:6px;">
+              <div style="display:flex;gap:5px;">
+                <input id="new-tag-productline" placeholder="New value…" style="flex:1;max-width:160px;padding:4px 8px;border:1px solid #C8D8FA;border-radius:5px;font-size:11px;font-family:'Manrope',sans-serif;outline:none;" onkeydown="if(event.key==='Enter')addTag('productline');if(event.key==='Escape')toggleInlineAdd('productline')"/>
+                <button class="btn-secondary" style="padding:4px 9px;font-size:10px;" onclick="addTag('productline')">Add</button>
+                <button class="btn-ghost" style="padding:4px 9px;font-size:10px;" onclick="toggleInlineAdd('productline')">Done</button>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#8C857C;line-height:1.5;">SKU prefixes and vendor category codes in transaction references</div>
+          <div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;color:#7A4D00;">72%</div>
+          <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-start;">
+            <span class="bdg g dim-badge" id="badge-productline">Confirmed</span>
+            <button class="v-btn" onclick="rejectDimension('productline')" style="font-size:9px;padding:2px 7px;">Reject</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT — needs review -->
+      <div class="dim-row" id="dim-project" data-status="review" style="border-top:1px solid #F4F0EB;background:#FDF3E0;">
+        <div style="display:grid;grid-template-columns:140px 1fr 160px 44px 110px;gap:12px;padding:10px 14px 10px;align-items:start;">
+          <div>
+            <div class="dim-name">Project</div>
+            <div style="font-size:9px;color:#C8C2BA;margin-top:2px;font-style:italic;">AI detected</div>
+          </div>
+          <div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-bottom:5px;" id="tags-project">
+              <span class="dim-tag" style="border-color:#E8C870;">PRJ-001 <button onclick="removeTag(this,'project')">×</button></span>
+              <span class="dim-tag" style="border-color:#E8C870;">PRJ-002 <button onclick="removeTag(this,'project')">×</button></span>
+              <span class="dim-tag" style="border-color:#E8C870;">PRJ-003 <button onclick="removeTag(this,'project')">×</button></span>
+              <button class="dim-add-tag" onclick="toggleInlineAdd('project')">+</button>
+            </div>
+            <div style="font-size:10px;color:#7A4D00;line-height:1.4;">⚠ Ask client if there are additional project codes not yet in GL transactions</div>
+            <div class="dim-inline-add" id="add-project" style="display:none;margin-top:6px;">
+              <div style="display:flex;gap:5px;">
+                <input id="new-tag-project" placeholder="New project code…" style="flex:1;max-width:160px;padding:4px 8px;border:1px solid #E8C870;border-radius:5px;font-size:11px;font-family:'Manrope',sans-serif;outline:none;" onkeydown="if(event.key==='Enter')addTag('project');if(event.key==='Escape')toggleInlineAdd('project')"/>
+                <button class="btn-secondary" style="padding:4px 9px;font-size:10px;" onclick="addTag('project')">Add</button>
+                <button class="btn-ghost" style="padding:4px 9px;font-size:10px;" onclick="toggleInlineAdd('project')">Done</button>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#8C857C;line-height:1.5;">3 project codes in GL narrative fields — low confidence, may be incomplete</div>
+          <div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;color:#7A4D00;">61%</div>
+          <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-start;">
+            <span class="bdg a dim-badge" id="badge-project">Needs review</span>
+            <div style="display:flex;gap:4px;">
+              <button class="v-btn" style="font-size:9px;padding:2px 7px;color:#166638;border-color:#A8D9BC;background:#E8F5EE;" onclick="confirmDimension('project')">Confirm</button>
+              <button class="v-btn" onclick="rejectDimension('project')" style="font-size:9px;padding:2px 7px;">Reject</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DISCOVERY SESSION NOTES -->
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="card-t">Discovery session notes</span>
+        <div style="font-size:10px;color:#8C857C;margin-top:2px;">IA reference only — not visible to client</div>
+      </div>
+      <button class="btn-ghost" style="font-size:11px;padding:5px 12px;" onclick="showToast('Notes saved')">Save notes</button>
+    </div>
+    <textarea id="session-notes" style="width:100%;height:80px;padding:9px 11px;border:1px solid #E2DDD7;border-radius:7px;font-size:12px;font-family:'Manrope',sans-serif;color:#080706;resize:none;outline:none;line-height:1.55;background:#FBF8F5;">Client confirmed 4 dimensions. Project dimension edited — client added 2 codes not in GL. "Bandung" renamed to "Bandung Warehouse." Discovery session Day 6 with Budi Santoso.</textarea>
+  </div>
+
+  <!-- LOCK ACTION -->
+  <div class="card" style="background:#F4F0EB;border-color:#E2DDD7;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#080706;margin-bottom:3px;">Lock dimensions to proceed to CoA mapping</div>
+        <div style="font-size:10px;color:#8C857C;line-height:1.5;">All dimensions must be confirmed or rejected before locking. Locking triggers Controller sign-off request (Chunk 2). Post-lock changes require IA action.</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+        <div id="lock-status" style="font-size:11px;color:#7A4D00;font-weight:500;white-space:nowrap;">1 dimension needs review</div>
+        <button class="btn-primary" id="lock-btn" onclick="lockDimensions()" style="opacity:0.4;cursor:not-allowed;white-space:nowrap;" disabled>Lock dimensions →</button>
+      </div>
+    </div>
+  </div>`;
+}
+// ── PHASE 3 ──
+// CoA mapping state
+const coaState = {
+  accounts: [
+    { id:'coa-1', legacyCode:'1-0001', legacyName:'Kas Besar', legacyCat:'Asset', tradeosCode:'1100', tradeosName:'Cash & Bank', placement:'BS · Current Asset', conf:98, rationale:'Name match: "Kas" = cash. High-frequency asset account pattern.', status:'mapped', tax:false },
+    { id:'coa-2', legacyCode:'1-0050', legacyName:'Bank BCA', legacyCat:'Asset', tradeosCode:'1100', tradeosName:'Cash & Bank', placement:'BS · Current Asset', conf:95, rationale:'Bank account pattern matched to Cash & Bank subtype.', status:'mapped', tax:false },
+    { id:'coa-3', legacyCode:'1-1200', legacyName:'Piutang Usaha', legacyCat:'Asset', tradeosCode:'1200', tradeosName:'Trade Receivable', placement:'BS · Current Asset', conf:96, rationale:'"Piutang Usaha" is the standard Indonesian term for trade receivable.', status:'mapped', tax:false },
+    { id:'coa-4', legacyCode:'1-1300', legacyName:'Piutang Lain-Lain', legacyCat:'Asset', tradeosCode:'1290', tradeosName:'Other Receivable', placement:'BS · Current Asset', conf:81, rationale:'"Piutang Lain-Lain" = other receivables. Category match confirmed.', status:'mapped', tax:false },
+    { id:'coa-5', legacyCode:'1-2000', legacyName:'Persediaan Barang', legacyCat:'Asset', tradeosCode:'1400', tradeosName:'Inventory', placement:'BS · Current Asset', conf:94, rationale:'"Persediaan Barang" = goods inventory. Direct match.', status:'mapped', tax:false },
+    { id:'coa-6', legacyCode:'1-5000', legacyName:'Aktiva Tetap', legacyCat:'Asset', tradeosCode:'1600', tradeosName:'Fixed Assets', placement:'BS · Non-current Asset', conf:92, rationale:'"Aktiva Tetap" = fixed assets. Standard classification.', status:'mapped', tax:false },
+    { id:'coa-7', legacyCode:'2-1000', legacyName:'Hutang Usaha', legacyCat:'Liability', tradeosCode:'2100', tradeosName:'Trade Payable', placement:'BS · Current Liability', conf:97, rationale:'"Hutang Usaha" is the standard Indonesian term for trade payable.', status:'mapped', tax:false },
+    { id:'coa-8', legacyCode:'2-1500', legacyName:'Hutang Bank', legacyCat:'Liability', tradeosCode:'2200', tradeosName:'Bank Loan', placement:'BS · Non-current Liability', conf:88, rationale:'"Hutang Bank" = bank loan. Matched to long-term liability subtype.', status:'mapped', tax:false },
+    { id:'coa-9', legacyCode:'2-2000', legacyName:'Hutang Pajak', legacyCat:'Liability', tradeosCode:'2310', tradeosName:'Tax Payable — PPN', placement:'BS · Current Liability', conf:99, rationale:'Tax account — system reserved. PPN pattern confirmed.', status:'tax', tax:true },
+    { id:'coa-10', legacyCode:'2-2100', legacyName:'PPh 21 Terutang', legacyCat:'Liability', tradeosCode:'2320', tradeosName:'Tax Payable — PPh 21', placement:'BS · Current Liability', conf:99, rationale:'Tax account — system reserved. PPh 21 payroll tax pattern.', status:'tax', tax:true },
+    { id:'coa-11', legacyCode:'3-0001', legacyName:'Modal Saham', legacyCat:'Equity', tradeosCode:'3100', tradeosName:'Share Capital', placement:'BS · Equity', conf:93, rationale:'"Modal Saham" = share capital. Standard equity account.', status:'mapped', tax:false },
+    { id:'coa-12', legacyCode:'3-0500', legacyName:'Laba Ditahan', legacyCat:'Equity', tradeosCode:'3200', tradeosName:'Retained Earnings', placement:'BS · Equity', conf:91, rationale:'"Laba Ditahan" = retained earnings. Direct match.', status:'mapped', tax:false },
+    { id:'coa-13', legacyCode:'4-0010', legacyName:'Pendapatan Penjualan', legacyCat:'Revenue', tradeosCode:'4010', tradeosName:'Sales Revenue', placement:'P&L · Revenue', conf:99, rationale:'"Pendapatan Penjualan" = sales revenue. Highest-frequency revenue account.', status:'mapped', tax:false },
+    { id:'coa-14', legacyCode:'4-0020', legacyName:'Pendapatan Jasa', legacyCat:'Revenue', tradeosCode:'4020', tradeosName:'Service Revenue', placement:'P&L · Revenue', conf:87, rationale:'"Pendapatan Jasa" = service revenue. Confirmed by transaction pattern.', status:'mapped', tax:false },
+    { id:'coa-15', legacyCode:'5-0001', legacyName:'HPP Barang', legacyCat:'Expense', tradeosCode:'5000', tradeosName:'Cost of Goods Sold', placement:'P&L · COGS', conf:95, rationale:'"HPP" = Harga Pokok Penjualan = COGS. Direct match.', status:'mapped', tax:false },
+    { id:'coa-16', legacyCode:'6-0010', legacyName:'Biaya Gaji', legacyCat:'Expense', tradeosCode:'6100', tradeosName:'Salaries & Wages', placement:'P&L · Operating Expense', conf:93, rationale:'"Biaya Gaji" = salary expense. Standard operating expense.', status:'mapped', tax:false },
+    { id:'coa-17', legacyCode:'6-0020', legacyName:'Biaya Sewa', legacyCat:'Expense', tradeosCode:'6200', tradeosName:'Rent Expense', placement:'P&L · Operating Expense', conf:90, rationale:'"Biaya Sewa" = rent expense. Matched to fixed overhead category.', status:'mapped', tax:false },
+    { id:'coa-18', legacyCode:'6-0099', legacyName:'Biaya Lain-Lain', legacyCat:'Expense', tradeosCode:'7990', tradeosName:'Other Expenses', placement:'P&L · Operating Expense', conf:71, rationale:'Generic "other" account — mapped to catch-all. Verify with client if subcategories exist.', status:'review', tax:false },
+    { id:'coa-19', legacyCode:'6-0100', legacyName:'Biaya Pengiriman', legacyCat:'Expense', tradeosCode:'6300', tradeosName:'Delivery Expense', placement:'P&L · Operating Expense', conf:75, rationale:'Matched by name. Confidence borderline — verify categorization.', status:'review', tax:false },
+    { id:'coa-20', legacyCode:'6030', legacyName:'(orphan — deleted)', legacyCat:'Unknown', tradeosCode:'7990', tradeosName:'Other Expenses', placement:'P&L · Operating Expense', conf:0, rationale:'Orphan account not in CoA export. Referenced in GL — manually mapped to catch-all in Phase 1.', status:'manual', tax:false },
+    { id:'coa-21', legacyCode:'6031', legacyName:'(orphan — deleted)', legacyCat:'Unknown', tradeosCode:'', tradeosName:'', placement:'', conf:0, rationale:'Orphan account — no mapping candidate found. Requires IA manual selection.', status:'unmapped', tax:false },
+  ],
+  overrideOpen: null,
+  batchPending: null,
+};
+
+// TradeOS account options for override dropdown
+const tradeosAccounts = [
+  { code:'1100', name:'Cash & Bank', placement:'BS · Current Asset' },
+  { code:'1200', name:'Trade Receivable', placement:'BS · Current Asset' },
+  { code:'1290', name:'Other Receivable', placement:'BS · Current Asset' },
+  { code:'1400', name:'Inventory', placement:'BS · Current Asset' },
+  { code:'1600', name:'Fixed Assets', placement:'BS · Non-current Asset' },
+  { code:'2100', name:'Trade Payable', placement:'BS · Current Liability' },
+  { code:'2200', name:'Bank Loan', placement:'BS · Non-current Liability' },
+  { code:'3100', name:'Share Capital', placement:'BS · Equity' },
+  { code:'3200', name:'Retained Earnings', placement:'BS · Equity' },
+  { code:'4010', name:'Sales Revenue', placement:'P&L · Revenue' },
+  { code:'4020', name:'Service Revenue', placement:'P&L · Revenue' },
+  { code:'5000', name:'Cost of Goods Sold', placement:'P&L · COGS' },
+  { code:'6100', name:'Salaries & Wages', placement:'P&L · Operating Expense' },
+  { code:'6200', name:'Rent Expense', placement:'P&L · Operating Expense' },
+  { code:'6300', name:'Delivery Expense', placement:'P&L · Operating Expense' },
+  { code:'7100', name:'General & Admin Expense', placement:'P&L · Operating Expense' },
+  { code:'7990', name:'Other Expenses', placement:'P&L · Operating Expense' },
+];
+
+function p3() {
+  const accs = coaState.accounts;
+  const mapped = accs.filter(a => a.status === 'mapped').length;
+  const review = accs.filter(a => a.status === 'review').length;
+  const manual = accs.filter(a => a.status === 'manual').length;
+  const unmapped = accs.filter(a => a.status === 'unmapped').length;
+  const tax = accs.filter(a => a.status === 'tax').length;
+  const iaResolved = accs.filter(a => a.status === 'resolved').length;
+
+  const rows = accs.map(a => coaRow(a)).join('');
+
+  return `
+  <!-- SUMMARY BAR -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;" id="coa-summary">
+    <div class="stat-t" style="border-left:3px solid #166638;">
+      <div class="sv g" id="coa-cnt-mapped">${mapped}</div>
+      <div class="sl">Auto-mapped</div>
+    </div>
+    <div class="stat-t" style="border-left:3px solid #E8C870;">
+      <div class="sv a" id="coa-cnt-review">${review}</div>
+      <div class="sl">Needs review</div>
+    </div>
+    <div class="stat-t" style="border-left:3px solid #A02020;">
+      <div class="sv r" id="coa-cnt-unmapped">${unmapped}</div>
+      <div class="sl">Cannot map</div>
+    </div>
+    <div class="stat-t" style="border-left:3px solid #B83D08;">
+      <div class="sv" style="color:#B83D08;" id="coa-cnt-resolved">${iaResolved + manual}</div>
+      <div class="sl">IA resolved</div>
+    </div>
+    <div class="stat-t" style="border-left:3px solid #C8C2BA;">
+      <div class="sv k" id="coa-cnt-tax">${tax}</div>
+      <div class="sl">Tax (reserved)</div>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <span style="font-size:10px;font-weight:600;color:#8C857C;text-transform:uppercase;letter-spacing:0.06em;">Filter:</span>
+    <button class="coa-filter-btn active" onclick="coaFilter('all',this)">All (${accs.length})</button>
+    <button class="coa-filter-btn" onclick="coaFilter('review',this)">Needs review (${review})</button>
+    <button class="coa-filter-btn" onclick="coaFilter('unmapped',this)">Cannot map (${unmapped})</button>
+    <button class="coa-filter-btn" onclick="coaFilter('tax',this)">Tax accounts (${tax})</button>
+    <div style="margin-left:auto;display:flex;gap:6px;">
+      <input id="coa-search" placeholder="Search accounts…" oninput="coaSearch(this.value)" style="padding:5px 10px;border:1px solid #E2DDD7;border-radius:6px;font-size:11px;font-family:'Manrope',sans-serif;outline:none;width:180px;"/>
+    </div>
+  </div>
+
+  <!-- MAPPING TABLE -->
+  <div class="card" style="padding:0;overflow:visible;border-radius:9px;">
+
+    <!-- TABLE HEADER -->
+    <div class="coa-header">
+      <div class="coa-col-legacy">Legacy account</div>
+      <div class="coa-col-arrow"></div>
+      <div class="coa-col-tradeos">TradeOS mapping</div>
+      <div class="coa-col-placement">FS placement</div>
+      <div class="coa-col-conf">Conf.</div>
+      <div class="coa-col-rationale">AI rationale</div>
+      <div class="coa-col-status">Status</div>
+      <div class="coa-col-actions">Actions</div>
+    </div>
+
+    <div id="coa-rows">${rows}</div>
+  </div>
+
+  <!-- LOCK BAR -->
+  <div class="card" style="background:#F4F0EB;border-color:#E2DDD7;padding:14px 18px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#080706;margin-bottom:3px;">Lock CoA mapping to proceed to GL mapping</div>
+        <div style="font-size:10px;color:#8C857C;line-height:1.5;">All accounts must be mapped or manually resolved. Tax accounts are pre-mapped and read-only. Locking triggers Controller sign-off (Chunk 3).</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+        <div id="coa-lock-status" style="font-size:11px;color:#A02020;font-weight:500;white-space:nowrap;">${unmapped} account${unmapped !== 1 ? 's' : ''} cannot be mapped</div>
+        <button class="btn-primary" id="coa-lock-btn" onclick="coaLock()" ${unmapped > 0 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''} style="white-space:nowrap;">Lock & request sign-off →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function coaRow(a) {
+  const isOpen = coaState.overrideOpen === a.id;
+  const confColor = a.conf >= 80 ? '#166638' : a.conf >= 60 ? '#7A4D00' : '#A02020';
+
+  let rowBg = '';
+  let statusBadge = '';
+  let actionHtml = '';
+  let mappingHtml = '';
+
+  if (a.status === 'tax') {
+    rowBg = 'background:#F4F0EB;';
+    statusBadge = '<span class="bdg gr" style="font-size:9px;">Tax · reserved</span>';
+    actionHtml = '<span style="font-size:10px;color:#C8C2BA;">Read-only</span>';
+    mappingHtml = `<div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:600;color:#080706;">${a.tradeosCode}</div><div style="font-size:10px;color:#8C857C;">${a.tradeosName}</div>`;
+  } else if (a.status === 'unmapped') {
+    rowBg = 'background:#FBF0F0;';
+    statusBadge = '<span class="bdg r" style="font-size:9px;">Cannot map</span>';
+    actionHtml = `<button class="v-btn" style="font-size:9px;padding:3px 8px;color:#1A46C8;border-color:#C8D8FA;" onclick="coaOpenOverride('${a.id}')">Select mapping</button>`;
+    mappingHtml = `<span style="font-size:11px;color:#C8C2BA;font-style:italic;">No candidate found</span>`;
+  } else if (a.status === 'review') {
+    rowBg = 'background:#FDF3E0;';
+    statusBadge = '<span class="bdg a" style="font-size:9px;">Needs review</span>';
+    actionHtml = `<button class="v-btn" style="font-size:9px;padding:3px 8px;color:#166638;border-color:#A8D9BC;background:#E8F5EE;" onclick="coaConfirm('${a.id}')">Confirm</button><button class="v-btn" style="font-size:9px;padding:3px 8px;margin-top:3px;" onclick="coaOpenOverride('${a.id}')">Override</button>`;
+    mappingHtml = `<div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:600;color:#080706;">${a.tradeosCode}</div><div style="font-size:10px;color:#8C857C;">${a.tradeosName}</div>`;
+  } else if (a.status === 'resolved' || a.status === 'manual') {
+    rowBg = 'background:#E8F5EE;';
+    statusBadge = '<span class="bdg" style="font-size:9px;background:#E8F5EE;color:#166638;border:1px solid #A8D9BC;">IA resolved</span>';
+    actionHtml = `<button class="v-btn" style="font-size:9px;padding:3px 8px;" onclick="coaOpenOverride('${a.id}')">Edit</button>`;
+    mappingHtml = `<div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:600;color:#080706;">${a.tradeosCode}</div><div style="font-size:10px;color:#8C857C;">${a.tradeosName}</div>`;
+  } else {
+    // mapped — auto
+    statusBadge = '<span class="bdg g" style="font-size:9px;">Auto-mapped</span>';
+    actionHtml = `<button class="v-btn" style="font-size:9px;padding:3px 8px;" onclick="coaOpenOverride('${a.id}')">Override</button>`;
+    mappingHtml = `<div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:600;color:#080706;">${a.tradeosCode}</div><div style="font-size:10px;color:#8C857C;">${a.tradeosName}</div>`;
+  }
+
+  const overridePanel = isOpen ? `
+    <div class="coa-override-panel">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:#8C857C;margin-bottom:8px;">Select TradeOS account</div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <input id="override-search-${a.id}" placeholder="Search by code or name…" oninput="coaFilterOverride('${a.id}',this.value)" style="flex:1;padding:6px 10px;border:1px solid #C8D8FA;border-radius:6px;font-size:11px;font-family:'Manrope',sans-serif;outline:none;"/>
+      </div>
+      <div id="override-list-${a.id}" style="display:flex;flex-direction:column;gap:4px;max-height:160px;overflow-y:auto;">
+        ${tradeosAccounts.map(t => `
+          <div class="coa-override-opt" onclick="coaApplyOverride('${a.id}','${t.code}','${t.name}','${t.placement}')">
+            <span style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:600;color:#080706;width:42px;flex-shrink:0;">${t.code}</span>
+            <span style="flex:1;font-size:11px;color:#2E2B27;">${t.name}</span>
+            <span style="font-size:10px;color:#8C857C;">${t.placement}</span>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:6px;">
+        <span style="font-size:10px;color:#8C857C;">Or add a new TradeOS account:</span>
+        <button class="v-btn" style="font-size:9px;padding:3px 8px;" onclick="showToast('Custom account creation coming in next sprint')">+ New account</button>
+        <button class="btn-ghost" style="font-size:10px;padding:4px 10px;margin-left:auto;" onclick="coaCloseOverride()">Cancel</button>
+      </div>
+    </div>` : '';
+
+  // Batch apply banner (shown after a fresh resolve if similar accounts exist)
+  const batchBanner = (coaState.batchPending && coaState.batchPending.triggeredBy === a.id) ? `
+    <div class="coa-batch-banner">
+      <span style="font-size:11px;color:#1338A8;font-weight:500;">3 accounts share a similar pattern — apply same mapping?</span>
+      <div style="display:flex;gap:6px;">
+        <button class="btn-secondary" style="padding:4px 10px;font-size:11px;" onclick="coaPreviewBatch('${a.id}')">Preview 3</button>
+        <button class="btn-primary" style="padding:4px 10px;font-size:11px;" onclick="coaConfirmBatch('${a.id}')">Apply to 3</button>
+        <button class="btn-ghost" style="padding:4px 10px;font-size:11px;" onclick="coaDismissBatch()">Skip</button>
+      </div>
+    </div>` : '';
+
+  return `<div class="coa-row" id="${a.id}" data-status="${a.status}" style="${rowBg}">
+    <div class="coa-cells">
+      <div class="coa-col-legacy">
+        <div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:600;color:#080706;">${a.legacyCode}</div>
+        <div style="font-size:11px;color:#2E2B27;margin-top:2px;">${a.legacyName}</div>
+        <div style="font-size:10px;color:#C8C2BA;margin-top:1px;">${a.legacyCat}</div>
+      </div>
+      <div class="coa-col-arrow" style="color:#C8C2BA;font-size:14px;padding-top:4px;">→</div>
+      <div class="coa-col-tradeos">${mappingHtml}</div>
+      <div class="coa-col-placement"><span style="font-size:10px;color:#8C857C;line-height:1.4;">${a.placement}</span></div>
+      <div class="coa-col-conf"><span style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;color:${confColor};">${a.conf > 0 ? a.conf + '%' : '—'}</span></div>
+      <div class="coa-col-rationale"><span style="font-size:10px;color:#8C857C;line-height:1.4;">${a.rationale}</span></div>
+      <div class="coa-col-status">${statusBadge}</div>
+      <div class="coa-col-actions" style="display:flex;flex-direction:column;gap:3px;">${actionHtml}</div>
+    </div>
+    ${overridePanel}
+    ${batchBanner}
+  </div>`;
+}
+// ── PHASE 4 ──
+function p4() {
+  const resolved = excResolved;
+  const batched = batchApplied;
+  return `
+  <div class="stats-grid sg-4" style="margin-bottom:12px;">
+    <div class="stat-t"><div class="sv g">${batched ? '13,858' : '13,824'}</div><div class="sl">Auto-mapped</div></div>
+    <div class="stat-t"><div class="sv a">${batched ? '4,574' : '4,608'}</div><div class="sl">IA exceptions</div></div>
+    <div class="stat-t"><div class="sv r">112</div><div class="sl">Controller review</div></div>
+    <div class="stat-t"><div class="sv k">287</div><div class="sl">Tax transactions</div></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><span class="card-t">Exception queue</span><span class="bdg a">${batched ? '4,574' : '4,608'} remaining</span></div>
+    ${resolved ? `
+    <div class="exc-wrap">
+      <div class="exc-resolved">
+        <span style="font-size:12px;color:#166638;">✓</span>
+        <span style="font-size:12px;font-weight:600;color:#166638;">INV-2024-08841 resolved — mapped to 4010 · Pendapatan Penjualan</span>
+        ${batched ? '<span class="bdg g" style="margin-left:auto;">34 similar applied</span>' : ''}
+      </div>
+    </div>
+    <div class="exc-wrap" style="margin-top:8px;">
+      <div class="exc-top">
+        <div style="flex:1;min-width:0;"><div style="font-size:11px;font-weight:700;">INV-2024-09012 <span class="bdg gr" style="margin-left:3px;">Expense</span></div><div style="font-size:11px;color:#8C857C;margin-top:2px;">Biaya pengiriman — PT Logistik Nusantara · Feb 3 2024</div></div>
+        <div style="text-align:right;flex-shrink:0;"><div style="font-family:'Inconsolata',monospace;font-size:13px;font-weight:600;">Rp 124,800,000</div><div style="font-size:10px;color:#1A46C8;margin-top:2px;">12 similar</div></div>
+      </div>
+      <div class="exc-cands">
+        <div class="exc-cand-lbl">AI mapping candidates</div>
+        <div class="cand sel" onclick="selectCand(this)"><input type="radio" name="e2" checked style="accent-color:#1A46C8;flex-shrink:0;"/><div class="cand-info"><div class="cand-name">5200 — Biaya Pengiriman</div><div class="cand-why">Name + vendor pattern match</div></div><span class="cand-pct" style="color:#166638;">88%</span></div>
+        <div class="cand" onclick="selectCand(this)"><input type="radio" name="e2" style="accent-color:#1A46C8;flex-shrink:0;"/><div class="cand-info"><div class="cand-name">5900 — Biaya Operasional Lainnya</div><div class="cand-why">Category match only</div></div><span class="cand-pct" style="color:#7A4D00;">51%</span></div>
+      </div>
+      <div class="exc-batch"><span style="font-size:11px;color:#1338A8;font-weight:500;">Apply to all 12 similar? · Rp 3.1B total</span><div style="display:flex;gap:5px;"><button class="btn-secondary" style="padding:5px 10px;font-size:11px;" onclick="showToast('Showing 12 similar transactions')">Preview</button><button class="btn-primary" style="padding:5px 10px;font-size:11px;" onclick="showToast('Mapping applied to 12 transactions')">Confirm</button></div></div>
+    </div>
+    ` : `
+    <div class="exc-wrap">
+      <div class="exc-top">
+        <div style="flex:1;min-width:0;"><div style="font-size:11px;font-weight:700;">INV-2024-08841 <span class="bdg gr" style="margin-left:3px;">Revenue</span></div><div style="font-size:11px;color:#8C857C;margin-top:2px;">Penjualan barang dagangan — PT Bumi Raya · Jan 14 2024</div></div>
+        <div style="text-align:right;flex-shrink:0;"><div style="font-family:'Inconsolata',monospace;font-size:13px;font-weight:600;">Rp 847,500,000</div><div style="font-size:10px;color:#1A46C8;margin-top:2px;">34 similar transactions</div></div>
+      </div>
+      <div class="exc-cands">
+        <div class="exc-cand-lbl">AI mapping candidates</div>
+        <div class="cand sel" id="cand-1" onclick="selectCand(this)"><input type="radio" name="e1" checked style="accent-color:#1A46C8;flex-shrink:0;"/><div class="cand-info"><div class="cand-name">4010 — Pendapatan Penjualan</div><div class="cand-why">Name + vendor pattern + amount range</div></div><span class="cand-pct" style="color:#166638;">94%</span></div>
+        <div class="cand" id="cand-2" onclick="selectCand(this)"><input type="radio" name="e1" style="accent-color:#1A46C8;flex-shrink:0;"/><div class="cand-info"><div class="cand-name">4020 — Pendapatan Jasa</div><div class="cand-why">Name match only</div></div><span class="cand-pct" style="color:#7A4D00;">42%</span></div>
+        <div class="cand" id="cand-3" onclick="selectCand(this)"><input type="radio" name="e1" style="accent-color:#1A46C8;flex-shrink:0;"/><div class="cand-info"><div class="cand-name">4030 — Pendapatan Lainnya</div><div class="cand-why">Low confidence</div></div><span class="cand-pct" style="color:#A02020;">18%</span></div>
+      </div>
+      <div class="exc-batch">
+        <span style="font-size:11px;color:#1338A8;font-weight:500;">Apply to all 34 similar? · Rp 14.2B total</span>
+        <div style="display:flex;gap:5px;">
+          <button class="btn-secondary" style="padding:5px 10px;font-size:11px;" onclick="showModal('Preview: 34 Similar Transactions','All 34 transactions share the pattern: Penjualan + PT vendor names + Revenue account. Total value: Rp 14.2B across Jan–Mar 2024.','<button class=\\'btn-primary\\' onclick=\\'closeModal();applyBatch()\\'>Confirm batch apply</button><button class=\\'btn-ghost\\' style=\\'margin-left:8px\\' onclick=\\'closeModal()\\'>Cancel</button>')">Preview 34</button>
+          <button class="btn-primary" style="padding:5px 10px;font-size:11px;" onclick="resolveException()">Confirm mapping</button>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:#C8C2BA;padding:6px 2px 0;">+ 4,607 more · ordered by amount descending</div>
+    `}
+  </div>
+  <div class="card">
+    <div class="card-hd"><span class="card-t">AR/AP aging reconstruction</span><span class="bdg a">4 AP terms pending</span></div>
+    <table class="mt-tbl">
+      <tr><th>Type</th><th>Open invoices</th><th style="text-align:right;">Total value</th><th>Terms coverage</th></tr>
+      <tr><td class="td-s">AR</td><td class="td-m">142</td><td class="td-m" style="text-align:right;">Rp 8.4B</td><td><span class="bdg g">100%</span></td></tr>
+      <tr><td class="td-s">AP</td><td class="td-m">89</td><td class="td-m" style="text-align:right;">Rp 3.1B</td><td><span class="bdg a">96% · 4 unknown</span></td></tr>
+    </table>
+  </div>`;
+}
+
+// ── PHASE 5 ──
+function p5() {
+  const locked = currentClient === 'makmur' && currentPhase === 5;
+  return `
+  <div class="card">
+    <div class="card-hd"><span class="card-t">Three-way comparison</span></div>
+    <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;gap:8px;margin-bottom:8px;padding:0 10px;">
+      <span style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#8C857C;">Account</span>
+      <span style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#8C857C;text-align:right;">Legacy TB</span>
+      <span style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#8C857C;text-align:right;">TradeOS TB</span>
+      <span style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#8C857C;text-align:right;">Variance</span>
+    </div>
+    <div class="var-row"><span class="var-lbl">1100 · Cash & Bank</span><span class="var-leg">Rp 4.82B</span><span class="var-ours">Rp 4.82B</span><span class="var-diff z">0</span></div>
+    <div class="var-row"><span class="var-lbl">1200 · Trade Receivable</span><span class="var-leg">Rp 8.40B</span><span class="var-ours">Rp 8.40B</span><span class="var-diff z">0</span></div>
+    <div class="var-row"><span class="var-lbl">2100 · Trade Payable</span><span class="var-leg">Rp 3.10B</span><span class="var-ours">Rp 3.10B</span><span class="var-diff z">0</span></div>
+    <div class="var-row" style="border-color:#EAB8B8;background:#FBF0F0;"><span class="var-lbl" style="font-weight:600;">4010 · Pendapatan Penjualan</span><span class="var-leg">Rp 42.10B</span><span class="var-ours">Rp 41.85B</span><span class="var-diff nz">−Rp 250M</span></div>
+    <div class="var-row"><span class="var-lbl">5000 · Cost of Goods Sold</span><span class="var-leg">Rp 28.40B</span><span class="var-ours">Rp 28.40B</span><span class="var-diff z">0</span></div>
+    <div style="margin-top:10px;padding:10px 12px;background:#FBF0F0;border-radius:7px;border:1px solid #EAB8B8;">
+      <div style="font-size:11px;font-weight:700;color:#A02020;margin-bottom:4px;">Variance on 4010 — investigation required</div>
+      <textarea style="width:100%;height:56px;padding:7px 10px;border:1px solid #EAB8B8;border-radius:6px;font-size:11px;font-family:'Manrope',sans-serif;color:#080706;resize:none;outline:none;background:#fff;" placeholder="Add IA investigation note…"></textarea>
+      <div style="margin-top:8px;display:flex;gap:6px;">
+        <button class="btn-primary" onclick="showToast('Investigation note saved')">Save note</button>
+        <button class="btn-ghost" onclick="showModal('Accept Variance','Accept the Rp 250M variance on account 4010 with documented reason? The Controller will be asked to review and confirm acceptance.','<button class=\\'btn-primary\\' onclick=\\'closeModal();showToast(\\'Variance accepted. Controller review requested.\\')\\'>Accept with reason</button><button class=\\'btn-ghost\\' style=\\'margin-left:8px\\' onclick=\\'closeModal()\\'>Cancel</button>')">Accept variance →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── PHASE 6 ──
+function p6() {
+  return `
+  <div class="card">
+    <div class="card-hd"><span class="card-t">Controller UAT checklist — IA monitoring view</span></div>
+    <div class="uat-i done"><div class="uat-cb done">✓</div><div class="uat-lbl">Look up 3 specific vendors in AP — verify open invoices match expectations</div><span class="bdg g" style="flex-shrink:0;">Passed</span></div>
+    <div class="uat-i done"><div class="uat-cb done">✓</div><div class="uat-lbl">Look up 3 specific customers in AR — verify open receivables match expectations</div><span class="bdg g" style="flex-shrink:0;">Passed</span></div>
+    <div class="uat-i flagged"><div class="uat-cb flag">!</div><div class="uat-lbl">Run P&L for current fiscal year — <strong style="color:#A02020;">flagged by controller · routed to IA queue</strong></div><span class="bdg r" style="flex-shrink:0;">Flagged</span></div>
+    <div class="uat-i"><div class="uat-cb"></div><div class="uat-lbl">Run Balance Sheet as of cut-off date — confirm it matches legacy system output</div><span style="font-size:10px;color:#C8C2BA;flex-shrink:0;">Pending</span></div>
+    <div class="uat-i"><div class="uat-cb"></div><div class="uat-lbl">Look up a specific transaction you remember — verify it appears correctly</div><span style="font-size:10px;color:#C8C2BA;flex-shrink:0;">Pending</span></div>
+  </div>
+  <div class="card" style="border-color:#EAB8B8;background:#FBF0F0;">
+    <div class="card-hd"><span class="card-t" style="color:#A02020;">Flagged item — IA exception</span></div>
+    <div style="font-size:12px;font-weight:600;color:#080706;margin-bottom:6px;">P&L Report — Controller noted mismatch on March figures</div>
+    <div style="font-size:12px;color:#2E2B27;line-height:1.6;margin-bottom:12px;">"The March P&L shows revenue of Rp 41.85B but our legacy system shows Rp 42.10B. Can you explain the Rp 250M difference?"</div>
+    <textarea style="width:100%;height:56px;padding:7px 10px;border:1px solid #EAB8B8;border-radius:6px;font-size:11px;font-family:'Manrope',sans-serif;resize:none;outline:none;background:#fff;" placeholder="Write resolution note for controller…"></textarea>
+    <div style="margin-top:8px;display:flex;gap:6px;">
+      <button class="btn-primary" onclick="showToast('Resolution sent to controller')">Send resolution to controller →</button>
+      <button class="btn-ghost" onclick="goToPhase(5)">Go to Trial Balance →</button>
+    </div>
+  </div>`;
+}
+
+// ── PHASE 7 ──
+function p7() {
+  return `
+  <div class="golive-block">
+    <div class="gl-pre">Pre-flight checklist</div>
+    <div class="gl-i done"><span style="font-size:10px;color:#166638;width:14px;flex-shrink:0;">✓</span><span class="gl-lbl done">All 6 Controller sign-offs complete</span></div>
+    <div class="gl-i done"><span style="font-size:10px;color:#166638;width:14px;flex-shrink:0;">✓</span><span class="gl-lbl done">Trial balance — zero variance or accepted with reason</span></div>
+    <div class="gl-i pend"><span style="font-size:10px;color:rgba(184,61,8,0.6);width:14px;flex-shrink:0;">○</span><span class="gl-lbl">Exception queue fully resolved</span></div>
+    <div class="gl-i pend"><span style="font-size:10px;color:rgba(184,61,8,0.6);width:14px;flex-shrink:0;">○</span><span class="gl-lbl">UAT final sign-off received</span></div>
+    <div class="gl-i pend"><span style="font-size:10px;color:rgba(184,61,8,0.6);width:14px;flex-shrink:0;">○</span><span class="gl-lbl">Controller informed of MIGRATION → LIVE implications</span></div>
+    <div class="gl-i pend"><span style="font-size:10px;color:rgba(184,61,8,0.6);width:14px;flex-shrink:0;">○</span><span class="gl-lbl">System-reserved tax accounts confirmed protected</span></div>
+    <div class="gl-switch">
+      <div>
+        <div class="gl-sw-title">MIGRATION → LIVE switch</div>
+        <div class="gl-sw-sub">Activates dimension enforcement · seals audit trail · triggers cashback calculation</div>
+      </div>
+      <button class="btn-brand" disabled>Activate go-live</button>
+    </div>
+  </div>
+  <div class="card" style="margin-top:0;">
+    <div class="card-hd"><span class="card-t">Demo: trigger go-live (all checks bypassed)</span></div>
+    <p style="font-size:11px;color:#8C857C;margin-bottom:10px;">In the real product, the button above activates only when all 6 checklist items are complete.</p>
+    <button class="btn-primary" onclick="triggerGoLive()">Simulate go-live activation →</button>
+  </div>`;
+}
+
+// ── RENDER ASIDE ──
+function renderAside(phase) {
+  const auditsByPhase = {
+    0: [
+      { t:'D1', who:'sys', l:'Invite sent — budi@makmurjaya.co.id', sub:'Email · Controller registration · TradeOS Migration' },
+      { t:'D1', who:'sys', l:'Invite sent — sari@makmurjaya.co.id', sub:'Email · Controller registration · TradeOS Migration' },
+      { t:'D1', who:'sys', l:'Invite sent — hendra@makmurjaya.co.id', sub:'Email · Director Sponsor view access' },
+      { t:'D1', who:'ia', l:'Entity configured', sub:'Reza Maulana · 2 controllers · 1 sponsor' },
+      { t:'D1', who:'sys', l:'Migration timer armed', sub:'System · awaiting first upload' },
+    ],
+    1: [
+      { t:'D4', who:'sys', l:'Email — sign-off request sent', sub:'Email → budi@makmurjaya.co.id · health check review' },
+      { t:'D3', who:'ia', l:'IA uploaded Trial Balance v1', sub:'Reza Maulana · on behalf of client · active version set' },
+      { t:'D3', who:'client', l:'Client uploaded GL Export v2', sub:'Budi Santoso · active version set to v2' },
+      { t:'D2', who:'sys', l:'Email — hard block notification sent', sub:'Email → budi@makmurjaya.co.id + hendra@makmurjaya.co.id' },
+      { t:'D2', who:'sys', l:'Hard block triggered — GL v1 failed', sub:'System · monthly summary detected' },
+      { t:'D2', who:'client', l:'Client uploaded GL Export v1', sub:'Budi Santoso' },
+      { t:'D2', who:'client', l:'Client uploaded CoA v1', sub:'Budi Santoso · active version set to v1' },
+      { t:'D2', who:'sys', l:'30-day timer started', sub:'System · first upload received' },
+      { t:'D1', who:'sys', l:'Email — migration dashboard activated', sub:'Email → all contacts · upload instructions included' },
+    ],
+    2: [
+      { t:'D7', who:'sys', l:'Email — dimensions locked', sub:'Email → budi, sari, hendra · Phase 3 now available' },
+      { t:'D7', who:'client', l:'Dimensions locked by Admin', sub:'Budi Santoso' },
+      { t:'D6', who:'ia', l:'Discovery session completed', sub:'Reza Maulana · session notes saved' },
+      { t:'D5', who:'sys', l:'Email — dimension recommendations ready', sub:'Email → budi@makmurjaya.co.id · review requested' },
+      { t:'D5', who:'sys', l:'Dimension recommendations generated', sub:'System · 4 dimensions detected' },
+    ],
+    3: [
+      { t:'D12', who:'sys', l:'Email — CoA mapping locked', sub:'Email → budi, sari, hendra · Phase 4 now available' },
+      { t:'D12', who:'client', l:'Controller signed off — CoA mapping', sub:'Budi Santoso' },
+      { t:'D11', who:'ia', l:'4 orphan accounts mapped manually', sub:'Reza Maulana' },
+      { t:'D10', who:'sys', l:'Email — sign-off request sent', sub:'Email → budi@makmurjaya.co.id · CoA mapping review' },
+      { t:'D10', who:'sys', l:'Batch apply: 34 accounts → 7100', sub:'System · confirmed by IA' },
+      { t:'D10', who:'sys', l:'AI mapping completed — 634 auto-mapped', sub:'System · 124 exceptions queued for IA' },
+    ],
+    4: [
+      { t:'D14', who:'sys', l:'Batch apply: 34 txns → 4010', sub:'System · confirmed by IA' },
+      { t:'D13', who:'sys', l:'Email — sign-off request sent', sub:'Email → budi@makmurjaya.co.id · GL sample review · 26h waiting' },
+      { t:'D13', who:'sys', l:'Batch apply: 78 txns → 2100', sub:'System · confirmed by IA' },
+      { t:'D10', who:'sys', l:'Email — GL mapping started', sub:'Email → budi, sari, hendra · daily status' },
+      { t:'D10', who:'sys', l:'GL mapping started — 13,824 auto-mapped', sub:'System · 4,608 exceptions queued' },
+    ],
+    5: [
+      { t:'D18', who:'sys', l:'Email — trial balance ready for review', sub:'Email → budi@makmurjaya.co.id · sign-off requested' },
+      { t:'D18', who:'sys', l:'Three-way comparison generated', sub:'System · 1 variance on 4010' },
+      { t:'D18', who:'ia', l:'Investigation note added — 4010 variance', sub:'Reza Maulana · Rp 250M timing difference' },
+    ],
+    6: [
+      { t:'D23', who:'sys', l:'Email — flagged item routed to IA', sub:'System · P&L mismatch flagged by Budi' },
+      { t:'D23', who:'client', l:'UAT item flagged — P&L mismatch', sub:'Budi Santoso' },
+      { t:'D22', who:'sys', l:'Email — UAT checklist sent', sub:'Email → budi@makmurjaya.co.id · 6 items to complete' },
+    ],
+    7: [
+      { t:'D25', who:'sys', l:'Email — pre-flight checklist ready', sub:'Email → budi, sari, hendra · go-live preparation' },
+      { t:'D25', who:'sys', l:'Pre-flight checklist generated', sub:'System · 4/6 items complete' },
+    ],
+  };
+
+  const legendHtml = phase === 1 ? `
+    <div class="aside-lbl">Upload legend</div>
+    <div class="card" style="padding:10px 12px;">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px;">
+        <div class="v-who client">C</div>
+        <span style="font-size:11px;color:#2E2B27;">Uploaded by client</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;">
+        <div class="v-who ia">IA</div>
+        <span style="font-size:11px;color:#2E2B27;">IA upload on behalf of client — separately logged</span>
+      </div>
+    </div>` : '';
+
+  const benchHtml = phase === 4 ? `
+    <div class="aside-lbl" style="margin-top:4px;">Phase benchmark</div>
+    <div class="card" style="padding:10px 12px;">
+      <div class="bench-r"><span style="color:#8C857C;font-size:11px;">Expected</span><span style="font-size:11px;font-weight:600;">10 days</span></div>
+      <div class="bench-r"><span style="color:#8C857C;font-size:11px;">Elapsed</span><span style="font-size:11px;font-weight:600;color:#B83D08;">4 of 10</span></div>
+      <div class="bench-bar"><div class="bench-fill" style="width:40%;background:#B83D08;"></div></div>
+    </div>` : '';
+
+  const nudgeHtml = phase === 4 ? `<button class="btn-warn" style="margin-top:8px;width:100%;" onclick="showToast('Nudge sent to Budi Santoso')">Nudge Budi Santoso →</button>` : '';
+
+  const entries = (auditsByPhase[phase] || []).map(e => `
+    <div class="audit-i">
+      <span class="audit-t">${e.t}</span>
+      <div class="audit-dot ${e.who}"></div>
+      <div class="audit-b"><div class="audit-l">${e.l}</div><div class="audit-who">${e.sub}</div></div>
+    </div>`).join('');
+
+  return `
+    ${legendHtml}
+    ${benchHtml}
+    <div class="aside-lbl" style="margin-top:${phase === 1 ? '4px' : '0'};">Audit trail — Phase ${phase}</div>
+    <div class="card" style="padding:10px 12px;">
+      <div style="display:flex;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #F4F0EB;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:4px;"><div class="audit-dot client" style="flex-shrink:0;"></div><span style="font-size:10px;color:#8C857C;">Client</span></div>
+        <div style="display:flex;align-items:center;gap:4px;"><div class="audit-dot ia" style="flex-shrink:0;"></div><span style="font-size:10px;color:#8C857C;">IA</span></div>
+        <div style="display:flex;align-items:center;gap:4px;"><div class="audit-dot sys" style="flex-shrink:0;"></div><span style="font-size:10px;color:#8C857C;">System</span></div>
+      </div>
+      ${entries || '<div style="font-size:11px;color:#C8C2BA;padding:4px 0;">No activity yet</div>'}
+      ${nudgeHtml}
+    </div>`;
+}
+
+// ── P0 CONTACT FUNCTIONS ──
+let ctrlCount = 2;
+let sponCount = 1;
+
+function addController() {
+  ctrlCount++;
+  const n = ctrlCount;
+  const list = document.getElementById('controllers-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.className = 'contact-row';
+  div.id = `ctrl-${n}`;
+  div.style.cssText = 'margin-top:10px;padding-top:10px;border-top:1px solid #F4F0EB;';
+  div.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:20px;height:20px;border-radius:50%;background:#EBF0FD;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#1A46C8;">${n}</div>
+        <span style="font-size:11px;font-weight:600;color:#080706;">Controller ${n}</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="bdg a" style="font-size:8px;">Not yet invited</span>
+        <button class="v-btn" style="font-size:9px;padding:2px 7px;" onclick="removeContact('ctrl-${n}','controller')">Remove</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="field"><label>Full name</label><input placeholder="Full name" style="margin-top:3px;font-size:12px;"/></div>
+      <div class="field"><label>Email</label><input placeholder="email@company.co.id" style="margin-top:3px;font-size:12px;"/></div>
+    </div>`;
+  list.appendChild(div);
+  updateInvitePreview();
+  showToast('Controller added — save to send invite');
+}
+
+function addSponsor() {
+  sponCount++;
+  const n = sponCount;
+  const list = document.getElementById('sponsors-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.className = 'contact-row';
+  div.id = `spon-${n}`;
+  div.style.cssText = 'margin-top:10px;padding-top:10px;border-top:1px solid #F4F0EB;';
+  div.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:20px;height:20px;border-radius:50%;background:#F7EDE5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#B83D08;">${n}</div>
+        <span style="font-size:11px;font-weight:600;color:#080706;">Director Sponsor ${n}</span>
+        <span class="bdg gr" style="font-size:8px;">View only</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="bdg a" style="font-size:8px;">Not yet invited</span>
+        <button class="v-btn" style="font-size:9px;padding:2px 7px;" onclick="removeContact('spon-${n}','sponsor')">Remove</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="field"><label>Full name</label><input placeholder="Full name" style="margin-top:3px;font-size:12px;"/></div>
+      <div class="field"><label>Email</label><input placeholder="email@company.co.id" style="margin-top:3px;font-size:12px;"/></div>
+    </div>`;
+  list.appendChild(div);
+  updateInvitePreview();
+  showToast('Sponsor added — save to send invite');
+}
+
+function removeContact(id, type) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+  updateInvitePreview();
+  showToast(`${type === 'controller' ? 'Controller' : 'Sponsor'} removed`);
+}
+
+function sendInvite(id, name) {
+  const statusEl = document.getElementById(id + '-status');
+  if (statusEl) {
+    statusEl.textContent = 'Invited · now';
+    statusEl.className = 'bdg g';
+    statusEl.style.fontSize = '8px';
+  }
+  showToast(`Invite sent to ${name}`);
+}
+
+function updateInvitePreview() {
+  const list = document.getElementById('invite-list');
+  if (!list) return;
+  const controllers = document.querySelectorAll('#controllers-list .contact-row');
+  const sponsors = document.querySelectorAll('#sponsors-list .contact-row');
+  let html = '';
+  controllers.forEach((row, i) => {
+    const email = row.querySelector('input[placeholder="email@company.co.id"]');
+    const emailVal = email ? (email.value || 'email pending') : `budi@makmurjaya.co.id`;
+    html += `<div style="display:flex;align-items:center;gap:7px;font-size:11px;">
+      <div class="audit-dot client"></div>
+      <span style="flex:1;color:#080706;font-weight:500;">${emailVal}</span>
+      <span class="bdg b" style="font-size:8px;">Controller · sign-off access</span>
+    </div>`;
+  });
+  sponsors.forEach(row => {
+    const email = row.querySelector('input[placeholder="email@company.co.id"]');
+    const emailVal = email ? (email.value || 'email pending') : `hendra@makmurjaya.co.id`;
+    html += `<div style="display:flex;align-items:center;gap:7px;font-size:11px;">
+      <div class="audit-dot client" style="background:#D4622A;"></div>
+      <span style="flex:1;color:#080706;font-weight:500;">${emailVal}</span>
+      <span class="bdg gr" style="font-size:8px;">Sponsor · view only</span>
+    </div>`;
+  });
+  list.innerHTML = html;
+}
+
+function saveAndInvite() {
+  // Build dynamic contact list
+  const ctrls = [], spons = [];
+  document.querySelectorAll('#controllers-list .contact-row').forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const name = inputs[0]?.value || 'Controller';
+    const email = inputs[1]?.value || '';
+    if (email) ctrls.push({ name, email });
+  });
+  document.querySelectorAll('#sponsors-list .contact-row').forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const name = inputs[0]?.value || 'Sponsor';
+    const email = inputs[1]?.value || '';
+    if (email) spons.push({ name, email });
+  });
+  const ctrlList = ctrls.map(c => `• ${c.email}`).join('<br>') || '• (no controllers added)';
+  const sponList = spons.map(s => `• ${s.email}`).join('<br>') || '• (no sponsors added)';
+  showModal('Save & send invites',
+    `The following invites will be sent immediately on save:<br><br><strong>Controllers — sign-off access:</strong><br>${ctrlList}<br><br><strong>Director Sponsors — view only:</strong><br>${sponList}<br><br>Each person receives an email to register on TradeOS Migration. Controllers get sign-off access. Sponsors get view-only access and will receive all email updates and milestone notifications.`,
+    `<button class='btn-primary' onclick='closeModal();confirmSaveInvite()'>Confirm & send ${ctrls.length + spons.length} invite${ctrls.length + spons.length !== 1 ? 's' : ''}</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`);
+}
+
+function confirmSaveInvite() {
+  // Mark all pending as invited
+  document.querySelectorAll('.bdg.a').forEach(el => {
+    if (el.textContent === 'Pending invite' || el.textContent === 'Not yet invited') {
+      el.textContent = 'Invited · now';
+      el.className = 'bdg g';
+      el.style.fontSize = '8px';
+    }
+  });
+  // Count contacts
+  const ctrlCount = document.querySelectorAll('#controllers-list .contact-row').length;
+  const sponCount = document.querySelectorAll('#sponsors-list .contact-row').length;
+  showToast(`Entity saved · ${ctrlCount + sponCount} invites sent successfully`);
+  // Refresh aside with updated audit trail
+  document.getElementById('aside-inner').innerHTML = renderAside(0);
+}
+
+function setActiveVersion(radio, fileId, version) {
+  // Guard: check if the version item has a failed badge — if so, block
+  const versionItem = radio.closest('.version-item');
+  if (versionItem) {
+    const badges = versionItem.querySelectorAll('.bdg.r');
+    if (badges.length > 0) {
+      radio.checked = false;
+      showToast('Cannot set a failed version as active — upload a clean version first');
+      return;
+    }
+  }
+  // Update all labels in this file block
+  const versionList = document.querySelector(`#fbody-${fileId} .version-list`);
+  if (versionList) {
+    versionList.querySelectorAll('.active-ver-label').forEach(l => {
+      const inp = l.querySelector('input');
+      if (inp && inp.checked) {
+        l.classList.add('is-active');
+        l.innerHTML = '';
+        const newInp = document.createElement('input');
+        newInp.type = 'radio';
+        newInp.name = inp.name;
+        newInp.checked = true;
+        newInp.style.accentColor = '#166638';
+        l.appendChild(newInp);
+        l.appendChild(document.createTextNode(' Active'));
+        newInp.onchange = function() { setActiveVersion(newInp, fileId, version); };
+      } else {
+        l.classList.remove('is-active');
+        l.innerHTML = '';
+        const newInp = document.createElement('input');
+        newInp.type = 'radio';
+        newInp.name = radio.name;
+        newInp.style.accentColor = '#166638';
+        l.appendChild(newInp);
+        l.appendChild(document.createTextNode(' Set active'));
+        newInp.onchange = function() { setActiveVersion(newInp, fileId, version); };
+      }
+    });
+  }
+  // Inject audit entry
+  const auditCard = document.querySelector('#aside-inner .card');
+  if (auditCard) {
+    const newItem = document.createElement('div');
+    newItem.className = 'audit-i';
+    newItem.style.background = '#F4F0EB';
+    const fileNames = { gl: 'GL Export', coa: 'Chart of Accounts', tb: 'Trial Balance' };
+    const label = fileNames[fileId] || fileId;
+    newItem.innerHTML = `<span class="audit-t">Now</span><div class="audit-dot ia"></div><div class="audit-b"><div class="audit-l">Active version set — ${label} ${version}</div><div class="audit-who">Reza Maulana · traceability label only · health check unchanged</div></div>`;
+    const firstItem = auditCard.querySelector('.audit-i');
+    if (firstItem) auditCard.insertBefore(newItem, firstItem);
+    else auditCard.appendChild(newItem);
+  }
+  showToast(`Active version set to ${version} for ${fileId === 'gl' ? 'GL Export' : fileId === 'coa' ? 'Chart of Accounts' : 'Trial Balance'} — logged`);
+}
+
+// ── DIMENSION FUNCTIONS ──
+function updateDimCounts() {
+  const rows = document.querySelectorAll('#dim-list .dim-row');
+  let confirmed = 0, review = 0, rejected = 0, values = 0;
+  rows.forEach(row => {
+    const status = row.dataset.status;
+    if (status === 'confirmed') confirmed++;
+    else if (status === 'review') review++;
+    else if (status === 'rejected') rejected++;
+    // count editable tags (not the + button)
+    const tagContainers = row.querySelectorAll('[id^="tags-"] .dim-tag');
+    values += tagContainers.length;
+  });
+  const cc = document.getElementById('dim-confirmed-count');
+  const rc = document.getElementById('dim-review-count');
+  const rjc = document.getElementById('dim-rejected-count');
+  const vc = document.getElementById('dim-values-count');
+  if (cc) cc.textContent = confirmed;
+  if (rc) rc.textContent = review;
+  if (rjc) rjc.textContent = rejected;
+  if (vc) vc.textContent = values;
+  const lockBtn = document.getElementById('lock-btn');
+  const lockStatus = document.getElementById('lock-status');
+  if (lockBtn && lockStatus) {
+    if (review === 0 && confirmed > 0) {
+      lockBtn.disabled = false;
+      lockBtn.style.opacity = '1';
+      lockBtn.style.cursor = 'pointer';
+      lockStatus.textContent = `${confirmed} dimension${confirmed !== 1 ? 's' : ''} ready to lock`;
+      lockStatus.style.color = '#166638';
+    } else {
+      lockBtn.disabled = true;
+      lockBtn.style.opacity = '0.4';
+      lockBtn.style.cursor = 'not-allowed';
+      lockStatus.textContent = review > 0
+        ? `${review} dimension${review !== 1 ? 's' : ''} need${review === 1 ? 's' : ''} review`
+        : 'No dimensions confirmed yet';
+      lockStatus.style.color = '#7A4D00';
+    }
+  }
+}
+
+function toggleInlineAdd(id) {
+  const panel = document.getElementById('add-' + id);
+  if (!panel) return;
+  const isOpen = panel.style.display !== 'none';
+  panel.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) {
+    const inp = document.getElementById('new-tag-' + id);
+    if (inp) setTimeout(() => inp.focus(), 50);
+  }
+}
+
+function confirmDimension(id) {
+  const row = document.getElementById('dim-' + id);
+  if (!row) return;
+  const tags = document.querySelectorAll(`#tags-${id} .dim-tag`);
+  row.dataset.status = 'confirmed';
+  row.style.background = '';
+  const badge = row.querySelector('.dim-badge');
+  if (badge) { badge.className = 'bdg g dim-badge'; badge.textContent = 'Confirmed'; }
+  // replace confirm/reject buttons with just reject
+  const btnArea = badge ? badge.nextElementSibling : null;
+  if (btnArea) btnArea.innerHTML = `<button class="v-btn" onclick="rejectDimension('${id}')" style="font-size:9px;padding:2px 7px;">Reject</button>`;
+  // close inline add if open
+  const addPanel = document.getElementById('add-' + id);
+  if (addPanel) addPanel.style.display = 'none';
+  updateDimCounts();
+  showToast(`${id.charAt(0).toUpperCase() + id.slice(1)} confirmed — ${tags.length} values`);
+}
+
+function rejectDimension(id) {
+  showModal(`Reject dimension?`,
+    `Rejecting will remove this dimension from the migration. It will not be used for transaction classification. This can be undone before dimensions are locked.`,
+    `<button class='btn-primary' style='background:#A02020;' onclick='closeModal();doRejectDimension("${id}")'>Reject dimension</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`);
+}
+
+function doRejectDimension(id) {
+  const row = document.getElementById('dim-' + id);
+  if (!row) return;
+  row.dataset.status = 'rejected';
+  row.classList.add('rejected');
+  row.style.background = '#FBF0F0';
+  const badge = row.querySelector('.dim-badge');
+  if (badge) {
+    badge.className = 'bdg r dim-badge';
+    badge.textContent = 'Rejected';
+    // replace sibling button area
+    const btnArea = badge.nextElementSibling;
+    if (btnArea) btnArea.innerHTML = `<button class="v-btn" onclick="restoreDimension('${id}')" style="font-size:9px;padding:2px 7px;">Restore</button>`;
+  }
+  const addPanel = document.getElementById('add-' + id);
+  if (addPanel) addPanel.style.display = 'none';
+  updateDimCounts();
+  showToast('Dimension rejected — can be restored before locking');
+}
+
+function restoreDimension(id) {
+  const row = document.getElementById('dim-' + id);
+  if (!row) return;
+  row.dataset.status = 'review';
+  row.classList.remove('rejected');
+  row.style.background = id === 'project' ? '#FDF3E0' : '';
+  const badge = row.querySelector('.dim-badge');
+  if (badge) {
+    badge.className = 'bdg a dim-badge';
+    badge.textContent = 'Needs review';
+    const btnArea = badge.nextElementSibling;
+    if (btnArea) btnArea.innerHTML = `<button class="v-btn" style="font-size:9px;padding:2px 7px;color:#166638;border-color:#A8D9BC;background:#E8F5EE;" onclick="confirmDimension('${id}')">Confirm</button><button class="v-btn" onclick="rejectDimension('${id}')" style="font-size:9px;padding:2px 7px;">Reject</button>`;
+  }
+  updateDimCounts();
+  showToast('Dimension restored — confirm before locking');
+}
+
+function addTag(dimId) {
+  const input = document.getElementById('new-tag-' + dimId);
+  if (!input || !input.value.trim()) return;
+  const val = input.value.trim();
+  const container = document.getElementById('tags-' + dimId);
+  if (!container) return;
+  const tag = document.createElement('span');
+  tag.className = 'dim-tag';
+  tag.innerHTML = `${val} <button onclick="removeTag(this,'${dimId}')">×</button>`;
+  // insert before the + button
+  const addBtn = container.querySelector('.dim-add-tag');
+  if (addBtn) container.insertBefore(tag, addBtn);
+  else container.appendChild(tag);
+  input.value = '';
+  input.focus();
+  updateDimCounts();
+}
+
+function removeTag(btn, dimId) {
+  btn.closest('.dim-tag').remove();
+}
+
+function addDimension() {
+  showModal('Add custom dimension',
+    `<div style="display:flex;flex-direction:column;gap:10px;">
+      <div><label style="font-size:10px;font-weight:700;color:#8C857C;letter-spacing:0.06em;text-transform:uppercase;display:block;margin-bottom:4px;">Dimension name</label>
+      <input id="new-dim-name" placeholder="e.g. Sales region, Warehouse, Customer segment" style="width:100%;padding:8px 11px;border:1px solid #E2DDD7;border-radius:6px;font-size:12px;font-family:'Manrope',sans-serif;outline:none;"/></div>
+      <div><label style="font-size:10px;font-weight:700;color:#8C857C;letter-spacing:0.06em;text-transform:uppercase;display:block;margin-bottom:4px;">Initial values (comma-separated)</label>
+      <input id="new-dim-values" placeholder="e.g. North, South, East" style="width:100%;padding:8px 11px;border:1px solid #E2DDD7;border-radius:6px;font-size:12px;font-family:'Manrope',sans-serif;outline:none;"/></div>
+      <div style="font-size:10px;color:#8C857C;">This dimension was not detected by AI — it will be marked as manually added with no confidence score.</div>
+    </div>`,
+    `<button class='btn-primary' onclick='doAddDimension()'>Add dimension</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`);
+}
+
+function doAddDimension() {
+  const name = document.getElementById('new-dim-name')?.value.trim();
+  const vals = document.getElementById('new-dim-values')?.value.trim();
+  if (!name) { showToast('Please enter a dimension name'); return; }
+  closeModal();
+  const id = name.toLowerCase().replace(/\s+/g, '-');
+  const values = vals ? vals.split(',').map(v => v.trim()).filter(Boolean) : [];
+  const list = document.getElementById('dim-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.className = 'dim-row';
+  div.id = 'dim-' + id;
+  div.dataset.status = 'review';
+  div.style.cssText = 'border-top:1px solid #F4F0EB;background:#FDF3E0;';
+  div.innerHTML = `
+    <div style="display:grid;grid-template-columns:140px 1fr 160px 44px 110px;gap:12px;padding:12px 14px;align-items:start;">
+      <div>
+        <div class="dim-name">${name}</div>
+        <div style="font-size:9px;font-weight:600;color:#B83D08;letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;">Manual</div>
+      </div>
+      <div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;" id="tags-${id}">
+          ${values.map(v => `<span class="dim-tag">${v} <button onclick="removeTag(this,'${id}')">×</button></span>`).join('')}
+          <button class="dim-add-tag" onclick="toggleInlineAdd('${id}')">+</button>
+        </div>
+        <div class="dim-inline-add" id="add-${id}" style="display:none;margin-top:6px;">
+          <div style="display:flex;gap:5px;">
+            <input id="new-tag-${id}" placeholder="New value…" style="flex:1;max-width:160px;padding:4px 8px;border:1px solid #E8C870;border-radius:5px;font-size:11px;font-family:'Manrope',sans-serif;outline:none;" onkeydown="if(event.key==='Enter')addTag('${id}');if(event.key==='Escape')toggleInlineAdd('${id}')"/>
+            <button class="btn-secondary" style="padding:4px 9px;font-size:10px;" onclick="addTag('${id}')">Add</button>
+            <button class="btn-ghost" style="padding:4px 9px;font-size:10px;" onclick="toggleInlineAdd('${id}')">Done</button>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:#8C857C;line-height:1.5;">Added manually by IA — not detected in GL analysis</div>
+      <div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;color:#C8C2BA;">—</div>
+      <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-start;">
+        <span class="bdg a dim-badge" id="badge-${id}">Needs review</span>
+        <div style="display:flex;gap:4px;">
+          <button class="v-btn" style="font-size:9px;padding:2px 7px;color:#166638;border-color:#A8D9BC;background:#E8F5EE;" onclick="confirmDimension('${id}')">Confirm</button>
+          <button class="v-btn" onclick="rejectDimension('${id}')" style="font-size:9px;padding:2px 7px;">Reject</button>
+        </div>
+      </div>
+    </div>`;
+  list.appendChild(div);
+  updateDimCounts();
+  showToast(`"${name}" added — confirm when ready`);
+}
+
+function lockDimensions() {
+  showModal('Lock dimensions',
+    'This will lock all confirmed dimensions and trigger a Controller sign-off request (Chunk 2). CoA mapping will become available after the Controller confirms.<br><br>Post-lock changes require IA action in the CMS.',
+    `<button class='btn-primary' onclick='closeModal();doLockDimensions()'>Lock & request sign-off</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`);
+}
+
+function doLockDimensions() {
+  showToast('Dimensions locked · Sign-off request sent to Budi Santoso · Phase 3 now available');
+  const lockBtn = document.getElementById('lock-btn');
+  const lockStatus = document.getElementById('lock-status');
+  if (lockBtn) { lockBtn.textContent = 'Locked ✓'; lockBtn.style.background = '#166638'; lockBtn.disabled = true; }
+  if (lockStatus) { lockStatus.textContent = 'Dimensions locked'; lockStatus.style.color = '#166638'; }
+  document.getElementById('aside-inner').innerHTML = renderAside(2);
+}
+
+// ── INTERACTIONS ──
+function segSelect(btn) {
+  const seg = btn.closest('.seg');
+  seg.querySelectorAll('.seg-b').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function toggleFileBlock(id) {
+  const body = document.getElementById('fbody-' + id);
+  const chev = document.getElementById('chev-' + id);
+  if (!body) return;
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  chev.classList.toggle('open', !isOpen);
+}
+
+function showHardBlockModal() {
+  showModal('Hard Block — GL Export Format',
+    'PT Artha Niaga uploaded a monthly summary GL export. The system requires invoice-line level data to reconstruct AR/AP aging.<br><br>The 30-day timer has <strong>not started</strong>. Migration cannot proceed until a corrected file is uploaded.<br><br>Recommended: send client the Accurate invoice-line export instructions.',
+    `<button class='btn-primary' onclick='closeModal();showToast("Instructions sent to Budi Santoso")'>Send instructions to client</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`);
+}
+
+function showSoftBlockModal() {
+  showModal('Soft Block — 4 Orphan Accounts',
+    'Accounts 6030, 6031, 6032, 6099 appear in GL transactions but are missing from the CoA export. Likely deleted legacy accounts still referenced in historical data.<br><br>This is a soft block — migration can proceed. The Controller must decide how to handle these accounts before Phase 3 begins.',
+    `<button class='btn-primary' onclick='closeModal();acceptSoftBlock()'>Accept — map manually in Phase 3</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal();showToast("Message sent to Budi Santoso")'>Ask client to clarify</button>`);
+}
+
+function acceptSoftBlock() {
+  showToast('Soft block accepted — orphan accounts will be mapped manually in Phase 3');
+  const warnItem = document.querySelector('#fbody-coa .cl-item.warn');
+  if (warnItem) {
+    warnItem.className = 'cl-item pass';
+    warnItem.querySelector('.cl-ic').className = 'cl-ic pass';
+    warnItem.querySelector('.cl-ic').textContent = '✓';
+    warnItem.querySelector('.cl-lbl').textContent = '4 orphan accounts — accepted, map in Phase 3';
+    const act = warnItem.querySelector('.cl-act');
+    if (act) act.remove();
+  }
+}
+
+function showSignoffModal() {
+  showModal('Request Controller Sign-off — Health Check',
+    'Send Budi Santoso a sign-off request. They will see:<br><br>• 3 files with their health check status<br>• 1 warning (orphan accounts) with your recommended handling<br>• Estimated review time: 15 minutes',
+    `<button class='btn-primary' onclick='closeModal();showToast("Sign-off request sent to Budi Santoso")'>Send sign-off request →</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`);
+}
+
+function simulateUpload(fileId, filename) {
+  const progress = document.getElementById('upload-progress');
+  if (!progress) return;
+  const fnEl = document.getElementById('upload-filename');
+  const pctEl = document.getElementById('upload-pct');
+  const fillEl = document.getElementById('progress-fill');
+  const statusEl = document.getElementById('upload-status');
+  progress.style.display = 'block';
+  fnEl.textContent = filename;
+  fillEl.style.width = '0%';
+  pctEl.textContent = '0%';
+  const steps = [
+    { pct:30, status:'Uploading file…', delay:400 },
+    { pct:65, status:'Running health check…', delay:900 },
+    { pct:85, status:'Analyzing file structure…', delay:1400 },
+    { pct:100, status:'Complete', delay:2000 },
+  ];
+  steps.forEach(s => {
+    setTimeout(() => {
+      fillEl.style.width = s.pct + '%';
+      pctEl.textContent = s.pct + '%';
+      statusEl.textContent = s.status;
+      if (s.pct === 100) {
+        setTimeout(() => {
+          progress.style.display = 'none';
+          if (fileId !== 'new') addNewVersion(fileId, filename);
+          showToast(`${filename} uploaded — logged as IA upload in audit trail`);
+          // refresh aside to show new audit entry
+          const newEntry = { t:'Now', who:'ia', l:`IA uploaded ${filename}`, sub:'Reza Maulana · on behalf of client' };
+          const auditCard = document.querySelector('#aside-inner .card');
+          if (auditCard) {
+            const newItem = document.createElement('div');
+            newItem.className = 'audit-i';
+            newItem.style.background = '#FDF3E0';
+            newItem.innerHTML = `<span class="audit-t">Now</span><div class="audit-dot ia"></div><div class="audit-b"><div class="audit-l">${newEntry.l}</div><div class="audit-who">${newEntry.sub}</div></div>`;
+            const firstItem = auditCard.querySelector('.audit-i');
+            if (firstItem) auditCard.insertBefore(newItem, firstItem);
+            else auditCard.appendChild(newItem);
+          }
+        }, 600);
+      }
+    }, s.delay);
+  });
+}
+
+function addNewVersion(fileId, filename) {
+  const versionList = document.querySelector(`#fbody-${fileId} .version-list`);
+  if (!versionList) return;
+  const items = versionList.querySelectorAll('.version-item');
+  const newNum = 'v' + (items.length + 1);
+  const radioName = fileId + '-active';
+  // deactivate all current active labels
+  versionList.querySelectorAll('.active-ver-label').forEach(l => {
+    l.classList.remove('is-active');
+    l.querySelector('input').checked = false;
+    l.textContent = ''; // rebuild
+    const inp = document.createElement('input');
+    inp.type = 'radio';
+    inp.name = radioName;
+    inp.style.accentColor = '#166638';
+    inp.onchange = () => setActiveVersion(inp, fileId, l.closest('.version-item').querySelector('.v-num').textContent);
+    l.appendChild(inp);
+    l.appendChild(document.createTextNode(' Set active'));
+  });
+  items.forEach(item => item.classList.remove('latest'));
+  const newItem = document.createElement('div');
+  newItem.className = 'version-item latest';
+  newItem.innerHTML = `
+    <span class="v-num">${newNum}</span>
+    <div class="v-who ia" title="IA upload">IA</div>
+    <div class="v-info"><div class="v-filename">${filename}</div><div class="v-detail">Just uploaded · IA upload on behalf of client</div></div>
+    <label class="active-ver-label is-active" title="Active version for migration">
+      <input type="radio" name="${radioName}" checked style="accent-color:#166638;"/> Active
+    </label>
+    <span class="bdg gr" style="flex-shrink:0;margin-left:4px;">Latest</span>
+    <span class="v-time">Now</span>
+    <div class="v-actions">
+      <button class="v-btn" onclick="showToast('Downloading ${filename}')">Download</button>
+    </div>`;
+  newItem.querySelector('input[type=radio]').onchange = function() {
+    setActiveVersion(this, fileId, newNum);
+  };
+  versionList.insertBefore(newItem, versionList.firstChild);
+  // update meta
+  const hd = document.querySelector(`#fbody-${fileId}`).previousElementSibling;
+  const metaEl = hd ? hd.querySelector('.file-meta-sm') : null;
+  if (metaEl) {
+    const parts = metaEl.textContent.split('·');
+    if (parts.length > 1) {
+      const last = parts[parts.length - 1].trim();
+      if (last.includes('version')) parts[parts.length-1] = ' ' + (items.length + 1) + ' versions';
+      metaEl.textContent = parts.join('·');
+    }
+  }
+}
+
+function showRevertModal(filename, ver) {
+  const prev = parseInt(ver.replace('v','')) - 1;
+  showModal(`Revert to v${prev}?`,
+    `This will set <strong>v${prev}</strong> as the active version. The current ${ver} will be kept in history but marked superseded. Health check will re-run against v${prev}.<br><br>This will be logged in the audit trail.`,
+    `<button class='btn-primary' onclick='closeModal();showToast("Reverted to v${prev} — health check re-running")'>Confirm revert</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`);
+}
+
+function selectCand(el) {
+  const wrap = el.closest('.exc-cands');
+  wrap.querySelectorAll('.cand').forEach(c => { c.classList.remove('sel'); c.querySelector('input').checked = false; });
+  el.classList.add('sel');
+  el.querySelector('input').checked = true;
+}
+
+function resolveException() {
+  excResolved = true;
+  renderPhase(4);
+  showToast('Exception resolved — mapped to 4010 · Pendapatan Penjualan');
+}
+
+function applyBatch() {
+  excResolved = true;
+  batchApplied = true;
+  renderPhase(4);
+  renderPhaseNav();
+  document.getElementById('aside-inner').innerHTML = renderAside(4);
+  showToast('Batch applied — 34 transactions mapped to 4010');
+}
+
+function triggerGoLive() {
+  showModal(
+    'MIGRATION → LIVE — Final Confirmation',
+    'This action will:\n• Activate dimension enforcement for all rules\n• Seal the migration audit trail permanently\n• Trigger cashback calculation (Day 14 — full cashback confirmed)\n• Mark legacy system as read-only reference\n\nThe Controller has been informed of this action. This cannot be undone.',
+    `<button class='btn-brand' onclick='closeModal();completeMigration()'>Activate go-live</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`
+  );
+}
+
+function completeMigration() {
+  document.getElementById('main-content').innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;gap:16px;">
+      <div style="width:56px;height:56px;border-radius:50%;background:#E8F5EE;border:2px solid #A8D9BC;display:flex;align-items:center;justify-content:center;font-size:24px;">✓</div>
+      <div style="font-family:'Manrope',sans-serif;">
+        <div style="font-size:20px;font-weight:700;color:#080706;margin-bottom:6px;">PT Makmur Jaya is live.</div>
+        <div style="font-size:13px;color:#8C857C;margin-bottom:4px;">Day 14 of 30 · Full cashback confirmed · Rp 12,500,000</div>
+        <div style="font-size:12px;color:#C8C2BA;">Audit trail sealed · Legacy system marked read-only</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn-primary" onclick="showToast('Go-live report sent to Budi + Hendra')">Send go-live report →</button>
+        <button class="btn-ghost" onclick="showToast('Opening audit trail')">View audit trail</button>
+      </div>
+    </div>`;
+}
+
+// ── COA FUNCTIONS ──
+function coaUpdateSummary() {
+  const accs = coaState.accounts;
+  const get = (s) => accs.filter(a => a.status === s).length;
+  const el = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
+  el('coa-cnt-mapped', get('mapped'));
+  el('coa-cnt-review', get('review'));
+  el('coa-cnt-unmapped', get('unmapped'));
+  el('coa-cnt-resolved', get('resolved') + get('manual'));
+  el('coa-cnt-tax', get('tax'));
+  const unmapped = get('unmapped');
+  const review = get('review');
+  const lockBtn = document.getElementById('coa-lock-btn');
+  const lockStatus = document.getElementById('coa-lock-status');
+  if (lockBtn && lockStatus) {
+    if (unmapped === 0 && review === 0) {
+      lockBtn.disabled = false; lockBtn.style.opacity = '1'; lockBtn.style.cursor = 'pointer';
+      lockStatus.textContent = 'All accounts mapped — ready to lock';
+      lockStatus.style.color = '#166638';
+    } else {
+      lockBtn.disabled = true; lockBtn.style.opacity = '0.4'; lockBtn.style.cursor = 'not-allowed';
+      const issues = [];
+      if (unmapped > 0) issues.push(`${unmapped} cannot map`);
+      if (review > 0) issues.push(`${review} needs review`);
+      lockStatus.textContent = issues.join(' · ');
+      lockStatus.style.color = unmapped > 0 ? '#A02020' : '#7A4D00';
+    }
+  }
+}
+
+function coaRenderRow(id) {
+  const a = coaState.accounts.find(x => x.id === id);
+  if (!a) return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  const newEl = document.createElement('div');
+  newEl.innerHTML = coaRow(a);
+  el.replaceWith(newEl.firstElementChild);
+}
+
+function coaFilter(status, btn) {
+  document.querySelectorAll('.coa-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.coa-row').forEach(row => {
+    if (status === 'all') row.style.display = '';
+    else row.style.display = row.dataset.status === status ? '' : 'none';
+  });
+}
+
+function coaSearch(q) {
+  const lower = q.toLowerCase();
+  document.querySelectorAll('.coa-row').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(lower) ? '' : 'none';
+  });
+  document.querySelectorAll('.coa-filter-btn').forEach(b => b.classList.remove('active'));
+  if (!q) document.querySelector('.coa-filter-btn')?.classList.add('active');
+}
+
+function coaOpenOverride(id) {
+  coaState.overrideOpen = id;
+  coaRenderRow(id);
+  setTimeout(() => {
+    const inp = document.getElementById('override-search-' + id);
+    if (inp) inp.focus();
+  }, 50);
+}
+
+function coaCloseOverride() {
+  const prev = coaState.overrideOpen;
+  coaState.overrideOpen = null;
+  if (prev) coaRenderRow(prev);
+}
+
+function coaFilterOverride(id, q) {
+  const lower = q.toLowerCase();
+  const list = document.getElementById('override-list-' + id);
+  if (!list) return;
+  list.querySelectorAll('.coa-override-opt').forEach(opt => {
+    opt.style.display = opt.textContent.toLowerCase().includes(lower) ? '' : 'none';
+  });
+}
+
+function coaApplyOverride(id, code, name, placement) {
+  const a = coaState.accounts.find(x => x.id === id);
+  if (!a) return;
+  const wasUnmapped = a.status === 'unmapped';
+  a.tradeosCode = code;
+  a.tradeosName = name;
+  a.placement = placement;
+  a.status = 'resolved';
+  a.rationale = 'IA manual override — ' + a.rationale;
+  a.conf = 0;
+  coaState.overrideOpen = null;
+  // trigger batch suggestion for unmapped resolutions
+  if (wasUnmapped) {
+    coaState.batchPending = { triggeredBy: id };
+  }
+  coaRenderRow(id);
+  coaUpdateSummary();
+  showToast(`Mapped to ${code} · ${name}`);
+}
+
+function coaConfirm(id) {
+  const a = coaState.accounts.find(x => x.id === id);
+  if (!a) return;
+  a.status = 'resolved';
+  coaRenderRow(id);
+  coaUpdateSummary();
+  showToast(`Mapping confirmed — ${a.legacyCode} → ${a.tradeosCode}`);
+}
+
+function coaPreviewBatch(id) {
+  showModal('Batch apply preview',
+    'The following 3 accounts share a similar "Biaya Lain" pattern and have no mapping:<br><br>• 6032 · Biaya Lain A<br>• 6033 · Biaya Lain B<br>• 6099 · Biaya Umum<br><br>All will be mapped to the same TradeOS account as the resolved account.',
+    `<button class='btn-primary' onclick='closeModal();coaConfirmBatch("${id}")'>Apply to 3 accounts</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`);
+}
+
+function coaConfirmBatch(id) {
+  coaState.batchPending = null;
+  coaRenderRow(id);
+  showToast('Batch applied — 3 similar accounts mapped');
+}
+
+function coaDismissBatch() {
+  const id = coaState.batchPending?.triggeredBy;
+  coaState.batchPending = null;
+  if (id) coaRenderRow(id);
+}
+
+function coaLock() {
+  showModal('Lock CoA mapping',
+    'This will lock all 847 account mappings. The Controller will receive a sign-off request (Chunk 3). Post-lock changes require IA action and a new Controller sign-off.',
+    `<button class='btn-primary' onclick='closeModal();showToast("CoA mapping locked · Sign-off sent to Budi Santoso · Phase 4 now available")'>Lock & request sign-off</button><button class='btn-ghost' style='margin-left:8px' onclick='closeModal()'>Cancel</button>`);
+}
+
+// ── ASIDE TOGGLE ──
+let asideCollapsed = false;
+function toggleAside() {
+  asideCollapsed = !asideCollapsed;
+  const aside = document.getElementById('aside-col');
+  const toggle = aside.querySelector('.aside-toggle');
+  if (asideCollapsed) {
+    aside.classList.add('collapsed');
+    toggle.title = 'Expand audit trail';
+  } else {
+    aside.classList.remove('collapsed');
+    toggle.title = 'Collapse audit trail';
+  }
+}
+
+// ── MODAL ──
+function showModal(title, body, actions) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body.replace(/\n/g, '<br>');
+  document.getElementById('modal-actions').innerHTML = actions;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── INIT ──
+renderPhaseNav();
+renderPhase(currentPhase);
+</script>
+</body>
+</html>
