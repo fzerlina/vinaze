@@ -342,6 +342,49 @@ h1{font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:
 .warn-bar-icon{color:var(--color-brand);font-size:13px;flex-shrink:0;}
 .warn-bar-text{font-size:12px;color:var(--color-text-secondary);line-height:1.55;font-weight:300;}
 
+/* ── MONTH CARDS (Stage 4 overview) ── */
+.month-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2);margin-bottom:18px;}
+.month-card{border:1px solid var(--color-border-default);border-radius:var(--radius-lg);padding:14px 16px;background:var(--color-surface-raised);cursor:pointer;transition:border-color var(--transition-base),box-shadow var(--transition-base);position:relative;}
+.month-card:hover{border-color:var(--color-action-subtle);box-shadow:0 0 0 3px var(--color-action-wash);}
+.month-card.mc-done{border-left:3px solid var(--color-success-text);background:var(--color-success-surface);}
+.month-card.mc-active{border-left:3px solid var(--color-brand);background:var(--color-brand-wash);}
+.month-card.mc-warn{border-left:3px solid var(--color-warning-text);background:var(--color-warning-surface);}
+.month-card.mc-todo{border-left:3px solid var(--color-border-strong);}
+.month-card.mc-pend{opacity:.55;cursor:default;}
+.month-card.mc-pend:hover{border-color:var(--color-border-default);box-shadow:none;}
+.mc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.mc-month{font-size:14px;font-weight:700;color:var(--color-text-primary);letter-spacing:-0.01em;}
+.mc-card.mc-done .mc-month{color:var(--color-success-text);}
+.mc-status{font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-full);}
+.mc-s-done{background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);}
+.mc-s-active{background:var(--color-brand-wash);color:var(--color-brand);border:1px solid var(--color-brand-subtle);}
+.mc-s-warn{background:var(--color-warning-surface);color:var(--color-warning-text);border:1px solid var(--color-warning-border);}
+.mc-s-pend{background:var(--color-surface-sunken);color:var(--color-text-disabled);border:1px solid var(--color-border-default);}
+.mc-prog-wrap{background:var(--color-border-default);border-radius:var(--radius-full);height:3px;margin-bottom:10px;overflow:hidden;}
+.mc-prog-bar{height:3px;border-radius:var(--radius-full);}
+.mc-prog-bar.grn{background:var(--color-success-text);}
+.mc-prog-bar.tc{background:var(--color-brand);}
+.mc-prog-bar.amb{background:var(--color-warning-text);}
+.mc-stats{display:flex;gap:10px;}
+.mc-stat{flex:1;}
+.mc-stat-n{font-size:15px;font-weight:700;font-family:var(--font-mono);color:var(--color-text-primary);letter-spacing:-0.02em;}
+.mc-stat-n.grn{color:var(--color-success-text);}
+.mc-stat-n.red{color:var(--color-danger-text);}
+.mc-stat-n.amb{color:var(--color-warning-text);}
+.mc-stat-l{font-size:10px;color:var(--color-text-tertiary);margin-top:1px;font-weight:300;}
+.mc-var-flag{margin-top:8px;padding:4px 8px;border-radius:var(--radius-sm);font-size:10px;font-weight:600;display:flex;align-items:center;gap:5px;}
+.mc-var-flag.has-var{background:var(--color-warning-surface);color:var(--color-warning-text);}
+.mc-var-flag.no-var{background:var(--color-success-surface);color:var(--color-success-text);}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding-top:48px;overflow-y:auto;}
+.modal-box{background:var(--color-surface-raised);border-radius:var(--radius-xl);width:100%;max-width:760px;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:0 var(--space-4) var(--space-8);}
+.modal-hdr{padding:20px 24px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.modal-title{font-size:18px;font-weight:700;color:var(--color-text-primary);letter-spacing:-0.01em;}
+.modal-close{background:none;border:none;font-size:18px;color:var(--color-text-tertiary);cursor:pointer;padding:0;line-height:1;flex-shrink:0;margin-top:2px;}
+.modal-close:hover{color:var(--color-text-primary);}
+.modal-body{padding:16px 24px 24px;}
+
 /* ── STAGE 4 ── */
 .gl-queue-tabs{display:flex;gap:0;border-bottom:2px solid var(--color-border-default);margin-bottom:16px;overflow-x:auto;}
 .gl-tab{padding:8px 14px;font-size:12px;font-weight:500;color:var(--color-text-tertiary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font-sans);}
@@ -1016,13 +1059,13 @@ function updS1Sidebar(){
   var names=['Upload','Health check &amp; mapping','Sign-off'];
   var doneTags=['326 accounts &middot; Day 1','62 to review','Locked'];
   var rows=names.map(function(nm,i){
-    var isBlocked=st[i]===0;
-    var isSel=APP.s1.cur===i&&!isBlocked;
-    var dotCls=st[i]===2?'done':(isSel?'active':isBlocked?'lock':'empty');
+    var isBlocked=false; /* prototype: all steps accessible */
+    var isSel=APP.s1.cur===i;
+    var dotCls=st[i]===2?'done':(isSel?'active':'empty');
     var dotInner=st[i]===2?'&#10003;':(isSel?'&#9654;':'');
     var tagTxt=st[i]===2?doneTags[i]:'';
-    var cls='cl-item'+(isSel?' cl-sel':'')+(isBlocked?' cl-blocked':'');
-    return'<div class="'+cls+'"'+(isBlocked?'':' onclick="s1GoStep('+i+')"')+'>'
+    var cls='cl-item'+(isSel?' cl-sel':'');
+    return'<div class="'+cls+'" onclick="s1GoStep('+i+')">'
       +'<div class="cl-dot '+dotCls+'">'+dotInner+'</div>'
       +'<div><div class="cl-name">'+nm+'</div>'
       +(tagTxt?'<span class="cl-tag done">'+tagTxt+'</span>':'')
@@ -1037,8 +1080,8 @@ function updS1Sidebar(){
     +'</div>'+rows;
 }
 function s1GoStep(i){
-  if(i>0&&APP.s1.ts[0]<3)return;
-  if(i>1&&APP.s1.ts[1]<3)return;
+  APP.s1.ts[0]=Math.max(APP.s1.ts[0]||0,3); /* mark upload done for prototype */
+  APP.s1.ts[1]=Math.max(APP.s1.ts[1]||0,3);
   APP.s1.cur=i;updS1Sidebar();renderS1();
 }
 function renderS1(){
@@ -1185,7 +1228,7 @@ var MD_DATA={
 function updS2Sidebar(curItem){
   var it=APP.s2.items;
   var st=APP.s2.steps;
-  var avail=[true,true,true,it[2]>=3,true,it[4]>=3];
+  var avail=[true,true,true,true,true,true]; /* prototype: all items accessible */
   var done=it.filter(function(v){return v>=3;}).length;
   var pct=Math.round(done/6*100);
 
@@ -1202,17 +1245,16 @@ function updS2Sidebar(curItem){
   };
 
   function mkItem(idx,name){
-    var isAvail=avail[idx],isSel=idx===curItem,isBlocked=!isAvail;
+    var isAvail=true,isSel=idx===curItem,isBlocked=false; /* prototype: always available */
     var itemSt=it[idx];
-    var dotCls=itemSt>=3?'done':(isSel&&itemSt>=1?'active':isBlocked?'lock':itemSt>=1?'empty':'lock');
+    var dotCls=itemSt>=3?'done':(isSel&&itemSt>=1?'active':itemSt>=1?'empty':'lock');
     var dotInner=itemSt>=3?'&#10003;':(isSel&&itemSt>=1?'&#9654;':'');
     var tagTxt='',tagCls='lock';
     if(itemSt>=3){tagTxt=MD_DAYS[idx]?'Day '+MD_DAYS[idx]:'Complete';tagCls='done';}
     else if(isSel&&itemSt>=1){tagTxt='In progress';tagCls='active';}
     else if(isAvail&&itemSt>=1){tagTxt='Ready';tagCls='ready';}
-    else if(!isAvail){tagTxt=idx===3?'Needs product data':idx===5?'Needs C&amp;V data':'';tagCls='lock';}
-    var cls='cl-item'+(isSel?' cl-sel':'')+(isBlocked?' cl-blocked':'');
-    var row='<div class="'+cls+'"'+(isBlocked?'':' onclick="s2GoItem('+idx+')"')+'>'
+    var cls='cl-item'+(isSel?' cl-sel':'');
+    var row='<div class="'+cls+'" onclick="s2GoItem('+idx+')">'
       +'<div class="cl-dot '+dotCls+'">'+dotInner+'</div>'
       +'<div><div class="cl-name">'+name+'</div>'+(tagTxt?'<span class="cl-tag '+tagCls+'">'+tagTxt+'</span>':'')+'</div>'
       +'</div>';
@@ -1498,6 +1540,34 @@ function jumpToStage(s){
   else if(s===4){goStage6();}
   else if(s===5){goStage7();}
 }
+/* Prototype-only shortcuts — bypass uploads and jump directly to a specific sub-screen */
+function protoJump(target){
+  document.getElementById('sidebar').style.display='';
+  document.getElementById('main').style.padding='';
+  document.getElementById('stagebar').style.display='';
+  APP.s1.ts=[3,3,3];APP.s2.items=[3,3,3,3,3,3];
+  if(target==='s4-overview'){
+    APP.stage=3;S4.step=2;
+    updStageBar();updDay();updS4Sidebar(2);rS4Overview();
+  } else if(target==='s4-workspace'){
+    APP.stage=3;S4.step=2;S4_WS.activeMonth=3;
+    updStageBar();updDay();rS4GLWorkspace(3);
+  } else if(target==='s4-batch'){
+    /* open modal on top of GL workspace */
+    APP.stage=3;S4.step=2;S4_WS.activeMonth=3;
+    updStageBar();updDay();rS4GLWorkspace(3);
+    setTimeout(function(){showBatchConfirm();},50);
+  } else if(target==='s4-signoff'){
+    APP.stage=3;S4.step=4;
+    updStageBar();updDay();updS4Sidebar(4);rS4SignOff();
+  } else if(target==='s5'){
+    APP.stage=3;S5.step=0;S5.activeTab=0;S5_PERIOD='full';
+    updStageBar();updDay();updS5Sidebar(0);rS5Review();
+  } else if(target==='s5-signoff'){
+    APP.stage=3;S5.step=1;S5.invAccepted=true;
+    updStageBar();updDay();updS5Sidebar(1);rS5SignOff();
+  }
+}
 window.addEventListener("load",function(){rLogin();});
 
 
@@ -1539,7 +1609,7 @@ function updS3Sidebar(active){
   updS1Sidebar();
 }
 function s3GoStep(i){
-  if(i>S3.step)return;
+  S3.step=Math.max(S3.step,i);
   S3.step=i;updS3Sidebar(i);
   if(i===0)rS3Overview();
   else if(i===1)rS3Exceptions();
@@ -1736,13 +1806,20 @@ var S4_TXNS = [
    STAGE 4: ENTER
 ═══════════════════════════════════════ */
 function goStage4(){
-  APP.stage=3;APP.screen='s4-overview';S4.step=0;
+  APP.stage=3;APP.screen='s4-gl-upload';S4.step=0;
   updStageBar();updDay();
   updS4Sidebar(0);
-  rS4Overview();
+  rS4GLUpload();
 }
 function updS4Sidebar(active){
-  var steps=['Mapping overview|18,432 transactions','Your exception queue|112 to review','Controller sign-off|Unlock Stage 5'];
+  /* step indices: 0=GL upload, 1=TB upload, 2=GL mapping, 3=TB review, 4=Sign-off */
+  var steps=[
+    'Upload GL export|.xlsx or .csv from your ERP',
+    'Upload Trial Balance|As of cut-off date',
+    'GL mapping|Month by month',
+    'TB · BS · P&L review|Formal reconciliation',
+    'Sign-off|Seal audit trail'
+  ];
   var rows=steps.map(function(r,i){
     var p=r.split('|');
     var state=i<active?'dn':i===active?'act':'pend';
@@ -1753,44 +1830,621 @@ function updS4Sidebar(active){
   document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Transaction data</span></div>'+rows;
 }
 function s4GoStep(i){
-  if(i>S4.step)return;
-  S4.step=i;updS4Sidebar(i);
-  if(i===0)rS4Overview();
-  else if(i===1)rS4Queue();
-  else rS4SignOff();
+  S4.step=Math.max(S4.step,i);updS4Sidebar(i);
+  if(i===0)rS4GLUpload();
+  else if(i===1)rS4TBUpload();
+  else if(i===2)rS4Overview();
+  else if(i===3)goStage5();
+  else rS5SignOff();
 }
 
 /* ═══════════════════════════════════════
-   STAGE 4, STEP 1: MAPPING OVERVIEW
+   STAGE 4, STEP 1: GL UPLOAD
 ═══════════════════════════════════════ */
+var S4_GL={uploaded:false,processing:false,done:false};
+var S4_TB={uploaded:false,processing:false,done:false};
+
+function rS4GLUpload(){
+  APP.screen='s4-gl-upload';
+  var t=T[1]; /* GL export data from T[] */
+  var a=document.getElementById('main');
+  a.innerHTML='<div class="srow"><span class="badge b-not">Not started</span><span class="bmeta">Transaction data &middot; Step 1</span></div>'
+    +'<h1>Upload your GL export</h1>'
+    +'<p class="desc">Your GL export is the complete transaction history for your current fiscal year. The system will run a health check automatically — results in about 30 seconds.</p>'
+    +'<div class="alert blue"><div class="alert-icon">&#9432;</div><div class="alert-body">GL mapping uses your locked CoA from Stage 1. Every transaction will be matched against your 326 confirmed accounts.<strong>Required: invoice-level lines, not monthly summaries.</strong></div></div>'
+    +'<div class="upzone"><div style="font-size:22px;color:var(--color-border-strong)">&#8679;</div>'
+      +'<div style="font-size:13px;font-weight:600;color:var(--color-text-primary)">'+t.ut+'</div>'
+      +'<div style="font-size:12px;color:var(--color-text-tertiary);text-align:center;font-weight:300">'+t.us+'</div>'
+      +'<button class="btn-action" onclick="startGLProc()">Choose file</button>'
+    +'</div>'
+    +'<div class="chklist"><h3>What your GL export must include</h3>'
+      +t.cl.map(function(c){return'<div class="cli"><div class="cdot"></div><span>'+c+'</span></div>';}).join('')
+    +'</div>';
+}
+
+function startGLProc(){
+  S4_GL.processing=true;
+  var t=T[1];
+  var a=document.getElementById('main');
+  updS4Sidebar(0);
+  a.innerHTML='<div class="srow"><span class="badge b-proc">Processing</span><span class="bmeta">Transaction data &middot; Step 1</span></div>'
+    +'<h1>GL export</h1>'
+    +'<div class="pcard">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'
+        +'<div style="display:flex;align-items:center;gap:8px"><span style="color:var(--color-text-tertiary)">&#128196;</span>'
+        +'<span style="font-size:13px;font-weight:600;color:var(--color-text-primary)">'+t.fn+'</span></div>'
+        +'<span style="font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono)">'+t.fs+'</span>'
+      +'</div>'
+      +'<div class="pbar-wrap"><div class="pbar" id="pbar-gl" style="width:5%"></div></div>'
+      +'<div class="plabel">Running health check on your GL export…</div>'
+      +'<div class="psteps" id="psteps-gl"><span>'+t.ps[0]+'...</span></div>'
+    +'</div>';
+  var pct=0;if(PT)clearInterval(PT);
+  PT=setInterval(function(){
+    pct+=Math.random()*16+8;
+    if(pct>=100){pct=100;clearInterval(PT);setTimeout(function(){
+      S4_GL.done=true;
+      rS4GLHealthCheck();
+    },400);}
+    var b=document.getElementById('pbar-gl');if(b)b.style.width=Math.min(pct,100)+'%';
+    var sp=document.getElementById('psteps-gl');
+    if(sp){var st=t.ps,h='';for(var i=0;i<st.length;i++){var thr=(i+1)/(st.length+1)*100;if(pct>thr+15)h+='<span class="ds">'+st[i]+' &#10003;</span>';else if(pct>thr-10)h+='<span class="cs">'+st[i]+'...</span>';else h+='<span>'+st[i]+'</span>';if(i<st.length-1)h+='<span> &middot; </span>';}sp.innerHTML=h;}
+  },200);
+}
+
+function rS4GLHealthCheck(){
+  var t=T[1];var hc=t.hc;
+  var a=document.getElementById('main');
+  /* light inline result — structural issues only, not a full HC screen */
+  var issueItems='';
+  if(hc.hard>0){
+    hc.hb.forEach(function(b){
+      issueItems+='<div class="bcard" style="margin-bottom:6px;"><h3>&#9888; '+b.t+'</h3><p>'+b.i+'</p><p>'+b.a+'</p><button class="btn-ia">'+b.b+'</button></div>';
+    });
+  }
+  hc.sb.forEach(function(b){
+    issueItems+='<div class="bcard sft" style="margin-bottom:6px;"><h3>'+b.t+'</h3><p>'+b.i+'</p><p>'+b.a+'</p><button class="btn-ia">'+b.b+'</button></div>';
+  });
+
+  a.innerHTML='<div class="srow"><span class="badge '+(hc.hard>0?'b-act':'b-proc')+'">'+(hc.hard>0?'Action required':'File ready')+'</span><span class="bmeta">Transaction data &middot; Step 1</span></div>'
+    +'<h1>Upload your GL export</h1>'
+    +'<div class="frow" style="margin-bottom:12px;">'
+      +'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:16px;">&#128196;</span>'
+      +'<div><div class="fname">'+t.fn+'</div><div class="fmeta">'+t.fm+'</div></div></div>'
+      +'<span class="up-badge">Uploaded &#10003;</span>'
+    +'</div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:'+(issueItems?'14px':'0px')+'">'
+      +'<div class="hccard '+(hc.hard===0?'gd':'hrd')+'" style="flex:1;"><div class="hcn '+(hc.hard===0?'gd':'')+'" style="font-size:16px;">'+hc.hard+'</div><div class="hcl">Hard blocks</div></div>'
+      +'<div class="hccard sft" style="flex:1;"><div class="hcn" style="font-size:16px;">'+hc.soft+'</div><div class="hcl">Soft blocks</div></div>'
+      +'<div class="hccard wrn" style="flex:1;"><div class="hcn" style="font-size:16px;">'+hc.warn+'</div><div class="hcl">Warnings</div></div>'
+    +'</div>'
+    +(issueItems?issueItems:'')
+    +'<div style="margin-top:14px;text-align:right;"><button class="btn-cont" onclick="ackGLHC()">'+(hc.hard>0?'Resolve &amp; proceed':'Acknowledge &amp; upload Trial Balance')+'&#8250;</button></div>';
+}
+
+function ackGLHC(){
+  S4.step=1;updS4Sidebar(1);rS4TBUpload();
+}
+
+/* ═══════════════════════════════════════
+   STAGE 4, STEP 2: TB UPLOAD
+═══════════════════════════════════════ */
+function rS4TBUpload(){
+  APP.screen='s4-tb-upload';
+  var t=T[2]; /* Trial balance data */
+  var a=document.getElementById('main');
+  a.innerHTML='<div class="srow"><span class="badge b-not">Not started</span><span class="bmeta">Transaction data &middot; Step 2</span></div>'
+    +'<h1>Upload your Trial Balance</h1>'
+    +'<p class="desc">The Trial Balance is a completeness check — not a data source. It tells the system what the final numbers should be, so we can confirm nothing was lost or distorted during migration.</p>'
+    +'<div class="alert"><div class="alert-icon">&#9432;</div><div class="alert-body">'+t.al.m+'</div></div>'
+    +'<div class="upzone"><div style="font-size:22px;color:var(--color-border-strong)">&#8679;</div>'
+      +'<div style="font-size:13px;font-weight:600;color:var(--color-text-primary)">'+t.ut+'</div>'
+      +'<div style="font-size:12px;color:var(--color-text-tertiary);text-align:center;font-weight:300">'+t.us+'</div>'
+      +'<button class="btn-action" onclick="startTBProc()">Choose file</button>'
+    +'</div>'
+    +'<div class="chklist"><h3>What your Trial Balance must include</h3>'
+      +t.cl.map(function(c){return'<div class="cli"><div class="cdot"></div><span>'+c+'</span></div>';}).join('')
+    +'</div>';
+}
+
+function startTBProc(){
+  S4_TB.processing=true;
+  var t=T[2];
+  var a=document.getElementById('main');
+  a.innerHTML='<div class="srow"><span class="badge b-proc">Processing</span><span class="bmeta">Transaction data &middot; Step 2</span></div>'
+    +'<h1>Trial Balance</h1>'
+    +'<div class="pcard">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'
+        +'<div style="display:flex;align-items:center;gap:8px"><span style="color:var(--color-text-tertiary)">&#128196;</span>'
+        +'<span style="font-size:13px;font-weight:600;color:var(--color-text-primary)">'+t.fn+'</span></div>'
+        +'<span style="font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono)">'+t.fs+'</span>'
+      +'</div>'
+      +'<div class="pbar-wrap"><div class="pbar" id="pbar-tb" style="width:5%"></div></div>'
+      +'<div class="plabel">Matching accounts and comparing GL totals…</div>'
+      +'<div class="psteps" id="psteps-tb"><span>'+t.ps[0]+'...</span></div>'
+    +'</div>';
+  var pct=0;if(PT)clearInterval(PT);
+  PT=setInterval(function(){
+    pct+=Math.random()*16+8;
+    if(pct>=100){pct=100;clearInterval(PT);setTimeout(function(){
+      S4_TB.done=true;
+      rS4TBHealthCheck();
+    },400);}
+    var b=document.getElementById('pbar-tb');if(b)b.style.width=Math.min(pct,100)+'%';
+    var sp=document.getElementById('psteps-tb');
+    if(sp){var st=t.ps,h='';for(var i=0;i<st.length;i++){var thr=(i+1)/(st.length+1)*100;if(pct>thr+15)h+='<span class="ds">'+st[i]+' &#10003;</span>';else if(pct>thr-10)h+='<span class="cs">'+st[i]+'...</span>';else h+='<span>'+st[i]+'</span>';if(i<st.length-1)h+='<span> &middot; </span>';}sp.innerHTML=h;}
+  },200);
+}
+
+function rS4TBHealthCheck(){
+  var t=T[2];var hc=t.hc;
+  var a=document.getElementById('main');
+  var issueItems='';
+  hc.sb.forEach(function(b){
+    issueItems+='<div class="bcard sft" style="margin-bottom:6px;"><h3>'+b.t+'</h3><p>'+b.i+'</p><p>'+b.a+'</p><button class="btn-ia">'+b.b+'</button></div>';
+  });
+  hc.wb.forEach(function(b){
+    issueItems+='<div class="bcard wrn" style="margin-bottom:6px;"><h3>'+b.t+'</h3><p>'+b.i+'</p></div>';
+  });
+
+  a.innerHTML='<div class="srow"><span class="badge b-proc">File ready</span><span class="bmeta">Transaction data &middot; Step 2</span></div>'
+    +'<h1>Upload your Trial Balance</h1>'
+    +'<div class="frow" style="margin-bottom:12px;">'
+      +'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:16px;">&#128196;</span>'
+      +'<div><div class="fname">'+t.fn+'</div><div class="fmeta">'+t.fm+'</div></div></div>'
+      +'<span class="up-badge">Uploaded &#10003;</span>'
+    +'</div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:'+(issueItems?'14px':'0px')+'">'
+      +'<div class="hccard gd" style="flex:1;"><div class="hcn gd" style="font-size:16px;">'+hc.hard+'</div><div class="hcl">Hard blocks</div></div>'
+      +'<div class="hccard sft" style="flex:1;"><div class="hcn" style="font-size:16px;">'+hc.soft+'</div><div class="hcl">Soft blocks</div></div>'
+      +'<div class="hccard wrn" style="flex:1;"><div class="hcn" style="font-size:16px;">'+hc.warn+'</div><div class="hcl">Warnings</div></div>'
+    +'</div>'
+    +(issueItems?issueItems:'')
+    +'<div style="margin-top:14px;text-align:right;"><button class="btn-cont" onclick="ackTBHC()">Acknowledge &amp; go to GL mapping &#8250;</button></div>';
+}
+
+function ackTBHC(){
+  S4.step=2;updS4Sidebar(2);rS4Overview();
+}
+
+/* ═══════════════════════════════════════
+   STAGE 4, STEP 3: MONTH OVERVIEW (was step 1)
+═══════════════════════════════════════ */
+
+/* ═══════════════════════════════════════
+   STAGE 4, STEP 1: MONTH OVERVIEW
+═══════════════════════════════════════ */
+var S4_MONTHS=[
+  {m:'January',  txn:1102, mapped:1102, review:0,  pct:100, var:false, status:'done'},
+  {m:'February', txn:876,  mapped:876,  review:0,  pct:100, var:false, status:'done'},
+  {m:'March',    txn:1089, mapped:1089, review:0,  pct:100, var:false, status:'done'},
+  {m:'April',    txn:2134, mapped:2100, review:34, pct:98,  var:true,  status:'active'},
+  {m:'May',      txn:1876, mapped:1864, review:12, pct:99,  var:false, status:'warn'},
+  {m:'June',     txn:1543, mapped:0,    review:0,  pct:0,   var:false, status:'todo'},
+  {m:'July',     txn:1678, mapped:0,    review:0,  pct:0,   var:false, status:'todo'},
+  {m:'August',   txn:2011, mapped:0,    review:0,  pct:0,   var:false, status:'todo'},
+  {m:'September',txn:2123, mapped:0,    review:0,  pct:0,   var:false, status:'todo'},
+];
+
 function rS4Overview(){
   APP.screen='s4-overview';
   var a=document.getElementById('main');
-  a.innerHTML='<div class="srow"><span class="badge b-proc">In progress</span><span class="bmeta">Stage 4 &middot; Step 1 &middot; PRD Phase 4</span></div>'
+
+  var totalTxn=S4_MONTHS.reduce(function(s,m){return s+m.txn;},0);
+  var totalMapped=S4_MONTHS.reduce(function(s,m){return s+m.mapped;},0);
+  var totalReview=S4_MONTHS.reduce(function(s,m){return s+m.review;},0);
+  var pctDone=Math.round(totalMapped/totalTxn*100);
+
+  var cards=S4_MONTHS.map(function(m,i){
+    var cardCls='month-card mc-'+m.status;
+    var statusHtml='';
+    if(m.status==='done') statusHtml='<span class="mc-status mc-s-done">&#10003; Done</span>';
+    else if(m.status==='active') statusHtml='<span class="mc-status mc-s-active">In progress</span>';
+    else if(m.status==='warn') statusHtml='<span class="mc-status mc-s-warn">'+m.review+' remaining</span>';
+    else statusHtml='<span class="mc-status mc-s-pend">Not started</span>';
+
+    var progCls=m.status==='done'?'grn':m.status==='todo'?'tc':'amb';
+    var mappedCls=m.status==='done'?'grn':'';
+    var reviewCls=m.review>0?'red':'';
+
+    var varHtml=m.status!=='todo'
+      ?('<div class="mc-var-flag '+(m.var?'has-var':'no-var')+'">'+(m.var?'&#9651; TB variance detected':'&#10003; No variance')+'</div>')
+      :'';
+
+    var onclick=' onclick="goS4Month('+i+')"';
+    return'<div class="'+cardCls+'"'+onclick+'>'
+      +'<div class="mc-header"><span class="mc-month">'+m.m+'</span>'+statusHtml+'</div>'
+      +'<div class="mc-prog-wrap"><div class="mc-prog-bar '+progCls+'" style="width:'+m.pct+'%"></div></div>'
+      +'<div class="mc-stats">'
+        +'<div class="mc-stat"><div class="mc-stat-n '+mappedCls+'">'+m.mapped.toLocaleString()+'</div><div class="mc-stat-l">mapped</div></div>'
+        +'<div class="mc-stat"><div class="mc-stat-n">'+m.txn.toLocaleString()+'</div><div class="mc-stat-l">total</div></div>'
+        +'<div class="mc-stat"><div class="mc-stat-n '+reviewCls+'">'+(m.review>0?m.review:'—')+'</div><div class="mc-stat-l">to review</div></div>'
+      +'</div>'
+      +varHtml
+    +'</div>';
+  }).join('');
+
+  a.innerHTML='<div class="srow"><span class="badge b-proc">In progress</span><span class="bmeta">Transaction data &middot; GL mapping</span></div>'
     +'<h1>GL transaction mapping</h1>'
-    +'<p class="desc">The system has applied your locked CoA mapping to all 18,432 GL transactions and inferred dimension values for each. 13,824 lines were mapped automatically. 4,608 are in the exception queue — your IA is resolving the majority. You have a specific review queue of 112 transactions.</p>'
-    +'<div class="alert blue"><div class="alert-icon">&#9432;</div><div class="alert-body">GL mapping uses your locked CoA from Stage 3. Account mapping is deterministic — dimension inference is AI-generated with confidence scores.</div></div>'
-    +'<div class="hcgrid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:12px">'
-      +'<div class="hccard gd"><div class="hcn gd" style="font-size:17px">13,824</div><div class="hcl">Auto-mapped</div><div class="hcs">&#8805;80% confidence</div></div>'
-      +'<div class="hccard sft"><div class="hcn" style="font-size:17px">4,608</div><div class="hcl">Exception queue</div><div class="hcs">IA resolving majority</div></div>'
-      +'<div class="hccard hrd"><div class="hcn" style="color:var(--color-danger-text);font-size:17px">112</div><div class="hcl">Your review queue</div><div class="hcs">Action required</div></div>'
-      +'<div class="hccard wrn"><div class="hcn" style="font-size:17px">287</div><div class="hcl">Tax transactions</div><div class="hcs">All reviewed</div></div>'
+    +'<p class="desc">Your GL covers '+totalTxn.toLocaleString()+' transactions across 9 months. Work month by month — the AI has pre-mapped the majority. Click any month to open its workspace, or start from January.</p>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'
+      +'<span style="font-size:12px;color:var(--color-text-tertiary);font-weight:300">'+totalMapped.toLocaleString()+' of '+totalTxn.toLocaleString()+' transactions mapped</span>'
+      +'<span style="font-size:12px;font-weight:700;color:var(--color-brand)">'+pctDone+'% complete</span>'
     +'</div>'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:var(--color-text-tertiary);font-weight:300">13,824 of 18,432 transactions mapped</span><span style="font-size:12px;font-weight:700;color:var(--color-brand)">75% complete</span></div>'
-    +'<div class="coa-prog-wrap"><div class="coa-prog-bar tc" style="width:75%"></div></div>'
-    +'<div style="border:1px solid var(--color-border-default);border-radius:var(--radius-lg);overflow:hidden;margin-top:14px;margin-bottom:10px">'
-      +'<div style="padding:12px 16px;font-size:13px;font-weight:600;color:var(--color-text-primary);background:var(--color-surface-sunken);border-bottom:1px solid var(--color-border-default)">Exception queue &#8212; 4,608 transactions</div>'
-      +'<div class="exc-queue-row"><span class="exc-q-lbl">Top 20 by amount</span><span class="exc-q-cnt">20</span><span class="exc-q-owner">You (required)</span><span class="exc-q-badge inq">In your queue</span></div>'
-      +'<div class="exc-queue-row"><span class="exc-q-lbl">Random sample</span><span class="exc-q-cnt">50</span><span class="exc-q-owner">You (required)</span><span class="exc-q-badge inq">In your queue</span></div>'
-      +'<div class="exc-queue-row"><span class="exc-q-lbl">IDR 50M+ exceptions</span><span class="exc-q-cnt">42</span><span class="exc-q-owner">You (required)</span><span class="exc-q-badge inq">In your queue</span></div>'
-      +'<div class="exc-queue-row"><span class="exc-q-lbl">Tax-account transactions</span><span class="exc-q-cnt">287</span><span class="exc-q-owner">You (required)</span><span class="exc-q-badge inq">In your queue</span></div>'
-      +'<div class="exc-queue-row"><span class="exc-q-lbl">Remaining exceptions</span><span class="exc-q-cnt">4,209</span><span class="exc-q-owner">IA</span><span class="exc-q-badge iares">IA resolving</span></div>'
-      +'<div style="padding:10px 16px;font-size:11px;color:var(--color-text-tertiary);font-weight:300;border-top:1px solid var(--color-border-subtle)">When you and your IA resolve the same exception simultaneously, your interface updates in real time — no duplicate work.</div>'
-    +'</div>'
-    +'<div class="arap-row"><div class="arap-text"><div class="title">AR/AP aging reconstruction</div><div class="sub">Running in parallel as transactions are mapped</div><div class="detail">8,341 AP lines matched &middot; 4 vendors with unknown payment terms</div></div><div class="soft-block-badge">&#9651; Soft block</div></div>'
-    +'<div style="margin-top:16px;text-align:right"><button class="btn-cont" onclick="goS4Queue()">Go to your exception queue &#8250;</button></div>';
+    +'<div class="coa-prog-wrap" style="margin-bottom:18px"><div class="coa-prog-bar tc" style="width:'+pctDone+'%"></div></div>'
+    +'<div class="month-grid">'+cards+'</div>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">'
+      +'<div style="font-size:12px;color:var(--color-text-tertiary);font-weight:300">'
+        +totalReview+' transactions across all months need your review'
+      +'</div>'
+      +'<button class="btn-cont" onclick="goS4Month(0)">Start from January &#8250;</button>'
+    +'</div>';
 }
-function goS4Queue(){S4.step=1;updS4Sidebar(1);rS4Queue();}
+
+function goS4Month(i){
+  S4.step=2;S4_WS.activeMonth=i;updS4Sidebar(2);rS4GLWorkspace(i);
+}
+function goS4Queue(){S4.step=2;updS4Sidebar(2);rS4GLWorkspace(S4_WS.activeMonth||3);}
+
+/* ═══════════════════════════════════════
+   STAGE 4, STEP 4: GL WORKSPACE
+═══════════════════════════════════════ */
+/* Month workspace state */
+var S4_WS = {
+  activeMonth: 3,       /* default: April (index 3) */
+  activeFilter: 'review', /* 'review' | 'all' | 'auto' */
+  activeSort: 'amount', /* 'amount' | 'vendor' */
+  expandedGroup: 0,     /* which account group is expanded */
+  txnStates: {}         /* key: 'month-group-txn', value: 'pending'|'confirmed'|'flagged' */
+};
+
+/* Account groups per month — April demo data */
+var S4_ACCT_GROUPS = [
+  { name:'COGS', code:'5xxx', toReview:8, total:42,
+    txns:[
+      {ref:'INV-2025-0234',date:'Apr 3',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 287,400,000',conf:89,confCls:'hi',suggested:'5110 · Raw Material Purchases',similar:143},
+      {ref:'INV-2025-0241',date:'Apr 7',vendor:'CV Maju Bersama',desc:'Pembelian Bahan Baku',amount:'Rp 98,200,000',conf:63,confCls:'med',suggested:'5110 · Raw Material Purchases',similar:0},
+      {ref:'INV-2025-0267',date:'Apr 18',vendor:'PT Logistik Nusantara',desc:'Ongkos Kirim Barang',amount:'Rp 34,100,000',conf:71,confCls:'med',suggested:'5310 · Freight & Shipping',similar:12},
+    ]
+  },
+  { name:'OpEx', code:'6xxx', toReview:2, total:28,
+    txns:[
+      {ref:'JNL-2025-0934',date:'Apr 14',vendor:'—',desc:'Biaya Representasi',amount:'Rp 24,100,000',conf:41,confCls:'lo',suggested:'6110 · Entertainment & Rep',similar:0},
+      {ref:'JNL-2025-0901',date:'Apr 1',vendor:'Sewa Gedung',desc:'Sewa Gedung Q2 2025',amount:'Rp 156,800,000',conf:94,confCls:'hi',suggested:'6200 · Rent Expense',similar:0},
+    ]
+  },
+  { name:'Assets', code:'1xxx', toReview:0, total:15, txns:[] },
+  { name:'Liabilities', code:'2xxx', toReview:0, total:11, txns:[] },
+];
+
+function rS4GLWorkspace(monthIdx){
+  APP.screen='s4-workspace';
+  S4_WS.activeMonth=monthIdx;
+  var mo=S4_MONTHS[monthIdx];
+  var a=document.getElementById('main');
+
+  /* build month sidebar */
+  var sidebarMonths=S4_MONTHS.map(function(m,i){
+    var dotCls=m.status==='done'?'dn':m.status==='active'||m.status==='warn'?'act':'pend';
+    var sel=i===monthIdx?' sel':'';
+    var badge='';
+    if(m.status==='done') badge='<span style="font-size:10px;color:var(--color-success-text);">&#10003;</span>';
+    else if(m.review>0) badge='<span style="font-size:10px;font-weight:600;color:var(--color-danger-text);">'+m.review+'</span>';
+    return'<div class="sb-row'+sel+'" onclick="goS4Month('+i+')">'
+      +'<div class="step-n '+dotCls+'" style="font-size:10px;width:20px;height:20px;">'+(m.status==='done'?'&#10003;':(i+1))+'</div>'
+      +'<div style="flex:1"><div class="sb-name">'+m.m+'</div><div class="sb-meta">'+m.txn.toLocaleString()+' txn</div></div>'
+      +badge
+    +'</div>';
+  }).join('');
+  /* progress bar */
+  var totalMapped=S4_MONTHS.reduce(function(s,m){return s+m.mapped;},0);
+  var totalTxn=S4_MONTHS.reduce(function(s,m){return s+m.txn;},0);
+  var pct=Math.round(totalMapped/totalTxn*100);
+  var sidebarHTML=''
+  +'<div class="sb-hdr"><span class="sb-lbl">Transaction data</span></div>'
+  +'<div class="sb-row" onclick="s4GoStep(0)" style="font-size:12px;padding:6px 16px;"><div class="step-n dn" style="font-size:10px;width:18px;height:18px;">&#10003;</div><div><div class="sb-name" style="font-size:12px;">Upload GL</div></div></div>'
+  +'<div class="sb-row" onclick="s4GoStep(1)" style="font-size:12px;padding:6px 16px;"><div class="step-n dn" style="font-size:10px;width:18px;height:18px;">&#10003;</div><div><div class="sb-name" style="font-size:12px;">Upload Trial Balance</div></div></div>'
+  +'<div class="sb-row sel" style="font-size:12px;padding:6px 16px;"><div class="step-n act" style="font-size:10px;width:18px;height:18px;">3</div><div><div class="sb-name" style="font-size:12px;">GL mapping</div></div></div>'
+  +'<div class="sb-row" onclick="s4GoStep(3)" style="font-size:12px;padding:6px 16px;"><div class="step-n pend" style="font-size:10px;width:18px;height:18px;">4</div><div><div class="sb-name" style="font-size:12px;">TB · BS · P&amp;L review</div></div></div>'
+  +'<div class="sb-row" onclick="s4GoStep(4)" style="font-size:12px;padding:6px 16px;"><div class="step-n pend" style="font-size:10px;width:18px;height:18px;">5</div><div><div class="sb-name" style="font-size:12px;">Sign-off</div></div></div>'
+  +'<div class="cl-divider"></div>'
+  +'<div class="sb-prog-wrap">'
+    +'<div class="sb-prog-bg"><div class="sb-prog-fill" style="width:'+pct+'%"></div></div>'
+    +'<div class="sb-prog-label"><span>'+pct+'% mapped</span><span>'+totalMapped.toLocaleString()+' / '+totalTxn.toLocaleString()+'</span></div>'
+  +'</div>'
+  +'<div class="cl-group-lbl">Months</div>'
+  +sidebarMonths;
+  document.getElementById('sidebar').innerHTML=sidebarHTML;
+
+  /* filter bar */
+  var filt=S4_WS.activeFilter;
+  var srt=S4_WS.activeSort;
+  var filterBar='<div style="display:flex;gap:6px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">'
+    +'<span style="font-size:11px;color:var(--color-text-tertiary);font-weight:300;">Show:</span>'
+    +'<button class="'+(filt==='review'?'btn-confirm':'btn-ghost')+'" onclick="s4wsFilter(\'review\')">Needs review ('+mo.review+')</button>'
+    +'<button class="'+(filt==='all'?'btn-confirm':'btn-ghost')+'" onclick="s4wsFilter(\'all\')">All</button>'
+    +'<button class="'+(filt==='auto'?'btn-confirm':'btn-ghost')+'" onclick="s4wsFilter(\'auto\')">Auto-mapped</button>'
+    +'<span style="font-size:11px;color:var(--color-text-tertiary);font-weight:300;margin-left:6px;">Sort:</span>'
+    +'<button class="'+(srt==='amount'?'btn-confirm':'btn-ghost')+'" onclick="s4wsSort(\'amount\')">Amount &#8595;</button>'
+    +'<button class="'+(srt==='vendor'?'btn-confirm':'btn-ghost')+'" onclick="s4wsSort(\'vendor\')">Vendor</button>'
+  +'</div>';
+
+  /* batch banner (show if first txn in April just got confirmed) */
+  var batchHtml='';
+  if(S4_WS.txnStates['3-0-0']==='confirmed'){
+    batchHtml='<div class="bulk-banner" style="margin-bottom:12px;">'
+      +'<div class="bulk-text"><strong>PT Sumber Makmur — 143 similar transactions detected</strong>Confirmed INV-2025-0234 → 5110 · Raw Material Purchases. Same vendor pattern across Apr–Sep. Apply to all 143? Total: Rp 287,400,000</div>'
+      +'<div class="bulk-actions">'
+        +'<button class="exc-btn-apply" onclick="showBatchConfirm()">Review &amp; apply to 143 &#8250;</button>'
+        +'<button class="exc-btn-indiv">This one only</button>'
+      +'</div>'
+    +'</div>';
+  }
+
+  /* account groups */
+  var groupsHtml=S4_ACCT_GROUPS.map(function(grp,gi){
+    var isExp=S4_WS.expandedGroup===gi;
+    var reviewBadge=grp.toReview>0
+      ?'<span class="coa-badge action">'+grp.toReview+' to review</span>'
+      :'<span class="coa-badge auto">All mapped</span>';
+
+    var txnRows='';
+    if(isExp){
+      txnRows=grp.txns.map(function(txn,ti){
+        var key=monthIdx+'-'+gi+'-'+ti;
+        var state=S4_WS.txnStates[key]||'pending';
+        var confColor=txn.confCls==='hi'?'var(--color-success-text)':txn.confCls==='med'?'var(--color-warning-text)':'var(--color-danger-text)';
+        var rowBg=state==='confirmed'?'background:var(--color-success-surface);':txn.conf<70?'background:var(--color-warning-surface);opacity:.95;':'';
+        var actionHtml='';
+        if(state==='confirmed'){
+          actionHtml='<span style="font-size:11px;font-weight:600;color:var(--color-success-text);">&#10003; Confirmed</span>';
+        } else if(state==='flagged'){
+          actionHtml='<span style="font-size:11px;font-weight:600;color:var(--color-warning-text);">&#9651; Flagged to IA</span>';
+        } else {
+          actionHtml='<button class="exc-btn-confirm" onclick="s4wsConfirm('+gi+','+ti+')">Confirm</button>'
+            +'<button class="exc-btn-override" onclick="void(0)" style="margin-left:4px;">Override</button>'
+            +'<button class="btn-ia" onclick="s4wsFlag('+gi+','+ti+')" style="margin-left:4px;">Flag IA</button>';
+        }
+        return'<div style="padding:10px 14px;border-top:1px solid var(--color-border-subtle);display:flex;align-items:center;gap:10px;'+rowBg+'">'
+          +'<div style="flex:1;min-width:0;">'
+            +'<div style="font-size:12px;font-family:var(--font-mono);color:var(--color-text-tertiary);">'+txn.ref+' &middot; '+txn.date+'</div>'
+            +'<div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-top:1px;">'+txn.vendor+'</div>'
+            +'<div style="font-size:11px;color:var(--color-text-tertiary);margin-top:1px;">'+txn.desc+'</div>'
+            +'<div style="font-size:11px;color:var(--color-text-secondary);margin-top:3px;">AI: <span style="font-weight:500;">'+txn.suggested+'</span> &nbsp;<span style="color:'+confColor+';font-weight:600;">'+txn.conf+'%</span></div>'
+            +(txn.similar>0?'<div style="font-size:11px;color:var(--color-action);margin-top:2px;">'+txn.similar+' similar transactions from same vendor</div>':'')
+          +'</div>'
+          +'<div style="text-align:right;flex-shrink:0;">'
+            +'<div style="font-size:14px;font-weight:700;font-family:var(--font-mono);color:var(--color-text-primary);margin-bottom:6px;">'+txn.amount+'</div>'
+            +'<div style="display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap;">'+actionHtml+'</div>'
+          +'</div>'
+        +'</div>';
+      }).join('');
+      if(grp.txns.length===0){
+        txnRows='<div style="padding:10px 14px;border-top:1px solid var(--color-border-subtle);font-size:12px;color:var(--color-text-tertiary);">All '+grp.total+' transactions auto-mapped at &ge;80% confidence.</div>';
+      }
+    }
+
+    return'<div class="coa-sec" style="margin-bottom:8px;">'
+      +'<div class="coa-sec-hdr '+(grp.toReview>0?'amb-l':'grn-l')+'" onclick="s4wsToggleGroup('+gi+')">'
+        +'<div><div class="coa-sec-title">'+(isExp?'&#9660;':'&#9654;')+' '+grp.name+' &middot; '+grp.total+' transactions</div>'
+        +'<div class="coa-sec-desc">'+grp.code+'</div></div>'
+        +reviewBadge
+      +'</div>'
+      +txnRows
+    +'</div>';
+  }).join('');
+
+  /* TB panel */
+  var tbPanel='<div style="width:220px;flex-shrink:0;border-left:1px solid var(--color-border-default);padding:14px;">'
+    +'<div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Trial balance</div>'
+    +'<div style="display:flex;gap:4px;margin-bottom:8px;">'
+      +'<button class="btn-ghost" style="font-size:10px;padding:2px 7px;background:var(--color-action-wash);color:var(--color-action);border-color:var(--color-action-subtle);">'+mo.m+'</button>'
+      +'<button class="btn-ghost" style="font-size:10px;padding:2px 7px;">YTD</button>'
+      +'<button class="btn-ghost" style="font-size:10px;padding:2px 7px;">Full yr</button>'
+    +'</div>'
+    +'<div style="display:flex;border-bottom:1px solid var(--color-border-default);margin-bottom:8px;">'
+      +'<button class="btn-ghost" style="font-size:10px;padding:3px 8px;border:none;border-bottom:2px solid var(--color-brand);border-radius:0;color:var(--color-brand);font-weight:600;">TB</button>'
+      +'<button class="btn-ghost" style="font-size:10px;padding:3px 8px;border:none;border-radius:0;">BS</button>'
+      +'<button class="btn-ghost" style="font-size:10px;padding:3px 8px;border:none;border-radius:0;">P&amp;L</button>'
+    +'</div>'
+    +'<div style="background:var(--color-success-surface);border-radius:var(--radius-sm);padding:6px 9px;margin-bottom:4px;display:flex;justify-content:space-between;">'
+      +'<span style="font-size:11px;color:var(--color-text-tertiary);">Legacy</span>'
+      +'<span style="font-size:11px;font-family:var(--font-mono);font-weight:600;color:var(--color-success-text);">Rp 28.4B</span>'
+    +'</div>'
+    +'<div style="background:var(--color-surface-sunken);border-radius:var(--radius-sm);padding:6px 9px;margin-bottom:4px;display:flex;justify-content:space-between;">'
+      +'<span style="font-size:11px;color:var(--color-text-tertiary);">TradeOS</span>'
+      +'<span style="font-size:11px;font-family:var(--font-mono);font-weight:600;color:var(--color-warning-text);">Rp 28.39B</span>'
+    +'</div>'
+    +(mo.var
+      ?'<div style="background:var(--color-warning-surface);border-left:3px solid var(--color-warning-text);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:6px 9px;margin-bottom:6px;">'
+        +'<div style="display:flex;justify-content:space-between;margin-bottom:3px;">'
+          +'<span style="font-size:11px;color:var(--color-warning-text);font-weight:600;">Variance</span>'
+          +'<span style="font-size:11px;font-family:var(--font-mono);font-weight:600;color:var(--color-warning-text);">&Delta; Rp 10M</span>'
+        +'</div>'
+        +'<div style="font-size:10px;color:var(--color-danger-text);margin-bottom:3px;">Driven by: 6110 · Entertainment</div>'
+        +'<button class="btn-ia" style="font-size:10px;padding:2px 8px;" onclick="void(0)">Go to 6110 in GL &#8599;</button>'
+      +'</div>'
+      :'<div style="background:var(--color-success-surface);border-radius:var(--radius-sm);padding:6px 9px;margin-bottom:6px;font-size:11px;color:var(--color-success-text);">&#10003; Balanced for '+mo.m+'</div>'
+    )
+    +'<div style="border-top:1px solid var(--color-border-default);padding-top:8px;margin-top:4px;">'
+      +'<div style="font-size:10px;color:var(--color-text-tertiary);font-weight:300;margin-bottom:4px;">Overall progress</div>'
+      +'<div class="coa-prog-wrap" style="margin-bottom:4px;"><div class="coa-prog-bar tc" style="width:'+pct+'%"></div></div>'
+      +'<div style="font-size:10px;color:var(--color-text-tertiary);">'+pct+'% &middot; '+totalMapped.toLocaleString()+' / '+totalTxn.toLocaleString()+'</div>'
+    +'</div>'
+    +'<div style="border-top:1px solid var(--color-border-default);padding-top:8px;margin-top:8px;">'
+      +'<div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Sign-off gate</div>'
+      +'<div style="font-size:11px;color:var(--color-text-tertiary);font-weight:300;line-height:1.5;margin-bottom:6px;">TB must balance before sign-off unlocks.</div>'
+      +'<button class="btn-ghost" style="font-size:11px;width:100%;opacity:.4;cursor:default;">Sign-off locked</button>'
+    +'</div>'
+  +'</div>';
+
+  /* prev/next nav */
+  var prevIdx=monthIdx-1;
+  var nextIdx=monthIdx+1;
+  var prevBtn=prevIdx>=0
+    ?'<button class="btn-ghost" onclick="goS4Month('+prevIdx+')" style="font-size:12px;">&#8592; '+S4_MONTHS[prevIdx].m+'</button>':'<span></span>';
+  var nextBtn=nextIdx<S4_MONTHS.length
+    ?'<button class="btn-ghost" onclick="goS4Month('+nextIdx+')" style="font-size:12px;">'+S4_MONTHS[nextIdx].m+' &#8594;</button>':'<span></span>';
+
+  a.innerHTML='<div class="srow"><span class="badge b-act">Action required</span><span class="bmeta">Transaction data &middot; GL workspace &middot; '+mo.m+'</span></div>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">'
+      +'<h1 style="margin-bottom:0;">'+mo.m+' 2025</h1>'
+      +'<div style="display:flex;gap:8px;align-items:center;">'+prevBtn+nextBtn+'</div>'
+    +'</div>'
+    +'<div style="font-size:12px;color:var(--color-text-tertiary);font-weight:300;margin-bottom:10px;">'+mo.txn.toLocaleString()+' transactions &middot; '+mo.review+' need your review &middot; '+(mo.txn-mo.review).toLocaleString()+' auto-mapped</div>'
+    +'<div style="display:flex;gap:0;align-items:flex-start;">'
+      +'<div style="flex:1;min-width:0;">'
+        +filterBar
+        +batchHtml
+        +groupsHtml
+        +'<div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;">'
+          +(nextIdx<S4_MONTHS.length
+            ?'<button class="btn-cont" onclick="goS4Month('+nextIdx+')">Next: '+S4_MONTHS[nextIdx].m+' &#8250;</button>'
+            :'<button class="btn-cont" onclick="S4.step=3;updS4Sidebar(3);goStage5()">All months done &mdash; go to TB review &#8250;</button>')
+          +'<button class="btn-ghost" onclick="S4.step=2;updS4Sidebar(2);rS4Overview()" style="font-size:12px;">&#8592; Back to overview</button>'
+        +'</div>'
+      +'</div>'
+      +tbPanel
+    +'</div>';
+}
+
+function s4wsFilter(f){S4_WS.activeFilter=f;rS4GLWorkspace(S4_WS.activeMonth);}
+function s4wsSort(s){S4_WS.activeSort=s;rS4GLWorkspace(S4_WS.activeMonth);}
+function s4wsToggleGroup(gi){S4_WS.expandedGroup=S4_WS.expandedGroup===gi?-1:gi;rS4GLWorkspace(S4_WS.activeMonth);}
+function s4wsConfirm(gi,ti){
+  var key=S4_WS.activeMonth+'-'+gi+'-'+ti;
+  S4_WS.txnStates[key]='confirmed';
+  /* if large similar batch, show banner on re-render */
+  rS4GLWorkspace(S4_WS.activeMonth);
+}
+function s4wsFlag(gi,ti){
+  var key=S4_WS.activeMonth+'-'+gi+'-'+ti;
+  S4_WS.txnStates[key]='flagged';
+  rS4GLWorkspace(S4_WS.activeMonth);
+}
+function showBatchConfirm(){
+  /* render as modal overlay — don't navigate away from GL workspace */
+  var excluded=Object.keys(S4_BATCH.excluded).filter(function(k){return S4_BATCH.excluded[k];}).length;
+  var applying=143-excluded;
+
+  var rows=S4_BATCH_TXNS.map(function(t,i){
+    var isExcluded=S4_BATCH.excluded[i];
+    var rowStyle=isExcluded?'opacity:.4;':'background:'+(i%2===0?'var(--color-surface-raised)':'var(--color-surface-sunken)')+';';
+    return'<tr style="'+rowStyle+'">'
+      +'<td style="font-family:var(--font-mono);font-size:11px;color:var(--color-text-tertiary);padding:8px 10px;">'+t.ref+'</td>'
+      +'<td style="font-size:11px;color:var(--color-text-tertiary);padding:8px 4px;">'+t.date+'</td>'
+      +'<td style="font-size:12px;font-weight:500;color:var(--color-text-primary);padding:8px 4px;">'+t.vendor+'</td>'
+      +'<td style="font-size:11px;color:var(--color-text-secondary);padding:8px 4px;">'+t.desc+'</td>'
+      +'<td style="font-family:var(--font-mono);font-size:12px;font-weight:600;text-align:right;padding:8px 4px;">'+t.amount+'</td>'
+      +'<td style="text-align:right;padding:8px 10px;">'
+        +(isExcluded
+          ?'<button class="btn-ia" onclick="s4BatchToggle('+i+')" style="font-size:10px;">Include</button>'
+          :'<button class="btn-ghost" onclick="s4BatchToggle('+i+')" style="font-size:10px;">Exclude</button>')
+      +'</td>'
+    +'</tr>';
+  }).join('');
+
+  /* inject modal overlay into body */
+  var el=document.getElementById('batch-modal');
+  if(!el){el=document.createElement('div');el.id='batch-modal';document.body.appendChild(el);}
+  el.className='modal-overlay';
+  el.style.display='flex';
+  el.innerHTML=''
+    +'<div class="modal-box">'
+      +'<div class="modal-hdr">'
+        +'<div>'
+          +'<div class="modal-title">Apply mapping to '+applying+' transactions?</div>'
+          +'<div style="font-size:12px;color:var(--color-text-tertiary);margin-top:3px;font-weight:300;">PT Sumber Makmur &rarr; 5110 &middot; Raw Material Purchases &middot; Rp 287,400,000 total</div>'
+        +'</div>'
+        +'<button class="modal-close" onclick="closeBatchModal()">&#x2715;</button>'
+      +'</div>'
+      +'<div class="modal-body">'
+        +'<div class="hcgrid" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px;">'
+          +'<div class="hccard gd"><div class="hcn gd" style="font-size:16px;">'+applying+'</div><div class="hcl">Will be mapped</div></div>'
+          +'<div class="hccard '+(excluded>0?'sft':'wrn')+'"><div class="hcn" style="font-size:16px;">'+excluded+'</div><div class="hcl">Excluded</div></div>'
+          +'<div class="hccard wrn"><div class="hcn" style="font-size:16px;">143</div><div class="hcl">Total detected</div></div>'
+        +'</div>'
+        +'<div class="alert blue" style="margin-bottom:12px;"><div class="alert-icon">&#9432;</div><div class="alert-body">Showing first 20 of 143. All will be mapped unless excluded. Excluded transactions return to your review queue.</div></div>'
+        +'<div class="twrap" style="margin-bottom:14px;max-height:260px;overflow-y:auto;">'
+          +'<table style="width:100%;border-collapse:collapse;">'
+            +'<thead style="position:sticky;top:0;"><tr>'
+              +'<th style="text-align:left;font-size:10px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-bottom:1px solid var(--color-border-default);background:var(--color-surface-sunken);">Reference</th>'
+              +'<th style="text-align:left;font-size:10px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;padding:7px 4px;border-bottom:1px solid var(--color-border-default);background:var(--color-surface-sunken);">Date</th>'
+              +'<th style="text-align:left;font-size:10px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;padding:7px 4px;border-bottom:1px solid var(--color-border-default);background:var(--color-surface-sunken);">Vendor</th>'
+              +'<th style="text-align:left;font-size:10px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;padding:7px 4px;border-bottom:1px solid var(--color-border-default);background:var(--color-surface-sunken);">Description</th>'
+              +'<th style="text-align:right;font-size:10px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;padding:7px 4px;border-bottom:1px solid var(--color-border-default);background:var(--color-surface-sunken);">Amount</th>'
+              +'<th style="border-bottom:1px solid var(--color-border-default);background:var(--color-surface-sunken);"></th>'
+            +'</tr></thead>'
+            +'<tbody>'+rows+'</tbody>'
+          +'</table>'
+          +'<div style="padding:8px 10px;background:var(--color-surface-sunken);border-top:1px solid var(--color-border-default);font-size:11px;color:var(--color-text-tertiary);">Showing 20 of 143</div>'
+        +'</div>'
+        +'<div style="border:1px solid var(--color-warning-border);border-radius:var(--radius-md);background:var(--color-warning-surface);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--color-warning-text);line-height:1.5;">'
+          +'<strong style="display:block;margin-bottom:2px;">This action is recorded in the audit trail.</strong>'
+          +applying+' transactions mapped to 5110 &middot; Raw Material Purchases. Cannot be undone without IA involvement.'
+        +'</div>'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;">'
+          +'<button class="btn-ghost" onclick="closeBatchModal()">Cancel</button>'
+          +'<button class="btn-cont" onclick="s4BatchApply()">Apply to '+applying+' transactions &#8250;</button>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+}
+
+function closeBatchModal(){
+  var el=document.getElementById('batch-modal');
+  if(el)el.style.display='none';
+}
+
+function s4BatchToggle(i){
+  S4_BATCH.excluded[i]=!S4_BATCH.excluded[i];
+  showBatchConfirm(); /* re-render modal in place */
+}
+
+function s4BatchApply(){
+  var excluded=Object.keys(S4_BATCH.excluded).filter(function(k){return S4_BATCH.excluded[k];}).length;
+  var applied=143-excluded;
+  closeBatchModal();
+  /* show a brief success banner in the GL workspace */
+  var banner=document.createElement('div');
+  banner.style.cssText='position:fixed;bottom:24px;right:24px;background:var(--color-success-surface);border:1px solid var(--color-success-border);border-radius:var(--radius-lg);padding:12px 18px;font-size:13px;color:var(--color-success-text);font-weight:500;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,.12);';
+  banner.innerHTML='&#10003; '+applied+' transactions mapped to 5110 &middot; Raw Material Purchases'+(excluded>0?' &middot; '+excluded+' returned to queue':'');
+  document.body.appendChild(banner);
+  setTimeout(function(){if(banner.parentNode)banner.parentNode.removeChild(banner);},3500);
+  rS4GLWorkspace(S4_WS.activeMonth);
+}
+
+/* ═══════════════════════════════════════
+   STAGE 4, BATCH CONFIRM (>50 TXN) — full screen
+═══════════════════════════════════════ */
+var S4_BATCH = { excluded:{} };
+var S4_BATCH_TXNS = [
+  {ref:'INV-2025-0234',date:'Apr 3',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 287,400,000'},
+  {ref:'INV-2025-0251',date:'Apr 10',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 143,200,000'},
+  {ref:'INV-2025-0267',date:'Apr 18',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku — Batch 3',amount:'Rp 98,700,000'},
+  {ref:'INV-2025-0289',date:'Apr 24',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 211,300,000'},
+  {ref:'INV-2025-0301',date:'May 2',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 176,800,000'},
+  {ref:'INV-2025-0318',date:'May 9',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 134,500,000'},
+  {ref:'INV-2025-0334',date:'May 15',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku — Partial',amount:'Rp 67,200,000'},
+  {ref:'INV-2025-0351',date:'May 22',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 198,400,000'},
+  {ref:'INV-2025-0367',date:'Jun 3',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 245,100,000'},
+  {ref:'INV-2025-0382',date:'Jun 11',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 88,900,000'},
+  {ref:'INV-2025-0398',date:'Jun 19',vendor:'PT Sumber Makmur',desc:'Pembelian Alat Produksi',amount:'Rp 42,300,000'},
+  {ref:'INV-2025-0412',date:'Jun 28',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 167,600,000'},
+  {ref:'INV-2025-0429',date:'Jul 4',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 223,400,000'},
+  {ref:'INV-2025-0445',date:'Jul 14',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 154,700,000'},
+  {ref:'INV-2025-0461',date:'Jul 22',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 189,200,000'},
+  {ref:'INV-2025-0478',date:'Aug 1',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 312,800,000'},
+  {ref:'INV-2025-0492',date:'Aug 9',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 145,600,000'},
+  {ref:'INV-2025-0508',date:'Aug 19',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 201,300,000'},
+  {ref:'INV-2025-0524',date:'Sep 2',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 278,900,000'},
+  {ref:'INV-2025-0541',date:'Sep 14',vendor:'PT Sumber Makmur',desc:'Pembelian Bahan Baku',amount:'Rp 163,400,000'},
+];
+
+function s4BatchToggle(i){
+  S4_BATCH.excluded[i]=!S4_BATCH.excluded[i];
+  showBatchConfirm(); /* re-render modal in place */
+}
 
 /* ═══════════════════════════════════════
    STAGE 4, STEP 2: EXCEPTION QUEUE
@@ -1863,70 +2517,6 @@ function confirmTxn(ti){
   S4.selectedCand=null;S4.reviewed=Math.min(S4.reviewed+1,112);
   rS4Queue();
 }
-function goS4SignOff(){S4.step=2;updS4Sidebar(2);rS4SignOff();}
-
-/* ═══════════════════════════════════════
-   STAGE 4, STEP 3: CONTROLLER SIGN-OFF
-═══════════════════════════════════════ */
-function rS4SignOff(){
-  APP.screen='s4-signoff';
-  var a=document.getElementById('main');
-  a.innerHTML='<div class="srow"><span class="badge b-act">Action required</span><span class="bmeta">Stage 4 &middot; Step 3 &middot; Sign-off</span></div>'
-    +'<h1>GL mapping &#8212; sign-off</h1>'
-    +'<p class="desc">You have completed your review queue. Sign off to confirm the GL mapping is correct. This unlocks Trial Balance reconciliation in Stage 5.</p>'
-    +'<div class="twrap" style="margin-bottom:16px"><table class="so4-table">'
-      +'<thead><tr><th>Review category</th><th>Transactions</th><th>Status</th></tr></thead>'
-      +'<tbody>'
-        +'<tr><td>Top 20 by amount</td><td style="font-family:var(--font-mono)">20 of 20</td><td><span class="so4-b-complete">Complete &#10003;</span></td></tr>'
-        +'<tr><td>Random sample (system-selected)</td><td style="font-family:var(--font-mono)">50 of 50</td><td><span class="so4-b-complete">Complete &#10003;</span></td></tr>'
-        +'<tr><td>IDR 50M+ exceptions</td><td style="font-family:var(--font-mono)">42 of 42</td><td><span class="so4-b-complete">Complete &#10003;</span></td></tr>'
-        +'<tr><td>Tax-account transactions</td><td style="font-family:var(--font-mono)">287 of 287</td><td><span class="so4-b-complete">Complete &#10003;</span></td></tr>'
-      +'</tbody>'
-    +'</table></div>'
-    +'<div class="hcgrid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:14px">'
-      +'<div style="text-align:center;padding:12px;border:1px solid var(--color-border-default);border-radius:var(--radius-md);background:var(--color-success-surface)"><div style="font-family:var(--font-mono);font-size:18px;font-weight:600;color:var(--color-success-text)">13,824</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">Auto-mapped by system</div></div>'
-      +'<div style="text-align:center;padding:12px;border:1px solid var(--color-border-default);border-radius:var(--radius-md);background:var(--color-danger-surface)"><div style="font-family:var(--font-mono);font-size:18px;font-weight:600;color:var(--color-danger-text)">4,096</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">Resolved by IA</div></div>'
-      +'<div style="text-align:center;padding:12px;border:1px solid var(--color-border-default);border-radius:var(--radius-md);background:var(--color-action-wash)"><div style="font-family:var(--font-mono);font-size:18px;font-weight:600;color:var(--color-action)">112</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">Resolved by you</div></div>'
-      +'<div style="text-align:center;padding:12px;border:1px solid var(--color-border-default);border-radius:var(--radius-md);background:var(--color-surface-sunken)"><div style="font-family:var(--font-mono);font-size:18px;font-weight:600;color:var(--color-text-tertiary)">400</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">Tax transactions (auto)</div></div>'
-    +'</div>'
-    +'<div class="arap-row" style="margin-bottom:14px"><div class="arap-text"><div class="title">AR/AP aging reconstruction is complete</div><div class="sub">143 open AP invoices &middot; 89 open AR invoices. 4 vendors still have unknown payment terms — flagged for Day 15 resolution.</div></div><div class="soft-block-badge">4 terms pending</div></div>'
-    +'<p style="font-size:11px;color:var(--color-text-tertiary);font-weight:300;margin-bottom:12px">[PRD: AR/AP aging runs in parallel as a background system process. Controller sees result here as context only — not a separate navigation step.]</p>'
-    +'<div class="so-box">'
-      +'<div><div class="so-lbl">Controller Sign-off</div><div class="so-text">I have reviewed the sample and the GL mapping is correct to the best of my knowledge.</div><div class="so-note">This sign-off is recorded in the migration audit trail and unlocks Stage 5.</div></div>'
-      +'<button class="btn-lock" onclick="lockGL()">Lock GL<br>mapping &#8250;</button>'
-    +'</div>';
-}
-
-/* ═══════════════════════════════════════
-   STAGE 4: DONE
-═══════════════════════════════════════ */
-function lockGL(){
-  APP.screen='s4done';APP.stage=3;
-  updStageBar();updDay();
-  var steps=['Mapping overview|Complete','Your exception queue|Complete','Controller sign-off|Complete'];
-  var rows=steps.map(function(r){var p=r.split('|');return'<div class="sb-row"><div class="step-n dn">&#10003;</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+p[1]+'</div></div></div>';}).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Transaction data</span></div>'+rows;
-  var a=document.getElementById('main');
-  a.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 20px 28px">'
-    +'<div class="succircle"><span class="succheck">&#10003;</span></div>'
-    +'<h2 style="font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:8px;letter-spacing:-0.01em">All 18,432 transactions mapped.</h2>'
-    +'<p style="font-size:13px;color:var(--color-text-tertiary);margin-bottom:18px;font-weight:300;max-width:520px">75% mapped automatically. Your IA resolved the bulk of exceptions. You confirmed the critical sample.</p>'
-    +'<div class="pills" style="flex-wrap:wrap;justify-content:center">'
-      +'<span class="pill">13,824 auto-mapped</span><span class="pill">4,096 IA-resolved</span><span class="pill">112 you reviewed</span><span class="pill">143 AP invoices</span><span class="pill">89 AR invoices</span><span class="pill">Day 12</span>'
-    +'</div>'
-    +'<div style="width:100%;border-top:1px solid var(--color-border-default);margin:18px 0"></div>'
-    +'<p style="font-size:10px;color:var(--color-text-tertiary);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px">What unlocks next</p>'
-    +'<div style="width:100%;max-width:560px;margin-bottom:22px">'
-      +'<div style="border:1px solid var(--color-border-default);border-radius:var(--radius-lg);padding:14px;text-align:left;background:var(--color-surface-sunken)">'
-        +'<div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:5px">Stage 5 &#8212; Trial Balance Reconciliation</div>'
-        +'<p style="font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px;font-weight:300">The system will generate a 3-way comparison: Legacy TB vs TradeOS TB vs Variance. Automated analysis runs immediately.</p>'
-        +'<span style="background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-full);display:inline-block">Starting now</span>'
-      +'</div>'
-    +'</div>'
-    +'<button class="btn-cont" onclick="goStage5()">Go to Stage 5 &#8594;</button>'
-  +'</div>';
-}
-
 
 /* ═══════════════════════════════════════
    STAGE 5 DATA
@@ -1937,190 +2527,303 @@ var S5 = { step:0, activeTab:0, invAccepted:false };
    STAGE 5: ENTER
 ═══════════════════════════════════════ */
 function goStage5(){
-  APP.stage=3;APP.screen='s5-threeway';S5.step=0;
+  APP.stage=3;APP.screen='s5-review';S5.step=0;S5.activeTab=0;
   updStageBar();updDay();
   updS5Sidebar(0);
-  rS5ThreeWay();
+  rS5Review();
 }
 function updS5Sidebar(active){
-  var steps=['Three-way comparison|TB &middot; BS &middot; P&amp;L','Variance review|3 variances','Controller sign-off|Seal audit trail'];
-  var rows=steps.map(function(r,i){
+  /* 2 steps: 0=TB·BS·P&L review, 1=Sign-off */
+  var steps=[
+    'TB &middot; BS &middot; P&amp;L review|Formal reconciliation',
+    'Sign-off|Seal audit trail'
+  ];
+  var stepsHtml=steps.map(function(r,i){
     var p=r.split('|');
     var state=i<active?'dn':i===active?'act':'pend';
     var sel=i===active?' sel':'';
     var sub=i<active?'Complete':p[1];
     return'<div class="sb-row'+sel+'" onclick="s5GoStep('+i+')"><div class="step-n '+state+'">'+(i<active?'&#10003;':(i+1))+'</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+sub+'</div></div></div>';
   }).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Transaction data</span></div>'+rows;
+  document.getElementById('sidebar').innerHTML=''
+    +'<div class="sb-hdr"><span class="sb-lbl">Transaction data</span></div>'
+    +'<div class="sb-row" onclick="s4GoStep(2)" style="padding:6px 16px;"><div class="step-n dn" style="font-size:10px;width:18px;height:18px;">&#10003;</div><div><div class="sb-name" style="font-size:12px;">GL mapping</div><div class="sb-meta">Complete</div></div></div>'
+    +'<div class="cl-divider"></div>'
+    +'<div class="cl-group-lbl">TB reconciliation</div>'
+    +stepsHtml;
 }
 function s5GoStep(i){
-  if(i>S5.step)return;
   S5.step=i;updS5Sidebar(i);
-  if(i===0)rS5ThreeWay();
-  else if(i===1)rS5Variance();
+  if(i===0)rS5Review();
   else rS5SignOff();
 }
 
 /* ═══════════════════════════════════════
-   STAGE 5, STEP 1: THREE-WAY COMPARISON
+   STAGE 5, STEP 1: TB · BS · P&L REVIEW
+   (single screen — tabs + variance cards inline)
 ═══════════════════════════════════════ */
-function rS5ThreeWay(){
-  APP.screen='s5-threeway';
+var S5_PERIOD='full';
+
+function s5SetPeriod(k){S5_PERIOD=k;rS5Review();}
+function s5SetTab(i){S5.activeTab=i;rS5Review();}
+
+function rS5Review(){
+  APP.screen='s5-review';
   var a=document.getElementById('main');
+
+  /* ── tabs ── */
   var tabs=[
-    {lbl:'Trial Balance',tag:'3 variances',tagCls:'has',active:S5.activeTab===0},
-    {lbl:'Balance Sheet',tag:'Clean &#10003;',tagCls:'clean',active:S5.activeTab===1},
-    {lbl:'P&amp;L',tag:'1 variance',tagCls:'has',active:S5.activeTab===2}
+    {lbl:'Trial Balance',tag:'3 variances',tagCls:'has'},
+    {lbl:'Balance Sheet',tag:'Balanced &#10003;',tagCls:'clean'},
+    {lbl:'P&amp;L',tag:'1 investigable',tagCls:'has'}
   ];
   var tabHtml=tabs.map(function(t,i){
-    return'<button class="tb-tab'+(t.active?' active':'')+'" onclick="s5SetTab('+i+')">'
+    return'<button class="tb-tab'+(S5.activeTab===i?' active':'')+'" onclick="s5SetTab('+i+')">'
       +t.lbl+'<span class="tab-var '+t.tagCls+'">'+t.tag+'</span></button>';
   }).join('');
 
-  var tabContent='';
-  if(S5.activeTab===0){
-    tabContent='<div class="tb3-cards">'
-      +'<div class="tb3-card"><div class="tb3-num">Rp 28,412,340,000</div><div class="tb3-lbl">Legacy TB total</div></div>'
-      +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 28,412,340,000</div><div class="tb3-lbl">TradeOS TB total</div></div>'
-      +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 0</div><div class="tb3-lbl">Net variance &middot; Balanced &#10003;</div></div>'
-      +'</div>'
-      +'<p style="font-size:12px;color:var(--color-text-secondary);font-weight:300;margin-bottom:12px">Total books balance. 3 account-level variances net to zero — review below.</p>'
-      +'<div class="twrap"><table class="tb3-table">'
-        +'<thead><tr><th>Account</th><th>FS Placement</th><th>Legacy Balance</th><th>TradeOS Balance</th><th>Variance</th><th>Type</th></tr></thead>'
-        +'<tbody>'
-          +'<tr><td class="acct">1110 &middot; Cash</td><td>BS &middot; Current</td><td class="mono">Rp 847,200,000</td><td class="mono">Rp 847,200,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary)">—</span></td></tr>'
-          +'<tr><td class="acct">1120 &middot; Bank BCA</td><td>BS &middot; Current</td><td class="mono">Rp 2,341,800,000</td><td class="mono">Rp 2,341,800,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary)">—</span></td></tr>'
-          +'<tr><td class="acct">1310 &middot; Trade Receivables</td><td>BS &middot; Current</td><td class="mono">Rp 4,812,400,000</td><td class="mono">Rp 4,812,400,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary)">—</span></td></tr>'
-          +'<tr style="background:var(--color-success-surface)"><td class="acct">5110 &middot; Raw Material Purchases</td><td>P&amp;L &middot; COGS</td><td class="mono">Rp 8,234,100,000</td><td class="mono">Rp 8,235,340,000</td><td class="var-pos">+Rp 1,240,000</td><td><span class="var-badge vb-exp">Expected</span></td></tr>'
-          +'<tr><td class="acct">2110 &middot; Trade Payables</td><td>BS &middot; Current Liab</td><td class="mono">Rp 1,847,320,000</td><td class="mono">Rp 1,847,320,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary)">—</span></td></tr>'
-          +'<tr><td class="acct">5200 &middot; Salaries &amp; Wages</td><td>P&amp;L &middot; OpEx</td><td class="mono">Rp 3,412,800,000</td><td class="mono">Rp 3,412,800,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary)">—</span></td></tr>'
-          +'<tr style="background:var(--color-success-surface)"><td class="acct">1310 &middot; Prepaid Expenses</td><td>BS &middot; Current</td><td class="mono">Rp 11,480,000</td><td class="mono">Rp 11,840,000</td><td class="var-pos">+Rp 360,000</td><td><span class="var-badge vb-exp">Expected</span></td></tr>'
-          +'<tr style="background:var(--color-warning-surface)"><td class="acct">6110 &middot; Entertainment &amp; Rep</td><td>P&amp;L &middot; OpEx</td><td class="mono">Rp 287,400,000</td><td class="mono">Rp 284,200,000</td><td class="var-neg">-Rp 3,200,000</td><td><span class="var-badge vb-inv">Investigable</span></td></tr>'
-          +'<tr><td class="acct">4200 &middot; Sales Returns</td><td>P&amp;L &middot; Revenue</td><td class="mono">Rp 124,300,000</td><td class="mono">Rp 124,300,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary)">—</span></td></tr>'
-          +'<tr><td class="acct">2900 &middot; Other Payables</td><td>BS &middot; Current Liab</td><td class="mono">Rp 412,800,000</td><td class="mono">Rp 412,800,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary)">—</span></td></tr>'
-        +'</tbody>'
-      +'</table></div>';
-  } else if(S5.activeTab===1){
-    tabContent='<div class="tb3-cards" style="grid-template-columns:1fr 1fr">'
-      +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 18,412,340,000</div><div class="tb3-lbl">Total Assets — matches Legacy &#10003;</div></div>'
-      +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 18,412,340,000</div><div class="tb3-lbl">Total Liabilities + Equity — matches &#10003;</div></div>'
-      +'</div>'
-      +'<div class="tb3-balanced">&#10003; Balance Sheet is balanced. No variances detected.</div>'
-      +'<div class="twrap"><table class="tb3-table">'
-        +'<thead><tr><th>Section</th><th>Legacy</th><th>TradeOS</th><th>Variance</th></tr></thead>'
-        +'<tbody>'
-          +'<tr><td class="acct">Current Assets</td><td class="mono">Rp 8,024,880,000</td><td class="mono">Rp 8,024,880,000</td><td class="var-zero">Rp 0</td></tr>'
-          +'<tr><td class="acct">Fixed Assets</td><td class="mono">Rp 10,387,460,000</td><td class="mono">Rp 10,387,460,000</td><td class="var-zero">Rp 0</td></tr>'
-          +'<tr><td class="acct">Current Liabilities</td><td class="mono">Rp 3,672,140,000</td><td class="mono">Rp 3,672,140,000</td><td class="var-zero">Rp 0</td></tr>'
-          +'<tr><td class="acct">Long-term Liabilities</td><td class="mono">Rp 4,200,000,000</td><td class="mono">Rp 4,200,000,000</td><td class="var-zero">Rp 0</td></tr>'
-          +'<tr><td class="acct">Equity</td><td class="mono">Rp 10,540,200,000</td><td class="mono">Rp 10,540,200,000</td><td class="var-zero">Rp 0</td></tr>'
-        +'</tbody>'
-      +'</table></div>';
-  } else {
-    tabContent='<div class="tb3-cards" style="grid-template-columns:1fr 1fr">'
-      +'<div class="tb3-card"><div class="tb3-num">Rp 2,847,300,000</div><div class="tb3-lbl">Legacy net profit</div></div>'
-      +'<div class="tb3-card amb"><div class="tb3-num" style="color:var(--color-warning-text)">Rp 2,844,100,000</div><div class="tb3-lbl">TradeOS net profit &middot; Rp 3,200,000 variance</div></div>'
-      +'</div>'
-      +'<p class="tb3-warn">1 investigable variance detected. Review required.</p>'
-      +'<div class="twrap"><table class="tb3-table">'
-        +'<thead><tr><th>Section</th><th>Legacy</th><th>TradeOS</th><th>Variance</th></tr></thead>'
-        +'<tbody>'
-          +'<tr><td class="acct">Revenue</td><td class="mono">Rp 28,412,500,000</td><td class="mono">Rp 28,412,500,000</td><td class="var-zero">Rp 0</td></tr>'
-          +'<tr><td class="acct">COGS</td><td class="mono">Rp 18,234,100,000</td><td class="mono">Rp 18,234,100,000</td><td class="var-zero">Rp 0</td></tr>'
-          +'<tr><td class="acct">Gross Profit</td><td class="mono">Rp 10,178,400,000</td><td class="mono">Rp 10,178,400,000</td><td class="var-zero">Rp 0</td></tr>'
-          +'<tr style="background:var(--color-warning-surface)"><td class="acct">Operating Expenses</td><td class="mono">Rp 7,331,100,000</td><td class="mono">Rp 7,334,300,000</td><td class="var-neg">-Rp 3,200,000</td></tr>'
-          +'<tr style="background:var(--color-warning-surface)"><td class="acct">Net Profit</td><td class="mono">Rp 2,847,300,000</td><td class="mono">Rp 2,844,100,000</td><td class="var-neg">-Rp 3,200,000</td></tr>'
-        +'</tbody>'
-      +'</table></div>';
+  /* ── period selector ── */
+  var periods=[
+    {k:'jan',lbl:'Jan'},{k:'feb',lbl:'Feb'},{k:'mar',lbl:'Mar'},{k:'apr',lbl:'Apr'},
+    {k:'may',lbl:'May'},{k:'jun',lbl:'Jun'},{k:'jul',lbl:'Jul'},{k:'aug',lbl:'Aug'},
+    {k:'sep',lbl:'Sep'},{k:'ytd',lbl:'YTD'},{k:'full',lbl:'Full year'}
+  ];
+  var periodHtml='<div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:14px;">'
+    +'<span style="font-size:11px;color:var(--color-text-tertiary);font-weight:300;margin-right:4px;">Period:</span>'
+    +periods.map(function(p){
+      var act=S5_PERIOD===p.k;
+      return'<button class="'+(act?'btn-confirm':'btn-ghost')+'" onclick="s5SetPeriod(\''+p.k+'\')" style="font-size:11px;padding:3px 9px;">'+p.lbl+'</button>';
+    }).join('')
+  +'</div>';
+
+  /* ── context banner ── */
+  var ctxBanner='';
+  if(S5_PERIOD==='apr'){
+    ctxBanner='<div class="alert" style="margin-bottom:12px;"><div class="alert-icon">&#9651;</div><div class="alert-body">April has the variance in 6110 &middot; Entertainment &amp; Rep. This is the month driving the P&amp;L discrepancy. <button class="btn-ia" onclick="s4wsJumpFromTB(\'apr\',\'6110\')" style="margin-top:4px;">Go to April &middot; 6110 in GL workspace &#8599;</button></div></div>';
+  } else if(S5_PERIOD==='full'||S5_PERIOD==='ytd'){
+    ctxBanner='<div class="alert blue" style="margin-bottom:12px;"><div class="alert-icon">&#9432;</div><div class="alert-body">Showing cumulative Jan–Sep 2025. The Rp 3,200,000 variance in 6110 is driven by April. <button class="btn-ia" onclick="s5SetPeriod(\'apr\')" style="margin-top:4px;">Drill into April &#8594;</button></div></div>';
   }
 
-  a.innerHTML='<div class="srow"><span class="badge b-rev">Review required</span><span class="bmeta">Stage 5 &middot; Step 1 &middot; PRD Phase 5</span></div>'
+  /* ── tab content ── */
+  var tabContent='';
+
+  if(S5.activeTab===0){
+    /* TB tab — account table + variance cards below */
+    tabContent=''
+      +'<div class="tb3-cards">'
+        +'<div class="tb3-card"><div class="tb3-num">Rp 28,412,340,000</div><div class="tb3-lbl">Legacy TB total</div></div>'
+        +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 28,412,340,000</div><div class="tb3-lbl">TradeOS TB total</div></div>'
+        +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 0</div><div class="tb3-lbl">Net variance &middot; Balanced &#10003;</div></div>'
+      +'</div>'
+      +'<p style="font-size:12px;color:var(--color-text-secondary);font-weight:300;margin-bottom:12px;">Total books balance. 3 account-level variances net to zero — see breakdown below.</p>'
+      +'<div class="twrap" style="margin-bottom:16px;"><table class="tb3-table">'
+        +'<thead><tr><th>Account</th><th>FS placement</th><th>Legacy</th><th>TradeOS</th><th>Variance</th><th>Classification</th><th></th></tr></thead>'
+        +'<tbody>'
+          +'<tr><td class="acct">1110 &middot; Cash</td><td>BS &middot; Current</td><td class="mono">Rp 847,200,000</td><td class="mono">Rp 847,200,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary);font-size:11px;">—</span></td><td></td></tr>'
+          +'<tr><td class="acct">1120 &middot; Bank BCA</td><td>BS &middot; Current</td><td class="mono">Rp 2,341,800,000</td><td class="mono">Rp 2,341,800,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary);font-size:11px;">—</span></td><td></td></tr>'
+          +'<tr class="tb3-row-highlight"><td class="acct">5110 &middot; Raw Material Purchases</td><td>P&amp;L &middot; COGS</td><td class="mono">Rp 8,234,100,000</td><td class="mono">Rp 8,235,340,000</td><td class="var-pos">+Rp 1,240,000</td><td><span class="var-badge vb-exp">Expected</span></td><td><button class="btn-ia" onclick="s4wsJumpFromTB(\'apr\',\'5110\')" style="font-size:10px;white-space:nowrap;">Go to GL &#8599;</button></td></tr>'
+          +'<tr><td class="acct">2110 &middot; Trade Payables</td><td>BS &middot; Current Liab</td><td class="mono">Rp 1,847,320,000</td><td class="mono">Rp 1,847,320,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary);font-size:11px;">—</span></td><td></td></tr>'
+          +'<tr><td class="acct">5200 &middot; Salaries &amp; Wages</td><td>P&amp;L &middot; OpEx</td><td class="mono">Rp 3,412,800,000</td><td class="mono">Rp 3,412,800,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary);font-size:11px;">—</span></td><td></td></tr>'
+          +'<tr class="tb3-row-highlight"><td class="acct">1310 &middot; Prepaid Expenses</td><td>BS &middot; Current</td><td class="mono">Rp 11,480,000</td><td class="mono">Rp 11,840,000</td><td class="var-pos">+Rp 360,000</td><td><span class="var-badge vb-exp">Expected</span></td><td><button class="btn-ia" onclick="s4wsJumpFromTB(\'mar\',\'1310\')" style="font-size:10px;white-space:nowrap;">Go to GL &#8599;</button></td></tr>'
+          +'<tr class="tb3-row-warn"><td class="acct">6110 &middot; Entertainment &amp; Rep</td><td>P&amp;L &middot; OpEx</td><td class="mono">Rp 287,400,000</td><td class="mono">Rp 284,200,000</td><td class="var-neg">-Rp 3,200,000</td><td><span class="var-badge vb-inv">Investigable</span></td><td><button class="btn-ia" onclick="s4wsJumpFromTB(\'apr\',\'6110\')" style="font-size:10px;white-space:nowrap;">Go to Apr &middot; 6110 &#8599;</button></td></tr>'
+          +'<tr><td class="acct">4200 &middot; Sales Returns</td><td>P&amp;L &middot; Revenue</td><td class="mono">Rp 124,300,000</td><td class="mono">Rp 124,300,000</td><td class="var-zero">Rp 0</td><td><span style="color:var(--color-text-tertiary);font-size:11px;">—</span></td><td></td></tr>'
+        +'</tbody>'
+      +'</table></div>'
+      /* variance cards inline — this is what makes TB review earn its place */
+      +'<div style="font-size:11px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;">Variance detail &amp; IA notes</div>'
+      /* Expected 1 */
+      +'<div class="var-card exp" style="margin-bottom:8px;">'
+        +'<div class="var-card-hdr"><div><div class="title">5110 &middot; Raw Material Purchases</div><div class="nums">Legacy: Rp 8,234,100,000 &rarr; TradeOS: Rp 8,235,340,000 &middot; <span class="v vpos">+Rp 1,240,000</span></div></div><span class="var-badge vb-exp">Expected</span></div>'
+        +'<div class="sys-exp-box"><div class="sys-exp-lbl">System explanation</div><div class="sys-exp-text">GL-to-TB auto-adjustment accepted during GL upload health check (Soft block 1). Rp 880,000 on 5110 and Rp 360,000 on 1310 posted as rounding adjustments. Total net: Rp 1,240,000. Auto-accepted.</div></div>'
+        +'<div class="var-card-footer"><span class="var-auto-accepted">Auto-accepted — no action required</span><span class="var-badge vb-exp">&#10003;</span></div>'
+      +'</div>'
+      /* Expected 2 */
+      +'<div class="var-card exp" style="margin-bottom:8px;">'
+        +'<div class="var-card-hdr"><div><div class="title">1310 &middot; Prepaid Expenses</div><div class="nums">Legacy: Rp 11,480,000 &rarr; TradeOS: Rp 11,840,000 &middot; <span class="v vpos">+Rp 360,000</span></div></div><span class="var-badge vb-exp">Expected</span></div>'
+        +'<div class="sys-exp-box"><div class="sys-exp-lbl">System explanation</div><div class="sys-exp-text">Part of the same GL-to-TB auto-adjustment from GL upload. Counterpart to the 5110 entry above.</div></div>'
+        +'<div class="var-card-footer"><span class="var-auto-accepted">Auto-accepted — no action required</span><span class="var-badge vb-exp">&#10003;</span></div>'
+      +'</div>'
+      /* Investigable */
+      +rS5InvCard();
+
+  } else if(S5.activeTab===1){
+    /* BS tab — structured balance sheet */
+    tabContent=''
+      +'<div class="tb3-cards" style="grid-template-columns:1fr 1fr;margin-bottom:16px;">'
+        +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 18,412,340,000</div><div class="tb3-lbl">Total Assets — matches Legacy &#10003;</div></div>'
+        +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 18,412,340,000</div><div class="tb3-lbl">Liabilities + Equity — balanced &#10003;</div></div>'
+      +'</div>'
+      +'<p style="font-size:12px;color:var(--color-text-secondary);font-weight:300;margin-bottom:14px;">Balance Sheet is clean. Assets = Liabilities + Equity across both systems.</p>'
+      +'<div class="twrap"><table class="tb3-table">'
+        +'<thead><tr><th>Section</th><th>Legacy</th><th>TradeOS</th><th>Variance</th></tr></thead>'
+        +'<tbody>'
+          +'<tr style="background:var(--color-surface-sunken);"><td colspan="4" style="font-weight:600;font-size:11px;color:var(--color-text-tertiary);letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;">Assets</td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Current Assets</td><td class="mono">Rp 8,847,200,000</td><td class="mono">Rp 8,847,200,000</td><td class="var-zero">Rp 0</td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Fixed Assets</td><td class="mono">Rp 6,234,800,000</td><td class="mono">Rp 6,234,800,000</td><td class="var-zero">Rp 0</td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Other Assets</td><td class="mono">Rp 3,330,340,000</td><td class="mono">Rp 3,330,340,000</td><td class="var-zero">Rp 0</td></tr>'
+          +'<tr style="font-weight:600;border-top:2px solid var(--color-border-default);"><td>Total Assets</td><td class="mono">Rp 18,412,340,000</td><td class="mono">Rp 18,412,340,000</td><td class="var-zero">Rp 0 &#10003;</td></tr>'
+          +'<tr style="background:var(--color-surface-sunken);"><td colspan="4" style="font-weight:600;font-size:11px;color:var(--color-text-tertiary);letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;">Liabilities</td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Current Liabilities</td><td class="mono">Rp 2,847,320,000</td><td class="mono">Rp 2,847,320,000</td><td class="var-zero">Rp 0</td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Long-term Liabilities</td><td class="mono">Rp 4,120,000,000</td><td class="mono">Rp 4,120,000,000</td><td class="var-zero">Rp 0</td></tr>'
+          +'<tr style="background:var(--color-surface-sunken);"><td colspan="4" style="font-weight:600;font-size:11px;color:var(--color-text-tertiary);letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;">Equity</td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Share Capital</td><td class="mono">Rp 5,000,000,000</td><td class="mono">Rp 5,000,000,000</td><td class="var-zero">Rp 0</td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Retained Earnings</td><td class="mono">Rp 6,445,020,000</td><td class="mono">Rp 6,445,020,000</td><td class="var-zero">Rp 0</td></tr>'
+          +'<tr style="font-weight:600;border-top:2px solid var(--color-border-default);"><td>Total Liabilities + Equity</td><td class="mono">Rp 18,412,340,000</td><td class="mono">Rp 18,412,340,000</td><td class="var-zero">Rp 0 &#10003;</td></tr>'
+        +'</tbody>'
+      +'</table></div>'
+      +'<div style="margin-top:14px;padding:12px 16px;background:var(--color-success-surface);border:1px solid var(--color-success-border);border-radius:var(--radius-md);font-size:12px;color:var(--color-success-text);">&#10003; Balance Sheet is clean. No action required on this tab.</div>';
+
+  } else {
+    /* P&L tab — income statement with variance highlighted */
+    tabContent=''
+      +'<div class="tb3-cards" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;">'
+        +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 14,234,800,000</div><div class="tb3-lbl">Revenue — matches &#10003;</div></div>'
+        +'<div class="tb3-card grn"><div class="tb3-num grn">Rp 8,235,340,000</div><div class="tb3-lbl">COGS — matches &#10003;</div></div>'
+        +'<div class="tb3-card" style="border-left:3px solid var(--color-warning-border);"><div class="tb3-num" style="color:var(--color-warning-text);">-Rp 3,200,000</div><div class="tb3-lbl">OpEx variance &middot; see below</div></div>'
+      +'</div>'
+      +'<div class="twrap" style="margin-bottom:16px;"><table class="tb3-table">'
+        +'<thead><tr><th>Line item</th><th>Legacy</th><th>TradeOS</th><th>Variance</th><th></th></tr></thead>'
+        +'<tbody>'
+          +'<tr style="background:var(--color-surface-sunken);"><td colspan="5" style="font-weight:600;font-size:11px;color:var(--color-text-tertiary);letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;">Revenue</td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Gross Sales</td><td class="mono">Rp 14,358,700,000</td><td class="mono">Rp 14,358,700,000</td><td class="var-zero">Rp 0</td><td></td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Sales Returns</td><td class="mono">(Rp 123,900,000)</td><td class="mono">(Rp 123,900,000)</td><td class="var-zero">Rp 0</td><td></td></tr>'
+          +'<tr style="font-weight:600;"><td>Net Revenue</td><td class="mono">Rp 14,234,800,000</td><td class="mono">Rp 14,234,800,000</td><td class="var-zero">Rp 0 &#10003;</td><td></td></tr>'
+          +'<tr style="background:var(--color-surface-sunken);"><td colspan="5" style="font-weight:600;font-size:11px;color:var(--color-text-tertiary);letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;">Cost of Goods Sold</td></tr>'
+          +'<tr style="font-weight:600;"><td>Total COGS</td><td class="mono">Rp 8,234,100,000</td><td class="mono">Rp 8,235,340,000</td><td class="var-pos">+Rp 1,240,000</td><td><span class="var-badge vb-exp" style="font-size:10px;">Expected</span></td></tr>'
+          +'<tr style="font-weight:600;border-top:2px solid var(--color-border-default);"><td>Gross Profit</td><td class="mono">Rp 6,000,700,000</td><td class="mono">Rp 5,999,460,000</td><td class="var-neg">-Rp 1,240,000</td><td></td></tr>'
+          +'<tr style="background:var(--color-surface-sunken);"><td colspan="5" style="font-weight:600;font-size:11px;color:var(--color-text-tertiary);letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;">Operating Expenses</td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Salaries &amp; Wages</td><td class="mono">Rp 3,412,800,000</td><td class="mono">Rp 3,412,800,000</td><td class="var-zero">Rp 0</td><td></td></tr>'
+          +'<tr class="tb3-row-warn"><td style="padding-left:20px;font-weight:500;">Entertainment &amp; Rep (6110)</td><td class="mono">Rp 287,400,000</td><td class="mono">Rp 284,200,000</td><td class="var-neg">-Rp 3,200,000</td><td><button class="btn-ia" onclick="s4wsJumpFromTB(\'apr\',\'6110\')" style="font-size:10px;white-space:nowrap;">Go to Apr &middot; 6110 &#8599;</button></td></tr>'
+          +'<tr><td style="padding-left:20px;color:var(--color-text-secondary);">Other OpEx</td><td class="mono">Rp 3,630,900,000</td><td class="mono">Rp 3,630,900,000</td><td class="var-zero">Rp 0</td><td></td></tr>'
+          +'<tr style="font-weight:600;border-top:2px solid var(--color-border-default);"><td>Total OpEx</td><td class="mono">Rp 7,331,100,000</td><td class="mono">Rp 7,327,900,000</td><td class="var-neg">-Rp 3,200,000</td><td><span class="var-badge vb-inv" style="font-size:10px;">Investigable</span></td></tr>'
+          +'<tr style="font-weight:700;border-top:2px solid var(--color-border-strong);font-size:13px;"><td>Net Profit</td><td class="mono">Rp (1,330,400,000)</td><td class="mono">Rp (1,328,440,000)</td><td class="var-pos">+Rp 1,960,000</td><td></td></tr>'
+        +'</tbody>'
+      +'</table></div>'
+      /* investigable card here too — the P&L tab needs the IA note to make sense */
+      +'<div style="font-size:11px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;">Variance requiring your decision</div>'
+      +rS5InvCard();
+  }
+
+  /* ── can proceed? ── */
+  var canProceed=S5.invAccepted;
+
+  a.innerHTML='<div class="srow"><span class="badge b-rev">Review required</span><span class="bmeta">Transaction data &middot; TB &middot; BS &middot; P&amp;L review</span></div>'
     +'<h1>Trial balance reconciliation</h1>'
-    +'<p class="desc">The system has compared your legacy financial data against TradeOS across three dimensions — Trial Balance, Balance Sheet, and P&amp;L. Review each comparison and confirm the variances before signing off.</p>'
-    +'<div class="tb-tabs">'+tabHtml+'</div>'
+    +'<p class="desc">Your IA has run a full 3-way comparison: Legacy TB vs TradeOS across TB, Balance Sheet, and P&amp;L. Review each tab. Variances classified as Investigable need your decision before sign-off.</p>'
+    +'<div class="tab-row">'+tabHtml+'</div>'
+    +periodHtml
+    +ctxBanner
     +tabContent
-    +'<div class="links-row" style="margin-top:12px">Review Balance Sheet and P&amp;L comparisons before proceeding. <a onclick="s5SetTab(1)">Go to Balance Sheet &#8594;</a> <a onclick="s5SetTab(2)" style="margin-left:8px">Go to P&amp;L &#8594;</a></div>'
-    +'<div style="text-align:right"><button class="btn-cont" onclick="goS5Variance()">Review variances in detail &#8250;</button></div>';
+    +'<div style="margin-top:20px;border-top:1px solid var(--color-border-default);padding-top:16px;display:flex;align-items:center;justify-content:space-between;">'
+      +(canProceed
+        ?'<span style="font-size:12px;color:var(--color-success-text);">&#10003; All variances resolved — proceed to sign-off</span>'
+        :'<span style="font-size:12px;color:var(--color-text-tertiary);font-weight:300;">Accept the investigable variance to proceed</span>')
+      +'<button class="btn-cont" '+(canProceed?'onclick="s5GoStep(1)"':'style="opacity:.4;cursor:default;" disabled')+'>'
+        +'Proceed to sign-off &#8250;'
+      +'</button>'
+    +'</div>';
 }
-function s5SetTab(i){S5.activeTab=i;rS5ThreeWay();}
-function goS5Variance(){S5.step=1;updS5Sidebar(1);rS5Variance();}
+
+function rS5InvCard(){
+  /* Investigable variance card — shown on both TB and P&L tabs */
+  var isAccepted=S5.invAccepted;
+  var footer=isAccepted
+    ?'<div class="var-card-footer"><span style="font-size:12px;color:var(--color-success-text);font-weight:500;">&#10003; Accepted with reason — documented in audit trail</span></div>'
+    :'<div class="var-card-footer"><span style="font-size:12px;color:var(--color-text-tertiary);font-weight:300;">Your decision is required. Accept with reason or escalate further.</span><div style="display:flex;gap:8px;margin-top:6px;"><button class="btn-accept-reason" onclick="acceptInv()">Accept with reason</button><button class="btn-request-inv">Request further investigation</button></div></div>';
+  return'<div class="var-card inv">'
+    +'<div class="var-card-hdr"><div><div class="title">6110 &middot; Entertainment &amp; Representation</div><div class="nums">Legacy: Rp 287,400,000 &rarr; TradeOS: Rp 284,200,000 &middot; <span class="v vneg">-Rp 3,200,000</span></div></div><span class="var-badge vb-inv">Investigable</span></div>'
+    +'<div class="ia-note-box"><div class="ia-note-lbl">IA investigation note</div><div class="ia-note-text">3 transactions totaling Rp 3,200,000 were tagged to account 6111 (Biaya Representasi Direksi) in the legacy system but mapped to 6110 in TradeOS during CoA consolidation. This reflects the account merge — not a missing transaction. Recommend accepting.</div><div class="ia-note-attr">— Reviewed by IA &middot; Day 18</div></div>'
+    +footer
+  +'</div>';
+}
+
+function acceptInv(){S5.invAccepted=true;rS5Review();}
 
 /* ═══════════════════════════════════════
-   STAGE 5, STEP 2: VARIANCE REVIEW
+   STAGE 5, STEP 2: SIGN-OFF (lean)
 ═══════════════════════════════════════ */
-function rS5Variance(){
-  APP.screen='s5-variance';
-  var a=document.getElementById('main');
-  var invFooter=S5.invAccepted
-    ?'<div class="var-card-footer"><span style="font-size:12px;color:var(--color-success-text);font-weight:500">&#10003; Accepted with reason — documented in audit trail</span></div>'
-    :'<div class="var-card-footer"><span style="font-size:12px;color:var(--color-text-tertiary);font-weight:300">Your decision will be documented in the migration audit trail.</span><div style="display:flex;gap:8px"><button class="btn-accept-reason" onclick="acceptInv()">Accept with reason</button><button class="btn-request-inv">Request further investigation</button></div></div>';
-
-  a.innerHTML='<div class="srow"><span class="badge b-act">Action required</span><span class="bmeta">Stage 5 &middot; Step 2 &middot; PRD Phase 5</span></div>'
-    +'<h1>Variance review</h1>'
-    +'<p class="desc">Review each variance below. Expected variances are automatically explained. Investigable variances include your IA investigation note — accept with a reason or request further investigation.</p>'
-    +'<div class="hcgrid">'
-      +'<div class="hccard gd"><div class="hcn gd">2</div><div class="hcl">Expected variances &middot; Auto-explained</div></div>'
-      +'<div class="hccard sft"><div class="hcn">1</div><div class="hcl">Investigable &middot; IA note included</div></div>'
-      +'<div class="hccard gd"><div class="hcn gd">0</div><div class="hcl">Blocking &middot; None &#10003;</div></div>'
-    +'</div>'
-    // Card 1: Expected
-    +'<div class="var-card exp">'
-      +'<div class="var-card-hdr"><div><div class="title">5110 &middot; Raw Material Purchases</div><div class="nums">Legacy: Rp 8,234,100,000 &#8594; TradeOS: Rp 8,235,340,000 &middot; Variance: <span class="v vpos">+Rp 1,240,000</span></div></div><span class="var-badge vb-exp">Expected</span></div>'
-      +'<div class="sys-exp-box"><div class="sys-exp-lbl">System Explanation</div><div class="sys-exp-text">This variance is the GL-to-TB auto-adjustment entry accepted during Stage 1 health check (Soft block 1 &middot; Chunk 1). Rp 880,000 on account 5110 and Rp 360,000 on account 1310 were posted as rounding adjustments. Total: Rp 1,240,000.</div></div>'
-      +'<div class="var-card-footer"><span class="var-auto-accepted">Accepted automatically — no action required.</span><span class="var-badge vb-exp">Auto-accepted &#10003;</span></div>'
-    +'</div>'
-    // Card 2: Expected
-    +'<div class="var-card exp">'
-      +'<div class="var-card-hdr"><div><div class="title">1310 &middot; Prepaid Expenses</div><div class="nums">Legacy: Rp 11,480,000 &#8594; TradeOS: Rp 11,840,000 &middot; Variance: <span class="v vpos">+Rp 360,000</span></div></div><span class="var-badge vb-exp">Expected</span></div>'
-      +'<div class="sys-exp-box"><div class="sys-exp-lbl">System Explanation</div><div class="sys-exp-text">Part of the same GL-to-TB auto-adjustment from Stage 1 Soft block 1. See Card 1 above.</div></div>'
-      +'<div class="var-card-footer"><span class="var-auto-accepted">Accepted automatically — no action required.</span><span class="var-badge vb-exp">Auto-accepted &#10003;</span></div>'
-    +'</div>'
-    // Card 3: Investigable
-    +'<div class="var-card inv">'
-      +'<div class="var-card-hdr"><div><div class="title">6110 &middot; Entertainment &amp; Representation</div><div class="nums">Legacy: Rp 287,400,000 &#8594; TradeOS: Rp 284,200,000 &middot; Variance: <span class="v vneg">-Rp 3,200,000</span></div></div><span class="var-badge vb-inv">Investigable</span></div>'
-      +'<div class="ia-note-box"><div class="ia-note-lbl">IA Investigation Note</div><div class="ia-note-text">3 transactions totaling Rp 3,200,000 were tagged to account 6111 (Biaya Representasi Direksi) in the legacy system but mapped to 6110 in TradeOS during CoA mapping consolidation. The difference reflects the account merge — not a missing transaction. Recommend accepting.</div><div class="ia-note-attr">— Reviewed by IA &middot; Day 18</div></div>'
-      +invFooter
-    +'</div>'
-    +'<div style="margin-top:14px;display:flex;align-items:center;justify-content:space-between">'
-      +'<button class="btn-cont" onclick="goS5SignOff()" '+(S5.invAccepted?'':'style="opacity:.4;cursor:default" disabled')+'> Proceed to sign-off &#8250;</button>'
-      +(S5.invAccepted?'':'<p style="font-size:11px;color:var(--color-text-tertiary);font-weight:300">Accept the investigable variance to continue</p>')
-    +'</div>'
-    +'<p class="proto-note">[Prototype only — in production Steps 2 and 3 are gated sequentially]</p>';
+function s4wsJumpFromTB(month,acct){
+  var monthMap={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8};
+  var idx=monthMap[month]!==undefined?monthMap[month]:3;
+  APP.stage=3;S4.step=2;S4_WS.activeMonth=idx;
+  updStageBar();updDay();
+  rS4GLWorkspace(idx);
 }
-function acceptInv(){S5.invAccepted=true;rS5Variance();}
-function goS5SignOff(){S5.step=2;updS5Sidebar(2);rS5SignOff();}
 
 /* ═══════════════════════════════════════
-   STAGE 5, STEP 3: CONTROLLER SIGN-OFF
+   STAGE 5, STEP 2: SIGN-OFF (lean)
 ═══════════════════════════════════════ */
+var S5_DISPUTES = {}; /* key: variance id, value: true if disputed */
+
 function rS5SignOff(){
   APP.screen='s5-signoff';
+  updS5Sidebar(1);
   var a=document.getElementById('main');
-  a.innerHTML='<div class="srow"><span class="badge b-act">Action required</span><span class="bmeta">Stage 5 &middot; PRD Chunk 5 &middot; Sign-off</span></div>'
+
+  var autoVars=[
+    {id:'5110',acct:'5110 &middot; Raw Material Purchases',amt:'Rp 1,240,000',reason:'Auto-accepted: GL-to-TB rounding adjustment'},
+    {id:'1310',acct:'1310 &middot; Prepaid Expenses',amt:'Rp 360,000',reason:'Auto-accepted: GL-to-TB rounding adjustment'},
+  ];
+
+  var autoVarHtml=autoVars.map(function(v){
+    var isDisputed=S5_DISPUTES[v.id];
+    if(isDisputed){
+      return'<div class="bcard sft" style="margin-bottom:6px;">'
+        +'<h3>'+v.acct+' &mdash; '+v.amt+' <span class="stag t-dec" style="margin-left:6px;">Escalated to IA</span></h3>'
+        +'<p>'+v.reason+'</p>'
+        +'<p style="color:var(--color-warning-text);font-weight:500;margin-top:4px;">Your IA has been notified. Sign-off is locked until this is resolved.</p>'
+        +'<button class="btn-ghost" onclick="s5Undispute(\''+v.id+'\')" style="font-size:11px;margin-top:6px;">&#8592; Withdraw dispute</button>'
+      +'</div>';
+    }
+    return'<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--color-border-subtle);">'
+      +'<div><div style="font-weight:500;color:var(--color-text-primary);font-size:13px;">'+v.acct+'</div>'
+        +'<div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px;">'+v.reason+' &middot; <span class="mono">'+v.amt+'</span></div>'
+      +'</div>'
+      +'<button class="btn-ia" onclick="s5Dispute(\''+v.id+'\')" style="font-size:11px;padding:3px 10px;white-space:nowrap;flex-shrink:0;">I disagree &#8599;</button>'
+    +'</div>';
+  }).join('');
+
+  var hasDisputes=Object.keys(S5_DISPUTES).some(function(k){return S5_DISPUTES[k];});
+  var canSeal=!hasDisputes;
+
+  a.innerHTML='<div class="srow"><span class="badge b-act">Action required</span><span class="bmeta">Transaction data &middot; Sign-off</span></div>'
     +'<h1>Confirm financial position</h1>'
-    +'<p class="desc">You have reviewed the Trial Balance, Balance Sheet, and P&amp;L reconciliation. This sign-off formally accepts the financial data in TradeOS as of September 30, 2025. It is stored permanently in the migration audit trail and cannot be undone.</p>'
+    +'<p class="desc">Your review is complete. Check the summary, challenge any auto-accepted items if needed, then sign and seal the audit trail.</p>'
+    /* reconciliation summary */
     +'<div class="so5-summary">'
-      +'<div class="so5-row"><span class="so5-label">Trial Balance</span><span class="so5-reviewed">Reviewed &#10003;</span><span class="so5-detail">2 expected (auto-accepted) &middot; 1 investigable (accepted)</span></div>'
-      +'<div class="so5-row"><span class="so5-label">Balance Sheet</span><span class="so5-reviewed">Reviewed &#10003;</span><span class="so5-detail">None — clean</span></div>'
-      +'<div class="so5-row"><span class="so5-label">P&amp;L</span><span class="so5-reviewed">Reviewed &#10003;</span><span class="so5-detail">1 investigable (accepted)</span></div>'
+      +'<div class="so5-row"><span class="so5-label">Trial Balance</span><span class="so5-reviewed">Balanced &#10003;</span><span class="so5-detail">Net variance Rp 0 &middot; 2 expected (auto-accepted) &middot; 1 investigable (accepted)</span></div>'
+      +'<div class="so5-row"><span class="so5-label">Balance Sheet</span><span class="so5-reviewed">Clean &#10003;</span><span class="so5-detail">Assets = Liabilities + Equity &middot; no variances</span></div>'
+      +'<div class="so5-row"><span class="so5-label">P&amp;L</span><span class="so5-reviewed">Reviewed &#10003;</span><span class="so5-detail">1 investigable accepted &middot; account consolidation (6110)</span></div>'
     +'</div>'
-    +'<div class="accepted-box">'
-      +'<div class="accepted-box-lbl">Accepted variances — on record</div>'
-      +'<div class="accepted-item">5110 &middot; Raw Material Purchases — Rp 1,240,000 — "Auto-accepted: rounding adjustment"</div>'
-      +'<div class="accepted-item">1310 &middot; Prepaid Expenses — Rp 360,000 — "Auto-accepted: rounding adjustment"</div>'
-      +'<div class="accepted-item">6110 &middot; Entertainment &amp; Rep — Rp 3,200,000 — "Accepted: account consolidation during CoA mapping — confirmed with IA"</div>'
-      +'<div class="accepted-note">These documented variances will appear in your migration audit report.</div>'
+    /* auto-accepted challenge */
+    +'<div class="shdr"><h2>Auto-accepted variances</h2><span class="stag t-info">Challenge if you disagree</span></div>'
+    +'<p style="font-size:12px;color:var(--color-text-secondary);font-weight:300;margin-bottom:10px;line-height:1.5;">These were accepted automatically by the system. Click "I disagree" to escalate to Investigable — your IA will be notified before sign-off can proceed.</p>'
+    +'<div style="border:1px solid var(--color-border-default);border-radius:var(--radius-md);padding:0 14px;margin-bottom:16px;background:var(--color-surface-raised);">'
+      +autoVarHtml
     +'</div>'
+    +(hasDisputes?'<div class="alert" style="margin-bottom:14px;"><div class="alert-icon">&#9651;</div><div class="alert-body"><strong>Sign-off locked.</strong> You have disputed '+Object.values(S5_DISPUTES).filter(Boolean).length+' variance(s). Your IA has been notified and must resolve these first.</div></div>':'')
+    /* formal sign-off */
     +'<div class="fin-pos-row"><span class="fin-pos-lbl">Financial position as of</span><span class="fin-pos-date">30 September 2025</span></div>'
-    +'<div class="formal-box">'
+    +'<div class="formal-box" style="'+(canSeal?'':'opacity:.5;')+'">'
       +'<div class="formal-box-lbl">Formal Controller Acceptance</div>'
-      +'<div class="formal-text">I have reviewed the trial balance, Balance Sheet, and P&amp;L reconciliation. All accepted variances are documented. I am satisfied that the financial position in TradeOS correctly represents our company financial state as of <span class="mono">30 September 2025</span>.</div>'
+      +'<div class="formal-text">I have reviewed the Trial Balance, Balance Sheet, and P&amp;L reconciliation. All accepted variances are documented. I am satisfied that the financial position in TradeOS correctly represents our company financial state as of <span class="mono">30 September 2025</span>.</div>'
       +'<div class="formal-sig">'
-        +'<div class="formal-sig-name">BW — [Controller name]<br><span style="font-family:var(--font-mono);font-size:11px">Day 20 of 30</span></div>'
-        +'<button class="btn-sign-seal" onclick="sealStage5()">Sign &amp; seal &#8250;</button>'
+        +'<div class="formal-sig-name">BW &mdash; [Controller name]<br><span style="font-family:var(--font-mono);font-size:11px">Day 20 of 30</span></div>'
+        +(canSeal
+          ?'<button class="btn-sign-seal" onclick="sealStage5()">Sign &amp; seal &#8250;</button>'
+          :'<button class="btn-sign-seal" style="opacity:.4;cursor:default;" disabled>Sign &amp; seal &#8250;</button>')
       +'</div>'
     +'</div>'
-    +'<p class="proto-note">This sign-off is permanently sealed in the migration audit trail. It cannot be amended without IA involvement and a full re-sign-off.</p>';
+    +(canSeal?'':'<p class="proto-note">Sign-off locked — resolve disputed variances with your IA first.</p>');
+}
+
+function s5Dispute(id){
+  S5_DISPUTES[id]=true;
+  rS5SignOff();
+}
+function s5Undispute(id){
+  S5_DISPUTES[id]=false;
+  rS5SignOff();
 }
 
 /* ═══════════════════════════════════════
@@ -2205,7 +2908,7 @@ function updS6Sidebar(active){
 }
 
 function s6GoStep(i){
-  if(i>S6.step)return;
+  S6.step=Math.max(S6.step,i);
   S6.step=i;updS6Sidebar(i);
   if(i===0)rS6UAT();
   else rS6SignOff();
@@ -2491,7 +3194,7 @@ function updS7Sidebar(active){
 }
 
 function s7GoStep(i){
-  if(i>S7.step)return;
+  S7.step=Math.max(S7.step,i);
   S7.step=i;updS7Sidebar(i);
   if(i===0)rS7Checklist();
   else if(i===1)rS7Switch();
@@ -2866,7 +3569,17 @@ function p0HTML(inProgress){
         +'<div class="p0-cta-sub">Have your 3 files exported from Accurate before you start. The clock begins on your first upload — not now.</div>'
         +'<button class="btn-begin" onclick="beginMigration()">Begin migration &#8594;</button>'
         +'<p class="p0-clock-note">&#9711; Clock starts on first file upload</p>'
-        +'<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--color-border-default);text-align:center"><button style="background:none;border:none;font-size:11px;color:var(--color-text-tertiary);cursor:pointer;font-family:var(--font-sans);text-decoration:underline" onclick="previewInProgress()">Prototype: preview in-progress state &#8250;</button></div>'
+        +'<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--color-border-default)">'
+          +'<div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Prototype shortcuts</div>'
+          +'<div style="display:flex;flex-direction:column;gap:5px;">'
+            +'<button style="background:none;border:1px solid var(--color-border-default);border-radius:var(--radius-sm);font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);padding:5px 10px;text-align:left;" onclick="previewInProgress()">&#8594; Stage 3 — Transaction data (homepage view)</button>'
+            +'<button style="background:none;border:1px solid var(--color-border-default);border-radius:var(--radius-sm);font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);padding:5px 10px;text-align:left;" onclick="protoJump(\'s4-overview\')">&#8594; Transaction data — Mapping overview (month cards)</button>'
+            +'<button style="background:none;border:1px solid var(--color-border-default);border-radius:var(--radius-sm);font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);padding:5px 10px;text-align:left;" onclick="protoJump(\'s4-workspace\')">&#8594; Transaction data — GL workspace (April)</button>'
+            +'<button style="background:none;border:1px solid var(--color-border-default);border-radius:var(--radius-sm);font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);padding:5px 10px;text-align:left;" onclick="protoJump(\'s4-batch\')">&#8594; Transaction data — Batch apply (&gt;50 txn confirmation)</button>'
+            +'<button style="background:none;border:1px solid var(--color-border-default);border-radius:var(--radius-sm);font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);padding:5px 10px;text-align:left;" onclick="protoJump(\'s5\')">&#8594; Transaction data — Trial balance (TB/BS/P&amp;L + period selector)</button>'
+            +'<button style="background:none;border:1px solid var(--color-border-default);border-radius:var(--radius-sm);font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);padding:5px 10px;text-align:left;" onclick="protoJump(\'s5-signoff\')">&#8594; Transaction data — Sign-off (I disagree flow)</button>'
+          +'</div>'
+        +'</div>'
       +'</div>';
   } else {
     var stageNames = ['','Chart of Accounts','Master data','Transaction data','UAT','Live'];
