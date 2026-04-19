@@ -40,22 +40,52 @@ body{font-family:var(--font-sans);background:var(--color-surface-base);color:var
 .day-badge.pend{background:var(--color-surface-sunken);color:var(--color-text-tertiary);border:1px solid var(--color-border-default);}
 .day-badge.act{background:var(--color-danger-surface);color:var(--color-danger-text);border:1px solid var(--color-danger-border);}
 .avatar{width:28px;height:28px;border-radius:50%;background:var(--color-brand);color:var(--color-text-inverse);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;}
-/* STAGE BAR */
-.stagebar{background:var(--color-surface-raised);border-bottom:1px solid var(--color-border-default);padding:12px var(--space-14);display:flex;align-items:center;}
-.sti{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:72px;}
-.stc{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+/* TOP NAV */
+.stagebar{background:var(--color-surface-raised);border-bottom:1px solid var(--color-border-default);padding:0 var(--space-14);display:flex;align-items:stretch;height:48px;}
+.sti{display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:2px solid transparent;white-space:nowrap;}
+.sti.clickable{cursor:pointer;}
+.sti.clickable:hover{background:var(--color-surface-sunken);}
+.sti.on{border-bottom-color:var(--color-brand);}
+.sti.off{opacity:.35;}
+.stc{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
 .stc.on{background:var(--color-brand);color:var(--color-text-inverse);}
-.stc.done{background:var(--color-brand);color:var(--color-text-inverse);}
-.stc.off{background:var(--color-surface-raised);color:var(--color-text-disabled);border:1.5px solid var(--color-border-default);}
-.stl{font-size:10px;color:var(--color-text-tertiary);text-align:center;line-height:1.3;font-weight:400;}
-.stl.on{color:var(--color-brand);}
-.sts{font-size:10px;color:var(--color-text-disabled);}
-.sts.on{color:var(--color-brand);font-weight:500;}
-.sts.done{color:var(--color-success-text);font-weight:500;}
-.conn{flex:1;height:0;border-top:1.5px dashed var(--color-border-default);margin-bottom:18px;}
-.conn-done{border-top:2px solid var(--color-brand) !important;}
-/* LAYOUT */
-.layout{display:flex;min-height:calc(100vh - 116px);}
+.stc.done{background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);}
+.stc.off{background:var(--color-surface-sunken);color:var(--color-text-disabled);border:1.5px solid var(--color-border-default);}
+.stl{font-size:12px;font-weight:500;}
+.stl.on{color:var(--color-brand);font-weight:600;}
+.stl.done{color:var(--color-text-secondary);}
+.stl.off{color:var(--color-text-disabled);}
+.sts{display:none;}
+.conn{width:1px;background:var(--color-border-default);margin:12px 0;flex-shrink:0;}
+.conn-done{background:var(--color-border-default);}
+/* LEFT NAV — checklist */
+.sb-prog-wrap{padding:6px 16px 8px;border-bottom:1px solid var(--color-border-subtle);}
+.sb-prog-bg{background:var(--color-border-default);border-radius:var(--radius-full);height:2px;margin-bottom:5px;overflow:hidden;}
+.sb-prog-fill{height:2px;border-radius:var(--radius-full);background:var(--color-brand);}
+.sb-prog-fill.complete{background:var(--color-success-text);}
+.sb-prog-label{display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-tertiary);font-weight:300;}
+.cl-item{padding:8px var(--space-4);display:flex;align-items:flex-start;gap:10px;cursor:pointer;border-left:3px solid transparent;transition:background var(--transition-base);}
+.cl-item:hover:not(.cl-blocked){background:var(--color-surface-sunken);}
+.cl-item.cl-sel{background:var(--color-brand-wash);border-left-color:var(--color-brand);}
+.cl-item.cl-blocked{opacity:.32;cursor:default;}
+.cl-dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-top:1px;}
+.cl-dot.empty{border:1.5px solid var(--color-border-strong);}
+.cl-dot.active{background:var(--color-brand);color:var(--color-text-inverse);}
+.cl-dot.done{background:var(--color-success-surface);border:1px solid var(--color-success-border);}
+.cl-dot.warn{background:var(--color-warning-surface);border:1px solid var(--color-warning-border);}
+.cl-dot.lock{background:var(--color-surface-sunken);border:1px solid var(--color-border-default);}
+.cl-name{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.cl-blocked .cl-name{color:var(--color-text-disabled);}
+.cl-tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:var(--radius-full);margin-top:2px;font-weight:500;}
+.cl-tag.done{background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);}
+.cl-tag.active{background:var(--color-brand-wash);color:var(--color-brand);border:1px solid var(--color-brand-subtle);}
+.cl-tag.ready{background:var(--color-action-wash);color:var(--color-action);border:1px solid var(--color-action-subtle);}
+.cl-tag.wait{background:var(--color-warning-surface);color:var(--color-warning-text);border:1px solid var(--color-warning-border);}
+.cl-tag.lock{background:var(--color-surface-sunken);color:var(--color-text-disabled);border:1px solid var(--color-border-default);}
+.cl-group-lbl{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 2px;}
+.cl-divider{height:1px;background:var(--color-border-subtle);margin:3px 0;}
+
+.layout{display:flex;min-height:calc(100vh - 104px);}
 /* SIDEBAR */
 .sidebar{width:220px;background:var(--color-surface-raised);border-right:1px solid var(--color-border-default);padding:14px 0;flex-shrink:0;}
 .sb-hdr{padding:0 var(--space-4) 10px;display:flex;justify-content:space-between;}
@@ -675,6 +705,164 @@ h1{font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:
 .btn-begin{width:100%;background:var(--color-action);color:var(--color-text-inverse);border:none;border-radius:var(--radius-md);padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:background var(--transition-base);display:flex;align-items:center;justify-content:center;gap:8px;}
 .btn-begin:hover{background:var(--color-action-hover);}
 .p0-clock-note{font-size:11px;color:var(--color-text-tertiary);font-weight:300;text-align:center;margin-top:8px;}
+/* tier badge in hero */
+.p0-tier-badge{display:flex;align-items:center;gap:12px;margin-top:18px;}
+.p0-tier-pill{display:inline-flex;align-items:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:var(--radius-full);letter-spacing:.01em;}
+.p0-tier-check{color:rgba(255,255,255,.7);font-size:12px;font-weight:400;}
+/* role switcher in nav */
+.role-switcher{display:flex;align-items:center;gap:0;border:1px solid var(--color-border-default);border-radius:var(--radius-full);overflow:hidden;background:var(--color-surface-sunken);}
+.role-btn{padding:4px 12px;font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--color-text-tertiary);font-family:var(--font-sans);transition:all .15s;}
+.role-btn.active{background:var(--color-surface-raised);color:var(--color-text-primary);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+/* dashboard view */
+.dash-shell{min-height:calc(100vh - 52px);background:var(--color-surface-base);display:flex;flex-direction:column;}
+.dash-hero{background:var(--color-brand);padding:28px 56px 26px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;}
+.dash-hero-left{}
+.dash-hero-kicker{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.dash-hero-kicker::before{content:'';width:16px;height:2px;background:rgba(255,255,255,.35);display:block;}
+.dash-hero h1{font-size:clamp(24px,3vw,36px);font-weight:800;color:#fff;letter-spacing:-0.02em;line-height:1.1;margin-bottom:6px;}
+.dash-hero-sub{font-size:13px;color:rgba(255,255,255,.65);font-weight:300;}
+.dash-cashback-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-lg);padding:14px 20px;flex-shrink:0;}
+.dcp-icon{font-size:22px;}
+.dcp-lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;}
+.dcp-val{font-size:16px;font-weight:700;color:#fff;letter-spacing:-0.01em;}
+.dcp-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:1px;font-weight:300;}
+.dash-body{flex:1;padding:28px 56px 40px;display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start;}
+/* progress track */
+.dash-track-card{border:1px solid var(--color-border-default);border-radius:var(--radius-lg);background:var(--color-surface-raised);overflow:hidden;margin-bottom:20px;}
+.dash-track-hdr{padding:12px 16px;background:var(--color-surface-sunken);border-bottom:1px solid var(--color-border-default);display:flex;align-items:center;justify-content:space-between;}
+.dash-track-lbl{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;}
+.dash-track-day{font-family:var(--font-mono);font-size:11px;color:var(--color-text-tertiary);}
+/* timeline bar */
+.dash-timeline{padding:20px 20px 16px;}
+.dash-tl-bar-wrap{position:relative;height:8px;background:var(--color-border-default);border-radius:var(--radius-full);margin-bottom:8px;overflow:hidden;}
+.dash-tl-bar-fill{position:absolute;left:0;top:0;height:100%;background:var(--color-brand);border-radius:var(--radius-full);transition:width .4s;}
+.dash-tl-bar-target{position:absolute;top:-4px;height:16px;width:2px;background:var(--color-success-text);border-radius:1px;}
+.dash-tl-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-tertiary);margin-bottom:16px;font-family:var(--font-mono);}
+.dash-tl-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.dash-stat{text-align:center;padding:10px 8px;background:var(--color-surface-sunken);border-radius:var(--radius-md);border:1px solid var(--color-border-default);}
+.dash-stat-n{font-family:var(--font-mono);font-size:18px;font-weight:700;color:var(--color-text-primary);letter-spacing:-0.02em;}
+.dash-stat-n.green{color:var(--color-success-text);}
+.dash-stat-n.amber{color:var(--color-warning-text);}
+.dash-stat-l{font-size:10px;color:var(--color-text-tertiary);margin-top:2px;font-weight:300;}
+/* stage status table */
+.dash-stages-card{border:1px solid var(--color-border-default);border-radius:var(--radius-lg);background:var(--color-surface-raised);overflow:hidden;}
+.dash-stages-hdr{padding:12px 16px;background:var(--color-surface-sunken);border-bottom:1px solid var(--color-border-default);font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;}
+.dash-stage-row{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--color-border-subtle);}
+.dash-stage-row:last-child{border-bottom:none;}
+.dash-sn{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.dash-sn.done{background:var(--color-success-surface);color:var(--color-success-text);border:1.5px solid var(--color-success-border);}
+.dash-sn.active{background:var(--color-brand);color:#fff;}
+.dash-sn.pending{background:var(--color-surface-sunken);color:var(--color-text-disabled);border:1.5px solid var(--color-border-default);}
+.dash-stage-body{flex:1;}
+.dash-stage-name{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.dash-stage-status{font-size:11px;color:var(--color-text-tertiary);font-weight:300;margin-top:1px;}
+.dash-stage-row.active-row .dash-stage-name{color:var(--color-brand);font-weight:600;}
+.dash-stage-badge{font-size:10px;font-weight:600;padding:2px 9px;border-radius:var(--radius-full);white-space:nowrap;flex-shrink:0;}
+.dash-b-done{background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);}
+.dash-b-active{background:var(--color-brand-wash);color:var(--color-brand);border:1px solid var(--color-brand-subtle);}
+.dash-b-pend{background:var(--color-surface-sunken);color:var(--color-text-disabled);border:1px solid var(--color-border-default);}
+/* right rail cards */
+.dash-right{display:flex;flex-direction:column;gap:16px;position:sticky;top:16px;}
+.dash-projection-card{border:1px solid var(--color-border-default);border-radius:var(--radius-lg);background:var(--color-surface-raised);overflow:hidden;}
+.dash-proj-hdr{padding:12px 16px;background:var(--color-surface-sunken);border-bottom:1px solid var(--color-border-default);font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;}
+.dash-proj-body{padding:16px;}
+.dash-proj-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--color-border-subtle);}
+.dash-proj-row:last-child{border-bottom:none;}
+.dash-proj-lbl{font-size:12px;color:var(--color-text-secondary);font-weight:300;}
+.dash-proj-val{font-size:12px;font-weight:600;color:var(--color-text-primary);font-family:var(--font-mono);}
+.dash-proj-val.green{color:var(--color-success-text);}
+.dash-proj-val.amber{color:var(--color-warning-text);}
+.dash-attn-card{border:1px solid var(--color-warning-border);border-radius:var(--radius-lg);background:var(--color-warning-surface);overflow:hidden;}
+.dash-attn-hdr{padding:10px 14px;border-bottom:1px solid var(--color-warning-border);font-size:10px;font-weight:600;color:var(--color-warning-text);text-transform:uppercase;letter-spacing:.07em;}
+.dash-attn-body{padding:12px 14px;}
+.dash-attn-item{display:flex;gap:8px;margin-bottom:8px;font-size:12px;color:var(--color-warning-text);}
+.dash-attn-item:last-child{margin-bottom:0;}
+.dash-attn-dot{width:5px;height:5px;border-radius:50%;background:var(--color-warning-text);flex-shrink:0;margin-top:5px;}
+.dash-team-card{border:1px solid var(--color-border-default);border-radius:var(--radius-lg);background:var(--color-surface-raised);overflow:hidden;}
+.dash-team-hdr{padding:12px 16px;background:var(--color-surface-sunken);border-bottom:1px solid var(--color-border-default);font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;}
+.dash-team-body{padding:12px 16px;}
+.dash-team-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--color-border-subtle);}
+.dash-team-row:last-child{border-bottom:none;}
+.dash-team-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.dash-team-av.ctrl{background:var(--color-brand);color:#fff;}
+.dash-team-av.ia{background:var(--color-action);color:#fff;}
+.dash-team-av.spn{background:var(--color-surface-sunken);color:var(--color-text-secondary);border:1.5px solid var(--color-border-default);}
+.dash-team-name{font-size:12px;font-weight:500;color:var(--color-text-primary);}
+.dash-team-role{font-size:11px;color:var(--color-text-tertiary);font-weight:300;}
+
+/* ── UNIFIED STAGE TABLE ── */
+.p0-stage-table{margin-bottom:20px;}
+.p0s-row{display:flex;gap:0;margin-bottom:0;}
+.p0s-left{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0;padding-top:2px;}
+.p0s-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;z-index:1;}
+.p0s-num.done{background:var(--color-brand);color:#fff;}
+.p0s-num.active{background:var(--color-brand);color:#fff;box-shadow:0 0 0 3px var(--color-brand-wash);}
+.p0s-num.locked{background:var(--color-surface-raised);color:var(--color-text-disabled);border:1.5px solid var(--color-border-default);}
+.p0s-num.plan{background:var(--color-surface-sunken);color:var(--color-text-tertiary);border:1.5px solid var(--color-border-default);}
+.p0s-connector{width:2px;flex:1;min-height:16px;margin:3px auto;}
+.p0s-connector.done{background:var(--color-brand);}
+.p0s-connector.active{background:linear-gradient(to bottom,var(--color-brand) 50%,var(--color-border-default) 50%);}
+.p0s-connector{background:var(--color-border-default);}
+.p0s-body{flex:1;padding:0 0 20px 14px;}
+.p0s-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:5px;}
+.p0s-name{font-size:13px;font-weight:700;color:var(--color-text-primary);}
+.p0s-current .p0s-name{color:var(--color-brand);}
+.p0s-done .p0s-name{color:var(--color-text-secondary);}
+.p0s-days{font-size:11px;color:var(--color-text-tertiary);font-weight:300;font-family:var(--font-mono);}
+.p0s-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-full);white-space:nowrap;margin-left:auto;}
+.p0s-badge.done{background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);}
+.p0s-badge.active{background:var(--color-brand-wash);color:var(--color-brand);border:1px solid var(--color-brand-subtle);}
+.p0s-badge.locked{background:var(--color-surface-sunken);color:var(--color-text-disabled);border:1px solid var(--color-border-default);}
+.p0s-badge.plan{background:var(--color-action-wash);color:var(--color-action);border:1px solid var(--color-action-subtle);}
+.p0s-desc{font-size:12px;color:var(--color-text-tertiary);font-weight:300;line-height:1.6;margin-bottom:4px;}
+.p0s-status{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-top:3px;}
+.p0s-current .p0s-status{color:var(--color-brand);}
+/* files sub-section inside stage 1 row */
+.p0s-files{margin-top:10px;border:1px solid var(--color-border-default);border-radius:var(--radius-md);overflow:hidden;background:var(--color-surface-sunken);}
+.p0s-file{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-bottom:1px solid var(--color-border-subtle);}
+.p0s-file:last-child{border-bottom:none;}
+.p0s-file-num{width:18px;height:18px;border-radius:50%;background:var(--color-surface-raised);color:var(--color-text-tertiary);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--color-border-default);margin-top:1px;}
+.p0s-file-name{font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:2px;}
+.p0s-file-req{font-size:11px;color:var(--color-text-tertiary);font-weight:300;line-height:1.5;}
+.p0s-file-req strong{color:var(--color-brand);font-weight:600;}
+/* completed files tags */
+.p0s-files-done{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.p0s-file-tag{background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);font-size:10px;font-weight:500;padding:2px 8px;border-radius:var(--radius-full);}
+/* projection rows inside cashback card */
+.p0s-proj-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--color-border-subtle);}
+.p0s-proj-row:last-child{border-bottom:none;}
+.p0s-proj-lbl{font-size:12px;color:var(--color-text-secondary);font-weight:300;}
+.p0s-proj-val{font-size:12px;font-weight:600;color:var(--color-text-primary);font-family:var(--font-mono);}
+/* timeline bar in hero */
+.p0-tl-wrap{width:100%;max-width:560px;margin-bottom:16px;}
+.p0-tl-bar-bg{position:relative;height:6px;background:rgba(255,255,255,.2);border-radius:var(--radius-full);margin-bottom:6px;overflow:visible;}
+.p0-tl-bar-fill{position:absolute;left:0;top:0;height:100%;background:#fff;border-radius:var(--radius-full);}
+.p0-tl-target{position:absolute;right:0;top:-5px;width:2px;height:16px;background:rgba(255,255,255,.5);border-radius:1px;}
+.p0-tl-labels{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.5);font-family:var(--font-mono);}
+/* hero stats row */
+.p0-hero-stats{display:flex;gap:20px;}
+.p0-hs{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-md);padding:10px 16px;}
+.p0-hs-n{font-family:var(--font-mono);font-size:18px;font-weight:700;color:#fff;letter-spacing:-0.02em;margin-bottom:2px;}
+.p0-hs-l{font-size:11px;color:rgba(255,255,255,.55);font-weight:300;}
+/* team card */
+.p0-team-card{border:1px solid var(--color-border-default);border-radius:var(--radius-lg);background:var(--color-surface-raised);overflow:hidden;}
+.p0-team-hdr{padding:12px 16px;background:var(--color-surface-sunken);border-bottom:1px solid var(--color-border-default);font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;}
+.p0-team-body{padding:4px 16px 8px;}
+.p0-team-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--color-border-subtle);}
+.p0-team-row:last-child{border-bottom:none;}
+.p0-team-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.p0-team-av.ctrl{background:var(--color-brand);color:#fff;}
+.p0-team-av.ia{background:var(--color-action);color:#fff;}
+.p0-team-av.spn{background:var(--color-surface-sunken);color:var(--color-text-secondary);border:1.5px solid var(--color-border-default);}
+.p0-team-name{font-size:12px;font-weight:500;color:var(--color-text-primary);}
+.p0-team-role{font-size:11px;color:var(--color-text-tertiary);font-weight:300;}
+/* attention card */
+.p0-attn-card{border:1px solid var(--color-warning-border);border-radius:var(--radius-lg);background:var(--color-warning-surface);overflow:hidden;margin-bottom:0;}
+.p0-attn-hdr{padding:10px 14px;border-bottom:1px solid var(--color-warning-border);font-size:10px;font-weight:600;color:var(--color-warning-text);text-transform:uppercase;letter-spacing:.07em;}
+.p0-attn-body{padding:10px 14px;}
+.p0-attn-item{display:flex;gap:8px;margin-bottom:7px;font-size:12px;color:var(--color-warning-text);line-height:1.5;}
+.p0-attn-item:last-child{margin-bottom:0;}
+.p0-attn-dot{width:5px;height:5px;border-radius:50%;background:var(--color-warning-text);flex-shrink:0;margin-top:5px;}
 
 /* ── AUTH0-STYLE LOGIN ── */
 .login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#3D1200 0%,#B83D08 45%,#D4622A 75%,#A03206 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
@@ -708,14 +896,26 @@ h1{font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:
 .login-footer-mark{width:24px;height:24px;opacity:.25;}
 .login-error{background:#FBF0F0;border:1px solid #EAB8B8;border-radius:6px;padding:10px 14px;font-size:13px;color:#A02020;margin-bottom:16px;display:none;}
 .login-error.show{display:block;}
+
+/* ── SIDEBAR SUB-STEPS (expand on active item) ── */
+.cl-substeps{padding:4px 0 6px 28px;display:flex;flex-direction:column;gap:2px;}
+.cl-sub{display:flex;align-items:center;gap:7px;padding:3px 0;}
+.cl-sub-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;}
+.cl-sub-dot.done{background:var(--color-success-surface);border:1px solid var(--color-success-border);color:var(--color-success-text);}
+.cl-sub-dot.active{background:var(--color-brand);color:var(--color-text-inverse);}
+.cl-sub-dot.lock{background:var(--color-surface-sunken);border:1px solid var(--color-border-default);}
+.cl-sub-name{font-size:11px;font-weight:400;color:var(--color-text-tertiary);}
+.cl-sub.cl-sub-active .cl-sub-name{color:var(--color-brand);font-weight:500;}
+.cl-sub.cl-sub-done .cl-sub-name{color:var(--color-success-text);}
 </style>
 </head>
 <body>
 <div class="nav">
-  <div style="display:flex;align-items:center;gap:6px">
+  <div style="display:flex;align-items:center;gap:6px;cursor:pointer" onclick="if(APP.stage>0){rMigrationHome();}else{rPhase0();}">
     <span class="nav-logo">TradeOS</span>
     <span class="nav-sep">&#8594;</span>
     <span class="nav-org">PT Makmur Jaya</span>
+    <span style="font-size:10px;color:var(--color-text-tertiary);margin-left:2px" id="nav-home-hint"></span>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <span class="day-badge pend" id="daybadge">Day &#8211; of 30</span>
@@ -732,11 +932,12 @@ h1{font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:
    APP STATE
 ═══════════════════════════════════════ */
 var APP = {
-  stage: 1,          // 1 or 2
-  screen: 's1',      // s1 | s1done | s2-ai | s2-review | s2-signoff | s2done
-  s1: { ts:[0,0,0,0], day:0, cur:0 },
-  s2: { step:0, dimConf:[false,false,false,false], revOpen:[true,true,true,true] }
+  stage: 1,
+  screen: 's1',
+  s1: { ts:[0,0,0], day:0, cur:0 },
+  s2: { items:[0,0,0,0,0,0], cur:0, steps:[0,0,0,0,0,0], dimConf:[false,false,false,false], revOpen:[true,true,true,true] }
 };
+var MD_DAYS=[0,0,0,0,0,0];
 var PT = null;
 
 /* ═══════════════════════════════════════
@@ -767,381 +968,538 @@ var DIMS=[
 ];
 
 /* ═══════════════════════════════════════
-   SHARED: STAGE BAR + DAY BADGE
+   SHARED: TOP NAV + DAY BADGE
 ═══════════════════════════════════════ */
 function updStageBar(){
   var s=APP.stage;
-  var stages=[
-    {n:1,lbl:'Data upload<br>&amp; setup',st:s>1?'done':s===1?'on':'off',ss:s>1?'Done':s===1?'In progress':'Locked'},
-    {n:2,lbl:'Dimensions',st:s>2?'done':s===2?'on':'off',ss:s>2?'Done':s===2?'In progress':'Locked'},
-    {n:3,lbl:'CoA mapping',st:s>3?'done':s===3?'on':'off',ss:s>3?'Done':s===3?'In progress':'Locked'},
-    {n:4,lbl:'GL mapping',st:s>4?'done':s===4?'on':'off',ss:s>4?'Done':s===4?'In progress':'Locked'},
-    {n:5,lbl:'TB reconciliation',st:s>5?'done':s===5?'on':'off',ss:s>5?'Done':s===5?'In progress':'Locked'},
-    {n:6,lbl:'UAT',st:s>6?'done':s===6?'on':'off',ss:s>6?'Done':s===6?'In progress':'Locked'},
-    {n:7,lbl:'Live',st:s===7?'on':'off',ss:s===7?'In progress':'Locked'}
+  var tabs=[
+    {n:1,lbl:'Chart of Accounts'},
+    {n:2,lbl:'Master data'},
+    {n:3,lbl:'Transaction data'},
+    {n:4,lbl:'UAT'},
+    {n:5,lbl:'Live'}
   ];
   var h='';
-  stages.forEach(function(sg,i){
-    var icon=sg.st==='done'?'&#10003;':sg.n;
-    var lc=sg.st==='on'?' on':'';
-    var sc=sg.st==='done'?' done':sg.st==='on'?' on':'';
-    var onclick=(i===0)?' onclick="jumpToStage(1)" style="cursor:pointer"':(i===1)?' onclick="jumpToStage(2)" style="cursor:pointer"':(i===2)?' onclick="jumpToStage(3)" style="cursor:pointer"':(i===3)?' onclick="jumpToStage(4)" style="cursor:pointer"':(i===4)?' onclick="jumpToStage(5)" style="cursor:pointer"':(i===5)?' onclick="jumpToStage(6)" style="cursor:pointer"':'';
-    h+='<div class="sti"'+onclick+'><div class="stc '+sg.st+'">'+icon+'</div><div class="stl'+lc+'">'+sg.lbl+'</div><div class="sts'+sc+'">'+sg.ss+'</div></div>';
-    if(i<stages.length-1){
-      var connDone=(sg.st==='done')&&(stages[i+1].st==='done'||stages[i+1].st==='on');
-      h+='<div class="conn'+(connDone?' conn-done':'')+'"></div>';
-    }
+  tabs.forEach(function(tb,i){
+    var st=s>tb.n?'done':s===tb.n?'on':'off';
+    var icon=st==='done'?'&#10003;':tb.n;
+    var clickable=(st!=='off')?' clickable':'';
+    var oc=st!=='off'?' onclick="jumpToStage('+tb.n+')"':'';
+    h+='<div class="sti'+clickable+' '+st+'"'+oc+'>'
+      +'<div class="stc '+st+'">'+icon+'</div>'
+      +'<div class="stl '+st+'">'+tb.lbl+'</div>'
+      +'</div>';
+    if(i<tabs.length-1) h+='<div class="conn"></div>';
   });
   document.getElementById('stagebar').innerHTML=h;
 }
 function updDay(){
   var b=document.getElementById('daybadge');
-  var d=APP.stage===1?APP.s1.day:APP.stage===2?5:APP.stage===3?8:APP.stage===4?12:APP.stage===5?20:APP.stage===6?25:APP.stage===7?25:28;
+  var d=APP.stage===1?(APP.s1.day||0):APP.stage===2?5:APP.stage===3?12:APP.stage===4?20:APP.stage===5?25:0;
   if(d===0){b.innerHTML='Day &#8211; of 30';b.className='day-badge pend';}
   else{b.textContent='Day '+d+' of 30';b.className='day-badge act';}
 }
 
 /* ═══════════════════════════════════════
-   STAGE 1: SIDEBAR
+   STAGE 1: SIDEBAR  (CoA — 3 steps)
 ═══════════════════════════════════════ */
 function updS1Sidebar(){
   var s=APP.s1;
-  var done=0;
-  var rows='';
-  var names=['Chart of accounts','GL export','Trial balance','Vendor &amp; customer data'];
-  for(var i=0;i<4;i++){
-    var isDone=(i<3&&s.ts[i]>=3)||(i===3&&s.ts[3]>=3);
-    var meta='';
-    if(i===0&&s.ts[0]>=3)meta='326 accounts · Day 1';
-    else if(i===1&&s.ts[1]>=3)meta='18,432 lines · Day 2';
-    else if(i===2&&s.ts[2]>=3)meta='Rp 28.4B · Day 3';
-    else if(i===3&&s.ts[3]>=3)meta='43 vendors · Day 4';
-    else if(i<3&&s.ts[i]===1)meta='Analyzing...';
-    else if(i<3&&s.ts[i]===2)meta=T[i].dm;
-    if(isDone)done++;
-    var icClass=isDone?'done':(i<3&&s.ts[i]===1?'spnic':(i<3&&s.ts[i]===2?'warn':'pend'));
-    var icContent=isDone?'<span class="chk">&#10003;</span>':(i<3&&s.ts[i]===1?'<div class="spin"></div>':(i<3&&s.ts[i]===2?'<span class="dsh">&#8211;</span>':'<div class="dot"></div>'));
-    var sel=(s.cur===i&&APP.screen==='s1')?' sel':'';
-    rows+='<div class="sb-row'+sel+'" onclick="s1Sel('+i+')"><div class="ic '+icClass+'">'+icContent+'</div><div><div class="sb-name">'+names[i]+'</div><div class="sb-meta">'+meta+'</div></div></div>';
-  }
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Any order</span><span class="sb-cnt">'+done+' of 4</span></div>'+rows;
+  // step states: 0=locked, 1=active/available, 2=done
+  var st=[
+    s.ts[0]>=3?2:(s.ts[0]>0?1:1),          // Upload: always available
+    s.ts[0]>=3?(s.ts[1]>=3?2:1):0,          // Mapping: available after upload done
+    s.ts[1]>=3?(s.ts[2]>=3?2:1):0           // Sign-off: available after mapping
+  ];
+  var doneCnt=st.filter(function(v){return v===2;}).length;
+  var pct=Math.round(doneCnt/3*100);
+  var names=['Upload','Health check &amp; mapping','Sign-off'];
+  var doneTags=['326 accounts &middot; Day 1','62 to review','Locked'];
+  var rows=names.map(function(nm,i){
+    var isBlocked=st[i]===0;
+    var isSel=APP.s1.cur===i&&!isBlocked;
+    var dotCls=st[i]===2?'done':(isSel?'active':isBlocked?'lock':'empty');
+    var dotInner=st[i]===2?'&#10003;':(isSel?'&#9654;':'');
+    var tagTxt=st[i]===2?doneTags[i]:'';
+    var cls='cl-item'+(isSel?' cl-sel':'')+(isBlocked?' cl-blocked':'');
+    return'<div class="'+cls+'"'+(isBlocked?'':' onclick="s1GoStep('+i+')"')+'>'
+      +'<div class="cl-dot '+dotCls+'">'+dotInner+'</div>'
+      +'<div><div class="cl-name">'+nm+'</div>'
+      +(tagTxt?'<span class="cl-tag done">'+tagTxt+'</span>':'')
+      +'</div></div>';
+  }).join('');
+  document.getElementById('sidebar').innerHTML=
+    '<div class="sb-hdr"><span class="sb-lbl">Chart of Accounts</span></div>'
+    +'<div class="sb-prog-wrap">'
+      +'<div class="sb-prog-bg"><div class="sb-prog-fill'+(pct===100?' complete':'')+'" style="width:'+pct+'%"></div></div>'
+      +'<div class="sb-prog-label"><span>Step '+(APP.s1.cur+1)+' of 3</span>'
+      +'<span>'+(pct===100?'<span style="color:var(--color-success-text)">Complete &#10003;</span>':pct+'%')+'</span></div>'
+    +'</div>'+rows;
 }
-
-/* ═══════════════════════════════════════
-   STAGE 1: NAVIGATION
-═══════════════════════════════════════ */
-function s1Sel(i){
-  if(APP.screen!=='s1')return;
-  APP.s1.cur=i;
-  updS1Sidebar();
-  renderS1();
+function s1GoStep(i){
+  if(i>0&&APP.s1.ts[0]<3)return;
+  if(i>1&&APP.s1.ts[1]<3)return;
+  APP.s1.cur=i;updS1Sidebar();renderS1();
 }
-
-/* ═══════════════════════════════════════
-   STAGE 1: MAIN RENDER DISPATCHER
-═══════════════════════════════════════ */
 function renderS1(){
   var a=document.getElementById('main');
-  var i=APP.s1.cur,s=APP.s1;
-  if(i===3){rVend(a);return;}
-  var ts=s.ts[i];
-  if(ts===0)rUp(a,T[i],i);
-  else if(ts===1)rProc(a,T[i]);
-  else if(ts===2)rHC(a,T[i],i);
-  else rSuc(a,T[i]);
+  var cur=APP.s1.cur,ts=APP.s1.ts;
+  if(cur===0){
+    if(ts[0]===0||ts[0]===undefined)rUp(a,T[0],0);
+    else if(ts[0]===1)rProc(a,T[0]);
+    else if(ts[0]===2)rHC(a,T[0],0);
+    else{APP.s1.cur=1;updS1Sidebar();goStage3();}
+  } else if(cur===1){
+    goStage3();
+  } else {
+    rS3SignOff();
+  }
 }
 
 /* ═══════════════════════════════════════
-   STAGE 1: UPLOAD
+   STAGE 1: UPLOAD / PROC / HC
 ═══════════════════════════════════════ */
 function rUp(a,t,i){
-  var descs=['Upload your Chart of Accounts export from Accurate, Zahir, or Excel. This is your first upload — it starts your 30-day migration timer.','Upload your GL export from Accurate, Zahir, or Excel. The file must be at invoice-line level — not monthly summary. This is required for AR/AP aging reconstruction later.','Upload your Trial Balance as of your cut-off date — September 30, 2025. The system will use this to validate that your GL export is complete and that all account balances carry over correctly into TradeOS.'];
-  a.innerHTML='<div class="srow"><span class="badge b-not">Not started</span><span class="bmeta">Stage 1 &middot; any order &middot; PRD Phase 1</span></div><h1>'+t.name+'</h1><p class="desc">'+descs[i]+'</p>'+(t.al?'<div class="alert"><div class="alert-icon">&#9888;</div><div class="alert-body">'+t.al.m+(t.al.s?'<strong>'+t.al.s+'</strong>':'')+'</div></div>':'')+'<div class="upzone"><div style="font-size:22px;color:var(--color-border-strong)">&#8679;</div><div style="font-size:13px;font-weight:600;color:var(--color-text-primary)">'+t.ut+'</div><div style="font-size:12px;color:var(--color-text-tertiary);text-align:center;font-weight:300">'+t.us+'</div><button class="btn-action" onclick="startProc('+i+')">Choose file</button></div><div class="chklist"><h3>What your export must include</h3>'+t.cl.map(function(c){return'<div class="cli"><div class="cdot"></div><span>'+c+'</span></div>';}).join('')+'</div>'+(t.ft?'<p style="font-size:11px;color:var(--color-text-tertiary);font-weight:300">'+t.ft+'</p>':'');
+  a.innerHTML='<div class="srow"><span class="badge b-not">Not started</span><span class="bmeta">Stage 1 &middot; Chart of Accounts</span></div>'
+    +'<h1>'+t.name+'</h1>'
+    +'<p class="desc">Upload your Chart of Accounts from Accurate, Zahir, or Excel. This is your first upload — it starts your 30-day migration timer.</p>'
+    +(t.al?'<div class="alert"><div class="alert-icon">&#9888;</div><div class="alert-body">'+t.al.m+(t.al.s?'<strong>'+t.al.s+'</strong>':'')+'</div></div>':'')
+    +'<div class="upzone"><div style="font-size:22px;color:var(--color-border-strong)">&#8679;</div>'
+    +'<div style="font-size:13px;font-weight:600;color:var(--color-text-primary)">'+t.ut+'</div>'
+    +'<div style="font-size:12px;color:var(--color-text-tertiary);text-align:center;font-weight:300">'+t.us+'</div>'
+    +'<button class="btn-action" onclick="startProc(0)">Choose file</button></div>'
+    +'<div class="chklist"><h3>What your export must include</h3>'
+    +t.cl.map(function(c){return'<div class="cli"><div class="cdot"></div><span>'+c+'</span></div>';}).join('')+'</div>';
 }
-
-/* ═══════════════════════════════════════
-   STAGE 1: PROCESSING
-═══════════════════════════════════════ */
 function startProc(idx){
-  APP.s1.ts[idx]=1;updS1Sidebar();renderS1();
+  APP.s1.ts[0]=1;updS1Sidebar();
+  var a=document.getElementById('main'),t=T[0];
+  a.innerHTML='<div class="srow"><span class="badge b-proc">Processing</span><span class="bmeta">Stage 1 &middot; Chart of Accounts</span></div>'
+    +'<h1>'+t.name+'</h1><div class="pcard">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'
+    +'<div style="display:flex;align-items:center;gap:8px"><span style="color:var(--color-text-tertiary)">&#128196;</span>'
+    +'<span style="font-size:13px;font-weight:600;color:var(--color-text-primary)">'+t.fn+'</span></div>'
+    +'<span style="font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono)">'+t.fs+'</span></div>'
+    +'<div class="pbar-wrap"><div class="pbar" id="pbar" style="width:5%"></div></div>'
+    +'<div class="plabel">Analyzing your Chart of Accounts — takes about 30 seconds</div>'
+    +'<div class="psteps" id="psteps"><span>'+t.ps[0]+'...</span></div></div>';
   var pct=0;if(PT)clearInterval(PT);
   PT=setInterval(function(){
     pct+=Math.random()*18+8;
-    if(pct>=100){pct=100;clearInterval(PT);setTimeout(function(){APP.s1.ts[idx]=2;if(APP.s1.day<T[idx].dou)APP.s1.day=T[idx].dou;updDay();updS1Sidebar();renderS1();},400);}
+    if(pct>=100){pct=100;clearInterval(PT);setTimeout(function(){
+      APP.s1.ts[0]=2;APP.s1.day=1;updDay();updS1Sidebar();
+      rHC(document.getElementById('main'),T[0],0);
+    },400);}
     var b=document.getElementById('pbar');if(b)b.style.width=Math.min(pct,100)+'%';
-    var s=document.getElementById('psteps');
-    if(s){var st=T[idx].ps,h='';for(var i=0;i<st.length;i++){var thr=(i+1)/(st.length+1)*100;if(pct>thr+15)h+='<span class="ds">'+st[i]+' &#10003;</span>';else if(pct>thr-10)h+='<span class="cs">'+st[i]+'...</span>';else h+='<span>'+st[i]+'</span>';if(i<st.length-1)h+='<span> &middot; </span>';}s.innerHTML=h;}
+    var sp=document.getElementById('psteps');
+    if(sp){var st=t.ps,h='';for(var i=0;i<st.length;i++){var thr=(i+1)/(st.length+1)*100;if(pct>thr+15)h+='<span class="ds">'+st[i]+' &#10003;</span>';else if(pct>thr-10)h+='<span class="cs">'+st[i]+'...</span>';else h+='<span>'+st[i]+'</span>';if(i<st.length-1)h+='<span> &middot; </span>';}sp.innerHTML=h;}
   },200);
 }
 function rProc(a,t){
-  a.innerHTML='<div class="srow"><span class="badge b-proc">Processing</span><span class="bmeta">Stage 1 &middot; any order &middot; PRD Phase 1</span></div><h1>'+t.name+'</h1><div class="pcard"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="display:flex;align-items:center;gap:8px"><span style="color:var(--color-text-tertiary)">&#128196;</span><span style="font-size:13px;font-weight:600;color:var(--color-text-primary)">'+t.fn+'</span></div><span style="font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono)">'+t.fs+'</span></div><div class="pbar-wrap"><div class="pbar" id="pbar" style="width:5%"></div></div><div class="plabel">Analyzing your '+t.name+' &mdash; takes about 30 seconds</div><div class="psteps" id="psteps"><span>'+t.ps[0]+'...</span></div></div>';
+  a.innerHTML='<div class="srow"><span class="badge b-proc">Processing</span><span class="bmeta">Stage 1 &middot; Chart of Accounts</span></div>'
+    +'<h1>'+t.name+'</h1><div class="pcard">'
+    +'<div class="pbar-wrap"><div class="pbar" id="pbar" style="width:60%"></div></div>'
+    +'<div class="plabel">Analyzing your Chart of Accounts…</div>'
+    +'<div class="psteps" id="psteps"><span>'+t.ps[0]+'...</span></div></div>';
 }
-
-/* ═══════════════════════════════════════
-   STAGE 1: HEALTH CHECK
-═══════════════════════════════════════ */
-function ackHC(idx){APP.s1.ts[idx]=3;updS1Sidebar();renderS1();}
 function rHC(a,t,i){
   var hc=t.hc;
-  var descs=['Your Chart of Accounts has been processed. Hard blocks must be resolved before moving forward. Soft blocks require your decision. Warnings are for your information.','Your GL export has been processed. Hard blocks must be resolved. Soft blocks require your sign-off decision. Warnings are logged for your information.','Your Trial Balance has been processed and compared against your GL export. Review the results below.'];
-  var h='<div class="srow"><span class="badge b-act">Action required</span><span class="bmeta">Stage 1 &middot; any order &middot; PRD Chunk 1</span></div><h1>'+t.name+' &mdash; health check</h1><p class="desc">'+descs[i]+'</p><div class="frow"><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--color-text-tertiary)">&#128196;</span><div><div class="fname">'+t.fn+'</div><div class="fmeta">'+t.fm+'</div></div></div><span class="up-badge">Uploaded &#10003;</span></div><div class="hcgrid"><div class="hccard '+(hc.hard===0?'gd':'hrd')+'"><div class="hcn '+(hc.hard===0?'gd':'')+'">'+hc.hard+'</div><div class="hcl">Hard blocks</div><div class="hcs">'+(hc.hard===0?'None &#10003;':'Must resolve')+'</div></div><div class="hccard sft"><div class="hcn">'+hc.soft+'</div><div class="hcl">Soft blocks</div><div class="hcs">Decision required</div></div><div class="hccard wrn"><div class="hcn">'+hc.warn+'</div><div class="hcl">Warnings</div><div class="hcs">No action needed</div></div></div>';
-  if(hc.isTB)h+='<div class="twrap"><table class="tbtable"><tr><td>Balance sheet balances</td><td class="val">Rp 28,412,340,000 = Rp 28,412,340,000</td><td><span class="b-bal">Balanced &#10003;</span></td></tr><tr><td>All TB accounts found in CoA</td><td class="val">326 of 326 matched</td><td><span class="b-bal">All matched &#10003;</span></td></tr><tr><td>GL-to-TB variance</td><td class="val">Rp 1,240,000 on 2 accounts</td><td><span class="b-rvw">Review needed</span></td></tr></table></div><div class="gbanner">&#10003; No hard blocks &mdash; your Trial Balance structure is valid.</div>';
-  if(hc.hard>0){h+='<div class="shdr"><h2>Hard blocks &middot; '+hc.hard+'</h2><span class="stag t-must">Must resolve before continuing</span></div>';for(var k=0;k<hc.hb.length;k++){var b=hc.hb[k];h+='<div class="bcard"><h3>'+b.t+'</h3><p><span style="color:var(--color-text-tertiary)">Impact: </span>'+b.i+'</p><p><span style="color:var(--color-text-tertiary)">Required action: </span>'+b.a+'</p><button class="btn-ia">'+b.b+'</button></div>';}}
-  h+='<div class="shdr" style="margin-top:'+(hc.hard>0?'10px':'0')+'"><h2>Soft blocks &middot; '+hc.soft+'</h2><span class="stag t-dec">Your decision required</span></div>';
-  for(var k=0;k<hc.sb.length;k++){var b=hc.sb[k];h+='<div class="bcard sft"><h3>'+b.t+'</h3><p><span style="color:var(--color-text-tertiary)">Impact: </span>'+b.i+'</p><p>'+b.a+'</p><button class="btn-ia">'+b.b+'</button></div>';}
-  h+='<div class="shdr" style="margin-top:10px"><h2>Warnings &middot; '+hc.warn+'</h2><span class="stag t-info">No action needed</span></div>';
-  for(var k=0;k<hc.wb.length;k++){var b=hc.wb[k];h+='<div class="bcard wrn"><h3>'+b.t+'</h3><p><span style="color:var(--color-text-tertiary)">Impact: </span>'+b.i+'</p></div>';}
-  h+='<div style="margin-top:16px"><button class="btn-action" onclick="ackHC('+i+')">Acknowledge &amp; continue</button></div>';
+  var h='<div class="srow"><span class="badge b-act">Action required</span><span class="bmeta">Stage 1 &middot; Chart of Accounts &middot; Health check</span></div>'
+    +'<h1>'+t.name+' &mdash; health check</h1>'
+    +'<p class="desc">Review the results below. Hard blocks must be resolved before CoA mapping. Soft blocks require your decision.</p>'
+    +'<div class="frow"><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--color-text-tertiary)">&#128196;</span>'
+    +'<div><div class="fname">'+t.fn+'</div><div class="fmeta">'+t.fm+'</div></div></div>'
+    +'<span class="up-badge">Uploaded &#10003;</span></div>'
+    +'<div class="hcgrid"><div class="hccard '+(hc.hard===0?'gd':'hrd')+'"><div class="hcn '+(hc.hard===0?'gd':'')+'">'+hc.hard+'</div><div class="hcl">Hard blocks</div><div class="hcs">'+(hc.hard===0?'None &#10003;':'Must resolve')+'</div></div>'
+    +'<div class="hccard sft"><div class="hcn">'+hc.soft+'</div><div class="hcl">Soft blocks</div><div class="hcs">Decision required</div></div>'
+    +'<div class="hccard wrn"><div class="hcn">'+hc.warn+'</div><div class="hcl">Warnings</div><div class="hcs">No action needed</div></div></div>';
+  if(hc.hard>0){h+='<div class="shdr"><h2>Hard blocks &middot; '+hc.hard+'</h2><span class="stag t-must">Must resolve</span></div>';hc.hb.forEach(function(b){h+='<div class="bcard"><h3>'+b.t+'</h3><p>'+b.i+'</p><p>'+b.a+'</p><button class="btn-ia">'+b.b+'</button></div>';});}
+  h+='<div class="shdr"><h2>Soft blocks &middot; '+hc.soft+'</h2><span class="stag t-dec">Your decision required</span></div>';
+  hc.sb.forEach(function(b){h+='<div class="bcard sft"><h3>'+b.t+'</h3><p>'+b.i+'</p><p>'+b.a+'</p><button class="btn-ia">'+b.b+'</button></div>';});
+  h+='<div class="shdr"><h2>Warnings &middot; '+hc.warn+'</h2><span class="stag t-info">No action needed</span></div>';
+  hc.wb.forEach(function(b){h+='<div class="bcard wrn"><h3>'+b.t+'</h3><p>'+b.i+'</p></div>';});
+  h+='<div style="margin-top:16px"><button class="btn-cont" onclick="ackHC(0)">Acknowledge &amp; proceed to CoA mapping &#8250;</button></div>';
   a.innerHTML=h;
 }
-
-/* ═══════════════════════════════════════
-   STAGE 1: PER-TASK SUCCESS
-═══════════════════════════════════════ */
+function ackHC(idx){
+  APP.s1.ts[0]=3;APP.s1.day=1;updDay();
+  APP.s1.cur=1;updS1Sidebar();
+  goStage3();
+}
 function rSuc(a,t){
-  var s=t.sc;
-  a.innerHTML='<div class="sucscreen"><div class="succircle"><span class="succheck">&#10003;</span></div><h2>'+s.h+'</h2><p class="sub">'+s.s+'</p><div class="pills">'+s.p.map(function(p){return'<span class="pill">'+p+'</span>';}).join('')+'</div><button class="btn-cont" onclick="s1GoNext('+s.ni+')">Continue to '+s.n+' &#8250;</button></div>';
+  APP.s1.ts[0]=3;APP.s1.cur=1;updS1Sidebar();goStage3();
 }
-function s1GoNext(ni){APP.s1.cur=ni;updS1Sidebar();renderS1();}
+function s1GoNext(ni){APP.s1.cur=1;updS1Sidebar();renderS1();}
+function rVend(a){}
+function rS1Done(){APP.s1.ts[2]=3;updS1Sidebar();}
 
 /* ═══════════════════════════════════════
-   STAGE 1: VENDOR SCREEN
+   STAGE 2: MASTER DATA
+   items[]: 0=dims 1=fa 2=product 3=inventory 4=cv 5=arap
+   values:  0=locked 1=ready 2=active 3=done
 ═══════════════════════════════════════ */
-function rVend(a){
-  var c=V.filter(function(v){return v.tr;}).length,ms=V.length-c;
-  a.innerHTML='<div class="srow"><span class="badge b-rev">Review required</span><span class="bmeta">Stage 1 &middot; any order &middot; PRD Phase 1</span></div><h1>Vendor &amp; customer data</h1><p class="desc">The system identified 43 vendors and customers from your GL export. Review the list and fill in missing payment terms — these are needed to calculate invoice due dates when your AP and AR aging is reconstructed in Stage 4.</p><div class="alert"><div class="alert-icon">&#9888;</div><div class="alert-body">These names were extracted directly from your GL transactions. No upload needed. Your job is to confirm the list is correct and fill in payment terms where missing.<strong>Missing payment terms are flagged in Stage 4 — you can complete them now or by Day 15.</strong></div></div><div class="scards" id="vstats"><div class="scard"><div class="snum">'+V.length+'</div><div class="slbl">Total extracted</div></div><div class="scard grn"><div class="snum grn">'+c+'</div><div class="slbl">Payment terms complete</div><div class="ssub">'+Math.round(c/V.length*100)+'% ready</div></div><div class="scard amb"><div class="snum amb">'+ms+'</div><div class="slbl">Payment terms missing</div><div class="ssub">Needed for aging</div></div></div><div class="twrap"><table class="vtable"><thead><tr><th>Name</th><th>Type</th><th>GL Txns</th><th>Total</th><th>Payment terms</th><th>Tax ID (NPWP)</th></tr></thead><tbody id="vtbody"></tbody></table></div><div style="margin-top:14px"><button class="btn-action" onclick="confV()">Confirm vendor list</button></div>';
-  drawVT();
-}
-function togEx(vi){V.forEach(function(v,i){if(i!==vi)v.ex=false;});V[vi].ex=!V[vi].ex;drawVT();}
-function saveTr(vi){var s=document.getElementById('ts'+vi),t=document.getElementById('tt'+vi);if(s&&s.value){V[vi].tr=s.value;V[vi].id=t?t.value:'';V[vi].ex=false;drawVT();updVS();}}
-function skipTr(vi){V[vi].ex=false;drawVT();}
-function updVS(){var m=document.getElementById('vstats');if(!m)return;var c=V.filter(function(v){return v.tr;}).length,ms=V.length-c;m.innerHTML='<div class="scard"><div class="snum">'+V.length+'</div><div class="slbl">Total extracted</div></div><div class="scard grn"><div class="snum grn">'+c+'</div><div class="slbl">Payment terms complete</div><div class="ssub">'+Math.round(c/V.length*100)+'% ready</div></div><div class="scard amb"><div class="snum amb">'+ms+'</div><div class="slbl">Payment terms missing</div><div class="ssub">Needed for aging</div></div>';}
-function drawVT(){
-  var el=document.getElementById('vtbody');if(!el)return;
-  var h='';
-  V.forEach(function(v,i){
-    var tb=v.tp==='Supplier'?'<span class="t-supp">Supplier</span>':'<span class="t-cust">Customer</span>';
-    var tc=v.tr?'<span style="color:var(--color-text-primary);font-weight:500">'+v.tr+'</span>':'<button class="btn-add" onclick="togEx('+i+')">Add terms</button>';
-    h+='<tr class="'+(v.ex?'xrow':'')+'"><td>'+v.n+'</td><td>'+tb+'</td><td style="font-family:var(--font-mono)">'+v.tx+'</td><td style="font-family:var(--font-mono)">'+v.tot+'</td><td>'+tc+'</td><td style="font-family:var(--font-mono)">'+(v.id||'&mdash;')+'</td></tr>';
-    if(v.ex)h+='<tr><td colspan="6" class="xform-td"><div class="xinner"><div class="ff"><label>Payment terms</label><select id="ts'+i+'"><option value="">Select terms</option><option>NET 7</option><option>NET 14</option><option>NET 30</option><option>NET 45</option><option>NET 60</option><option>COD</option><option>Prepaid</option></select></div><div class="ff"><label>Tax ID (NPWP)</label><input id="tt'+i+'" type="text" placeholder="e.g. 01.234.567.8-091.000" value="'+(v.id||'')+'"></div><div class="ff"><label>Notes</label><input class="nt" type="text" placeholder="e.g. preferred supplier"></div><button class="btn-save" onclick="saveTr('+i+')">Save</button><button class="btn-skip" onclick="skipTr('+i+')">Skip for now</button></div></td></tr>';
-  });
-  el.innerHTML=h;
-}
-function confV(){
-  APP.s1.ts[3]=3;APP.s1.day=4;
-  rS1Done();
-}
+var MD_DAYS=[0,0,0,0,0,0];
+var MD_DATA={
+  1:{desc:'Upload your fixed asset register so TradeOS can reconstruct depreciation schedules. Each asset maps to a CoA asset account.',name:'Fixed asset register',fn:'FixedAssets_PT_Makmur_Jaya.xlsx',fs:'42 KB',fm:'38 assets detected',
+     al:'Each asset needs: purchase date, acquisition cost, and useful life (years). TradeOS maps these to your CoA asset accounts and generates depreciation schedules.',
+     cl:['Asset name and code','Purchase date (acquisition date)','Acquisition cost (original purchase price)','Useful life in years','CoA account code'],
+     ps:['Reading file','Matching CoA accounts','Generating depreciation schedules'],
+     hc:{hard:0,soft:1,warn:1,hb:[],
+       sb:[{t:'2 assets missing useful life',i:'Depreciation schedule cannot be generated without useful life.',a:'Add useful life (in years) before confirming.',b:'Acknowledge'}],
+       wb:[{t:'1 asset with acquisition cost above Rp 5B',i:'Above threshold — flagged for IA review. No action required from you.'}]},
+     done:{h:'Fixed asset register confirmed.',s:'38 assets mapped to CoA. Depreciation schedules generated.',p:['38 assets','Rp 10.4B total','Day 7']}},
+  2:{desc:'Upload your product catalogue. Every SKU is validated against the required fields — UoM is essential for inventory balance matching.',name:'Product data',fn:'ProductMaster_PT_Makmur_Jaya.xlsx',fs:'38 KB',fm:'214 SKUs detected',
+     al:null,
+     cl:['SKU code and product name','Unit of Measure (UoM) — e.g. pcs, kg, box','Product category or type','Selling price (optional)'],
+     ps:['Reading file','Validating SKUs','Checking UoM'],
+     hc:{hard:0,soft:1,warn:1,hb:[],
+       sb:[{t:'14 SKUs missing UoM',i:'Inventory balance requires UoM for every SKU.',a:'Add UoM now or before uploading inventory balance.',b:'Acknowledge'}],
+       wb:[{t:'3 duplicate SKU codes with different names',i:'Same SKU code assigned to two products. Flagged for IA review.'}]},
+     done:{h:'Product data confirmed.',s:'214 SKUs validated. Inventory balance is now unlocked.',p:['214 SKUs','3 categories','Day 9']}},
+  3:{desc:'Upload closing inventory balances as of the cut-off date. Each SKU must tie exactly to your product data.',name:'Inventory balance',fn:'Inventory_Sep2025.xlsx',fs:'28 KB',fm:'214 SKUs matched',
+     al:'Each SKU must match your product data exactly. Values are tied to CoA inventory accounts.',
+     cl:['SKU code (must match product data exactly)','Warehouse location','Quantity on hand','Unit cost (for valuation)'],
+     ps:['Reading file','Matching SKUs to product data','Tying values to CoA accounts'],
+     hc:{hard:0,soft:1,warn:1,hb:[],
+       sb:[{t:'3 SKUs with zero quantity but non-zero cost',i:'These will be recorded as zero-quantity, non-zero value entries.',a:'Confirm or correct before proceeding.',b:'Acknowledge'}],
+       wb:[{t:'1 warehouse location not in dimensions',i:'Warehouse "Bekasi" not in your confirmed Location dimension. Will be flagged in GL mapping.'}]},
+     done:{h:'Inventory balance confirmed.',s:'214 SKUs matched. Values tied to CoA inventory accounts.',p:['214 SKUs','3 warehouses','Rp 3.2B total','Day 10']}},
+  4:{desc:'Upload a dedicated customer and vendor master file. This must not be extracted from GL — GL names are inconsistent and cause duplicates.',name:'Customer &amp; vendor',fn:'CVM_PT_Makmur_Jaya.xlsx',fs:'56 KB',fm:'43 records detected',
+     al:'This must be a dedicated upload — not extracted from GL. GL names are often inconsistent and cause duplicates.',
+     cl:['Vendor/customer name (exact, consistent spelling)','Address and email','Bank account details for payment','Payment terms (NET 30, NET 14, etc.)','Tax ID (NPWP) where available'],
+     ps:['Reading file','Deduplicating names','Validating records'],
+     hc:{hard:0,soft:1,warn:2,hb:[],
+       sb:[{t:'7 vendors missing bank details',i:'These vendors cannot have payments processed until bank info is added.',a:'Add bank details before or during Transaction data stage.',b:'Acknowledge'}],
+       wb:[{t:'2 near-duplicate names detected',i:'PT Sumber Makmur vs PT. Sumber Makmur — treated as same entity.'},{t:'3 customers with no NPWP',i:'Tax ID missing. Flagged for reference only.'}]},
+     done:{h:'Customer &amp; vendor confirmed.',s:'43 records validated. Outstanding AR/AP is now unlocked.',p:['43 records','37 with bank details','Day 9']}},
+  5:{desc:'Upload open invoices as of the cut-off date. Each invoice links to your customer/vendor master and CoA accounts for aging reconstruction.',name:'Outstanding AR/AP',fn:'OpenInvoices_Sep2025.xlsx',fs:'64 KB',fm:'232 open invoices detected',
+     al:'Each invoice links to your customer/vendor records and CoA accounts. Invoices from unknown vendors or customers will be flagged.',
+     cl:['Invoice reference number','Vendor or customer name (must match C&amp;V data exactly)','Invoice date and due date','Invoice amount (IDR)','CoA account code (AP or AR)'],
+     ps:['Reading file','Matching vendor/customer records','Reconstructing aging'],
+     hc:{hard:0,soft:1,warn:1,hb:[],
+       sb:[{t:'4 invoices with no matching C&amp;V record',i:'These invoices cannot be linked to a vendor or customer.',a:'Resolve in C&amp;V data or accept as unlinked.',b:'Acknowledge'}],
+       wb:[{t:'11 invoices outside the fiscal year range',i:'Dated before Jan 1 2025. Logged for reference only.'}]},
+     done:{h:'Outstanding AR/AP confirmed.',s:'143 AP + 89 AR invoices confirmed. Aging reconstructed.',p:['143 AP invoices','89 AR invoices','Rp 3.5B AP','Rp 2.8B AR','Day 11']}}
+};
 
-/* ═══════════════════════════════════════
-   STAGE 1: COMPLETE SCREEN
-═══════════════════════════════════════ */
-function rS1Done(){
-  APP.screen='s1done';
-  updDay();
-  // update sidebar — all 4 checked, none selected
-  var names=['Chart of accounts','GL export','Trial balance','Vendor &amp; customer data'];
-  var metas=['326 accounts · Day 1','18,432 lines · Day 2','Rp 28.4B · Day 3','43 vendors · Day 4'];
-  var rows=names.map(function(n,i){
-    return'<div class="sb-row"><div class="ic done"><span class="chk">&#10003;</span></div><div><div class="sb-name">'+n+'</div><div class="sb-meta">'+metas[i]+'</div></div></div>';
-  }).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Any order</span><span class="sb-cnt">4 of 4</span></div>'+rows;
-  var a=document.getElementById('main');
-  a.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 20px 28px">'
-    +'<div class="succircle"><span class="succheck">&#10003;</span></div>'
-    +'<h2 style="font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:8px;letter-spacing:-0.01em">Stage 1 complete. Your data is in.</h2>'
-    +'<p style="font-size:13px;color:var(--color-text-tertiary);margin-bottom:18px;font-weight:300;max-width:520px">All uploads are done and your vendor list is confirmed. The system has everything it needs to begin mapping your accounts.</p>'
-    +'<div class="pills"><span class="pill">326 accounts</span><span class="pill">18,432 GL lines</span><span class="pill">Rp 28.4B TB</span><span class="pill">43 vendors &amp; customers</span><span class="pill">Day 4</span></div>'
-    +'<div style="width:100%;border-top:1px solid var(--color-border-default);margin:18px 0"></div>'
-    +'<p style="font-size:10px;color:var(--color-text-tertiary);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px">What unlocks next</p>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:560px;margin-bottom:22px;">'
-      +'<div style="border:1px solid var(--color-border-default);border-radius:var(--radius-lg);padding:14px;text-align:left;background:var(--color-surface-sunken)">'
-        +'<div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:5px">Stage 2 &#8212; Dimension Discovery</div>'
-        +'<p style="font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px;font-weight:300">Your IA will schedule a discovery session. Already running in parallel from Day 3.</p>'
-        +'<span style="background:var(--color-warning-surface);color:var(--color-warning-text);border:1px solid var(--color-warning-border);font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-full);display:inline-block">In progress</span>'
-      +'</div>'
-      +'<div style="border:1px solid var(--color-border-default);border-radius:var(--radius-lg);padding:14px;text-align:left;background:var(--color-surface-sunken)">'
-        +'<div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:5px">Stage 3 &#8212; CoA Mapping</div>'
-        +'<p style="font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px;font-weight:300">Begins once dimensions are locked.</p>'
-        +'<span style="background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-full);display:inline-block">Unlocked</span>'
-      +'</div>'
+function updS2Sidebar(curItem){
+  var it=APP.s2.items;
+  var st=APP.s2.steps;
+  var avail=[true,true,true,it[2]>=3,true,it[4]>=3];
+  var done=it.filter(function(v){return v>=3;}).length;
+  var pct=Math.round(done/6*100);
+
+  // Sub-step definitions per item type
+  // Upload items (1-5): [Upload, Health check, Confirm]
+  // Dims (0): [Review, Structure, Sign-off]
+  var SUB_STEPS={
+    0:['Review recommendations','Review structure','Sign-off'],
+    1:['Upload','Health check','Confirm'],
+    2:['Upload','Health check','Confirm'],
+    3:['Upload','Health check','Confirm'],
+    4:['Upload','Health check','Confirm'],
+    5:['Upload','Health check','Confirm']
+  };
+
+  function mkItem(idx,name){
+    var isAvail=avail[idx],isSel=idx===curItem,isBlocked=!isAvail;
+    var itemSt=it[idx];
+    var dotCls=itemSt>=3?'done':(isSel&&itemSt>=1?'active':isBlocked?'lock':itemSt>=1?'empty':'lock');
+    var dotInner=itemSt>=3?'&#10003;':(isSel&&itemSt>=1?'&#9654;':'');
+    var tagTxt='',tagCls='lock';
+    if(itemSt>=3){tagTxt=MD_DAYS[idx]?'Day '+MD_DAYS[idx]:'Complete';tagCls='done';}
+    else if(isSel&&itemSt>=1){tagTxt='In progress';tagCls='active';}
+    else if(isAvail&&itemSt>=1){tagTxt='Ready';tagCls='ready';}
+    else if(!isAvail){tagTxt=idx===3?'Needs product data':idx===5?'Needs C&amp;V data':'';tagCls='lock';}
+    var cls='cl-item'+(isSel?' cl-sel':'')+(isBlocked?' cl-blocked':'');
+    var row='<div class="'+cls+'"'+(isBlocked?'':' onclick="s2GoItem('+idx+')"')+'>'
+      +'<div class="cl-dot '+dotCls+'">'+dotInner+'</div>'
+      +'<div><div class="cl-name">'+name+'</div>'+(tagTxt?'<span class="cl-tag '+tagCls+'">'+tagTxt+'</span>':'')+'</div>'
+      +'</div>';
+
+    // Expand sub-steps only for active, non-done item
+    if(isSel&&itemSt<3&&itemSt>=1){
+      var curStep=st[idx]; // 0=first, 1=second, 2=third
+      var subSteps=SUB_STEPS[idx];
+      var subHtml='<div class="cl-substeps">';
+      subSteps.forEach(function(lbl,si){
+        var isDone=si<curStep;
+        var isActive=si===curStep;
+        var sDot=isDone?'done':isActive?'active':'lock';
+        var sDotInner=isDone?'&#10003;':isActive?'&#9654;':'';
+        subHtml+='<div class="cl-sub'+(isActive?' cl-sub-active':isDone?' cl-sub-done':'')+'">'
+          +'<div class="cl-sub-dot '+sDot+'">'+sDotInner+'</div>'
+          +'<span class="cl-sub-name">'+lbl+'</span>'
+          +'</div>';
+      });
+      subHtml+='</div>';
+      row+=subHtml;
+    }
+    return row;
+  }
+
+  var rows=mkItem(0,'Dimensions')
+    +'<div class="cl-divider"></div>'
+    +mkItem(1,'Fixed asset')
+    +'<div class="cl-divider"></div>'
+    +'<div class="cl-group-lbl">Product</div>'
+    +mkItem(2,'Product data')
+    +mkItem(3,'Inventory balance')
+    +'<div class="cl-divider"></div>'
+    +'<div class="cl-group-lbl">AR / AP</div>'
+    +mkItem(4,'Customer &amp; vendor')
+    +mkItem(5,'Outstanding AR/AP');
+
+  document.getElementById('sidebar').innerHTML=
+    '<div class="sb-hdr"><span class="sb-lbl">Master data</span><span class="sb-cnt">'+done+' of 6</span></div>'
+    +'<div class="sb-prog-wrap">'
+      +'<div class="sb-prog-bg"><div class="sb-prog-fill'+(pct===100?' complete':'')+'" style="width:'+pct+'%"></div></div>'
+      +'<div class="sb-prog-label"><span>'+done+' of 6 complete</span>'
+      +'<span>'+(pct===100?'<span style="color:var(--color-success-text)">All done &#10003;</span>':pct+'%')+'</span></div>'
+    +'</div>'+rows;
+}
+function s2GoItem(idx){
+  APP.s2.cur=idx;
+  if(APP.s2.items[idx]<2) APP.s2.items[idx]=2;
+  // initialise step to 0 if not yet started (so substeps show from beginning)
+  if(APP.s2.steps[idx]===undefined) APP.s2.steps[idx]=0;
+  updS2Sidebar(idx);
+  if(idx===0) rS2AI(); else rS2Upload(idx);
+}
+/* ── Master data: standardised 3-step flow ──────────────────────────
+   Every upload item goes: Upload → Processing → Health check → Confirm
+   Step is tracked in APP.s2.step_N (per item, 0=upload 1=hc 2=confirmed)
+────────────────────────────────────────────────────────────────────── */
+function rS2Upload(idx){
+  var d=MD_DATA[idx],a=document.getElementById('main');
+  if(APP.s2.items[idx]>=3){rS2Done(idx);return;}
+  APP.s2.steps[idx]=0;updS2Sidebar(idx);
+  // Step 1 — Upload
+  a.innerHTML='<div class="srow"><span class="badge b-not">Not started</span><span class="bmeta">Stage 2 &middot; Master data</span></div>'
+    +'<h1>'+d.name+'</h1>'
+    +'<p class="desc">'+d.desc+'</p>'
+    +(d.al?'<div class="alert"><div class="alert-icon">&#9888;</div><div class="alert-body">'+d.al+'</div></div>':'')
+    +'<div class="upzone">'
+      +'<div style="font-size:22px;color:var(--color-border-strong)">&#8679;</div>'
+      +'<div style="font-size:13px;font-weight:600;color:var(--color-text-primary)">Upload '+d.name+'</div>'
+      +'<div style="font-size:12px;color:var(--color-text-tertiary);text-align:center;font-weight:300">Accepted: .xlsx, .csv</div>'
+      +'<button class="btn-action" onclick="s2StartProc('+idx+')">Choose file</button>'
     +'</div>'
-    +'<button class="btn-cont" onclick="goStage2()">Go to Stage 2 &#8212; Dimension Discovery &#8250;</button>'
+    +'<div class="chklist"><h3>What your file must include</h3>'
+      +d.cl.map(function(c){return'<div class="cli"><div class="cdot"></div><span>'+c+'</span></div>';}).join('')
+    +'</div>';
+}
+function s2StartProc(idx){
+  // Step 2 — Processing animation
+  APP.s2.steps[idx]=1;updS2Sidebar(idx);
+  var d=MD_DATA[idx],a=document.getElementById('main');
+  a.innerHTML='<div class="srow"><span class="badge b-proc">Processing</span><span class="bmeta">Stage 2 &middot; Master data</span></div>'
+    +'<h1>'+d.name+'</h1>'
+    +'<div class="pcard">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'
+        +'<div style="display:flex;align-items:center;gap:8px">'
+          +'<span style="color:var(--color-text-tertiary)">&#128196;</span>'
+          +'<span style="font-size:13px;font-weight:600;color:var(--color-text-primary)">'+d.fn+'</span>'
+        +'</div>'
+        +'<span style="font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono)">'+d.fs+'</span>'
+      +'</div>'
+      +'<div class="pbar-wrap"><div class="pbar" id="pbar" style="width:5%"></div></div>'
+      +'<div class="plabel">Analyzing — takes about 30 seconds</div>'
+      +'<div class="psteps" id="psteps"><span>'+d.ps[0]+'...</span></div>'
+    +'</div>';
+  var pct=0;if(PT)clearInterval(PT);
+  PT=setInterval(function(){
+    pct+=Math.random()*18+10;
+    if(pct>=100){pct=100;clearInterval(PT);setTimeout(function(){rS2HC(idx);},400);}
+    var b=document.getElementById('pbar');if(b)b.style.width=Math.min(pct,100)+'%';
+    var sp=document.getElementById('psteps');
+    if(sp){var st=d.ps,h='';for(var j=0;j<st.length;j++){var thr=(j+1)/(st.length+1)*100;if(pct>thr+15)h+='<span class="ds">'+st[j]+' &#10003;</span>';else if(pct>thr-10)h+='<span class="cs">'+st[j]+'...</span>';else h+='<span>'+st[j]+'</span>';if(j<st.length-1)h+='<span> &middot; </span>';}sp.innerHTML=h;}
+  },200);
+}
+function rS2HC(idx){
+  // Step 3 — Health check results + Confirm button (lightweight — no formal sign-off box)
+  APP.s2.steps[idx]=1;updS2Sidebar(idx);
+  var d=MD_DATA[idx],hc=d.hc,a=document.getElementById('main');
+  var noIssues=hc.hard===0&&hc.soft===0;
+  var h='<div class="srow"><span class="badge '+(noIssues?'b-proc':'b-act')+'">'+( noIssues?'Review':'Action required')+'</span><span class="bmeta">Stage 2 &middot; Master data &middot; Health check</span></div>'
+    +'<h1>'+d.name+' &mdash; health check</h1>'
+    +'<div class="frow">'
+      +'<div style="display:flex;align-items:center;gap:10px">'
+        +'<span style="color:var(--color-text-tertiary)">&#128196;</span>'
+        +'<div><div class="fname">'+d.fn+'</div><div class="fmeta">'+d.fm+'</div></div>'
+      +'</div>'
+      +'<span class="up-badge">Uploaded &#10003;</span>'
+    +'</div>'
+    +'<div class="hcgrid">'
+      +'<div class="hccard '+(hc.hard===0?'gd':'hrd')+'">'
+        +'<div class="hcn '+(hc.hard===0?'gd':'')+'">'+hc.hard+'</div>'
+        +'<div class="hcl">Hard blocks</div>'
+        +'<div class="hcs">'+(hc.hard===0?'None &#10003;':'Must resolve')+'</div>'
+      +'</div>'
+      +'<div class="hccard sft">'
+        +'<div class="hcn">'+hc.soft+'</div>'
+        +'<div class="hcl">Soft blocks</div>'
+        +'<div class="hcs">Decision required</div>'
+      +'</div>'
+      +'<div class="hccard wrn">'
+        +'<div class="hcn">'+hc.warn+'</div>'
+        +'<div class="hcl">Warnings</div>'
+        +'<div class="hcs">No action needed</div>'
+      +'</div>'
+    +'</div>';
+
+  // Hard blocks
+  if(hc.hard>0){
+    h+='<div class="shdr"><h2>Hard blocks &middot; '+hc.hard+'</h2><span class="stag t-must">Must resolve before confirming</span></div>';
+    hc.hb.forEach(function(b){h+='<div class="bcard"><h3>'+b.t+'</h3><p>'+b.i+'</p><p>'+b.a+'</p><button class="btn-ia">'+b.b+'</button></div>';});
+  }
+  // Soft blocks
+  if(hc.soft>0){
+    h+='<div class="shdr"><h2>Soft blocks &middot; '+hc.soft+'</h2><span class="stag t-dec">Acknowledge to continue</span></div>';
+    hc.sb.forEach(function(b){h+='<div class="bcard sft"><h3>'+b.t+'</h3><p>'+b.i+'</p><p>'+b.a+'</p><button class="btn-ia">'+b.b+'</button></div>';});
+  }
+  // Warnings
+  if(hc.warn>0){
+    h+='<div class="shdr"><h2>Warnings &middot; '+hc.warn+'</h2><span class="stag t-info">No action needed</span></div>';
+    hc.wb.forEach(function(b){h+='<div class="bcard wrn"><h3>'+b.t+'</h3><p>'+b.i+'</p></div>';});
+  }
+
+  // Clean banner if no issues
+  if(noIssues) h+='<div class="gbanner">&#10003; No issues found &mdash; data is clean and ready to confirm.</div>';
+
+  // Confirm button — lightweight, no formal sign-off box
+  h+='<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--color-border-default);display:flex;align-items:center;justify-content:space-between;gap:16px">'
+    +'<p style="font-size:12px;color:var(--color-text-tertiary);font-weight:300;line-height:1.5;max-width:420px">'+(hc.soft>0?'Acknowledge the soft blocks above, then confirm.':noIssues?'Health check passed. Confirm to accept this data into your migration.':'Review all items above, then confirm.')+'</p>'
+    +'<button class="btn-lock"'+(hc.hard>0?' disabled style="opacity:.4;cursor:default"':' onclick="s2MarkDone('+idx+')"')+'>'
+      +'Confirm '+d.name+' &#8250;'
+    +'</button>'
   +'</div>';
+
+  a.innerHTML=h;
+}
+function s2MarkDone(idx){
+  APP.s2.steps[idx]=2;
+  APP.s2.items[idx]=3;
+  MD_DAYS[idx]=[7,7,9,10,9,11][idx];
+  if(idx===2&&APP.s2.items[3]<1) APP.s2.items[3]=1;
+  if(idx===4&&APP.s2.items[5]<1) APP.s2.items[5]=1;
+  updS2Sidebar(idx);
+  if(idx>0) rS2Done(idx);  // idx 0 = Dimensions — lockDims() renders its own screen
+}
+function rS2Done(idx){
+  var d=MD_DATA[idx],dn=d.done,a=document.getElementById('main');
+  var allDone=APP.s2.items.every(function(v){return v>=3;});
+  a.innerHTML='<div class="sucscreen">'
+    +'<div class="succircle"><span class="succheck">&#10003;</span></div>'
+    +'<h2>'+dn.h+'</h2>'
+    +'<p class="sub">'+dn.s+'</p>'
+    +'<div class="pills">'+dn.p.map(function(p){return'<span class="pill">'+p+'</span>';}).join('')+'</div>'
+    +(allDone
+      ?'<button class="btn-cont" onclick="goStage4()">All master data confirmed &mdash; go to Transaction data &#8250;</button>'
+      :'<button class="btn-cont" onclick="s2NextItem('+idx+')">Continue &#8250;</button>')
+    +'</div>';
+}
+function s2NextItem(cur){
+  var order=[0,1,2,4,3,5];
+  for(var j=0;j<order.length;j++){
+    var idx=order[j];
+    var avail=[true,true,true,APP.s2.items[2]>=3,true,APP.s2.items[4]>=3];
+    if(avail[idx]&&APP.s2.items[idx]<3){s2GoItem(idx);return;}
+  }
 }
 
 /* ═══════════════════════════════════════
-   STAGE 2: ENTER
-═══════════════════════════════════════ */
-function goStage2(){
-  APP.stage=2;APP.screen='s2-ai';APP.s2.step=0;
-  updStageBar();updDay();
-  updS2Sidebar(0);
-  rS2AI();
-}
-function updS2Sidebar(active){
-  var steps=['AI recommendations|4 detected','Review &amp; edit|Full structure','Controller sign-off|Lock structure'];
-  var rows=steps.map(function(r,i){
-    var p=r.split('|');
-    var state=i<active?'dn':i===active?'act':'pend';
-    var sel=i===active?' sel':'';
-    var sub=i<active?'Complete':p[1];
-    return'<div class="sb-row'+sel+'" onclick="s2GoStep('+i+')"><div class="step-n '+state+'">'+(i<active?'&#10003;':(i+1))+'</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+sub+'</div></div></div>';
-  }).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 2 &middot; Dimensions</span></div>'+rows;
-}
-function s2GoStep(i){
-  APP.s2.step=i;
-  updS2Sidebar(i);
-  if(i===0)rS2AI();
-  else if(i===1)rS2Review();
-  else rS2SignOff();
-}
-
-/* ═══════════════════════════════════════
-   STAGE 2: AI RECOMMENDATIONS
+   STAGE 2: DIMENSIONS  (AI rec → review → sign-off)
 ═══════════════════════════════════════ */
 function rS2AI(){
-  APP.screen='s2-ai';
-  var allConf=APP.s2.dimConf.every(Boolean);
-  var confCount=APP.s2.dimConf.filter(Boolean).length;
+  APP.screen='s2-ai';APP.s2.steps[0]=0;updS2Sidebar(0);
+  var allConf=APP.s2.dimConf.every(Boolean),confCount=APP.s2.dimConf.filter(Boolean).length;
   var a=document.getElementById('main');
   var cards=DIMS.map(function(d,i){
     var isConf=APP.s2.dimConf[i];
     var pills=d.vals.map(function(v){return'<span class="dv-p'+(v==='?'?' unk':'')+'">'+v+'</span>';}).join('');
-    var acts=isConf
-      ?'<span class="conf-tag">&#10003; Confirmed</span>'
+    var acts=isConf?'<span class="conf-tag">&#10003; Confirmed</span>'
       :'<button class="btn-confirm" onclick="confDim('+i+')">Confirm</button><button class="btn-ghost" style="margin-left:6px">Edit values</button>'+(d.conf<80?'<button class="btn-ask" style="margin-left:6px">Ask IA</button>':'');
     return'<div class="dim-card'+(d.conf<80?' low':'')+'"><div class="dim-hdr"><span class="dim-name">'+d.name+'</span><span class="'+(d.conf>=80?'conf-h':'conf-l')+'">'+d.conf+'% confidence</span></div><p class="dim-desc">'+d.desc+'</p><div class="dv-pills">'+pills+'</div><div class="dim-acts">'+acts+'</div></div>';
   }).join('');
-  a.innerHTML='<div class="srow"><span class="badge b-rev">Review required</span><span class="bmeta">Stage 2 &middot; Step 1 &middot; PRD Phase 2</span></div>'
+  a.innerHTML='<div class="srow"><span class="badge b-rev">Review required</span><span class="bmeta">Stage 2 &middot; Dimensions</span></div>'
     +'<h1>Dimension recommendations</h1>'
-    +'<p class="desc">Your IA has reviewed your GL export and identified the financial dimensions that best fit your business. Review each recommendation and confirm or adjust before your IA finalizes the setup.</p>'
-    +'<div class="alert"><div class="alert-icon">&#9888;</div><div class="alert-body">Dimensions let you slice your financial reports by location, department, or product line. They\'re added to transactions automatically once configured.<strong>These are set up now so every migrated transaction is correctly tagged from day one.</strong></div></div>'
-    +'<div class="hcgrid"><div class="hccard wrn" style="border-left:3px solid var(--color-border-strong)"><div class="hcn">4</div><div class="hcl">Dimensions found</div></div><div class="hccard gd"><div class="hcn gd">3</div><div class="hcl">High confidence (&#8805;80%)</div><div class="hcs">Ready to confirm</div></div><div class="hccard sft"><div class="hcn">1</div><div class="hcl">Needs review (&lt;80%)</div><div class="hcs">Your input needed</div></div></div>'
+    +'<p class="desc">Your IA has identified financial dimensions from your confirmed CoA structure. Review each recommendation and confirm before locking.</p>'
+    +'<div class="alert blue"><div class="alert-icon">&#9432;</div><div class="alert-body">Dimensions depend on your confirmed CoA. Every migrated transaction will be tagged using this structure.</div></div>'
+    +'<div class="hcgrid"><div class="hccard wrn" style="border-left:3px solid var(--color-border-strong)"><div class="hcn">4</div><div class="hcl">Dimensions found</div></div><div class="hccard gd"><div class="hcn gd">3</div><div class="hcl">High confidence</div></div><div class="hccard sft"><div class="hcn">1</div><div class="hcl">Needs review</div></div></div>'
     +cards
     +'<div style="margin-top:8px">'+(allConf
-      ?'<button class="btn-cont" onclick="goS2Review()">Review &amp; finalize in detail &#8250;</button>'
-      :'<button class="btn-cont" style="opacity:.35;cursor:default" disabled>Review &amp; finalize in detail &#8250;</button><p style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px;font-weight:300">Confirm all '+confCount+' of 4 dimensions to continue</p>')
+      ?'<button class="btn-cont" onclick="goS2Review()">Review &amp; finalize &#8250;</button>'
+      :'<button class="btn-cont" style="opacity:.35;cursor:default" disabled>Review &amp; finalize</button><p style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px;font-weight:300">Confirm '+confCount+' of 4 dimensions to continue</p>')
     +'</div>';
 }
 function confDim(i){APP.s2.dimConf[i]=true;rS2AI();}
-function goS2Review(){APP.s2.step=1;updS2Sidebar(1);rS2Review();}
-
-/* ═══════════════════════════════════════
-   STAGE 2: REVIEW & EDIT
-═══════════════════════════════════════ */
+function goS2Review(){rS2Review();}
 function rS2Review(){
-  APP.screen='s2-review';
+  APP.screen='s2-review';APP.s2.steps[0]=1;updS2Sidebar(0);
   var a=document.getElementById('main');
   var secs=DIMS.map(function(d,i){
     var open=APP.s2.revOpen[i];
     var rows=d.vals.map(function(v,j){
-      if(v==='?')return'<div class="unres-row"><span style="font-weight:700">?</span><div><strong style="font-size:12px;display:block;margin-bottom:2px">Unresolved</strong>IA is reviewing these 156 transactions to determine channel classification.<br><span style="font-size:11px;color:var(--color-text-tertiary)">Used in 156 GL transactions</span></div></div>';
-      return'<div class="rev-row"><div class="rev-val"><div class="rev-dot" style="background:'+d.colors[j]+'"></div><span>'+v+'</span></div><span class="rev-txns">Used in '+d.txns[j].toLocaleString()+' GL transactions</span></div>';
+      if(v==='?')return'<div class="unres-row"><span style="font-weight:700">?</span><div><strong style="font-size:12px;display:block;margin-bottom:2px">Unresolved</strong>IA reviewing 156 transactions</div></div>';
+      return'<div class="rev-row"><div class="rev-val"><div class="rev-dot" style="background:'+d.colors[j]+'"></div><span>'+v+'</span></div><span class="rev-txns">'+d.txns[j].toLocaleString()+' transactions</span></div>';
     }).join('');
     return'<div class="rev-sec"><div class="rev-hdr" onclick="togRev('+i+')">'
       +'<div class="rev-trow"><span class="rev-chev'+(open?' op':'')+'">&#9660;</span><span class="rev-title">'+d.name+'</span><span class="rev-cnt">'+d.vals.filter(function(v){return v!=='?';}).length+' values</span></div>'
       +'<div class="rev-acts"><button class="btn-flag">Flag for IA</button><button class="btn-edit-sm">Edit</button></div>'
-      +'</div>'
-      +(open?'<div class="rev-body">'+rows+'<button class="add-link">+ Add '+d.addLbl+'</button></div>':'')
-      +'</div>';
+      +'</div>'+(open?'<div class="rev-body">'+rows+'<button class="add-link">+ Add '+d.addLbl+'</button></div>':'')+'</div>';
   }).join('');
-  a.innerHTML='<div class="srow"><span class="badge b-inrev">In review</span><span class="bmeta">Stage 2 &middot; Step 2 &middot; PRD Phase 2</span></div>'
+  a.innerHTML='<div class="srow"><span class="badge b-inrev">In review</span><span class="bmeta">Stage 2 &middot; Dimensions</span></div>'
     +'<h1>Review dimension structure</h1>'
-    +'<p class="desc">Your IA has configured the dimensions based on your confirmed recommendations. Review the full structure below. You can flag anything for IA review before locking.</p>'
-    +'<div class="alert blue"><div class="alert-icon">&#9432;</div><div class="alert-body">Locking dimensions confirms the structure for migration. Enforcement rules only go live when your IA switches TradeOS to LIVE mode in Stage 7.</div></div>'
+    +'<p class="desc">Review the full structure and flag anything before locking.</p>'
+    +'<div class="alert blue"><div class="alert-icon">&#9432;</div><div class="alert-body">Locking confirms the structure. Enforcement only activates when your IA flips MIGRATION &#8594; LIVE in Stage 5.</div></div>'
     +secs
-    +'<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--color-border-default)"><button class="btn-cont" onclick="goS2SignOff()">Looks good &#8212; proceed to sign-off &#8250;</button></div>';
+    +'<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--color-border-default)"><button class="btn-cont" onclick="goS2SignOff()">Looks good &mdash; proceed to sign-off &#8250;</button></div>';
 }
 function togRev(i){APP.s2.revOpen[i]=!APP.s2.revOpen[i];rS2Review();}
-function goS2SignOff(){APP.s2.step=2;updS2Sidebar(2);rS2SignOff();}
-
-/* ═══════════════════════════════════════
-   STAGE 2: CONTROLLER SIGN-OFF
-═══════════════════════════════════════ */
+function goS2SignOff(){rS2SignOff();}
 function rS2SignOff(){
-  APP.screen='s2-signoff';
+  APP.screen='s2-signoff';APP.s2.steps[0]=2;updS2Sidebar(0);
   var a=document.getElementById('main');
-  a.innerHTML='<div class="srow"><span class="badge b-act">Action required</span><span class="bmeta">Stage 2 &middot; PRD Chunk 2 &middot; Sign-off</span></div>'
+  a.innerHTML='<div class="srow"><span class="badge b-act">Action required</span><span class="bmeta">Stage 2 &middot; Dimensions &middot; Sign-off</span></div>'
     +'<h1>Confirm dimension structure</h1>'
-    +'<p class="desc">Review and confirm your dimension setup. These dimensions will be used to classify every transaction during migration. Once locked, changes require your IA involvement.</p>'
-    +'<div class="twrap"><table class="so-table">'
-      +'<thead><tr><th>Dimension</th><th>Values</th><th>GL Coverage</th></tr></thead>'
-      +'<tbody>'
-        +'<tr><td style="font-weight:600;color:var(--color-text-primary)">Location</td><td><div class="sv-pills"><span class="sv-p">Jakarta</span><span class="sv-p">Surabaya</span><span class="sv-p">Bandung</span></div></td><td style="font-family:var(--font-mono);font-size:12px">18,432 transactions</td></tr>'
-        +'<tr><td style="font-weight:600;color:var(--color-text-primary)">Department</td><td><div class="sv-pills"><span class="sv-p">Finance</span><span class="sv-p">Operations</span><span class="sv-p">Sales</span><span class="sv-p">Procurement</span></div></td><td style="font-family:var(--font-mono);font-size:12px">18,432 transactions</td></tr>'
-        +'<tr><td style="font-weight:600;color:var(--color-text-primary)">Product Line</td><td><div class="sv-pills"><span class="sv-p">Elektronik</span><span class="sv-p">Furnitur</span><span class="sv-p">Perlengkapan Kantor</span></div></td><td style="font-family:var(--font-mono);font-size:12px">18,432 transactions</td></tr>'
-        +'<tr><td style="font-weight:600;color:var(--color-text-primary)">Sales Channel</td><td><div class="sv-pills"><span class="sv-p">Direct</span><span class="sv-p">Distributor</span><span class="sv-pend">156 IA-pending</span></div></td><td style="font-family:var(--font-mono);font-size:12px">18,276 confirmed</td></tr>'
-      +'</tbody>'
-    +'</table></div>'
-    +'<div class="alert blue" style="margin-bottom:8px"><div class="alert-icon">&#9432;</div><div class="alert-body">Locking confirms this structure for migration. Enforcement only activates in Stage 7.<strong>After locking, CoA mapping (Stage 3) becomes available.</strong></div></div>'
-    +'<p style="font-size:11px;color:var(--color-text-tertiary);text-align:right;margin-bottom:8px;font-weight:300">Estimated time: 10 minutes</p>'
-    +'<div class="so-box">'
-      +'<div><div class="so-lbl">Controller Sign-off</div><div class="so-text">I confirm this dimension structure correctly represents how PT Makmur Jaya classifies its financial activity.</div><div class="so-note">This sign-off is recorded in the migration audit trail.</div></div>'
-      +'<button class="btn-lock" onclick="lockDims()">Lock<br>dimensions &#8250;</button>'
+    +'<p class="desc">These dimensions will classify every transaction during migration. Once locked, changes require your IA.</p>'
+    +'<div class="twrap"><table class="so-table"><thead><tr><th>Dimension</th><th>Values</th><th>GL Coverage</th></tr></thead><tbody>'
+    +'<tr><td style="font-weight:600">Location</td><td><div class="sv-pills"><span class="sv-p">Jakarta</span><span class="sv-p">Surabaya</span><span class="sv-p">Bandung</span></div></td><td style="font-family:var(--font-mono);font-size:12px">18,432 txns</td></tr>'
+    +'<tr><td style="font-weight:600">Department</td><td><div class="sv-pills"><span class="sv-p">Finance</span><span class="sv-p">Operations</span><span class="sv-p">Sales</span><span class="sv-p">Procurement</span></div></td><td style="font-family:var(--font-mono);font-size:12px">18,432 txns</td></tr>'
+    +'<tr><td style="font-weight:600">Product Line</td><td><div class="sv-pills"><span class="sv-p">Elektronik</span><span class="sv-p">Furnitur</span><span class="sv-p">Perlengkapan Kantor</span></div></td><td style="font-family:var(--font-mono);font-size:12px">18,432 txns</td></tr>'
+    +'<tr><td style="font-weight:600">Sales Channel</td><td><div class="sv-pills"><span class="sv-p">Direct</span><span class="sv-p">Distributor</span><span class="sv-pend">156 IA-pending</span></div></td><td style="font-family:var(--font-mono);font-size:12px">18,276 confirmed</td></tr>'
+    +'</tbody></table></div>'
+    +'<div class="so-box"><div><div class="so-lbl">Controller Sign-off</div><div class="so-text">I confirm this dimension structure correctly represents how PT Makmur Jaya classifies its financial activity.</div><div class="so-note">Recorded in the migration audit trail.</div></div><button class="btn-lock" onclick="lockDims()">Lock<br>dimensions &#8250;</button></div>';
+}
+function lockDims(){
+  s2MarkDone(0);
+  var a=document.getElementById('main');
+  a.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 20px 28px">'
+    +'<div class="succircle" style="font-size:22px">&#128274;</div>'
+    +'<h2 style="font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:8px">Dimensions locked.</h2>'
+    +'<p style="font-size:13px;color:var(--color-text-tertiary);margin-bottom:18px;font-weight:300;max-width:520px">4 dimensions locked. Every migrated transaction will be classified using this structure.</p>'
+    +'<div class="pills"><span class="pill">Location &middot; 3 values</span><span class="pill">Department &middot; 4 values</span><span class="pill">Product Line &middot; 3 values</span><span class="pill">Sales Channel &middot; 2 values</span><span class="pill">Day 7</span></div>'
+    +'<button class="btn-cont" onclick="s2NextItem(0)" style="margin-top:8px">Continue to next item &#8250;</button>'
     +'</div>';
 }
 
 /* ═══════════════════════════════════════
-   STAGE 2: LOCKED / DONE
+   STAGE ENTRY POINTS
 ═══════════════════════════════════════ */
-function lockDims(){
-  APP.screen='s2done';APP.stage=3;
-  updStageBar();
-  var steps=['AI recommendations|Complete','Review &amp; edit|Complete','Controller sign-off|Complete'];
-  var rows=steps.map(function(r){var p=r.split('|');return'<div class="sb-row"><div class="step-n dn">&#10003;</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+p[1]+'</div></div></div>';}).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 2 &middot; Dimensions</span></div>'+rows;
-  document.getElementById('daybadge').textContent='Day 5 of 30';
-  var a=document.getElementById('main');
-  a.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 20px 28px">'
-    +'<div class="succircle" style="font-size:22px">&#128274;</div>'
-    +'<h2 style="font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:8px;letter-spacing:-0.01em">Your financial structure is set.</h2>'
-    +'<p style="font-size:13px;color:var(--color-text-tertiary);margin-bottom:18px;font-weight:300;max-width:520px">4 dimensions locked. Every migrated transaction will be classified using this structure.</p>'
-    +'<div class="pills"><span class="pill">Location &middot; 3 values</span><span class="pill">Department &middot; 4 values</span><span class="pill">Product Line &middot; 3 values</span><span class="pill">Sales Channel &middot; 2 values</span><span class="pill">Day 5</span></div>'
-    +'<div style="width:100%;border-top:1px solid var(--color-border-default);margin:18px 0"></div>'
-    +'<p style="font-size:10px;color:var(--color-text-tertiary);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px">What unlocks next</p>'
-    +'<div style="width:100%;max-width:560px;margin-bottom:22px;">'
-      +'<div style="border:1px solid var(--color-border-default);border-radius:var(--radius-lg);padding:14px;text-align:left;background:var(--color-surface-sunken)">'
-        +'<div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:5px">Stage 3 &#8212; CoA Mapping</div>'
-        +'<p style="font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px;font-weight:300">The system has already generated AI mapping recommendations for your 326 accounts. Ready to review.</p>'
-        +'<span style="background:var(--color-action-wash);color:var(--color-action);border:1px solid var(--color-action-subtle);font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-full);display:inline-block">Unlocked now</span>'
-      +'</div>'
-    +'</div>'
-    +'<button class="btn-cont" onclick="goStage3()">Go to Stage 3 &#8212; CoA Mapping &#8250;</button>'
-  +'</div>';
+function goStage2(){
+  APP.stage=2;APP.screen='s2';APP.s2.items=[1,1,1,0,1,0];APP.s2.cur=0;
+  updStageBar();updDay();updS2Sidebar(0);rS2AI();
 }
-
-/* ═══════════════════════════════════════
-   JUMP BETWEEN STAGES
-═══════════════════════════════════════ */
 function jumpToStage(s){
-  if(s===1){
-    APP.stage=1;APP.screen='s1';
-    updStageBar();updDay();
-    updS1Sidebar();
-    renderS1();
-  } else if(s===2){
-    APP.stage=2;APP.screen='s2-ai';APP.s2.step=0;
-    updStageBar();updDay();
-    updS2Sidebar(0);
-    rS2AI();
-  } else if(s===3){
-    goStage3();
-  } else if(s===4){
-    goStage4();
-  } else if(s===5){
-    goStage5();
-  } else if(s===6){
-    goStage6();
-  } else if(s===7){
-    goStage7();
-  }
+  if(s===1){APP.stage=1;APP.screen='s1';updStageBar();updDay();updS1Sidebar();renderS1();}
+  else if(s===2){goStage2();}
+  else if(s===3){goStage4();}
+  else if(s===4){goStage6();}
+  else if(s===5){goStage7();}
 }
-
-/* ═══════════════════════════════════════
-   INIT
-═══════════════════════════════════════ */
 window.addEventListener("load",function(){rLogin();});
+
 
 
 /* ═══════════════════════════════════════
@@ -1162,12 +1520,14 @@ var S3 = { step:0, confirmedCount:0, overrideRow:null, bulkDismissed:false };
    STAGE 3: ENTER
 ═══════════════════════════════════════ */
 function goStage3(){
-  APP.stage=3;APP.screen='s3-overview';S3.step=0;
+  APP.stage=1;APP.screen='s3-overview';S3.step=0;
   updStageBar();updDay();
-  updS3Sidebar(0);
+  APP.s1.cur=1;updS1Sidebar();
   rS3Overview();
 }
 function updS3Sidebar(active){
+  // CoA mapping lives inside Stage 1
+  APP.s1.cur=1;if(active>=2)APP.s1.ts[1]=2;else APP.s1.ts[0]=3;updS1Sidebar();
   var steps=['AI mapping overview|326 accounts','Review exceptions|62 to review','Controller sign-off|Lock mapping'];
   var rows=steps.map(function(r,i){
     var p=r.split('|');
@@ -1176,7 +1536,7 @@ function updS3Sidebar(active){
     var sub=i<active?'Complete':p[1];
     return'<div class="sb-row'+sel+'" onclick="s3GoStep('+i+')"><div class="step-n '+state+'">'+(i<active?'&#10003;':(i+1))+'</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+sub+'</div></div></div>';
   }).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 3 &middot; CoA Mapping</span></div>'+rows;
+  updS1Sidebar();
 }
 function s3GoStep(i){
   if(i>S3.step)return;
@@ -1330,11 +1690,12 @@ function rS3SignOff(){
    STAGE 3: LOCKED / DONE
 ═══════════════════════════════════════ */
 function lockCoA(){
-  APP.screen='s3done';APP.stage=4;
+  APP.screen='s3done';APP.stage=2;
+  APP.s1.ts[1]=3;APP.s1.ts[2]=3;
   updStageBar();updDay();
   var steps=['AI mapping overview|Complete','Review exceptions|Complete','Controller sign-off|Complete'];
   var rows=steps.map(function(r){var p=r.split('|');return'<div class="sb-row"><div class="step-n dn">&#10003;</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+p[1]+'</div></div></div>';}).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 3 &middot; CoA Mapping</span></div>'+rows;
+  updS1Sidebar();
   var a=document.getElementById('main');
   a.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 20px 28px">'
     +'<div class="succircle" style="font-size:22px">&#128274;</div>'
@@ -1350,7 +1711,7 @@ function lockCoA(){
         +'<span style="background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-full);display:inline-block">Starting now</span>'
       +'</div>'
     +'</div>'
-    +'<button class="btn-cont" onclick="goStage4()">Go to Stage 4 &#8212; GL Mapping &#8250;</button>'
+    +'<button class="btn-cont" onclick="goStage2()">Go to Stage 2 &mdash; Master data &#8250;</button>'
   +'</div>';
 }
 
@@ -1375,7 +1736,7 @@ var S4_TXNS = [
    STAGE 4: ENTER
 ═══════════════════════════════════════ */
 function goStage4(){
-  APP.stage=4;APP.screen='s4-overview';S4.step=0;
+  APP.stage=3;APP.screen='s4-overview';S4.step=0;
   updStageBar();updDay();
   updS4Sidebar(0);
   rS4Overview();
@@ -1389,7 +1750,7 @@ function updS4Sidebar(active){
     var sub=i<active?'Complete':p[1];
     return'<div class="sb-row'+sel+'" onclick="s4GoStep('+i+')"><div class="step-n '+state+'">'+(i<active?'&#10003;':(i+1))+'</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+sub+'</div></div></div>';
   }).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 4 &middot; GL Mapping</span></div>'+rows;
+  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Transaction data</span></div>'+rows;
 }
 function s4GoStep(i){
   if(i>S4.step)return;
@@ -1540,11 +1901,11 @@ function rS4SignOff(){
    STAGE 4: DONE
 ═══════════════════════════════════════ */
 function lockGL(){
-  APP.screen='s4done';APP.stage=5;
+  APP.screen='s4done';APP.stage=3;
   updStageBar();updDay();
   var steps=['Mapping overview|Complete','Your exception queue|Complete','Controller sign-off|Complete'];
   var rows=steps.map(function(r){var p=r.split('|');return'<div class="sb-row"><div class="step-n dn">&#10003;</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+p[1]+'</div></div></div>';}).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 4 &middot; GL Mapping</span></div>'+rows;
+  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Transaction data</span></div>'+rows;
   var a=document.getElementById('main');
   a.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 20px 28px">'
     +'<div class="succircle"><span class="succheck">&#10003;</span></div>'
@@ -1576,7 +1937,7 @@ var S5 = { step:0, activeTab:0, invAccepted:false };
    STAGE 5: ENTER
 ═══════════════════════════════════════ */
 function goStage5(){
-  APP.stage=5;APP.screen='s5-threeway';S5.step=0;
+  APP.stage=3;APP.screen='s5-threeway';S5.step=0;
   updStageBar();updDay();
   updS5Sidebar(0);
   rS5ThreeWay();
@@ -1590,7 +1951,7 @@ function updS5Sidebar(active){
     var sub=i<active?'Complete':p[1];
     return'<div class="sb-row'+sel+'" onclick="s5GoStep('+i+')"><div class="step-n '+state+'">'+(i<active?'&#10003;':(i+1))+'</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+sub+'</div></div></div>';
   }).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 5 &middot; TB Reconciliation</span></div>'+rows;
+  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Transaction data</span></div>'+rows;
 }
 function s5GoStep(i){
   if(i>S5.step)return;
@@ -1766,11 +2127,11 @@ function rS5SignOff(){
    STAGE 5: DONE
 ═══════════════════════════════════════ */
 function sealStage5(){
-  APP.screen='s5done';APP.stage=6;
+  APP.screen='s5done';APP.stage=4;
   updStageBar();updDay();
   var steps=['Three-way comparison|Complete','Variance review|Complete','Controller sign-off|Complete'];
   var rows=steps.map(function(r){var p=r.split('|');return'<div class="sb-row"><div class="step-n dn">&#10003;</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+p[1]+'</div></div></div>';}).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 5 &middot; TB Reconciliation</span></div>'+rows;
+  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Transaction data</span></div>'+rows;
   var a=document.getElementById('main');
   a.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 20px 28px">'
     +'<div class="succircle"><span class="succheck">&#10003;</span></div>'
@@ -1825,7 +2186,7 @@ var UAT_ITEMS = [
 ];
 
 function goStage6(){
-  APP.stage=6;APP.screen='s6-uat';S6.step=0;
+  APP.stage=4;APP.screen='s6-uat';S6.step=0;
   updStageBar();updDay();
   updS6Sidebar(0);
   rS6UAT();
@@ -1840,7 +2201,7 @@ function updS6Sidebar(active){
     var sub=i<active?'Complete':p[1];
     return'<div class="sb-row'+sel+'" onclick="s6GoStep('+i+')"><div class="step-n '+state+'">'+(i<active?'&#10003;':(i+1))+'</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+sub+'</div></div></div>';
   }).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 6 &middot; UAT</span></div>'+rows;
+  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">UAT</span></div>'+rows;
 }
 
 function s6GoStep(i){
@@ -2061,11 +2422,11 @@ function rS6SignOff(){
    STAGE 6: DONE / TRANSITION TO STAGE 7
 ═══════════════════════════════════════ */
 function authorizeGoLive(){
-  APP.screen='s6done';APP.stage=7;
+  APP.screen='s6done';APP.stage=5;
   updStageBar();updDay();
   var steps=['UAT checklist|Complete','Controller sign-off|Complete'];
   var rows=steps.map(function(r){var p=r.split('|');return'<div class="sb-row"><div class="step-n dn">&#10003;</div><div><div class="sb-name">'+p[0]+'</div><div class="sb-meta">'+p[1]+'</div></div></div>';}).join('');
-  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">Stage 6 &middot; UAT</span></div>'+rows;
+  document.getElementById('sidebar').innerHTML='<div class="sb-hdr"><span class="sb-lbl">UAT</span></div>'+rows;
   var a=document.getElementById('main');
   a.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 20px 28px">'
     +'<div class="succircle"><span class="succheck">&#10003;</span></div>'
@@ -2111,7 +2472,7 @@ var IA_CHECKLIST = [
    STAGE 7: ENTER
 ═══════════════════════════════════════ */
 function goStage7(){
-  APP.stage=7;APP.screen='s7-checklist';S7.step=0;
+  APP.stage=5;APP.screen='s7-checklist';S7.step=0;
   updStageBar();updDay();
   updS7Sidebar(0);
   rS7Checklist();
@@ -2289,153 +2650,338 @@ function rS7Live(){
 }
 
 function updStageBarAllDone(){
-  var stages=[
-    {n:1,lbl:'Data upload<br>&amp; setup',ss:'Done'},
-    {n:2,lbl:'Dimensions',ss:'Done'},
-    {n:3,lbl:'CoA mapping',ss:'Done'},
-    {n:4,lbl:'GL mapping',ss:'Done'},
-    {n:5,lbl:'TB reconciliation',ss:'Done'},
-    {n:6,lbl:'UAT',ss:'Done'},
-    {n:7,lbl:'Live',ss:'Live &#10003;'}
+  var tabs=[
+    {n:1,lbl:'Chart of Accounts'},
+    {n:2,lbl:'Master data'},
+    {n:3,lbl:'Transaction data'},
+    {n:4,lbl:'UAT'},
+    {n:5,lbl:'Live'}
   ];
   var h='';
-  stages.forEach(function(sg,i){
-    var isLive=i===6;
-    var stc=isLive?'on':'done';
+  tabs.forEach(function(tb,i){
+    var isLive=i===4;
+    var st=isLive?'on':'done';
     var icon=isLive?'&#9889;':'&#10003;';
-    var lc=isLive?' on':'';
-    var sc=isLive?' on':' done';
-    h+='<div class="sti"><div class="stc '+stc+'">'+icon+'</div><div class="stl'+lc+'">'+sg.lbl+'</div><div class="sts'+sc+'">'+sg.ss+'</div></div>';
-    if(i<stages.length-1)h+='<div class="conn conn-done"></div>';
+    h+='<div class="sti '+(isLive?'on':'done clickable')+'">'
+      +'<div class="stc '+st+'">'+icon+'</div>'
+      +'<div class="stl '+st+'">'+tb.lbl+'</div>'
+      +'</div>';
+    if(i<tabs.length-1) h+='<div class="conn"></div>';
   });
   document.getElementById('stagebar').innerHTML=h;
 }
 
 
 /* ═══════════════════════════════════════
-   PHASE 0: PRE-MIGRATION LANDING
+   PHASE 0: UNIFIED MIGRATION HOMEPAGE
+   Shown to all roles (Controller, Director/CFO).
+   Pre-migration (stage===0): plan view + CTA "Begin migration"
+   In-progress (stage>=1): live timeline + CTA "Continue — Stage N"
 ═══════════════════════════════════════ */
+
+// Stage metadata for Phase 0 dashboard
+var STAGE_META = [
+  {n:0,name:'Setup &amp; configuration',days:'Before Day 1',desc:'Your IA configures your entity: cut-off date, accounting basis, migration tier, and team access.',sign:null,files:null},
+  {n:1,name:'Chart of Accounts',days:'Days 1–5',desc:'Upload your CoA. Health check runs automatically. Then map 326 accounts to TradeOS and sign off.',sign:'CoA mapping locked',files:[
+    {num:1,name:'Chart of Accounts',req:'Export from Accurate &middot; .xlsx or .csv &middot; Account code, name, and type for every account'}
+  ]},
+  {n:2,name:'Master data',days:'Days 5–10',desc:'Six items in dependency order: Dimensions, Fixed asset, Product data, Inventory balance, Customer &amp; vendor, Outstanding AR/AP. Work in parallel once CoA is confirmed.',sign:'Per item',files:null},
+  {n:3,name:'Transaction data',days:'Days 10–20',desc:'18,432 GL transactions mapped to TradeOS accounts. Trial Balance updates live as you work. Sign-off unlocks when TB is balanced.',sign:'TB balanced',files:null},
+  {n:4,name:'UAT',days:'Days 20–25',desc:'Verify AP, AR, and reports with real data inside TradeOS. Flag anything — your IA resolves before sign-off.',sign:'Go-live authorized',files:null},
+  {n:5,name:'Live',days:'Days 25–30',desc:'Your IA flips the MIGRATION → LIVE switch. Dimension enforcement activates, audit trail seals, cashback calculated.',sign:null,files:null}
+];
+
+var STAGE_STATUS_LIVE = [
+  'Setup complete &#10003;',
+  'CoA mapped &amp; locked',
+  '6 data items &middot; dependency-driven',
+  '18,432 transactions &middot; TB balanced',
+  'Verify AP, AR, reports',
+  'IA executes MIGRATION &#8594; LIVE'
+];
+
 function rPhase0(){
-  APP.stage=0;APP.screen='p0';
-  // blank stage bar — clock not started
-  var h='';
-  var stages=[
-    {n:1,lbl:'Data upload<br>&amp; setup'},
-    {n:2,lbl:'Dimensions'},
-    {n:3,lbl:'CoA mapping'},
-    {n:4,lbl:'GL mapping'},
-    {n:5,lbl:'TB reconciliation'},
-    {n:6,lbl:'UAT'},
-    {n:7,lbl:'Live'}
-  ];
-  stages.forEach(function(sg,i){
-    h+='<div class="sti"><div class="stc off">'+sg.n+'</div><div class="stl">'+sg.lbl+'</div><div class="sts">Locked</div></div>';
-    if(i<stages.length-1)h+='<div class="conn"></div>';
-  });
-  document.getElementById('stagebar').innerHTML=h;
+  APP.stage=0; APP.screen='p0';
+  var inProgress = APP.stage > 0; // always false here — rPhase0 is only called pre-migration
+
+  // Hide stage bar and sidebar — this page is full-width
+  document.getElementById('stagebar').style.display='none';
   document.getElementById('daybadge').innerHTML='Day &#8211; of 30';
   document.getElementById('daybadge').className='day-badge pend';
-
-  // hide sidebar, full-width content
   document.getElementById('sidebar').innerHTML='';
   document.getElementById('sidebar').style.display='none';
   document.getElementById('main').style.padding='0';
 
-  document.getElementById('main').innerHTML='<div class="p0-shell">'
+  document.getElementById('main').innerHTML = p0HTML(false);
+}
 
-    // Hero
-    +'<div class="p0-hero">'
-      +'<div class="p0-kicker">PT Makmur Jaya &middot; Migration ready</div>'
-      +'<h1>You are 30 days away<br>from <em>leaving your old ERP behind.</em></h1>'
-      +'<p class="p0-hero-sub">Everything is set up and waiting for you. Upload your first file and your migration begins — TradeOS handles the heavy lifting from here.</p>'
-    +'</div>'
+function rMigrationHome(){
+  // Called when user returns to homepage mid-migration (stage >= 1)
+  APP.screen = 'p0';
+  document.getElementById('stagebar').style.display = 'none';
+  document.getElementById('sidebar').innerHTML = '';
+  document.getElementById('sidebar').style.display = 'none';
+  document.getElementById('main').style.padding = '0';
 
-    // Body
-    +'<div class="p0-body">'
+  // Update day badge to current stage day
+  updDay();
 
-      // LEFT COLUMN
-      +'<div class="p0-left">'
+  document.getElementById('main').innerHTML = p0HTML(true);
+}
 
-        // Entity config card
-        +'<div class="p0-entity-card">'
-          +'<div class="p0-entity-hdr"><span class="p0-entity-lbl">Configured by your IA</span><span class="p0-entity-badge">Setup complete &#10003;</span></div>'
-          +'<div class="p0-entity-grid">'
-            +'<div class="p0-entity-field"><label>Entity</label><span>PT Makmur Jaya</span></div>'
-            +'<div class="p0-entity-field"><label>Cut-off date</label><span class="mono">30 Sep 2025</span></div>'
-            +'<div class="p0-entity-field"><label>Source system</label><span>Accurate</span></div>'
-            +'<div class="p0-entity-field"><label>Fiscal year start</label><span class="mono">1 Jan 2025</span></div>'
-            +'<div class="p0-entity-field"><label>Accounting basis</label><span style="color:var(--color-success-text)">Accrual &#10003;</span></div>'
-            +'<div class="p0-entity-field"><label>Migration tier</label><span>Standard &middot; 30 days</span></div>'
-          +'</div>'
+function previewInProgress(){
+  // Prototype helper: set APP to mid-migration (Stage 3, Day 8) and render homepage
+  APP.stage = 3; APP.screen = 'p0';
+  document.getElementById('stagebar').style.display = 'none';
+  document.getElementById('sidebar').innerHTML = '';
+  document.getElementById('sidebar').style.display = 'none';
+  document.getElementById('main').style.padding = '0';
+  document.getElementById('daybadge').textContent = 'Day 8 of 30';
+  document.getElementById('daybadge').className = 'day-badge act';
+  document.getElementById('main').innerHTML = p0HTML(true);
+}
+
+function p0HTML(inProgress){
+  var curStage = inProgress ? Math.min(APP.stage,5) : 0;
+  var curDay   = inProgress ? (curStage===1?(APP.s1.day||0):curStage===2?5:curStage===3?8:curStage===4?12:curStage===5?20:curStage===6?25:25) : 0;
+  var pct      = inProgress ? Math.round(curDay/30*100) : 0;
+
+  // ── HERO ──────────────────────────────
+  var heroHTML;
+  if(!inProgress){
+    heroHTML = ''
+      +'<div class="p0-hero">'
+        +'<div class="p0-kicker">PT Makmur Jaya &middot; Migration ready</div>'
+        +'<h1>Your migration target:<br><em>30 days.</em></h1>'
+        +'<p class="p0-hero-sub">Your IA has set you up for the standard tier. Upload your first file and the clock starts — every stage has a target date, and your IA tracks it alongside you.</p>'
+        +'<div class="p0-tier-badge"><span class="p0-tier-pill">Standard tier &mdash; 30 days</span><span class="p0-tier-check">Accrual-basis &#10003;</span></div>'
+      +'</div>';
+  } else {
+    var cashIcon, cashLabel, cashSub;
+    if(curDay<=30){cashIcon='&#127881;';cashLabel='Full cashback &mdash; on track';cashSub='Go live by Day 30 &middot; '+(30-curDay)+' days remaining';}
+    else if(curDay<=60){cashIcon='&#128336;';cashLabel='50% cashback &mdash; watch the clock';cashSub='Go live by Day 60 &middot; '+(60-curDay)+' days remaining';}
+    else{cashIcon='&#8212;';cashLabel='Cashback window closed';cashSub='Day '+curDay+' of 60';}
+
+    heroHTML = ''
+      +'<div class="p0-hero">'
+        +'<div class="p0-kicker">PT Makmur Jaya &middot; Migration in progress</div>'
+        +'<h1>Day '+curDay+' of 30 &mdash;<br><em>Stage '+curStage+' in progress.</em></h1>'
+        +'<div class="p0-tier-badge" style="margin-bottom:16px"><span class="p0-tier-pill">Standard tier &mdash; 30 days</span><span class="p0-tier-check">Accrual-basis &#10003;</span></div>'
+        // Timeline bar inline in hero
+        +'<div class="p0-tl-wrap">'
+          +'<div class="p0-tl-bar-bg"><div class="p0-tl-bar-fill" style="width:'+pct+'%"></div><div class="p0-tl-target" title="Full cashback deadline: Day 30"></div></div>'
+          +'<div class="p0-tl-labels"><span>Day 0</span><span>Day 10</span><span>Day 20</span><span>Day 30</span></div>'
         +'</div>'
-
-        // Files to prepare
-        +'<div class="p0-files">'
-          +'<div class="p0-files-hdr"><div class="p0-files-hdr-lbl">Files you need to prepare before starting</div></div>'
-          +'<div class="p0-file-row"><div class="p0-file-num">1</div><div class="p0-file-body"><div class="name">Chart of Accounts</div><div class="req">Export from Accurate &middot; .xlsx or .csv &middot; Must include account code, name, and type for every account</div></div></div>'
-          +'<div class="p0-file-row"><div class="p0-file-num">2</div><div class="p0-file-body"><div class="name">GL Export</div><div class="req"><strong>Must be invoice-line level — not monthly summary.</strong> Full fiscal year Jan 1 – Sep 30, 2025 &middot; Columns: date, account code, description, debit, credit, document reference, vendor/customer name on AP/AR lines</div></div></div>'
-          +'<div class="p0-file-row"><div class="p0-file-num">3</div><div class="p0-file-body"><div class="name">Trial Balance</div><div class="req">As of cut-off date 30 September 2025 &middot; Closing balance per account &middot; Both active and zero-balance accounts</div></div></div>'
+        +'<div class="p0-hero-stats">'
+          +'<div class="p0-hs"><div class="p0-hs-n">'+curDay+'</div><div class="p0-hs-l">Days elapsed</div></div>'
+          +'<div class="p0-hs"><div class="p0-hs-n" style="color:var(--primitive-go-200)">~Day '+(curDay+Math.max(0,22-curDay))+'</div><div class="p0-hs-l">Projected go-live</div></div>'
+          +'<div class="p0-hs"><div class="p0-hs-n" style="color:var(--primitive-go-200)">'+cashIcon+'</div><div class="p0-hs-l">'+cashLabel+'</div></div>'
         +'</div>'
+      +'</div>';
+  }
 
-        // 7-stage preview
-        +'<div class="p0-stages">'
-          +'<div class="p0-stages-hdr"><div class="p0-stages-hdr-lbl">What happens in each stage</div></div>'
-          +'<div class="p0-stage-row"><div class="p0-stage-n">1</div><div class="p0-stage-body"><div class="s-name">Data upload &amp; health check</div><div class="s-days">Days 2–5 &middot; Upload 3 files, system runs automated analysis</div><span class="p0-stage-sign">Sign-off 1</span></div></div>'
-          +'<div class="p0-stage-row"><div class="p0-stage-n">2</div><div class="p0-stage-body"><div class="s-name">Dimension discovery</div><div class="s-days">Days 3–7 &middot; Parallel with Stage 1 &middot; Confirm your reporting dimensions</div><span class="p0-stage-sign">Sign-off 2</span></div></div>'
-          +'<div class="p0-stage-row"><div class="p0-stage-n">3</div><div class="p0-stage-body"><div class="s-name">CoA mapping</div><div class="s-days">Days 6–12 &middot; AI maps your 326 legacy accounts to TradeOS</div><span class="p0-stage-sign">Sign-off 3</span></div></div>'
-          +'<div class="p0-stage-row"><div class="p0-stage-n">4</div><div class="p0-stage-body"><div class="s-name">GL transaction mapping</div><div class="s-days">Days 10–20 &middot; 18,432 transactions mapped, AR/AP aging reconstructed</div><span class="p0-stage-sign">Sign-off 4</span></div></div>'
-          +'<div class="p0-stage-row"><div class="p0-stage-n">5</div><div class="p0-stage-body"><div class="s-name">Trial balance reconciliation</div><div class="s-days">Days 18–24 &middot; 3-way comparison: Legacy TB vs TradeOS vs Variance</div><span class="p0-stage-sign">Sign-off 5</span></div></div>'
-          +'<div class="p0-stage-row"><div class="p0-stage-n">6</div><div class="p0-stage-body"><div class="s-name">UAT &amp; final review</div><div class="s-days">Days 22–27 &middot; Verify AP, AR, reports with real data</div><span class="p0-stage-sign">Sign-off 6</span></div></div>'
-          +'<div class="p0-stage-row"><div class="p0-stage-n" style="background:var(--color-brand);color:#fff;border-color:var(--color-brand)">7</div><div class="p0-stage-body"><div class="s-name">Go-live</div><div class="s-days">Days 25–30 &middot; IA flips the MIGRATION &#8594; LIVE switch</div></div></div>'
-        +'</div>'
-
+  // ── STAGE TABLE ───────────────────────
+  // Stage 0 (IA setup) row
+  var stageRowsHTML = ''
+    +'<div class="p0s-row p0s-done">'
+      +'<div class="p0s-left">'
+        +'<div class="p0s-num done">&#10003;</div>'
+        +'<div class="p0s-connector done"></div>'
       +'</div>'
+      +'<div class="p0s-body">'
+        +'<div class="p0s-head">'
+          +'<span class="p0s-name">Setup &amp; configuration</span>'
+          +'<span class="p0s-days">Before Day 1</span>'
+          +(inProgress?'<span class="p0s-badge done">Complete</span>':'<span class="p0s-badge done">Complete &#10003;</span>')
+        +'</div>'
+        +'<div class="p0s-desc">Your IA configured entity, cut-off date, accounting basis, and team access.</div>'
+      +'</div>'
+    +'</div>';
 
-      // RIGHT COLUMN
+  // Stages 1–7
+  for(var i=1;i<=5;i++){
+    var m = STAGE_META[i];
+    var rowState, badgeClass, badgeText, statusLine;
+
+    if(!inProgress){
+      // Pre-migration: everything is just a plan
+      rowState = 'plan';
+      badgeClass = 'plan';
+      badgeText = m.sign || 'Go-live';
+      statusLine = '';
+    } else {
+      if(i < curStage){ rowState='done'; badgeClass='done'; badgeText='Complete'; }
+      else if(i === curStage){ rowState='active'; badgeClass='active'; badgeText='In progress'; }
+      else { rowState='locked'; badgeClass='locked'; badgeText=(i===5?'Target Day 30':'Locked'); }
+      statusLine = '<div class="p0s-status">'+STAGE_STATUS_LIVE[i]+'</div>';
+    }
+
+    var isLast = (i===5);
+    var numContent = (inProgress && i<curStage) ? '&#10003;' : i;
+    var connClass = (inProgress && i<curStage) ? 'done' : (inProgress && i===curStage ? 'active' : '');
+
+    // Files sub-section (Stage 1 only, pre-migration)
+    var filesHTML = '';
+    if(!inProgress && m.files){
+      filesHTML = '<div class="p0s-files">';
+      m.files.forEach(function(f){
+        filesHTML += '<div class="p0s-file"><div class="p0s-file-num">'+f.num+'</div><div class="p0s-file-body"><div class="p0s-file-name">'+f.name+'</div><div class="p0s-file-req">'+f.req+'</div></div></div>';
+      });
+      filesHTML += '</div>';
+    }
+    // Files inline as "done" for in-progress view
+    if(inProgress && i===1 && curStage>1){
+      filesHTML = '<div class="p0s-files-done">'
+        +'<span class="p0s-file-tag">&#10003; CoA_PT_Makmur_Jaya_2025.xlsx</span>'
+        +'<span class="p0s-file-tag">&#10003; GL_PT_Makmur_Jaya_2025.xlsx</span>'
+        +'<span class="p0s-file-tag">&#10003; TB_PT_Makmur_Jaya_Sep2025.xlsx</span>'
+      +'</div>';
+    }
+
+    stageRowsHTML += ''
+      +'<div class="p0s-row p0s-'+rowState+(i===curStage?' p0s-current':'')+'">'
+        +'<div class="p0s-left">'
+          +'<div class="p0s-num '+rowState+'">'+numContent+'</div>'
+          +(!isLast?'<div class="p0s-connector '+connClass+'"></div>':'')
+        +'</div>'
+        +'<div class="p0s-body">'
+          +'<div class="p0s-head">'
+            +'<span class="p0s-name">'+m.name+'</span>'
+            +'<span class="p0s-days">'+m.days+'</span>'
+            +'<span class="p0s-badge '+badgeClass+'">'+badgeText+'</span>'
+          +'</div>'
+          +'<div class="p0s-desc">'+m.desc+'</div>'
+          +statusLine
+          +filesHTML
+        +'</div>'
+      +'</div>';
+  }
+
+  // ── CTA BUTTON ────────────────────────
+  var ctaHTML;
+  if(!inProgress){
+    ctaHTML = ''
+      +'<div class="p0-cta-card">'
+        +'<div class="p0-cta-title">Ready to begin?</div>'
+        +'<div class="p0-cta-sub">Have your 3 files exported from Accurate before you start. The clock begins on your first upload — not now.</div>'
+        +'<button class="btn-begin" onclick="beginMigration()">Begin migration &#8594;</button>'
+        +'<p class="p0-clock-note">&#9711; Clock starts on first file upload</p>'
+        +'<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--color-border-default);text-align:center"><button style="background:none;border:none;font-size:11px;color:var(--color-text-tertiary);cursor:pointer;font-family:var(--font-sans);text-decoration:underline" onclick="previewInProgress()">Prototype: preview in-progress state &#8250;</button></div>'
+      +'</div>';
+  } else {
+    var stageNames = ['','Chart of Accounts','Master data','Transaction data','UAT','Live'];
+    ctaHTML = ''
+      +'<div class="p0-cta-card">'
+        +'<div class="p0-cta-title">Migration in progress</div>'
+        +'<div class="p0-cta-sub">You are on Stage '+curStage+'. Pick up where you left off.</div>'
+        +'<button class="btn-begin" onclick="jumpToStage('+curStage+')">Continue &mdash; Stage '+curStage+': '+stageNames[curStage]+' &#8594;</button>'
+        +'<p class="p0-clock-note">Day '+curDay+' of 30 &middot; '+(30-curDay)+' days to full cashback</p>'
+      +'</div>';
+  }
+
+  // ── CASHBACK CARD ─────────────────────
+  var cashbackHTML;
+  if(!inProgress){
+    cashbackHTML = ''
+      +'<div class="p0-cashback">'
+        +'<div class="p0-cashback-hdr"><div class="p0-cashback-hdr-lbl">Your cashback incentive</div></div>'
+        +'<div class="p0-cashback-body">'
+          +'<div class="p0-cashback-row"><div class="p0-cb-icon full">&#127881;</div><div class="p0-cb-text"><span class="amount">Full month cashback</span><span class="when">Go live within 30 days of first upload</span></div></div>'
+          +'<div class="p0-cashback-row"><div class="p0-cb-icon half">&#128336;</div><div class="p0-cb-text"><span class="amount">50% cashback</span><span class="when">Go live within 31–60 days</span></div></div>'
+          +'<div class="p0-cashback-row"><div class="p0-cb-icon none">&#8212;</div><div class="p0-cb-text"><span class="amount" style="color:var(--color-text-tertiary)">No cashback</span><span class="when">After 60 days</span></div></div>'
+          +'<hr class="p0-cb-divider">'
+          +'<p class="p0-cb-note">The clock starts the moment you upload your first file. Every day the Controller delays a sign-off checkpoint is a day closer to the cashback deadline. Both you and your IA see the countdown at all times.</p>'
+        +'</div>'
+      +'</div>';
+  } else {
+    // In-progress: show projected dates instead
+    cashbackHTML = ''
+      +'<div class="p0-cashback">'
+        +'<div class="p0-cashback-hdr"><div class="p0-cashback-hdr-lbl">Cashback status</div></div>'
+        +'<div class="p0-cashback-body">'
+          +'<div class="p0-cashback-row"><div class="p0-cb-icon full">&#127881;</div><div class="p0-cb-text"><span class="amount" style="color:var(--color-success-text)">Full cashback &mdash; on track</span><span class="when">Projected go-live Day '+(curDay+Math.max(0,22-curDay))+' &middot; deadline Day 30</span></div></div>'
+          +'<hr class="p0-cb-divider">'
+          +'<div class="p0s-proj-row"><span class="p0s-proj-lbl">Migration started</span><span class="p0s-proj-val">Day 1 &mdash; Oct 1, 2025</span></div>'
+          +'<div class="p0s-proj-row"><span class="p0s-proj-lbl">Current stage</span><span class="p0s-proj-val">Stage '+curStage+'</span></div>'
+          +'<div class="p0s-proj-row"><span class="p0s-proj-lbl">Projected go-live</span><span class="p0s-proj-val" style="color:var(--color-success-text)">~Day '+(curDay+Math.max(0,22-curDay))+'</span></div>'
+          +'<div class="p0s-proj-row"><span class="p0s-proj-lbl">Full cashback deadline</span><span class="p0s-proj-val" style="color:var(--color-success-text)">Day 30</span></div>'
+        +'</div>'
+      +'</div>';
+  }
+
+  // ── ENTITY CONFIG ────────────────────
+  var entityHTML = ''
+    +'<div class="p0-entity-card">'
+      +'<div class="p0-entity-hdr"><span class="p0-entity-lbl">Configured by your IA</span><span class="p0-entity-badge">Setup complete &#10003;</span></div>'
+      +'<div class="p0-entity-grid">'
+        +'<div class="p0-entity-field"><label>Entity</label><span>PT Makmur Jaya</span></div>'
+        +'<div class="p0-entity-field"><label>Cut-off date</label><span class="mono">30 Sep 2025</span></div>'
+        +'<div class="p0-entity-field"><label>Source system</label><span>Accurate</span></div>'
+        +'<div class="p0-entity-field"><label>Fiscal year start</label><span class="mono">1 Jan 2025</span></div>'
+        +'<div class="p0-entity-field"><label>Accounting basis</label><span style="color:var(--color-success-text)">Accrual &#10003;</span></div>'
+        +'<div class="p0-entity-field"><label>Migration tier</label><span>Standard &middot; 30 days</span></div>'
+      +'</div>'
+    +'</div>';
+
+  // ── TEAM ─────────────────────────────
+  var teamHTML = ''
+    +'<div class="p0-team-card">'
+      +'<div class="p0-team-hdr">Migration team</div>'
+      +'<div class="p0-team-body">'
+        +'<div class="p0-team-row"><div class="p0-team-av ctrl">BW</div><div><div class="p0-team-name">Budi Wibowo</div><div class="p0-team-role">Controller &middot; Primary</div></div></div>'
+        +'<div class="p0-team-row"><div class="p0-team-av ctrl">SR</div><div><div class="p0-team-name">Sari Rahayu</div><div class="p0-team-role">Controller &middot; Secondary</div></div></div>'
+        +'<div class="p0-team-row"><div class="p0-team-av ia">RM</div><div><div class="p0-team-name">Reza Maulana</div><div class="p0-team-role">Implementation Associate</div></div></div>'
+        +'<div class="p0-team-row"><div class="p0-team-av spn">HS</div><div><div class="p0-team-name">Hendra Santoso</div><div class="p0-team-role">Director Sponsor &middot; View only</div></div></div>'
+      +'</div>'
+    +'</div>';
+
+  // ── IA MESSAGE (pre-migration only) ──
+  var iaHTML = !inProgress ? ''
+    +'<div class="p0-ia-card">'
+      +'<div class="p0-ia-hdr">Your Implementation Associate</div>'
+      +'<div class="p0-ia-body">'
+        +'<div class="p0-ia-av">RM</div>'
+        +'<div class="p0-ia-name">Reza Maulana</div>'
+        +'<div class="p0-ia-role">Implementation Associate &middot; TradeOS</div>'
+        +'<div class="p0-ia-msg">Everything is configured and ready. When you have your 3 files exported from Accurate, click Begin Migration. I will be notified the moment you upload your first file and will schedule the Stage 2 dimension discovery session with you.</div>'
+      +'</div>'
+    +'</div>' : '';
+
+  // ── ATTENTION BANNER (in-progress only) ──
+  var attnHTML = inProgress ? ''
+    +'<div class="p0-attn-card">'
+      +'<div class="p0-attn-hdr">&#9651; Action needed</div>'
+      +'<div class="p0-attn-body">'
+        +'<div class="p0-attn-item"><div class="p0-attn-dot"></div><span>Stage 3 — 62 accounts need your review before CoA sign-off</span></div>'
+        +'<div class="p0-attn-item"><div class="p0-attn-dot"></div><span>Stage 1 — 4 vendors still have missing payment terms (due Day 15)</span></div>'
+      +'</div>'
+    +'</div>' : '';
+
+  // ── ASSEMBLE ─────────────────────────
+  return '<div class="p0-shell">'
+    + heroHTML
+    +'<div class="p0-body">'
+      +'<div class="p0-left">'
+        +'<div class="p0-stage-table">'+stageRowsHTML+'</div>'
+        + teamHTML
+      +'</div>'
       +'<div class="p0-right">'
-
-        // Cashback card
-        +'<div class="p0-cashback">'
-          +'<div class="p0-cashback-hdr"><div class="p0-cashback-hdr-lbl">Your cashback incentive</div></div>'
-          +'<div class="p0-cashback-body">'
-            +'<div class="p0-cashback-row"><div class="p0-cb-icon full">&#127881;</div><div class="p0-cb-text"><span class="amount">Full month cashback</span><span class="when">Go live within 30 days of first upload</span></div></div>'
-            +'<div class="p0-cashback-row"><div class="p0-cb-icon half">&#128336;</div><div class="p0-cb-text"><span class="amount">50% cashback</span><span class="when">Go live within 31–60 days</span></div></div>'
-            +'<div class="p0-cashback-row"><div class="p0-cb-icon none">&#8212;</div><div class="p0-cb-text"><span class="amount" style="color:var(--color-text-tertiary)">No cashback</span><span class="when">After 60 days</span></div></div>'
-            +'<hr class="p0-cb-divider">'
-            +'<p class="p0-cb-note">The clock starts the moment you upload your first file. Every day the Controller delays a sign-off checkpoint is a day closer to the cashback deadline. Both you and your IA see the countdown at all times.</p>'
-          +'</div>'
-        +'</div>'
-
-        // IA note
-        +'<div class="p0-ia-card">'
-          +'<div class="p0-ia-hdr">Your Implementation Associate</div>'
-          +'<div class="p0-ia-body">'
-            +'<div class="p0-ia-av">IA</div>'
-            +'<div class="p0-ia-name">Your IA</div>'
-            +'<div class="p0-ia-role">Implementation Associate &middot; TradeOS</div>'
-            +'<div class="p0-ia-msg">Everything is configured and ready. When you have your 3 files exported from Accurate, click Begin Migration. I will be notified the moment you upload your first file and will schedule the Stage 2 dimension discovery session with you.</div>'
-          +'</div>'
-        +'</div>'
-
-        // CTA
-        +'<div class="p0-cta-card">'
-          +'<div class="p0-cta-title">Ready to begin?</div>'
-          +'<div class="p0-cta-sub">Have your 3 files exported from Accurate before you start. The clock begins on your first upload — not now.</div>'
-          +'<button class="btn-begin" onclick="beginMigration()">Begin migration &#8594;</button>'
-          +'<p class="p0-clock-note">&#9711; Clock starts on first file upload</p>'
-        +'</div>'
-
+        + ctaHTML
+        + attnHTML
+        + cashbackHTML
+        + entityHTML
+        + iaHTML
       +'</div>'
     +'</div>'
   +'</div>';
 }
 
 function beginMigration(){
-  // restore sidebar display
   document.getElementById('sidebar').style.display='';
   document.getElementById('main').style.padding='';
-  // jump into stage 1
+  document.getElementById('stagebar').style.display='';
   APP.stage=1;APP.screen='s1';
+  APP.s1.ts=[0,0,0];APP.s1.day=0;APP.s1.cur=0;
   updStageBar();updDay();
   updS1Sidebar();
   renderS1();
@@ -2505,6 +3051,8 @@ function togglePw(){
   var inp=document.getElementById('login-pw');
   if(inp)inp.type=inp.type==='password'?'text':'password';
 }
+
+
 
 function submitLogin(){
   var email=document.getElementById('login-email');
