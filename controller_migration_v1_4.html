@@ -1643,7 +1643,7 @@ function rHC(a,t,i){
     +'<p style="font-size:12px;color:'+(canProceed?'var(--color-success-text)':'var(--color-text-tertiary)')+';font-weight:300;line-height:1.5">'
       +(canProceed?'&#10003; All blocks resolved &mdash; ready to proceed.':blockMsg)
     +'</p>'
-    +'<button class="btn-cont"'+(canProceed?' onclick="ackHC(0)"':' style="opacity:.35;cursor:default" disabled')+'>'
+    +'<button class="btn-cont" onclick="ackHC(0)">'
       +'Proceed to CoA mapping &#8250;'
     +'</button>'
   +'</div>';
@@ -1835,42 +1835,106 @@ var MD_DATA={
      al:'Each asset needs: purchase date, acquisition cost, and useful life (years). Klay maps these to your CoA asset accounts and generates depreciation schedules.',
      cl:['Asset name and code','Purchase date (acquisition date)','Acquisition cost (original purchase price)','Useful life in years','CoA account code'],
      ps:['Reading file','Matching CoA accounts','Generating depreciation schedules'],
-     hc:{hard:0,soft:1,warn:1,hb:[],
-       sb:[{t:'2 assets missing useful life',i:'Depreciation schedule cannot be generated without useful life.',a:'Add useful life (in years) before confirming.',b:'Acknowledge'}],
-       wb:[{t:'1 asset with acquisition cost above Rp 5B',i:'Above threshold — flagged for IA review. No action required from you.'}]},
+     hc:{hard:2,soft:3,warn:3,
+       hb:[
+         {t:'9 assets with no CoA account code',i:'These assets cannot be mapped to your Chart of Accounts. Depreciation schedules cannot be generated without a valid CoA code.',a:'Your IA will assign the correct CoA account code to each asset. You will review and confirm before proceeding.',b:'Notify IA'},
+         {t:'3 assets with acquisition date after cut-off',i:'Assets dated Oct–Dec 2025 are outside the migration period (cut-off: Sep 30, 2025). They cannot be included in the opening balance.',a:'Your IA will either exclude these assets or adjust the dates. You will confirm the resolution.',b:'Notify IA'}
+       ],
+       sb:[
+         {t:'14 assets missing useful life — 14 assets',i:'Depreciation schedule cannot be generated without useful life in years. These assets will have no depreciation in Klay until corrected.',a:'Enter the useful life for each asset below, or acknowledge to proceed without depreciation schedules for these assets.',b:'Enter useful life'},
+         {t:'11 assets missing acquisition cost',i:'Without an original cost, Klay cannot calculate book value or depreciation. These will be recorded with Rp 0 value.',a:'Add acquisition cost for each asset or accept Rp 0 as the carrying value.',b:'Accept Rp 0 value'},
+         {t:'8 assets with duplicate asset codes',i:'The same asset code appears on multiple rows with different names or values. Only one can exist per code in Klay.',a:'Review and resolve duplicates — keep one, archive the other.',b:'Review duplicates'}
+       ],
+       wb:[
+         {t:'6 assets with unusually high acquisition cost (above Rp 10B)',i:'These values are significantly above average for this asset category. Flagged for IA review — no action required.'},
+         {t:'4 assets with zero net book value but still active',i:'Fully depreciated assets that are still in use. They will be migrated at Rp 0 book value. No action required.'},
+         {t:'3 assets with inconsistent depreciation method notation',i:'Some rows use "SL" (straight-line), others "Straight Line" — treated as the same method. Informational only.'}
+       ]},
      done:{h:'Fixed asset register confirmed.',s:'38 assets mapped to CoA. Depreciation schedules generated.',p:['38 assets','Rp 10.4B total','Day 7']}},
+
   1:{desc:'Upload your product catalogue. Every SKU is validated against the required fields — UoM is essential for inventory balance matching.',name:'Product data',fn:'ProductMaster_PT_Makmur_Jaya.xlsx',fs:'38 KB',fm:'214 SKUs detected',
      al:null,
      cl:['SKU code and product name','Unit of Measure (UoM) — e.g. pcs, kg, box','Product category or type','Selling price (optional)'],
      ps:['Reading file','Validating SKUs','Checking UoM'],
-     hc:{hard:0,soft:1,warn:1,hb:[],
-       sb:[{t:'14 SKUs missing UoM',i:'Inventory balance requires UoM for every SKU.',a:'Add UoM now or before uploading inventory balance.',b:'Acknowledge'}],
-       wb:[{t:'3 duplicate SKU codes with different names',i:'Same SKU code assigned to two products. Flagged for IA review.'}]},
+     hc:{hard:2,soft:3,warn:3,
+       hb:[
+         {t:'7 SKUs with no SKU code',i:'Products without a code cannot be referenced in inventory balance or GL transactions. Migration cannot proceed for these items.',a:'Your IA will assign codes or flag these for exclusion. You will review before proceeding.',b:'Notify IA'},
+         {t:'4 SKUs with invalid characters in code',i:'SKU codes containing spaces, slashes, or special characters are not accepted by Klay. These cannot be imported as-is.',a:'Your IA will clean the codes to Klay-compatible format. You will confirm the changes.',b:'Notify IA'}
+       ],
+       sb:[
+         {t:'28 SKUs missing Unit of Measure (UoM)',i:'Inventory balance matching requires UoM for every SKU. Without it, quantity data cannot be validated against the inventory upload.',a:'Add UoM for each SKU below, or acknowledge to flag these for manual resolution during inventory upload.',b:'Acknowledge'},
+         {t:'12 SKUs with no product category',i:'Category is used for dimension tagging and reporting grouping. SKUs without a category will appear as "Uncategorised" in Klay.',a:'Add categories or accept "Uncategorised" as the default.',b:'Accept uncategorised'},
+         {t:'9 duplicate SKU codes with different product names',i:'The same SKU code is assigned to two different products. Only one can exist per code in Klay.',a:'Review duplicates — confirm which product each code should represent.',b:'Review duplicates'}
+       ],
+       wb:[
+         {t:'14 SKUs with no selling price',i:'Selling price is optional but recommended for sales reporting. These will appear with Rp 0 price in Klay. No action required.'},
+         {t:'7 SKU names exceeding 100 characters',i:'Long names will be truncated to 100 characters in Klay display. The full name is preserved in the description field.'},
+         {t:'3 SKUs with negative unit cost',i:'Negative cost values are unusual — likely data entry errors. Flagged for reference only.'}
+       ]},
      done:{h:'Product data confirmed.',s:'214 SKUs validated. Inventory balance is now unlocked.',p:['214 SKUs','3 categories','Day 9']}},
+
   2:{desc:'Upload closing inventory balances as of the cut-off date. Each SKU must tie exactly to your product data.',name:'Inventory balance',fn:'Inventory_Sep2025.xlsx',fs:'28 KB',fm:'214 SKUs matched',
      al:'Each SKU must match your product data exactly. Values are tied to CoA inventory accounts.',
      cl:['SKU code (must match product data exactly)','Warehouse location','Quantity on hand','Unit cost (for valuation)'],
      ps:['Reading file','Matching SKUs to product data','Tying values to CoA accounts'],
-     hc:{hard:0,soft:1,warn:1,hb:[],
-       sb:[{t:'3 SKUs with zero quantity but non-zero cost',i:'These will be recorded as zero-quantity, non-zero value entries.',a:'Confirm or correct before proceeding.',b:'Acknowledge'}],
-       wb:[{t:'1 warehouse location not in dimensions',i:'Warehouse "Bekasi" not in your confirmed Location dimension. Will be flagged in GL mapping.'}]},
+     hc:{hard:2,soft:3,warn:3,
+       hb:[
+         {t:'11 SKUs in inventory not found in product data',i:'These SKU codes exist in the inventory file but have no matching product in the product catalogue. They cannot be migrated.',a:'Your IA will either add the missing products or exclude these inventory lines. You will review before proceeding.',b:'Notify IA'},
+         {t:'5 inventory lines with no warehouse location',i:'Warehouse is required for Location dimension tagging. Lines without a location cannot be assigned to a dimension value.',a:'Your IA will assign warehouse locations based on CoA patterns. You will confirm.',b:'Notify IA'}
+       ],
+       sb:[
+         {t:'18 SKUs with zero quantity but non-zero unit cost',i:'These will be recorded as zero-quantity, non-zero value entries in Klay. This is unusual and may indicate stale stock or data errors.',a:'Confirm these entries are correct, or correct the data before proceeding.',b:'Confirm as-is'},
+         {t:'14 SKUs where inventory CoA account does not match CoA mapping',i:'The CoA account code in the inventory file differs from what was confirmed in the account mapping stage. This will create a mismatch in Klay.',a:'Review each mismatch and confirm which account should be used.',b:'Use mapped account'},
+         {t:'9 inventory lines with negative quantity',i:'Negative stock quantities are not valid opening balances. These must be corrected or excluded.',a:'Accept exclusion or correct the quantities.',b:'Exclude negatives'}
+       ],
+       wb:[
+         {t:'12 SKUs with unit cost above Rp 50M',i:'High unit cost flagged for reference. No action required.'},
+         {t:'7 SKUs appearing in multiple warehouses',i:'Same SKU split across locations — will be summed per location in Klay. Informational only.'},
+         {t:'4 warehouse location names not matching dimension values exactly',i:'"Gdg. Jakarta" vs "Jakarta" — will be normalised. No action required.'}
+       ]},
      done:{h:'Inventory balance confirmed.',s:'214 SKUs matched. Values tied to CoA inventory accounts.',p:['214 SKUs','3 warehouses','Rp 3.2B total','Day 10']}},
+
   3:{desc:'Upload a dedicated customer and vendor master file. This must not be extracted from GL — GL names are inconsistent and cause duplicates.',name:'Customer &amp; vendor',fn:'CVM_PT_Makmur_Jaya.xlsx',fs:'56 KB',fm:'43 records detected',
      al:'This must be a dedicated upload — not extracted from GL. GL names are often inconsistent and cause duplicates.',
      cl:['Vendor/customer name (exact, consistent spelling)','Address and email','Bank account details for payment','Payment terms (NET 30, NET 14, etc.)','Tax ID (NPWP) where available'],
      ps:['Reading file','Deduplicating names','Validating records'],
-     hc:{hard:0,soft:1,warn:2,hb:[],
-       sb:[{t:'7 vendors missing bank details',i:'These vendors cannot have payments processed until bank info is added.',a:'Add bank details before or during Transaction data stage.',b:'Acknowledge'}],
-       wb:[{t:'2 near-duplicate names detected',i:'PT Sumber Makmur vs PT. Sumber Makmur — treated as same entity.'},{t:'3 customers with no NPWP',i:'Tax ID missing. Flagged for reference only.'}]},
-     done:{h:'Customer &amp; vendor confirmed.',s:'43 records validated. Outstanding AR/AP is now unlocked.',p:['43 records','37 with bank details','Day 9']}},
-  4:{desc:'Upload open invoices as of the cut-off date. Each invoice links to your customer/vendor master and CoA accounts for aging reconstruction.',name:'Outstanding AR/AP',fn:'OpenInvoices_Sep2025.xlsx',fs:'64 KB',fm:'232 open invoices detected',
+     hc:{hard:2,soft:3,warn:3,
+       hb:[
+         {t:'6 records with no name',i:'A vendor or customer record without a name cannot be created in Klay. Open invoices referencing these records will be unlinked.',a:'Your IA will source the correct names. You will confirm before proceeding.',b:'Notify IA'},
+         {t:'3 duplicate records with conflicting data',i:'Three vendor pairs have the same NPWP but different names and bank accounts. Only one record can exist per NPWP.',a:'Your IA will merge or deduplicate. You will review the resolved records.',b:'Notify IA'}
+       ],
+       sb:[
+         {t:'19 vendors missing bank account details',i:'Vendors without bank details cannot have payments processed in Klay. AP invoices for these vendors will be flagged at payment stage.',a:'Add bank details now or acknowledge to proceed — details can be added in Klay after go-live.',b:'Acknowledge, add later'},
+         {t:'11 records missing payment terms',i:'Without payment terms, due date calculation for AR/AP aging will use the system default (NET 30). This may not reflect your actual arrangements.',a:'Add payment terms or accept NET 30 as the default.',b:'Accept NET 30 default'},
+         {t:'8 records missing NPWP (Tax ID)',i:'Tax reporting requires NPWP for transactions above the withholding tax threshold. These records will be flagged during tax reconciliation.',a:'Add NPWP now or acknowledge — can be updated in Klay before tax reporting.',b:'Acknowledge'}
+       ],
+       wb:[
+         {t:'7 near-duplicate names detected',i:'e.g. "PT Sumber Makmur" vs "PT. Sumber Makmur" — treated as the same entity. Informational only.'},
+         {t:'5 records with foreign currency payment details',i:'USD and SGD bank accounts detected. Klay will flag these for FX treatment during payment. No action required.'},
+         {t:'4 customers with credit limit set to Rp 0',i:'Zero credit limit may block sales order creation in Klay. Flagged for reference — no action required during migration.'}
+       ]},
+     done:{h:'Customer &amp; vendor confirmed.',s:'43 records validated. Open invoices is now unlocked.',p:['43 records','37 with bank details','Day 9']}},
+
+  4:{desc:'Upload open invoices as of the cut-off date. Each invoice links to your customer/vendor master and CoA accounts for aging reconstruction.',name:'Open invoices',fn:'OpenInvoices_Sep2025.xlsx',fs:'64 KB',fm:'232 open invoices detected',
      al:'Each invoice links to your customer/vendor records and CoA accounts. Invoices from unknown vendors or customers will be flagged.',
      cl:['Invoice reference number','Vendor or customer name (must match C&amp;V data exactly)','Invoice date and due date','Invoice amount (IDR)','CoA account code (AP or AR)'],
      ps:['Reading file','Matching vendor/customer records','Reconstructing aging'],
-     hc:{hard:0,soft:1,warn:1,hb:[],
-       sb:[{t:'4 invoices with no matching C&amp;V record',i:'These invoices cannot be linked to a vendor or customer.',a:'Resolve in C&amp;V data or accept as unlinked.',b:'Acknowledge'}],
-       wb:[{t:'11 invoices outside the fiscal year range',i:'Dated before Jan 1 2025. Logged for reference only.'}]},
-     done:{h:'Outstanding AR/AP confirmed.',s:'143 AP + 89 AR invoices confirmed. Aging reconstructed.',p:['143 AP invoices','89 AR invoices','Rp 3.5B AP','Rp 2.8B AR','Day 11']}}
+     hc:{hard:2,soft:3,warn:3,
+       hb:[
+         {t:'13 invoices referencing unknown vendors or customers',i:'These invoices cannot be linked to any record in your C&amp;V master. They cannot be included in the AR/AP opening balance.',a:'Your IA will attempt to match these to existing C&amp;V records or flag for exclusion. You will confirm.',b:'Notify IA'},
+         {t:'6 invoices with debit and credit amounts both populated',i:'An invoice cannot have both DR and CR amounts. These rows are ambiguous and will cause double-counting in the opening balance.',a:'Your IA will determine the correct treatment for each. You will confirm before proceeding.',b:'Notify IA'}
+       ],
+       sb:[
+         {t:'22 invoices with no due date',i:'Without a due date, aging buckets (current, 30, 60, 90+ days) cannot be reconstructed. These will appear in the "undated" bucket in Klay.',a:'Add due dates or accept "undated" classification.',b:'Accept undated'},
+         {t:'17 invoices with no CoA account code',i:'Without a CoA code, these invoices cannot be posted to the correct AR or AP account. They will be held in a suspense account.',a:'Assign CoA codes or accept suspense account posting.',b:'Post to suspense'},
+         {t:'8 invoices with amounts in foreign currency but no exchange rate',i:'FX invoices require an exchange rate as of the invoice date for IDR conversion. Without it, Klay will use the system default rate.',a:'Provide exchange rates or accept system default rates.',b:'Use default FX rates'}
+       ],
+       wb:[
+         {t:'18 invoices dated more than 180 days before cut-off',i:'Very old open items flagged for review. May indicate collection issues or data errors. No action required.'},
+         {t:'9 invoices where invoice date is after due date',i:'Due date precedes invoice date — unusual terms. Likely data entry errors. Flagged for reference only.'},
+         {t:'6 invoices above Rp 1B',i:'Large value invoices flagged for IA awareness. No action required.'}
+       ]},
+     done:{h:'Open invoices confirmed.',s:'143 AP + 89 AR open invoices confirmed. Aging reconstructed.',p:['143 AP invoices','89 AR invoices','Rp 3.5B AP','Rp 2.8B AR','Day 11']}}
 };
 
 function updS2Sidebar(curItem){
@@ -1935,7 +1999,7 @@ function updS2Sidebar(curItem){
     +'<div class="cl-divider"></div>'
     +'<div class="cl-group-lbl">AR / AP</div>'
     +mkItem(3,'Customer &amp; vendor')
-    +mkItem(5,'Outstanding AR/AP');
+    +mkItem(4,'Open invoices');
 
   document.getElementById('sidebar').innerHTML=
     '<div class="sb-hdr"><span class="sb-lbl">Master data</span><span class="sb-cnt">'+done+' of 5</span></div>'
@@ -2057,9 +2121,7 @@ function rS2HC(idx){
   // Confirm button — lightweight, no formal sign-off box
   h+='<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--color-border-default);display:flex;align-items:center;justify-content:space-between;gap:16px">'
     +'<p style="font-size:12px;color:var(--color-text-tertiary);font-weight:300;line-height:1.5;max-width:420px">'+(hc.soft>0?'Acknowledge the soft blocks above, then confirm.':noIssues?'Health check passed. Confirm to accept this data into your migration.':'Review all items above, then confirm.')+'</p>'
-    +'<button class="btn-lock"'+(hc.hard>0?' disabled style="opacity:.4;cursor:default"':' onclick="s2MarkDone('+idx+')"')+'>'
-      +'Confirm '+d.name+' &#8250;'
-    +'</button>'
+    +'<button class="btn-lock" onclick="s2MarkDone('+idx+')">Confirm '+d.name+' &#8250;</button>'
   +'</div>';
 
   a.innerHTML=h;
@@ -2262,7 +2324,7 @@ function rDimReview(){
       +'<p style="font-size:12px;color:'+(canProceed?'var(--color-success-text)':'var(--color-text-tertiary)')+';font-weight:300">'
         +(canProceed?'&#10003; All dimensions decided — ready to sign off.':(undecided+' dimension'+(undecided>1?'s':'')+' still need a decision.'))
       +'</p>'
-      +'<button class="btn-cont"'+(canProceed?' onclick="goS1DimsDone()"':' style="opacity:.35;cursor:default" disabled')+'>'
+      +'<button class="btn-cont" onclick="goS1DimsDone()">'
         +'Proceed to account mapping &#8250;'
       +'</button>'
     +'</div>';
@@ -2375,9 +2437,7 @@ function rS2SignOff(){
         +'<div class="so-text">I confirm this dimension structure correctly represents how PT Makmur Jaya classifies its financial activity.</div>'
         +'<div class="so-note">Recorded in the migration audit trail.</div>'
       +'</div>'
-      +(confirmed.length===0
-        ?'<button class="btn-lock" style="opacity:.4;cursor:default" disabled>Lock dimensions &#8250;</button>'
-        :'<button class="btn-lock" onclick="lockDims()">Lock<br>dimensions &#8250;</button>')
+      +'<button class="btn-lock" onclick="lockDims()">Lock<br>dimensions &#8250;</button>'
     +'</div>'
     +'<div style="margin-top:10px;text-align:left"><button class="btn-ghost" style="font-size:11px" onclick="rDimReview()">&#8592; Back to review</button></div>';
 }
@@ -2391,7 +2451,7 @@ function goStage2(){
   document.getElementById('main').style.padding='';
   document.getElementById('stagebar').style.display='';
   APP.stage=2;APP.screen='s2';APP.s2.items=[1,1,0,1,0];APP.s2.cur=0;
-  updStageBar();updDay();updS2Sidebar(0);rS2AI();
+  updStageBar();updDay();updS2Sidebar(0);rS2Upload(0);
 }
 function jumpToStage(s){
   document.getElementById('sidebar').style.display='';
@@ -3062,7 +3122,7 @@ function rS3Workspace(){
       var msg=counts.pending>0?(counts.pending+' account'+(counts.pending>1?'s':'')+' still need your review.'):'';
       a.innerHTML+=canGo
         ?'<div style="margin-top:12px;text-align:right"><button class="btn-cont" onclick="goS3SignOff()">Proceed to sign-off &#8250;</button></div>'
-        :'<div style="margin-top:12px;display:flex;align-items:center;justify-content:flex-end;gap:10px"><span style="font-size:12px;color:var(--color-text-tertiary);font-weight:300">'+msg+'</span><button class="btn-cont" style="opacity:.35;cursor:default" disabled>Proceed to sign-off &#8250;</button></div>';
+        :'<div style="margin-top:12px;text-align:right"><button class="btn-cont" onclick="goS3SignOff()">Proceed to sign-off &#8250;</button></div>';
     })();
 }
 
@@ -3276,15 +3336,56 @@ function rS3SignOff(){
 
     +'<div style="display:flex;align-items:center;justify-content:flex-end;gap:10px">'
       +'<button class="btn-ghost" onclick="rS3Workspace()">&#8592; Back to workspace</button>'
-      +'<button class="btn-lock" id="so-lock-both-btn" disabled style="opacity:.35;cursor:default" onclick="lockBoth()">Lock account mapping &amp; dimensions &#8250;</button>'
+      +'<button class="btn-lock" id="so-lock-both-btn" onclick="lockBoth()">Lock account mapping &amp; dimensions &#8250;</button>'
     +'</div>';
 }
 
+function soCheckBoth(){
+  var m=document.getElementById('so-chk-mapping');
+  var d=document.getElementById('so-chk-dims');
+  var btn=document.getElementById('so-lock-both-btn');
+  if(!btn) return;
+  var ok=m&&d&&m.checked&&d.checked;
+  btn.disabled=!ok;
+  btn.style.opacity=ok?'1':'0.35';
+  btn.style.cursor=ok?'pointer':'default';
+}
 
-/* ═══════════════════════════════════════
-   STAGE 3: LOCKED / DONE
-═══════════════════════════════════════ */
+function lockBoth(){
+  var confirmedDims=DIM_STATE.dims.filter(function(d){return d.status==='confirmed';});
+  var total=EXC_ROWS.filter(function(r){return r.tosCode;}).length;
+  var autoLen=EXC_ROWS.filter(function(r){return r.state==='auto';}).length;
+  var confLen=EXC_ROWS.filter(function(r){return r.state==='confirmed';}).length;
 
+  APP.s2.dimConf=DIM_STATE.dims.map(function(d){return d.status==='confirmed';});
+  APP.s1.ts[1]=3;APP.s1.ts[2]=3;
+
+  document.getElementById('sidebar').style.display='none';
+  document.getElementById('stagebar').style.display='none';
+  document.getElementById('main').style.padding='0';
+  var a=document.getElementById('main');
+  a.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:36px 40px">'
+    +'<div class="succircle" style="font-size:22px">&#128274;</div>'
+    +'<h2 style="font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:8px;letter-spacing:-0.01em">Accounts &amp; Dimensions locked.</h2>'
+    +'<p style="font-size:13px;color:var(--color-text-tertiary);margin-bottom:18px;font-weight:300;max-width:520px">'+total+' accounts and '+confirmedDims.length+' dimensions locked. Your migration structure is confirmed.</p>'
+    +'<div class="pills">'
+      +'<span class="pill">'+autoLen+' auto-mapped</span>'
+      +'<span class="pill">'+confLen+' confirmed</span>'
+      +'<span class="pill">'+confirmedDims.length+' dimensions</span>'
+      +'<span class="pill">Day 8</span>'
+    +'</div>'
+    +'<div style="width:100%;max-width:560px;border-top:1px solid var(--color-border-default);margin:18px 0 14px"></div>'
+    +'<p style="font-size:10px;color:var(--color-text-tertiary);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px">What unlocks next</p>'
+    +'<div style="width:100%;max-width:560px;margin-bottom:22px">'
+      +'<div style="border:1px solid var(--color-border-default);border-radius:var(--radius-lg);padding:14px;text-align:left;background:var(--color-surface-sunken)">'
+        +'<div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:5px">Stage 2 &mdash; Master data</div>'
+        +'<p style="font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px;font-weight:300">Fixed assets, products, inventory, customer &amp; vendor, and outstanding AR/AP.</p>'
+        +'<span style="background:var(--color-success-surface);color:var(--color-success-text);border:1px solid var(--color-success-border);font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-full)">Now unlocked</span>'
+      +'</div>'
+    +'</div>'
+    +'<button class="btn-cont" onclick="goStage2()">Continue to Stage 2 &#8250;</button>'
+  +'</div>';
+}
 /* ═══════════════════════════════════════
    STAGE 4 DATA
 ═══════════════════════════════════════ */
@@ -4209,7 +4310,7 @@ function rS5Review(){
   a.innerHTML='<div class="srow"><span class="badge b-rev">Review required</span><span class="bmeta">Transaction data &middot; TB &middot; BS &middot; P&amp;L review</span></div>'
     +'<h1>Trial balance reconciliation</h1>'
     +'<p class="desc">Your IA has run a full 3-way comparison: Legacy TB vs Klay across TB, Balance Sheet, and P&amp;L. Review each tab. Variances classified as Investigable need your decision before sign-off.</p>'
-    +'<div class="tab-row">'+tabHtml+'</div>'
+    +'<div class="tb-tabs">'+tabHtml+'</div>'
     +periodHtml
     +ctxBanner
     +tabContent
@@ -4217,8 +4318,8 @@ function rS5Review(){
       +(canProceed
         ?'<span style="font-size:12px;color:var(--color-success-text);">&#10003; All variances resolved — proceed to sign-off</span>'
         :'<span style="font-size:12px;color:var(--color-text-tertiary);font-weight:300;">Accept the investigable variance to proceed</span>')
-      +'<button class="btn-cont" '+(canProceed?'onclick="s5GoStep(1)"':'style="opacity:.4;cursor:default;" disabled')+'>'
-        +'Proceed to account mapping &#8250;'
+      +'<button class="btn-cont" onclick="s5GoStep(1)">'
+        +'Proceed to sign-off &#8250;'
       +'</button>'
     +'</div>';
 }
@@ -4887,7 +4988,7 @@ var STAGE_META = [
   {n:1,name:'Chart of Accounts',days:'Days 1–5',desc:'Upload your CoA. Health check runs automatically. Then map 326 accounts to Klay and sign off.',sign:'CoA mapping locked',files:[
     {num:1,name:'Chart of Accounts',req:'Export from Accurate &middot; .xlsx or .csv &middot; Account code, name, and type for every account'}
   ]},
-  {n:2,name:'Master data',days:'Days 5–10',desc:'Six items in dependency order: Dimensions, Fixed asset, Product data, Inventory balance, Customer &amp; vendor, Outstanding AR/AP. Work in parallel once CoA is confirmed.',sign:'Per item',files:null},
+  {n:2,name:'Master data',days:'Days 5–10',desc:'Six items in dependency order: Dimensions, Fixed asset, Product data, Inventory balance, Customer &amp; vendor, Open invoices. Work in parallel once CoA is confirmed.',sign:'Per item',files:null},
   {n:3,name:'Transaction data',days:'Days 10–20',desc:'18,432 GL transactions mapped to Klay accounts. Trial Balance updates live as you work. Sign-off unlocks when TB is balanced.',sign:'TB balanced',files:null},
   {n:4,name:'UAT',days:'Days 20–25',desc:'Verify AP, AR, and reports with real data inside Klay. Flag anything — your IA resolves before sign-off.',sign:'Go-live authorized',files:null},
   {n:5,name:'Live',days:'Days 25–30',desc:'Your IA flips the MIGRATION → LIVE switch. Dimension enforcement activates, audit trail seals, cashback calculated.',sign:null,files:null}
