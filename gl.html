@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>General Ledger — Klay</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Manrope:wght@300;400;500;600;700&family=Inconsolata:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --color-brand:#B83D08;--color-brand-hover:#A03206;
+  --color-action:#1A46C8;--color-action-hover:#1338A8;
+  --color-text-primary:#080706;--color-text-secondary:#2E2B27;--color-text-tertiary:#8C857C;
+  --color-surface-base:#FBF8F5;--color-surface-raised:#FFFFFF;--color-surface-sunken:#F4F0EB;--color-surface-deep:#080706;
+  --color-border-default:#E2DDD7;
+  --success-text:#166638;--success-border:#A8D9BC;--success-surface:#E8F5EE;
+  --warning-text:#7A4D00;--warning-border:#E8C870;--warning-surface:#FDF3E0;
+  --danger-text:#A02020;--danger-border:#EAB8B8;--danger-surface:#FBF0F0;
+  --radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-xl:20px;--radius-full:9999px;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--space-12:48px;--space-16:64px;
+  --transition-fast:0.1s ease;--transition-base:0.15s ease;--transition-slow:0.2s ease;
+  --font-display:'Playfair Display',serif;--font-sans:'Manrope',sans-serif;--font-mono:'Inconsolata',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-surface-base);color:var(--color-text-primary);-webkit-font-smoothing:antialiased;font-size:13px;height:100vh;overflow:hidden}
+.shell{display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sb{width:196px;flex-shrink:0;background:var(--color-surface-raised);border-right:1px solid var(--color-border-default);display:flex;flex-direction:column;overflow-y:auto}
+.sb-top{padding:0 16px;height:52px;display:flex;align-items:center;border-bottom:1px solid var(--color-border-default);gap:8px;flex-shrink:0}
+.sb-logomark{width:26px;height:26px;background:var(--color-brand);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-logomark svg{width:12px;height:12px;fill:#fff}
+.sb-brand{font-size:14px;font-weight:700;letter-spacing:-.02em;color:var(--color-text-primary)}
+.sb-section{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-border-default);padding:16px 16px 6px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:7px 12px;margin:1px 6px;border-radius:var(--radius-sm);cursor:pointer;font-size:12px;font-weight:400;color:var(--color-text-tertiary);text-decoration:none;transition:background var(--transition-fast),color var(--transition-fast)}
+.sb-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;flex-shrink:0}
+.sb-item:hover{background:var(--color-surface-base);color:var(--color-text-secondary)}
+.sb-item.active{background:var(--color-surface-sunken);color:var(--color-text-primary);font-weight:600;border-left:2px solid var(--color-brand);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-left:0;padding-left:14px}
+
+/* ── SIDEBAR SEARCH ── */
+.sb-search-wrap{padding:10px 10px 4px;position:relative;flex-shrink:0}
+.sb-search{display:flex;align-items:center;gap:7px;background:var(--color-surface-sunken);border:1px solid var(--color-border-default);border-radius:var(--radius-md);padding:6px 9px;cursor:text;transition:border-color var(--transition-fast)}
+.sb-search.focused{border-color:var(--color-action);box-shadow:0 0 0 3px rgba(26,70,200,.08)}
+.sb-search svg{width:12px;height:12px;stroke:var(--color-text-tertiary);fill:none;stroke-width:1.5;flex-shrink:0}
+.sb-search input{border:none;outline:none;font-family:var(--font-sans);font-size:11px;color:var(--color-text-primary);background:transparent;width:100%;min-width:0}
+.sb-search input::placeholder{color:var(--color-text-tertiary)}
+.sb-kbd{font-size:9px;color:var(--color-text-tertiary);background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:3px;padding:1px 4px;font-family:var(--font-mono);flex-shrink:0}
+
+/* ── SIDEBAR PROFILE + NOTIF (bottom) ── */
+.sb-bottom{flex-shrink:0;border-top:1px solid var(--color-border-default)}
+.sb-profile{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;transition:background var(--transition-fast)}
+.sb-profile:hover{background:var(--color-surface-base)}
+.sb-av{width:28px;height:28px;border-radius:var(--radius-sm);background:var(--color-action);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:-.02em}
+.sb-profile-info{flex:1;min-width:0}
+.sb-profile-name{font-size:11px;font-weight:600;color:var(--color-text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-profile-role{font-size:10px;color:var(--color-text-tertiary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-notif{width:26px;height:26px;border-radius:var(--radius-sm);background:transparent;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0}
+.sb-notif svg{width:14px;height:14px;stroke:var(--color-text-tertiary);fill:none;stroke-width:1.5}
+.sb-notif-dot{position:absolute;top:4px;right:4px;width:6px;height:6px;background:var(--color-brand);border-radius:50%;border:1.5px solid var(--color-surface-raised)}
+.sb-notif:hover svg{stroke:var(--color-text-secondary)}
+
+/* ── MAIN ── */
+.main{flex:1;min-width:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* ── CMD DROPDOWN — anchors from sidebar search, opens rightward ── */
+.cmd-dropdown{position:absolute;top:0;left:calc(100% + 6px);width:320px;background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(8,7,6,.12),0 2px 8px rgba(8,7,6,.06);z-index:200;overflow:hidden;display:none}
+.cmd-dropdown.open{display:block}
+.cmd-section-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);padding:10px 14px 4px}
+.cmd-item{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:background var(--transition-fast)}
+.cmd-item:hover,.cmd-item.active{background:var(--color-surface-sunken)}
+.cmd-item-icon{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cmd-item-icon.ai{background:linear-gradient(135deg,#1A46C8,#7C3AED);animation:aiPulse 2s ease-in-out infinite}
+@keyframes aiPulse{0%,100%{box-shadow:0 0 0 0 rgba(26,70,200,.3)}50%{box-shadow:0 0 0 6px rgba(26,70,200,.0)}}
+.cmd-item-icon svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:1.5}
+.cmd-item-icon.nav{background:var(--color-surface-sunken)}
+.cmd-item-icon.nav svg{stroke:var(--color-text-secondary)}
+.cmd-item-text{flex:1;min-width:0}
+.cmd-item-title{font-size:12px;font-weight:600;color:var(--color-text-primary)}
+.cmd-item-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.cmd-item-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:var(--radius-full);flex-shrink:0}
+.cmd-item-tag.ai{background:linear-gradient(135deg,#EBF0FD,#EDE9FE);color:#1A46C8}
+.cmd-divider{height:1px;background:var(--color-border-default);margin:4px 0}
+
+/* ── CONTENT ROW ── */
+.content-row{display:flex;flex:1;min-height:0;overflow:hidden}
+.content-main{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.scroll-area{flex:1;overflow-y:auto;padding-bottom:44px;min-height:0}
+
+/* ══════════════════════════════════════════
+   COMMAND CENTER BAND
+══════════════════════════════════════════ */
+.cc-band{
+  background:linear-gradient(110deg,#B83D08 0%,#7A2505 36%,#1C0E08 100%);
+  padding:12px 20px 0;
+  flex-shrink:0;
+  position:relative;/* bubble is absolute inside here */
+  overflow:visible;
+}
+
+/* Top row: month nav + buttons */
+.cc-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.month-nav{display:flex;align-items:center;gap:5px}
+.m-arr{width:22px;height:22px;border-radius:var(--radius-sm);background:rgba(255,255,255,.14);border:0.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;color:rgba(255,255,255,.85);font-size:13px;transition:background var(--transition-fast)}
+.m-arr:hover{background:rgba(255,255,255,.24)}
+.m-label{font-size:13px;font-weight:600;color:#fff;min-width:68px;text-align:center;letter-spacing:-.01em}
+
+.cc-spacer{flex:1}
+
+.cc-actions{display:flex;gap:6px;align-items:center}
+
+/* Klay AI button */
+.btn-klayai{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-sans);font-size:12px;font-weight:600;padding:6px 13px;background:#1A46C8;border:1px solid rgba(147,180,248,.35);color:#fff;border-radius:var(--radius-md);cursor:pointer;position:relative;transition:background var(--transition-fast)}
+.btn-klayai:hover{background:#1338A8}
+.ai-btn-dot{width:6px;height:6px;border-radius:50%;background:#93B4F8;flex-shrink:0}
+@keyframes badgePulse{0%{box-shadow:0 0 0 0 rgba(255,208,128,.7)}70%{box-shadow:0 0 0 5px rgba(255,208,128,0)}100%{box-shadow:0 0 0 0 rgba(255,208,128,0)}}
+.ai-btn-badge{min-width:16px;height:16px;border-radius:var(--radius-full);background:#FFD080;color:#7A4D00;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;animation:badgePulse 1.8s ease-out infinite}
+
+.btn-cc-export{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-sans);font-size:12px;font-weight:500;padding:6px 13px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.32);color:rgba(255,255,255,.92);border-radius:var(--radius-md);cursor:pointer;transition:background var(--transition-fast)}
+.btn-cc-export:hover{background:rgba(255,255,255,.2)}
+.btn-cc-export svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.5}
+
+.btn-cc-je{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-sans);font-size:12px;font-weight:700;padding:6px 13px;background:#fff;border:none;color:#B83D08;border-radius:var(--radius-md);cursor:pointer;transition:background var(--transition-fast)}
+.btn-cc-je:hover{background:rgba(255,255,255,.9)}
+.btn-cc-je svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5}
+
+/* ── FLOATING BUBBLE ── */
+/* Absolutely positioned over the band, no layout impact */
+.bubble-anchor{position:absolute;top:10px;right:310px;/* sits left of the button cluster */z-index:20;pointer-events:none}
+/* actual bubble */
+.cc-bubble{
+  position:relative;
+  background:rgba(14,5,2,.82);
+  border:0.5px solid rgba(255,255,255,.14);
+  border-radius:var(--radius-md) 2px var(--radius-md) var(--radius-md);
+  padding:8px 13px 7px;
+  max-width:280px;
+  cursor:pointer;
+  pointer-events:all;
+  transition:background var(--transition-base),border-color var(--transition-base),opacity var(--transition-slow),transform var(--transition-slow);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+.cc-bubble:hover{background:rgba(24,9,3,.92);border-color:rgba(255,255,255,.22)}
+/* tail — small triangle pointing up-right toward Klay AI button */
+.cc-bubble::before{
+  content:'';
+  position:absolute;
+  top:-6px;right:10px;
+  width:0;height:0;
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-bottom:7px solid rgba(255,255,255,.14);
+}
+.cc-bubble::after{
+  content:'';
+  position:absolute;
+  top:-4px;right:11px;
+  width:0;height:0;
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-bottom:6px solid rgba(14,5,2,.82);
+}
+.bubble-text{font-size:11px;color:rgba(255,255,255,.75);line-height:1.55;font-family:var(--font-sans)}
+.bubble-text strong{color:rgba(255,255,255,.96);font-weight:600}
+.bubble-text em{color:#FFD080;font-style:normal;font-weight:600}
+.bubble-footer{display:flex;align-items:center;gap:4px;margin-top:5px}
+.bubble-footer-dot{width:4px;height:4px;border-radius:50%;background:#93B4F8;opacity:.7;flex-shrink:0}
+.bubble-footer-hint{font-size:10px;color:rgba(255,255,255,.28)}
+.bubble-dismiss{position:absolute;top:4px;right:6px;font-size:11px;color:rgba(255,255,255,.25);cursor:pointer;line-height:1;padding:2px}
+.bubble-dismiss:hover{color:rgba(255,255,255,.55)}
+
+/* bubble hidden state */
+.cc-bubble.hidden{opacity:0;pointer-events:none;transform:translateY(-4px)}
+
+/* ── CC CONTENT ROW ── */
+.cc-content{display:grid;grid-template-columns:140px 1px 1fr;gap:16px;align-items:center;margin-bottom:10px}
+.cc-div{background:rgba(255,255,255,.12);align-self:stretch}
+
+/* Saldo block */
+.saldo-block{display:flex;flex-direction:column;gap:8px}
+.saldo-num{font-size:26px;font-weight:600;font-family:var(--font-mono);color:#fff;line-height:1;letter-spacing:-.02em}
+.saldo-lbl{font-size:11px;color:rgba(255,255,255,.45)}
+.closing-track{height:3px;background:rgba(255,255,255,.15);border-radius:var(--radius-full);overflow:hidden;margin-top:4px}
+.closing-fill{height:100%;width:60%;background:rgba(255,255,255,.55);border-radius:var(--radius-full);transition:width .6s ease}
+.closing-row{display:flex;justify-content:space-between;margin-top:4px}
+.closing-lbl{font-size:10px;color:rgba(255,255,255,.35)}
+.closing-pct{font-size:10px;color:rgba(255,255,255,.7);font-weight:600;font-family:var(--font-mono)}
+
+/* Tiles */
+.cc-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.cc-tile{border-radius:var(--radius-md);padding:10px 11px;display:flex;flex-direction:column;gap:4px;cursor:pointer;border:0.5px solid;transition:background var(--transition-fast),transform var(--transition-fast)}
+.cc-tile:hover{transform:translateY(-1px)}
+.ct-red  {background:rgba(160,32,32,.28);border-color:rgba(255,160,160,.2)}
+.ct-red:hover  {background:rgba(160,32,32,.4)}
+.ct-amber{background:rgba(122,77,0,.28); border-color:rgba(255,210,100,.2)}
+.ct-amber:hover{background:rgba(122,77,0,.4)}
+.ct-blue {background:rgba(26,70,200,.28); border-color:rgba(147,180,248,.2)}
+.ct-blue:hover {background:rgba(26,70,200,.4)}
+.ct-dark {background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1)}
+.ct-dark:hover {background:rgba(255,255,255,.09)}
+.ct-count{font-size:22px;font-weight:600;font-family:var(--font-mono);line-height:1}
+.ctc-r{color:#FFAAAA}.ctc-a{color:#FFD080}.ctc-b{color:#93B4F8}.ctc-g{color:#86D4A4}
+.ct-title{font-size:11px;color:rgba(255,255,255,.8);line-height:1.3;font-weight:500}
+.ct-desc {font-size:10px;color:rgba(255,255,255,.35)}
+.ct-cta  {font-size:10px;font-weight:600;margin-top:2px}
+.ctcta-r{color:rgba(255,160,160,.8)}.ctcta-a{color:rgba(255,210,100,.8)}
+.ctcta-b{color:rgba(147,180,248,.8)}.ctcta-g{color:rgba(134,212,164,.8)}
+
+/* Expand toggle */
+.cc-expand{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px;cursor:pointer;border-top:0.5px solid rgba(255,255,255,.08);margin-top:2px}
+.cc-expand:hover .cc-exp-lbl{color:rgba(255,255,255,.45)}
+.cc-exp-lbl{font-size:10px;color:rgba(255,255,255,.28);transition:color var(--transition-fast)}
+.cc-exp-icon{font-size:9px;color:rgba(255,255,255,.2);transition:transform var(--transition-base)}
+.cc-exp-icon.open{transform:rotate(180deg)}
+
+/* Expanded area */
+.cc-exp-area{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.cc-exp-area.open{max-height:260px}
+.cc-exp-inner{padding:12px 0 6px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.exp-col-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px}
+
+/* Checklist */
+.cl-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,.07)}
+.cl-item:last-child{border-bottom:none}
+.cl-icon{width:16px;height:16px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}
+.ci-ok  {background:rgba(134,212,164,.18);border:0.5px solid rgba(134,212,164,.35);color:#86D4A4}
+.ci-warn{background:rgba(255,210,100,.15);border:0.5px solid rgba(255,210,100,.3); color:#FFD080}
+.ci-bad {background:rgba(255,160,160,.15);border:0.5px solid rgba(255,160,160,.28);color:#FFAAAA}
+.cl-body{flex:1}
+.cl-title{font-size:11px;color:rgba(255,255,255,.72)}
+.cl-sub  {font-size:10px;color:rgba(255,255,255,.3);margin-top:1px}
+.cl-cta  {font-size:10px;font-weight:500;padding:2px 8px;border-radius:var(--radius-sm);border:0.5px solid;cursor:pointer;white-space:nowrap;flex-shrink:0;background:transparent;font-family:var(--font-sans)}
+.cl-cta:hover{opacity:.8}
+.cl-cta-ok  {border-color:rgba(134,212,164,.35);color:#86D4A4}
+.cl-cta-warn{border-color:rgba(255,210,100,.35);color:#FFD080}
+.cl-cta-bad {border-color:rgba(255,160,160,.32);color:#FFAAAA}
+.cl-cta-dim {border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.35);cursor:not-allowed}
+
+/* AI Log */
+.al-item{display:flex;gap:7px;padding:5px 0;border-bottom:0.5px solid rgba(255,255,255,.07);align-items:flex-start}
+.al-item:last-child{border-bottom:none}
+.al-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.al-text{font-size:10px;color:rgba(255,255,255,.5);line-height:1.5;flex:1}
+.al-time{font-size:9px;color:rgba(255,255,255,.22);font-family:var(--font-mono);white-space:nowrap}
+
+/* ── DOCKED BAR (when scrolled past CC) ── */
+.cc-docked{
+  background:linear-gradient(110deg,#8C2E06 0%,#1C0E08 100%);
+  border-bottom:0.5px solid rgba(255,255,255,.07);
+  padding:7px 20px;
+  display:none;
+  align-items:center;
+  gap:10px;
+  flex-shrink:0;
+  /* sits above scroll-area, always in layout, toggled by JS */
+}
+.cc-docked.visible{display:flex}
+.docked-month{display:flex;align-items:center;gap:4px}
+.docked-m-arr{width:18px;height:18px;border-radius:4px;background:rgba(255,255,255,.12);border:0.5px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.7);font-size:11px}
+.docked-m-label{font-size:11px;font-weight:600;color:#fff;min-width:60px;text-align:center}
+.docked-sep{width:0.5px;height:12px;background:rgba(255,255,255,.15)}
+.docked-saldo{font-size:11px;font-family:var(--font-mono);color:rgba(255,255,255,.6)}
+.docked-saldo span{color:rgba(255,255,255,.3);font-size:10px;margin-left:3px}
+.docked-expand{font-size:10px;color:rgba(255,255,255,.3);cursor:pointer;margin-left:2px}
+.docked-expand:hover{color:rgba(255,255,255,.6)}
+.docked-actions{margin-left:auto;display:flex;gap:5px}
+
+/* ── BUTTONS (base) ── */
+.btn-primary{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-sans);font-size:13px;font-weight:600;padding:8px 16px;background:var(--color-action);color:#fff;border:none;border-radius:var(--radius-md);cursor:pointer;transition:background var(--transition-base)}
+.btn-primary:hover{background:var(--color-action-hover)}
+.btn-ghost{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-sans);font-size:12px;font-weight:500;color:var(--color-text-tertiary);background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:var(--radius-md);padding:7px 13px;cursor:pointer;transition:border-color var(--transition-fast),color var(--transition-fast)}
+.btn-ghost:hover{border-color:#c8c2ba;color:var(--color-text-secondary)}
+
+/* ── FILTER BAR ── */
+.filter-bar{background:var(--color-surface-raised);border-bottom:1px solid var(--color-border-default);padding:var(--space-2) var(--space-5);display:flex;align-items:center;gap:var(--space-2);flex-shrink:0}
+.f-search{display:flex;align-items:center;gap:7px;background:var(--color-surface-sunken);border:1px solid var(--color-border-default);border-radius:var(--radius-sm);padding:6px 10px;width:200px;flex-shrink:0;transition:border-color var(--transition-fast),box-shadow var(--transition-fast)}
+.f-search:focus-within{border-color:var(--color-action);box-shadow:0 0 0 3px rgba(26,70,200,.08)}
+.f-search svg{width:12px;height:12px;stroke:var(--color-text-tertiary);fill:none;stroke-width:1.5;flex-shrink:0}
+.f-search input{border:none;outline:none;font-family:var(--font-sans);font-size:12px;color:var(--color-text-primary);background:transparent;width:100%}
+.f-search input::placeholder{color:var(--color-text-tertiary)}
+.fsep{width:1px;height:18px;background:var(--color-border-default);flex-shrink:0;margin:0 2px}
+.chip-grp{display:flex;gap:3px}
+.chip{font-family:var(--font-sans);font-size:11px;font-weight:500;padding:4px 12px;border-radius:var(--radius-full);border:1px solid var(--color-border-default);background:var(--color-surface-raised);color:var(--color-text-tertiary);cursor:pointer;transition:all var(--transition-fast);white-space:nowrap}
+.chip:hover{border-color:#c8c2ba;color:var(--color-text-secondary)}
+.chip.on{background:var(--color-action);color:#fff;border-color:var(--color-action)}
+.f-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.f-filter-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--color-text-tertiary);background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:var(--radius-sm);padding:6px 11px;cursor:pointer;transition:all var(--transition-fast)}
+.f-filter-btn:hover{border-color:#c8c2ba;color:var(--color-text-secondary)}
+.f-filter-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.5}
+.f-filter-btn .badge{background:var(--color-action);color:#fff;border-radius:var(--radius-full);font-size:9px;font-weight:700;padding:1px 5px;margin-left:2px}
+.kurs-toggle-wrap{display:inline-flex;align-items:center;gap:6px}
+.kurs-toggle-label{font-size:11px;color:var(--color-text-tertiary)}
+.kurs-switch{position:relative;width:28px;height:16px;flex-shrink:0;cursor:pointer;display:inline-block}
+.kurs-switch input{opacity:0;width:0;height:0;position:absolute}
+.kurs-track{position:absolute;inset:0;background:var(--color-border-default);border-radius:var(--radius-full);transition:background var(--transition-base)}
+.kurs-switch input:checked+.kurs-track{background:var(--color-action)}
+.kurs-thumb{position:absolute;top:2px;left:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:left var(--transition-base);pointer-events:none}
+.kurs-switch input:checked~.kurs-thumb{left:14px}
+.export-wrap{position:relative}
+.exp-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:var(--radius-md);box-shadow:0 4px 20px rgba(8,7,6,.1);padding:var(--space-2);min-width:200px;display:none;z-index:50}
+.exp-menu.open{display:block}
+.exp-section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);padding:8px 10px 3px}
+.exp-item-check{display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:var(--radius-sm);cursor:pointer;font-size:12px;font-weight:500;color:var(--color-text-secondary);transition:background var(--transition-fast)}
+.exp-item-check:hover{background:var(--color-surface-sunken)}
+.exp-item-check input[type=radio]{accent-color:var(--color-action);flex-shrink:0}
+.exp-divider-sm{height:1px;background:var(--color-border-default);margin:4px 0}
+.exp-do-btn{width:calc(100% - 20px);margin:6px 10px 8px;font-family:var(--font-sans);font-size:12px;font-weight:600;padding:7px;background:var(--color-action);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--transition-fast)}
+.exp-do-btn:hover{background:var(--color-action-hover)}
+
+/* ── TABLE ── */
+.table-wrap{background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;margin:0 var(--space-5) var(--space-6)}
+.tbl-scroll{overflow-y:auto;flex:1}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--color-surface-deep);border-bottom:1px solid var(--color-border-default)}
+thead th{font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;padding:10px 14px;text-align:left;white-space:nowrap;user-select:none;border-right:0.5px solid rgba(255,255,255,.07)}
+thead th:last-child{border-right:none}
+thead th.sortable{cursor:pointer;transition:color var(--transition-fast)}
+thead th.sortable:hover{color:rgba(255,255,255,.8)}
+thead th.sort-asc .sort-arrow::after{content:'↑';margin-left:4px;color:#93B4F8;font-size:10px}
+thead th.sort-desc .sort-arrow::after{content:'↓';margin-left:4px;color:#93B4F8;font-size:10px}
+thead th .sort-arrow::after{content:'↕';margin-left:4px;color:rgba(255,255,255,.2);font-size:9px}
+thead th.r,.r{text-align:right}
+tbody tr{border-bottom:1px solid var(--color-surface-sunken);transition:background var(--transition-fast);cursor:pointer}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#FAFAF9}
+tbody tr.active-row{background:#EBF0FD}
+td{padding:10px 14px;vertical-align:middle}
+.td-ref{font-family:var(--font-mono);font-size:12px;color:var(--color-text-primary)}
+.td-desc{font-size:12px;color:var(--color-text-secondary);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.td-acct{font-family:var(--font-mono);font-size:11px;color:var(--color-text-tertiary)}
+.td-acct-name{font-size:12px;color:var(--color-text-secondary)}
+.td-amount{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--color-text-primary)}
+.td-amount.debit{color:#A02020}
+.td-amount.credit{color:#166638}
+.td-balance{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--color-text-secondary)}
+.td-date{font-size:12px;color:var(--color-text-tertiary);white-space:nowrap}
+.type-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--radius-full);font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.type-badge.je{background:#EBF0FD;color:var(--color-action)}
+.type-badge.inv{background:var(--success-surface);color:var(--success-text)}
+.type-badge.bill{background:var(--warning-surface);color:var(--warning-text)}
+.empty-state{padding:48px 24px;text-align:center;color:var(--color-text-tertiary)}
+.empty-state svg{width:32px;height:32px;stroke:var(--color-border-default);fill:none;stroke-width:1;margin:0 auto 12px;display:block}
+.empty-title{font-size:14px;font-weight:600;color:var(--color-text-secondary);margin-bottom:4px}
+.empty-sub{font-size:12px}
+
+/* Anomaly rows */
+tbody tr.anomaly-warn{background:#FFFBEE}
+tbody tr.anomaly-warn:hover{background:#FFF5CC}
+tbody tr.anomaly-danger{background:#FFF5F5}
+.anomaly-flag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:var(--radius-full);white-space:nowrap;margin-left:6px;vertical-align:middle}
+.anomaly-flag.warn{background:var(--warning-surface);color:var(--warning-text);border:1px solid var(--warning-border)}
+.anomaly-expand-row td{padding:0!important;background:inherit}
+.anomaly-expand-inner{padding:12px 14px 14px;border-top:1px dashed var(--color-border-default)}
+.anomaly-expand-title{font-size:11px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.4}
+.anomaly-expand-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.anomaly-expand-cell{background:var(--color-surface-sunken);border-radius:var(--radius-sm);padding:8px 10px}
+.anomaly-expand-cell-label{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:3px}
+.anomaly-expand-cell-val{font-size:12px;font-weight:700;color:var(--color-text-primary);font-family:var(--font-mono)}
+.anomaly-expand-actions{display:flex;gap:6px}
+.ai-btn-valid,.ai-btn-lihat{font-family:var(--font-sans);font-size:11px;font-weight:600;padding:5px 11px;border-radius:var(--radius-md);border:1px solid var(--color-border-default);background:var(--color-surface-raised);color:var(--color-text-secondary);cursor:pointer;transition:all var(--transition-fast)}
+.ai-btn-valid:hover,.ai-btn-lihat:hover{border-color:#c8c2ba;background:var(--color-surface-sunken)}
+.ai-btn-reklasifikasi{font-family:var(--font-sans);font-size:11px;font-weight:600;padding:5px 11px;border-radius:var(--radius-md);border:none;background:var(--color-action);color:#fff;cursor:pointer;transition:background var(--transition-fast)}
+.ai-btn-reklasifikasi:hover{background:var(--color-action-hover)}
+
+/* rekon cell */
+.rekon-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:var(--radius-full)}
+.rekon-matched{background:var(--success-surface);color:var(--success-text);border:1px solid var(--success-border)}
+.rekon-pending{background:var(--color-surface-sunken);color:var(--color-text-tertiary);border:1px solid var(--color-border-default)}
+
+/* ── STICKY STATUS BAR ── */
+.sticky-status-bar{position:fixed;bottom:0;left:196px;right:0;background:var(--color-surface-deep);border-top:1px solid rgba(255,255,255,.08);padding:9px 20px;display:flex;align-items:center;gap:var(--space-5);z-index:30;transition:right var(--transition-slow)}
+.sb-stat{display:flex;align-items:center;gap:6px}
+.sb-stat-label{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.sb-stat-val{font-family:var(--font-mono);font-size:11px;font-weight:600;color:rgba(255,255,255,.85)}
+.sb-stat-val.debit{color:#F59A9A}
+.sb-stat-val.credit{color:#86D4A4}
+.sb-stat-val.balance{color:#93B4F8}
+.sb-sep{width:1px;height:14px;background:rgba(255,255,255,.12)}
+.sb-right{margin-left:auto;display:flex;align-items:center;gap:var(--space-4)}
+
+/* ── DETAIL DRAWER ── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(8,7,6,.35);z-index:40;opacity:0;pointer-events:none;transition:opacity var(--transition-slow)}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:400px;background:var(--color-surface-raised);border-left:1px solid var(--color-border-default);z-index:50;display:flex;flex-direction:column;transform:translateX(100%);transition:transform var(--transition-slow);box-shadow:-4px 0 24px rgba(8,7,6,.1)}
+.drawer.open{transform:translateX(0)}
+.drawer-head{padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--color-border-default);display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-3);flex-shrink:0}
+.d-ref{font-family:var(--font-mono);font-size:14px;font-weight:600;color:var(--color-text-primary)}
+.d-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--radius-full);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+.d-badge.posted{background:var(--success-surface);color:var(--success-text);border:1px solid var(--success-border)}
+.d-close{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--color-text-tertiary);transition:background var(--transition-fast);flex-shrink:0}
+.d-close:hover{background:var(--color-surface-sunken);color:var(--color-text-primary)}
+.d-close svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.d-tabs{display:flex;padding:0 var(--space-5);border-bottom:1px solid var(--color-border-default);flex-shrink:0}
+.d-tab{padding:10px 0;margin-right:var(--space-5);font-size:12px;font-weight:500;color:var(--color-text-tertiary);cursor:pointer;border-bottom:2px solid transparent;transition:all var(--transition-fast);white-space:nowrap}
+.d-tab:hover{color:var(--color-text-secondary)}
+.d-tab.on{color:var(--color-action);border-bottom-color:var(--color-action);font-weight:600}
+.d-body{flex:1;overflow-y:auto;padding:var(--space-4) var(--space-5)}
+.d-pane{display:none}
+.d-pane.on{display:block}
+.dsec{margin-bottom:var(--space-5)}
+.dlbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:var(--space-3)}
+.info-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--color-surface-sunken);gap:var(--space-3)}
+.info-row:last-child{border-bottom:none}
+.info-row label{font-size:11px;color:var(--color-text-tertiary);flex-shrink:0}
+.info-row span,.info-row a{font-size:12px;font-weight:500;color:var(--color-text-primary);text-align:right}
+.info-row a{color:var(--color-action);text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.info-row a:hover{text-decoration:underline}
+.info-row a svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2}
+.dpill{display:inline-flex;padding:3px 9px;border-radius:var(--radius-full);font-size:11px;font-weight:600}
+.dp-dept{background:#EBF0FD;color:var(--color-action)}
+.dp-proj{background:var(--success-surface);color:var(--success-text)}
+.dp-branch{background:var(--warning-surface);color:var(--warning-text)}
+.d-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.d-tbl thead tr{background:var(--color-surface-sunken)}
+.d-tbl thead th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-tertiary);padding:7px 10px;text-align:left;border-bottom:1px solid var(--color-border-default)}
+.d-tbl thead th.r{text-align:right}
+.d-tbl tbody td{padding:7px 10px;border-bottom:1px solid var(--color-surface-sunken);color:var(--color-text-secondary)}
+.d-tbl tbody tr:last-child td{border-bottom:none}
+.d-tbl tfoot td{padding:7px 10px;font-weight:700;color:var(--color-text-primary);border-top:1px solid var(--color-border-default);font-family:var(--font-mono);font-size:12px}
+.d-tbl .r{text-align:right;font-family:var(--font-mono)}
+.li-sub{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+.d-open-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--color-action);text-decoration:none;padding:7px 12px;border:1px solid #C8D8FA;border-radius:var(--radius-md);background:#EBF0FD;margin-bottom:var(--space-4);transition:background var(--transition-fast)}
+.d-open-link:hover{background:#d8e4fc}
+.d-open-link svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.audit-list{display:flex;flex-direction:column;gap:0}
+.audit-item{display:flex;gap:10px;padding:8px 0;position:relative}
+.audit-item:not(:last-child)::after{content:'';position:absolute;left:11px;top:30px;bottom:-8px;width:1px;background:var(--color-border-default)}
+.audit-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.audit-dot.posted{background:var(--success-surface);border:1.5px solid var(--success-border)}
+.audit-dot.posted svg{width:10px;height:10px;stroke:var(--success-text);fill:none;stroke-width:2.5}
+.audit-dot.created{background:var(--color-surface-sunken);border:1.5px solid var(--color-border-default)}
+.audit-dot.created svg{width:8px;height:8px;stroke:var(--color-text-tertiary);fill:currentColor}
+.audit-content{flex:1}
+.audit-action{font-size:12px;font-weight:600;color:var(--color-text-primary)}
+.audit-meta{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.dim-grid{display:flex;flex-direction:column;gap:6px}
+.dim-row{display:flex;align-items:center;justify-content:space-between}
+.dim-row-label{font-size:11px;color:var(--color-text-tertiary)}
+
+/* ── FILTER DRAWER ── */
+.filter-overlay{position:fixed;inset:0;background:rgba(8,7,6,.35);z-index:38;opacity:0;pointer-events:none;transition:opacity var(--transition-slow)}
+.filter-overlay.open{opacity:1;pointer-events:all}
+.filter-drawer{position:fixed;top:0;right:0;height:100vh;width:320px;background:var(--color-surface-raised);border-left:1px solid var(--color-border-default);z-index:50;display:flex;flex-direction:column;transform:translateX(100%);transition:transform var(--transition-slow);box-shadow:-4px 0 24px rgba(8,7,6,.08)}
+.filter-drawer.open{transform:translateX(0)}
+.fd-head{padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--color-border-default);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.fd-title{font-size:14px;font-weight:700;color:var(--color-text-primary)}
+.fd-body{flex:1;overflow-y:auto;padding:var(--space-4) var(--space-5)}
+.fd-section{margin-bottom:var(--space-5)}
+.fd-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:var(--space-3)}
+.fd-shortcuts{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:var(--space-3)}
+.fd-sc{font-size:11px;font-weight:500;padding:4px 10px;border-radius:var(--radius-full);border:1px solid var(--color-border-default);background:var(--color-surface-raised);color:var(--color-text-tertiary);cursor:pointer;transition:all var(--transition-fast)}
+.fd-sc:hover{border-color:var(--color-action);color:var(--color-action)}
+.fd-sc.on{background:var(--color-action);color:#fff;border-color:var(--color-action)}
+.fd-date-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2)}
+.fd-input{font-family:var(--font-sans);font-size:12px;color:var(--color-text-primary);background:var(--color-surface-sunken);border:1px solid var(--color-border-default);border-radius:var(--radius-sm);padding:7px 10px;width:100%;outline:none;transition:border-color var(--transition-fast)}
+.fd-input:focus{border-color:var(--color-action);box-shadow:0 0 0 3px rgba(26,70,200,.08)}
+.fd-select{font-family:var(--font-sans);font-size:12px;color:var(--color-text-primary);background:var(--color-surface-sunken);border:1px solid var(--color-border-default);border-radius:var(--radius-sm);padding:7px 10px;width:100%;outline:none;cursor:pointer}
+.fd-foot{padding:var(--space-3) var(--space-5);border-top:1px solid var(--color-border-default);display:flex;gap:var(--space-2);flex-shrink:0}
+
+/* ── FLOATING KLAY AI CHAT ── */
+.ai-float{position:fixed;bottom:52px;right:20px;width:320px;background:var(--color-surface-raised);border:1px solid var(--color-border-default);border-radius:var(--radius-xl);box-shadow:0 12px 40px rgba(8,7,6,.18),0 4px 12px rgba(8,7,6,.08);display:flex;flex-direction:column;overflow:hidden;z-index:60;opacity:0;pointer-events:none;transform:translateY(10px) scale(.97);transform-origin:bottom right;transition:opacity .18s ease,transform .18s ease}
+.ai-float.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+
+.ai-float-head{padding:12px 14px;background:#1A46C8;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.ai-float-icon{width:24px;height:24px;border-radius:var(--radius-sm);background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-float-icon-dot{width:7px;height:7px;border-radius:50%;background:#93B4F8}
+.ai-float-title{font-size:13px;font-weight:600;color:#fff;flex:1}
+.ai-float-sub{font-size:10px;color:rgba(255,255,255,.5)}
+.ai-float-close{width:24px;height:24px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.6);transition:background var(--transition-fast)}
+.ai-float-close:hover{background:rgba(255,255,255,.15);color:#fff}
+.ai-float-close svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* Urgency context strip */
+.ai-ctx-bar{padding:7px 14px;background:var(--warning-surface);border-bottom:1px solid var(--warning-border);display:flex;align-items:flex-start;gap:6px}
+.ai-ctx-icon{font-size:12px;flex-shrink:0;margin-top:1px}
+.ai-ctx-text{font-size:11px;color:var(--warning-text);line-height:1.4}
+.ai-ctx-text strong{font-weight:700}
+
+/* Messages */
+.ai-float-msgs{padding:12px 14px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;max-height:240px;flex:1}
+.af-msg-ai{background:var(--color-surface-sunken);border:1px solid var(--color-border-default);border-radius:var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;padding:9px 11px;font-size:12px;color:var(--color-text-secondary);line-height:1.55}
+.af-msg-ai strong{font-weight:600;color:var(--color-text-primary)}
+.af-msg-ai em{font-style:normal;color:var(--warning-text);font-weight:600}
+.af-msg-user{background:var(--color-action);border-radius:var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);padding:9px 11px;font-size:12px;color:#fff;line-height:1.5;align-self:flex-end;max-width:85%}
+.af-msg-follow{background:var(--color-surface-sunken);border:1px solid var(--color-border-default);border-radius:var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;padding:9px 11px;font-size:12px;color:var(--color-text-secondary);line-height:1.55}
+.af-msg-follow strong{font-weight:600;color:var(--color-text-primary)}
+.af-msg-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.af-chip{font-size:10px;padding:2px 8px;border-radius:var(--radius-full);border:1px solid;cursor:pointer;transition:opacity var(--transition-fast)}
+.af-chip:hover{opacity:.7}
+.af-chip-r{background:var(--danger-surface);color:var(--danger-text);border-color:var(--danger-border)}
+.af-chip-a{background:var(--warning-surface);color:var(--warning-text);border-color:var(--warning-border)}
+.af-chip-b{background:#EBF0FD;color:var(--color-action);border-color:#C8D8FA}
+.ai-typing-float{display:flex;align-items:center;gap:4px;padding:9px 11px;background:var(--color-surface-sunken);border:1px solid var(--color-border-default);border-radius:var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;align-self:flex-start}
+.ai-typing-float span{width:6px;height:6px;border-radius:50%;background:var(--color-action);animation:typingBounce 1.2s ease-in-out infinite}
+.ai-typing-float span:nth-child(2){animation-delay:.2s}
+.ai-typing-float span:nth-child(3){animation-delay:.4s}
+@keyframes typingBounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
+/* Suggestions */
+.ai-float-sugs{padding:6px 14px 8px;border-top:1px solid var(--color-border-default);display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.afs-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px}
+.afs-item{font-size:11px;font-weight:500;padding:5px 10px;border-radius:var(--radius-sm);border:1px solid var(--color-border-default);color:var(--color-text-secondary);background:var(--color-surface-raised);cursor:pointer;transition:background var(--transition-fast)}
+.afs-item:hover{background:var(--color-surface-sunken)}
+
+/* Input */
+.ai-float-input-row{padding:8px 10px;border-top:1px solid var(--color-border-default);display:flex;gap:6px;align-items:flex-end;flex-shrink:0}
+.ai-float-textarea{flex:1;border:none;outline:none;font-family:var(--font-sans);font-size:12px;color:var(--color-text-primary);background:var(--color-surface-sunken);border:1px solid var(--color-border-default);border-radius:var(--radius-md);padding:7px 10px;resize:none;min-height:34px;max-height:80px;overflow-y:auto;line-height:1.4;transition:border-color var(--transition-fast)}
+.ai-float-textarea:focus{outline:none;border-color:var(--color-action);box-shadow:0 0 0 3px rgba(26,70,200,.08)}
+.ai-float-send{width:34px;height:34px;border-radius:var(--radius-md);background:var(--color-action);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background var(--transition-fast)}
+.ai-float-send:hover{background:var(--color-action-hover)}
+.ai-float-send svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<nav class="sb">
+  <div class="sb-top">
+    <div class="sb-logomark"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+    <span class="sb-brand">Klay</span>
+  </div>
+
+  <!-- Search -->
+  <div class="sb-search-wrap">
+    <div class="sb-search" id="sbSearch">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="tbSearchInput" placeholder="Cari…" autocomplete="off">
+      <span class="sb-kbd">⌘K</span>
+    </div>
+    <div class="cmd-dropdown" id="cmdDropdown">
+      <div class="cmd-section-label">Tanya AI</div>
+      <div class="cmd-item" id="cmdAskAI">
+        <div class="cmd-item-icon ai"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 8v4l3 3"/><circle cx="19" cy="5" r="3"/></svg></div>
+        <div class="cmd-item-text">
+          <div class="cmd-item-title" id="cmdAskAITitle">✦ Tanya AI tentang ini</div>
+          <div class="cmd-item-sub" id="cmdAskAISub">Buka percakapan dengan Klay AI</div>
+        </div>
+        <span class="cmd-item-tag ai">AI</span>
+      </div>
+      <div class="cmd-divider"></div>
+      <div class="cmd-section-label">Navigasi Cepat</div>
+      <div class="cmd-item" onclick="filterByType('je')">
+        <div class="cmd-item-icon nav"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="cmd-item-text"><div class="cmd-item-title">Journal Entry</div><div class="cmd-item-sub">Filter hanya JE</div></div>
+      </div>
+      <div class="cmd-item" onclick="filterByType('inv')">
+        <div class="cmd-item-icon nav"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="cmd-item-text"><div class="cmd-item-title">Invoice</div><div class="cmd-item-sub">Filter hanya Invoice</div></div>
+      </div>
+      <div class="cmd-item" onclick="filterByType('bill')">
+        <div class="cmd-item-icon nav"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="cmd-item-text"><div class="cmd-item-title">Bill</div><div class="cmd-item-sub">Filter hanya Bill</div></div>
+      </div>
+      <div id="cmdResults"></div>
+    </div>
+  </div>
+
+  <div class="sb-section">Overview</div>
+  <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+  <div class="sb-section">Keuangan</div>
+  <a class="sb-item active" href="#"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>General Ledger</a>
+  <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Journal Entry</a>
+  <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Bills</a>
+  <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Invoices</a>
+  <div class="sb-section">Operasional</div>
+  <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Vendors</a>
+  <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Customers</a>
+  <div class="sb-section">Laporan</div>
+  <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Trial Balance</a>
+  <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>P&amp;L</a>
+
+  <!-- Bottom: profile + notif -->
+  <div class="sb-bottom" style="margin-top:auto">
+    <div class="sb-profile">
+      <div class="sb-av">BS</div>
+      <div class="sb-profile-info">
+        <div class="sb-profile-name">Budi Santoso</div>
+        <div class="sb-profile-role">PT Sejahtera Makmur</div>
+      </div>
+      <div class="sb-notif">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="sb-notif-dot"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main" id="mainArea">
+
+  <!-- CONTENT ROW -->
+  <div class="content-row">
+    <div class="content-main">
+
+      <!-- DOCKED BAR — lives here, above scroll-area, always in layout flow -->
+      <div class="cc-docked" id="ccDocked">
+        <div class="docked-month">
+          <div class="docked-m-arr" onclick="prevMonth()">‹</div>
+          <span class="docked-m-label" id="ccMonthDocked">Jan 2025</span>
+          <div class="docked-m-arr" onclick="nextMonth()">›</div>
+        </div>
+        <div class="docked-sep"></div>
+        <span class="docked-saldo">616,6jt <span>saldo · Rp</span></span>
+        <span class="docked-expand" onclick="scrollToCC()">▾ buka command center</span>
+        <div class="docked-actions">
+          <button class="btn-klayai" style="font-size:11px;padding:5px 10px" onclick="openAIChat()">
+            <div class="ai-btn-dot"></div>Klay AI<div class="ai-btn-badge" style="animation:none">4</div>
+          </button>
+          <button class="btn-cc-export" style="font-size:11px;padding:5px 10px" onclick="toggleExp(event)">Export</button>
+          <button class="btn-cc-je" style="font-size:11px;padding:5px 10px" onclick="alert('Buka form JE baru')">+ JE</button>
+        </div>
+      </div>
+
+      <!-- SCROLL AREA — cc-band lives inside so IntersectionObserver works -->
+      <div class="scroll-area" id="scrollArea">
+
+      <!-- ══ COMMAND CENTER ══ -->
+      <div class="cc-band" id="ccBand">
+
+        <!-- Floating bubble — absolutely positioned, no layout impact -->
+        <div class="bubble-anchor">
+          <div class="cc-bubble" id="ccBubble" onclick="openAIChat()">
+            <span class="bubble-dismiss" id="bubbleDismiss" onclick="dismissBubble(event)">✕</span>
+            <div class="bubble-text" id="bubbleText">
+              <em>7 hari lagi closing.</em> GL <strong>seimbang</strong> tapi <strong>3 JE pending</strong> &amp; <strong>1 anomali</strong> masih belum selesai — rekon 76%.
+            </div>
+            <div class="bubble-footer">
+              <div class="bubble-footer-dot"></div>
+              <span class="bubble-footer-hint">klik untuk tanya Klay AI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top row: month nav + actions -->
+        <div class="cc-top">
+          <div class="month-nav">
+            <div class="m-arr" onclick="prevMonth()">‹</div>
+            <span class="m-label" id="ccMonth">Jan 2025</span>
+            <div class="m-arr" onclick="nextMonth()">›</div>
+          </div>
+          <div class="cc-spacer"></div>
+          <div class="cc-actions">
+            <button class="btn-klayai" id="klayAIBtn" onclick="openAIChat()">
+              <div class="ai-btn-dot"></div>
+              Klay AI
+              <div class="ai-btn-badge" id="aiBadge">4</div>
+            </button>
+            <div class="export-wrap">
+              <button class="btn-cc-export" onclick="toggleExp(event)">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Export
+              </button>
+              <div class="exp-menu" id="expMenu" style="min-width:210px">
+                <div class="exp-section-label">Scope</div>
+                <label class="exp-item-check"><input type="radio" name="expScope" value="visible" checked> Hanya yang terlihat</label>
+                <label class="exp-item-check"><input type="radio" name="expScope" value="all"> Semua data</label>
+                <div class="exp-divider-sm"></div>
+                <div class="exp-section-label">Format</div>
+                <label class="exp-item-check"><input type="radio" name="expFmt" value="xlsx" checked> Excel (.xlsx)</label>
+                <label class="exp-item-check"><input type="radio" name="expFmt" value="csv"> CSV</label>
+                <div class="exp-divider-sm"></div>
+                <button class="exp-do-btn" onclick="doExportNew()">Export Sekarang</button>
+              </div>
+            </div>
+            <button class="btn-cc-je" onclick="alert('Buka form Journal Entry baru')">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Jurnal Entry
+            </button>
+          </div>
+        </div>
+
+        <!-- Content: saldo + tiles -->
+        <div class="cc-content">
+
+          <!-- Saldo block -->
+          <div class="saldo-block">
+            <div>
+              <div class="saldo-num">616,6jt</div>
+              <div class="saldo-lbl">Saldo berjalan · Rp</div>
+            </div>
+            <div>
+              <div class="closing-track"><div class="closing-fill" id="closingFill"></div></div>
+              <div class="closing-row">
+                <span class="closing-lbl">Closing progress</span>
+                <span class="closing-pct">60%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cc-div"></div>
+
+          <!-- Action tiles -->
+          <div class="cc-tiles">
+            <div class="cc-tile ct-red" onclick="filterAnomalies('pending')">
+              <div class="ct-count ctc-r">3</div>
+              <div class="ct-title">JE pending approval</div>
+              <div class="ct-desc">Belum bisa di-post</div>
+              <div class="ct-cta ctcta-r">Tinjau →</div>
+            </div>
+            <div class="cc-tile ct-amber" onclick="filterAnomalies('anomali')">
+              <div class="ct-count ctc-a">1</div>
+              <div class="ct-title">Anomali terdeteksi</div>
+              <div class="ct-desc">Gaji +16.9% historis</div>
+              <div class="ct-cta ctcta-a">Lihat di tabel →</div>
+            </div>
+            <div class="cc-tile ct-blue" onclick="alert('Buka halaman Rekonsiliasi')">
+              <div class="ct-count ctc-b">12</div>
+              <div class="ct-title">Unmatched ke bank</div>
+              <div class="ct-desc">Perlu rekonsiliasi</div>
+              <div class="ct-cta ctcta-b">Buka rekon →</div>
+            </div>
+            <div class="cc-tile ct-dark" onclick="filterAnomalies('rekon')">
+              <div class="ct-count ctc-g">38</div>
+              <div class="ct-title">Auto-rekon AI</div>
+              <div class="ct-desc">08.02 · ±1 hari</div>
+              <div class="ct-cta ctcta-g">Spot-check →</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Expand toggle -->
+        <div class="cc-expand" onclick="toggleCCExpand()">
+          <span class="cc-exp-lbl" id="ccExpLbl">Lihat closing checklist &amp; AI log</span>
+          <span class="cc-exp-icon" id="ccExpIcon">▾</span>
+        </div>
+
+        <!-- Expanded: checklist + AI log -->
+        <div class="cc-exp-area" id="ccExpArea">
+          <div class="cc-exp-inner">
+
+            <!-- Closing checklist -->
+            <div>
+              <div class="exp-col-label">Closing checklist · Jan 2025</div>
+              <div class="cl-item">
+                <div class="cl-icon ci-ok">✓</div>
+                <div class="cl-body"><div class="cl-title">GL seimbang</div><div class="cl-sub">Total debit = kredit</div></div>
+                <button class="cl-cta cl-cta-ok">Trial balance →</button>
+              </div>
+              <div class="cl-item">
+                <div class="cl-icon ci-ok">✓</div>
+                <div class="cl-body"><div class="cl-title">Rekonsiliasi 76%</div><div class="cl-sub">38 dari 50 matched</div></div>
+                <button class="cl-cta cl-cta-ok" onclick="alert('Buka halaman Rekonsiliasi')">Lanjutkan →</button>
+              </div>
+              <div class="cl-item">
+                <div class="cl-icon ci-warn">!</div>
+                <div class="cl-body"><div class="cl-title">Anomali belum diselesaikan</div><div class="cl-sub">JE-2025-0001 perlu review</div></div>
+                <button class="cl-cta cl-cta-warn" onclick="filterAnomalies('anomali')">Lihat anomali →</button>
+              </div>
+              <div class="cl-item">
+                <div class="cl-icon ci-bad">✕</div>
+                <div class="cl-body"><div class="cl-title">3 JE belum di-post</div><div class="cl-sub">Menunggu approval finance manager</div></div>
+                <button class="cl-cta cl-cta-bad" onclick="filterAnomalies('pending')">Tinjau JE →</button>
+              </div>
+              <div class="cl-item">
+                <div class="cl-icon ci-bad">✕</div>
+                <div class="cl-body"><div class="cl-title">Periode belum dikunci</div><div class="cl-sub">Selesaikan semua item di atas dulu</div></div>
+                <button class="cl-cta cl-cta-dim" disabled>Kunci Jan 2025</button>
+              </div>
+            </div>
+
+            <!-- AI log -->
+            <div>
+              <div class="exp-col-label">Yang dilakukan AI hari ini</div>
+              <div class="al-item">
+                <div class="al-dot" style="background:#86D4A4"></div>
+                <div class="al-text">Auto-rekonsiliasi bank — 38 transaksi matched berdasarkan nominal + tanggal ±1 hari, confidence 97%</div>
+                <div class="al-time">08:02</div>
+              </div>
+              <div class="al-item">
+                <div class="al-dot" style="background:#86D4A4"></div>
+                <div class="al-text">Klasifikasi otomatis — 21 entri baru, model v2.1, akurasi rata-rata 96%</div>
+                <div class="al-time">10:14</div>
+              </div>
+              <div class="al-item">
+                <div class="al-dot" style="background:#FFD080"></div>
+                <div class="al-text">Anomali terdeteksi — JE-2025-0001 Beban Gaji Rp 85,5jt, +16.9% dari rata-rata historis 3 bulan (Rp 73,1jt)</div>
+                <div class="al-time">11:30</div>
+              </div>
+              <div class="al-item">
+                <div class="al-dot" style="background:#86D4A4"></div>
+                <div class="al-text">Running balance diperbarui setelah 5 entri baru di-post</div>
+                <div class="al-time">14:07</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div><!-- /cc-band -->
+
+        <!-- FILTER BAR -->
+        <div class="filter-bar" style="margin:var(--space-5) var(--space-5) 0;border-radius:var(--radius-md);border:1px solid var(--color-border-default)">
+          <div class="f-search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="localSearch" placeholder="Cari di General Ledger…" autocomplete="off">
+          </div>
+          <div class="fsep"></div>
+          <div class="chip-grp" id="typeChips">
+            <div class="chip on" data-v="all">Semua</div>
+            <div class="chip" data-v="je">Jurnal Entry</div>
+            <div class="chip" data-v="inv">Invoice</div>
+            <div class="chip" data-v="bill">Bill</div>
+          </div>
+          <div class="fsep"></div>
+          <div class="chip-grp" id="timeChips">
+            <div class="chip" data-range="today" onclick="setTimeChip(this)">Hari Ini</div>
+            <div class="chip" data-range="month" onclick="setTimeChip(this)">Bulan Ini</div>
+            <div class="chip" data-range="q1" onclick="setTimeChip(this)">Q1</div>
+            <div class="chip" data-range="q2" onclick="setTimeChip(this)">Q2</div>
+          </div>
+          <div class="f-right">
+            <button class="f-filter-btn" onclick="openFilterDrawer()">
+              <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+              Filter Lainnya
+              <span class="badge" id="filterBadge" style="display:none">0</span>
+            </button>
+            <div class="fsep"></div>
+            <div class="kurs-toggle-wrap">
+              <label class="kurs-switch">
+                <input type="checkbox" id="kursToggle" onchange="toggleKurs()">
+                <div class="kurs-track"></div>
+                <div class="kurs-thumb"></div>
+              </label>
+              <span class="kurs-toggle-label">Tampilkan kurs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrap" style="margin-top:var(--space-3)">
+          <div class="tbl-scroll">
+            <table id="glTable">
+              <thead>
+                <tr>
+                  <th class="sortable" data-col="date">Tanggal<span class="sort-arrow"></span></th>
+                  <th class="sortable" data-col="ref">Referensi<span class="sort-arrow"></span></th>
+                  <th>Tipe</th>
+                  <th class="sortable" data-col="acct">Akun<span class="sort-arrow"></span></th>
+                  <th class="sortable r" data-col="debit">Debit (Rp)<span class="sort-arrow"></span></th>
+                  <th class="sortable r" data-col="credit">Kredit (Rp)<span class="sort-arrow"></span></th>
+                  <th class="sortable r" data-col="balance">Saldo (Rp)<span class="sort-arrow"></span></th>
+                  <th style="text-align:center">Rekon</th>
+                </tr>
+              </thead>
+              <tbody id="glBody"></tbody>
+            </table>
+            <div id="emptyState" class="empty-state" style="display:none">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+              <div class="empty-title">Tidak ada data</div>
+              <div class="empty-sub">Coba ubah filter atau pencarian</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /scroll-area — contains cc-band + filter + table -->
+    </div><!-- /content-main -->
+  </div><!-- /content-row -->
+
+  <!-- STICKY STATUS BAR -->
+  <div class="sticky-status-bar" id="stickyStatusBar">
+    <div class="sb-stat">
+      <span class="sb-stat-label">Total</span>
+      <span class="sb-stat-val" id="statTotal">0 item</span>
+    </div>
+    <div class="sb-sep"></div>
+    <div class="sb-stat">
+      <span class="sb-stat-label">Tampil</span>
+      <span class="sb-stat-val" id="statShowing">0 dari 0</span>
+    </div>
+    <div class="sb-sep"></div>
+    <div class="sb-stat">
+      <span class="sb-stat-label">Debit</span>
+      <span class="sb-stat-val debit" id="statDebit">Rp 0</span>
+    </div>
+    <div class="sb-sep"></div>
+    <div class="sb-stat">
+      <span class="sb-stat-label">Kredit</span>
+      <span class="sb-stat-val credit" id="statCredit">Rp 0</span>
+    </div>
+    <div class="sb-sep"></div>
+    <div class="sb-stat">
+      <span class="sb-stat-label">Saldo</span>
+      <span class="sb-stat-val balance" id="statBalance">Rp 0</span>
+    </div>
+    <div class="sb-right">
+      <div class="sb-stat" style="gap:5px">
+        <span class="sb-stat-label">Baris</span>
+        <select id="pageSizeSelect" onchange="changePageSize(this.value)" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:4px;color:rgba(255,255,255,.85);font-family:var(--font-mono);font-size:11px;padding:2px 5px;cursor:pointer;outline:none">
+          <option value="20">20</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+      <div class="sb-sep"></div>
+      <div class="sb-stat" style="gap:4px">
+        <button onclick="prevPage()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:4px;color:rgba(255,255,255,.6);width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;line-height:1">‹</button>
+        <span class="sb-stat-val" id="statPage" style="min-width:32px;text-align:center">1/1</span>
+        <button onclick="nextPage()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:4px;color:rgba(255,255,255,.6);width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;line-height:1">›</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- DETAIL DRAWER OVERLAY -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+<!-- DETAIL DRAWER -->
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div>
+      <div class="d-ref" id="dRef">—</div>
+      <div class="d-badge posted" id="dBadge">Posted</div>
+    </div>
+    <div class="d-close" onclick="closeDrawer()">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+  </div>
+  <div class="d-tabs">
+    <div class="d-tab on" onclick="switchDrawerTab(0,this)">Detail</div>
+    <div class="d-tab" onclick="switchDrawerTab(1,this)">Line Items</div>
+    <div class="d-tab" onclick="switchDrawerTab(2,this)">Audit Trail</div>
+  </div>
+  <div class="d-body" id="dBody">
+    <div class="d-pane on" id="dPane0"></div>
+    <div class="d-pane" id="dPane1"></div>
+    <div class="d-pane" id="dPane2"></div>
+  </div>
+</div>
+
+<!-- FILTER DRAWER OVERLAY -->
+<div class="filter-overlay" id="filterOverlay" onclick="closeFilterDrawer()"></div>
+
+<!-- FILTER DRAWER -->
+<div class="filter-drawer" id="filterDrawer">
+  <div class="fd-head">
+    <span class="fd-title">Filter Lainnya</span>
+    <div class="d-close" onclick="closeFilterDrawer()">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+  </div>
+  <div class="fd-body">
+    <div class="fd-section">
+      <div class="fd-label">Rentang Tanggal</div>
+      <div class="fd-shortcuts">
+        <div class="fd-sc" data-range="today" onclick="setDateShortcut(this)">Hari ini</div>
+        <div class="fd-sc" data-range="week" onclick="setDateShortcut(this)">7 hari</div>
+        <div class="fd-sc" data-range="month" onclick="setDateShortcut(this)">Bulan ini</div>
+        <div class="fd-sc" data-range="q1" onclick="setDateShortcut(this)">Q1 2025</div>
+        <div class="fd-sc" data-range="all" onclick="setDateShortcut(this)">Semua</div>
+      </div>
+      <div class="fd-date-row">
+        <input type="date" class="fd-input" id="fdDateFrom" placeholder="Dari" onchange="applyFilters()">
+        <input type="date" class="fd-input" id="fdDateTo" placeholder="Sampai" onchange="applyFilters()">
+      </div>
+    </div>
+    <div class="fd-section">
+      <div class="fd-label">Akun</div>
+      <select class="fd-select" id="fdAcct" onchange="applyFilters()">
+        <option value="">Semua Akun</option>
+      </select>
+    </div>
+    <div class="fd-section">
+      <div class="fd-label">Status Anomali</div>
+      <select class="fd-select" id="fdAnomalyFilter" onchange="applyFilters()">
+        <option value="">Semua</option>
+        <option value="anomaly">Anomali saja</option>
+      </select>
+    </div>
+    <div class="fd-section">
+      <div class="fd-label">Dimensi</div>
+      <select class="fd-select" id="fdDim" onchange="applyFilters()">
+        <option value="">Semua Dimensi</option>
+        <option>Finance</option>
+        <option>Sales</option>
+        <option>Operations</option>
+        <option>HR</option>
+      </select>
+    </div>
+  </div>
+  <div class="fd-foot">
+    <button class="btn-ghost" onclick="resetFilters()" style="flex:1">Reset</button>
+    <button class="btn-primary" onclick="closeFilterDrawer()" style="flex:2">Terapkan</button>
+  </div>
+</div>
+
+<!-- ══ FLOATING KLAY AI CHAT ══ -->
+<div class="ai-float" id="aiFloat">
+  <div class="ai-float-head">
+    <div class="ai-float-icon"><div class="ai-float-icon-dot"></div></div>
+    <div>
+      <div class="ai-float-title">Klay AI Co-pilot</div>
+      <div class="ai-float-sub">● Aktif · General Ledger Jan 2025</div>
+    </div>
+    <div class="ai-float-close" onclick="closeAIChat()">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+  </div>
+
+  <!-- Date-aware urgency strip -->
+  <div class="ai-ctx-bar" id="aiCtxBar">
+    <span class="ai-ctx-icon">⏳</span>
+    <span class="ai-ctx-text" id="aiCtxText"><strong>7 hari lagi closing Jan 2025.</strong> Ada 4 item yang perlu diselesaikan sebelum periode bisa dikunci.</span>
+  </div>
+
+  <!-- Messages -->
+  <div class="ai-float-msgs" id="aiFloatMsgs">
+    <div class="af-msg-ai">
+      GL <strong>seimbang</strong> dan saldo berjalan <strong>Rp 616,6jt</strong>. Tapi ada <strong>3 JE pending approval</strong> dan <strong>1 anomali</strong> yang perlu diselesaikan sebelum Jan 2025 bisa dikunci — dan closing window tinggal <em>7 hari</em>.
+      <div class="af-msg-chips">
+        <span class="af-chip af-chip-r" onclick="askAI('Jelaskan 3 JE yang pending approval')">3 JE pending →</span>
+        <span class="af-chip af-chip-a" onclick="askAI('Kenapa JE-2025-0001 dianggap anomali?')">Anomali JE-0001 →</span>
+        <span class="af-chip af-chip-b" onclick="askAI('Rekonsiliasi mana yang belum selesai?')">12 unmatched →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suggestions -->
+  <div class="ai-float-sugs">
+    <div class="afs-lbl">Tanya lanjut</div>
+    <div class="afs-item" onclick="askAI('Apa yang perlu saya lakukan hari ini supaya closing Jan 2025 tepat waktu?')">Apa yang perlu dilakukan hari ini? ↗</div>
+    <div class="afs-item" onclick="askAI('Bandingkan saldo Jan 2025 dengan Desember 2024')">Bandingkan dengan bulan lalu ↗</div>
+  </div>
+
+  <!-- Input -->
+  <div class="ai-float-input-row">
+    <textarea class="ai-float-textarea" id="aiFloatInput" placeholder="Tanya tentang GL Jan 2025…" rows="1" onkeydown="aiFloatKey(event)" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+    <button class="ai-float-send" onclick="sendAIFloat()">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+const BILL_REFS={'BILL001':'BILL-2025-0001','BILL002':'BILL-2025-0002','BILL003':'BILL-2025-0003','BILL004':'BILL-2025-0004','BILL005':'BILL-2025-0005'};
+const INV_REFS={'INV001':'INV-C001-20250118','INV002':'INV-C002-20250125','INV003':'INV-C001-20250210','INV004':'INV-C003-20250220','INV005':'INV-C004-20250315'};
+
+const JE_DATA=[
+  {id:'JE-2025-0001',date:'2025-01-31',refType:'manual',refId:null,memo:'Beban gaji karyawan bulan Januari 2025',postedBy:'Budi Santoso',postedDate:'2025-01-31',createdBy:'Sarah Wijaya',createdDate:'2025-01-31',lines:[{acct:'5-1010',acctName:'Beban Gaji & Tunjangan',debit:45000000,credit:0,desc:'Gaji pokok + tunjangan bulan Januari'},{acct:'2-1300',acctName:'Utang Gaji & Tunjangan',debit:0,credit:45000000,desc:'Akrual gaji bulan Januari'}]},
+  {id:'JE-2025-0019',date:'2025-02-28',refType:'manual',refId:null,memo:'Beban gaji karyawan bulan Februari 2025',postedBy:'Budi Santoso',postedDate:'2025-02-28',createdBy:'Sarah Wijaya',createdDate:'2025-02-28',lines:[{acct:'5-1010',acctName:'Beban Gaji & Tunjangan',debit:45000000,credit:0,desc:'Gaji pokok + tunjangan bulan Februari'},{acct:'2-1300',acctName:'Utang Gaji & Tunjangan',debit:0,credit:45000000,desc:'Akrual gaji bulan Februari'}]},
+  {id:'JE-2025-0020',date:'2025-01-31',refType:'manual',refId:null,memo:'Penyusutan aset tetap bulan Januari 2025',postedBy:'Andi Prasetyo',postedDate:'2025-01-31',createdBy:'Andi Prasetyo',createdDate:'2025-01-31',lines:[{acct:'5-1040',acctName:'Beban Penyusutan',debit:3200000,credit:0,desc:'Penyusutan peralatan kantor bulan Januari'},{acct:'1-2110',acctName:'Akum. Penyusutan Peralatan',debit:0,credit:3200000,desc:'Akumulasi penyusutan peralatan kantor'}]},
+  {id:'JE-2025-0002',date:'2025-01-15',refType:'bill',refId:'BILL001',memo:'Pencatatan utang atas pembelian komponen elektronik dari supplier',postedBy:'Budi Santoso',postedDate:'2025-01-20',createdBy:'Sarah Wijaya',createdDate:'2025-01-15',lines:[{acct:'6-1000',acctName:'Biaya Pokok Penjualan',debit:75000000,credit:0,desc:'Pembelian komponen elektronik'},{acct:'5-2200',acctName:'Beban PPN Masukan',debit:7500000,credit:0,desc:'PPN masukan pembelian'},{acct:'2-1100',acctName:'Utang Usaha',debit:0,credit:82500000,desc:'Pencatatan utang kepada supplier'}]},
+  {id:'JE-2025-0003',date:'2025-01-20',refType:'bill',refId:'BILL002',memo:'Pencatatan pembelian peralatan kantor',postedBy:'Budi Santoso',postedDate:'2025-02-05',createdBy:'Andi Prasetyo',createdDate:'2025-01-20',lines:[{acct:'1-2100',acctName:'Peralatan Kantor',debit:19200000,credit:0,desc:'Pembelian peralatan kantor'},{acct:'5-2200',acctName:'Beban PPN Masukan',debit:1920000,credit:0,desc:'PPN masukan pembelian aset'},{acct:'2-1100',acctName:'Utang Usaha',debit:0,credit:21120000,desc:'Utang pembelian peralatan kantor'}]},
+  {id:'JE-2025-0004',date:'2025-02-08',refType:'bill',refId:'BILL003',memo:'Pencatatan biaya pengiriman & jasa logistik bulan Februari',postedBy:'Andi Prasetyo',postedDate:'2025-02-10',createdBy:'Rina Kusuma',createdDate:'2025-02-08',lines:[{acct:'5-1000',acctName:'Beban Operasional',debit:12500000,credit:0,desc:'Biaya jasa logistik & pengiriman produk'},{acct:'5-2200',acctName:'Beban PPN Masukan',debit:1250000,credit:0,desc:'PPN masukan jasa'},{acct:'2-1100',acctName:'Utang Usaha',debit:0,credit:13750000,desc:'Utang atas biaya logistik'}]},
+  {id:'JE-2025-0008',date:'2025-03-15',refType:'bill',refId:'BILL004',memo:'Pencatatan biaya konsultasi audit internal',postedBy:'Sarah Wijaya',postedDate:'2025-03-20',createdBy:'Budi Santoso',createdDate:'2025-03-15',lines:[{acct:'5-1070',acctName:'Biaya Konsultan & Profesional',debit:25000000,credit:0,desc:'Jasa konsultasi audit internal'},{acct:'5-2200',acctName:'Beban PPN Masukan',debit:2500000,credit:0,desc:'PPN masukan atas jasa konsultasi'},{acct:'2-1100',acctName:'Utang Usaha',debit:0,credit:27500000,desc:'Utang atas jasa konsultasi'}]},
+  {id:'JE-2025-0009',date:'2025-03-15',refType:'bill',refId:'BILL005',memo:'Pencatatan pembelian bahan baku jagung dari koperasi tani',postedBy:'Andi Prasetyo',postedDate:'2025-03-18',createdBy:'Sarah Wijaya',createdDate:'2025-03-15',lines:[{acct:'6-1000',acctName:'Biaya Pokok Penjualan',debit:12500000,credit:0,desc:'Pembelian bahan baku jagung'},{acct:'5-2200',acctName:'Beban PPN Masukan',debit:1250000,credit:0,desc:'PPN masukan'},{acct:'2-1100',acctName:'Utang Usaha',debit:0,credit:13750000,desc:'Utang pembelian bahan baku'}]},
+  {id:'JE-2025-0011',date:'2025-02-10',refType:'bill_payment',refId:'BILL001',memo:'Pembayaran utang pembelian komponen elektronik',postedBy:'Sarah Wijaya',postedDate:'2025-02-10',createdBy:'Andi Prasetyo',createdDate:'2025-02-10',lines:[{acct:'2-1100',acctName:'Utang Usaha',debit:82500000,credit:0,desc:'Pembayaran utang supplier'},{acct:'1-1100',acctName:'Kas & Bank',debit:0,credit:82500000,desc:'Pengeluaran kas'}]},
+  {id:'JE-2025-0012',date:'2025-02-05',refType:'bill_payment',refId:'BILL002',memo:'Pembayaran utang pembelian peralatan kantor',postedBy:'Sarah Wijaya',postedDate:'2025-02-05',createdBy:'Andi Prasetyo',createdDate:'2025-02-05',lines:[{acct:'2-1100',acctName:'Utang Usaha',debit:21120000,credit:0,desc:'Pembayaran utang supplier'},{acct:'1-1100',acctName:'Kas & Bank',debit:0,credit:21120000,desc:'Pengeluaran kas'}]},
+  {id:'JE-2025-0013',date:'2025-02-16',refType:'bill_payment',refId:'BILL003',memo:'Pembayaran biaya logistik',postedBy:'Sarah Wijaya',postedDate:'2025-02-16',createdBy:'Andi Prasetyo',createdDate:'2025-02-16',lines:[{acct:'2-1100',acctName:'Utang Usaha',debit:13750000,credit:0,desc:'Pembayaran utang logistik'},{acct:'1-1100',acctName:'Kas & Bank',debit:0,credit:13750000,desc:'Pengeluaran kas'}]},
+  {id:'JE-2025-0014',date:'2025-04-10',refType:'bill_payment',refId:'BILL004',memo:'Pembayaran biaya konsultasi',postedBy:'Andi Prasetyo',postedDate:'2025-04-10',createdBy:'Sarah Wijaya',createdDate:'2025-04-10',lines:[{acct:'2-1100',acctName:'Utang Usaha',debit:27500000,credit:0,desc:'Pembayaran utang konsultasi'},{acct:'1-1100',acctName:'Kas & Bank',debit:0,credit:27500000,desc:'Pengeluaran kas'}]},
+  {id:'JE-2025-0006',date:'2025-02-10',refType:'invoice',refId:'INV003',memo:'Pencatatan penjualan produk divisi A + jasa setup & training',postedBy:'Andi Prasetyo',postedDate:'2025-03-10',createdBy:'Sarah Wijaya',createdDate:'2025-02-10',lines:[{acct:'1-1200',acctName:'Piutang Usaha',debit:24200000,credit:0,desc:'Piutang penjualan'},{acct:'4-1010',acctName:'Penjualan Produk - Divisi A',debit:0,credit:20000000,desc:'Pendapatan penjualan divisi A'},{acct:'4-1030',acctName:'Penjualan Jasa Tambahan',debit:0,credit:2000000,desc:'Pendapatan jasa'},{acct:'2-1200',acctName:'Utang Pajak',debit:0,credit:2200000,desc:'PPN keluaran'}]},
+  {id:'JE-2025-0007',date:'2025-02-20',refType:'invoice',refId:'INV004',memo:'Pencatatan penjualan produk divisi B ke Toko Modern Bandung',postedBy:'Sarah Wijaya',postedDate:'2025-03-11',createdBy:'Andi Prasetyo',createdDate:'2025-02-20',lines:[{acct:'1-1200',acctName:'Piutang Usaha',debit:18562500,credit:0,desc:'Piutang penjualan'},{acct:'4-1020',acctName:'Penjualan Produk - Divisi B',debit:0,credit:16875000,desc:'Pendapatan penjualan divisi B'},{acct:'2-1200',acctName:'Utang Pajak',debit:0,credit:1687500,desc:'PPN keluaran'}]},
+  {id:'JE-2025-0010',date:'2025-03-15',refType:'invoice',refId:'INV005',memo:'Pencatatan penjualan produk divisi A ke Hypermarket Medan',postedBy:'Budi Santoso',postedDate:'2025-03-16',createdBy:'Sarah Wijaya',createdDate:'2025-03-15',lines:[{acct:'1-1200',acctName:'Piutang Usaha',debit:48400000,credit:0,desc:'Piutang penjualan'},{acct:'4-1010',acctName:'Penjualan Produk - Divisi A',debit:0,credit:44000000,desc:'Pendapatan penjualan divisi A'},{acct:'2-1200',acctName:'Utang Pajak',debit:0,credit:4400000,desc:'PPN keluaran'}]},
+  {id:'JE-2025-0018',date:'2025-02-12',refType:'invoice_payment',refId:'INV001',memo:'Penerimaan pembayaran piutang dari PT Ritel Utama Indonesia',postedBy:'Andi Prasetyo',postedDate:'2025-02-12',createdBy:'Sarah Wijaya',createdDate:'2025-02-12',lines:[{acct:'1-1100',acctName:'Kas & Bank',debit:33000000,credit:0,desc:'Penerimaan kas dari pelanggan'},{acct:'1-1200',acctName:'Piutang Usaha',debit:0,credit:33000000,desc:'Pelunasan piutang'}]},
+  {id:'JE-2025-0015',date:'2025-03-09',refType:'invoice_payment',refId:'INV002',memo:'Penerimaan pembayaran piutang dari CV Distributor Produk Rumahan',postedBy:'Andi Prasetyo',postedDate:'2025-03-09',createdBy:'Rina Kusuma',createdDate:'2025-03-09',lines:[{acct:'1-1100',acctName:'Kas & Bank',debit:9625000,credit:0,desc:'Penerimaan kas dari pelanggan'},{acct:'1-1200',acctName:'Piutang Usaha',debit:0,credit:9625000,desc:'Pelunasan piutang'}]},
+  {id:'JE-2025-0016',date:'2025-03-10',refType:'invoice_payment',refId:'INV003',memo:'Penerimaan pembayaran piutang dari PT Ritel Utama Indonesia',postedBy:'Budi Santoso',postedDate:'2025-03-10',createdBy:'Sarah Wijaya',createdDate:'2025-03-10',lines:[{acct:'1-1100',acctName:'Kas & Bank',debit:24200000,credit:0,desc:'Penerimaan kas dari pelanggan'},{acct:'1-1200',acctName:'Piutang Usaha',debit:0,credit:24200000,desc:'Pelunasan piutang'}]},
+  {id:'JE-2025-0017',date:'2025-03-11',refType:'invoice_payment',refId:'INV004',memo:'Penerimaan pembayaran piutang dari Toko Modern Bandung',postedBy:'Sarah Wijaya',postedDate:'2025-03-11',createdBy:'Andi Prasetyo',createdDate:'2025-03-11',lines:[{acct:'1-1100',acctName:'Kas & Bank',debit:18562500,credit:0,desc:'Penerimaan kas dari pelanggan'},{acct:'1-1200',acctName:'Piutang Usaha',debit:0,credit:18562500,desc:'Pelunasan piutang'}]},
+];
+
+const REKON_DATA={'JE-2025-0002':'matched','JE-2025-0003':'matched','JE-2025-0011':'matched','JE-2025-0012':'matched','JE-2025-0013':'matched','JE-2025-0015':'matched','JE-2025-0016':'matched','JE-2025-0017':'matched','JE-2025-0018':'matched'};
+const KURS_DATA={'JE-2025-0002':{orig:'USD 5.222',rate:'15.800'},'JE-2025-0004':{orig:'USD 791',rate:'15.800'},'JE-2025-0008':{orig:'USD 1.582',rate:'15.800'}};
+const JE_DIM={'JE-2025-0001':{dept:'Finance',proj:null,branch:'HQ Jakarta'},'JE-2025-0002':{dept:'Operations',proj:'Produk Divisi A',branch:'HQ Jakarta'},'JE-2025-0003':{dept:'General Affairs',proj:null,branch:'HQ Jakarta'},'JE-2025-0004':{dept:'Operations',proj:'Distribusi Feb',branch:'Surabaya'},'JE-2025-0006':{dept:'Sales',proj:'Produk Divisi A',branch:'HQ Jakarta'},'JE-2025-0007':{dept:'Sales',proj:'Produk Divisi B',branch:'Bandung'},'JE-2025-0008':{dept:'Finance',proj:'Audit Internal Q1',branch:'HQ Jakarta'},'JE-2025-0009':{dept:'Operations',proj:'Produk Divisi B',branch:'Yogyakarta'},'JE-2025-0010':{dept:'Sales',proj:'Produk Divisi A',branch:'Medan'},'JE-2025-0019':{dept:'Finance',proj:null,branch:'HQ Jakarta'},'JE-2025-0020':{dept:'Finance',proj:null,branch:'HQ Jakarta'}};
+const ANOMALIES={'JE-2025-0001':{type:'warn',flag:'Nilai tidak wajar',detail:'Nilai beban gaji melebihi rata-rata 3 bulan sebelumnya.',grid:[{label:'Rata-rata Historis',val:'Rp 38.500.000'},{label:'Nilai Saat Ini',val:'Rp 45.000.000'},{label:'Selisih',val:'+16.9%'}]}};
+
+let dismissedAnomalies=new Set();
+let expandedRows=new Set();
+let kursVisible=false;
+
+/* ── BUILD GL ROWS ── */
+function getDisplayRef(je){
+  if(je.refType==='invoice'||je.refType==='invoice_payment') return INV_REFS[je.refId]||je.id;
+  if(je.refType==='bill'||je.refType==='bill_payment') return BILL_REFS[je.refId]||je.id;
+  return je.id;
+}
+function mapRefType(t){
+  if(t==='invoice'||t==='invoice_payment') return 'inv';
+  if(t==='bill'||t==='bill_payment') return 'bill';
+  return 'je';
+}
+function fmtDate(d){return new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}
+function fmt(n){if(!n&&n!==0)return'–';return'Rp '+Math.abs(n).toLocaleString('id-ID')}
+function fmtNum(n){if(!n)return'–';return Math.abs(n).toLocaleString('id-ID')}
+
+function buildGLRows(){
+  const sorted=[...JE_DATA].sort((a,b)=>a.date.localeCompare(b.date));
+  const rows=[];let runBal=500000000;
+  sorted.forEach(je=>{
+    const displayRef=getDisplayRef(je);
+    const refType=mapRefType(je.refType);
+    const isAnomaly=!!ANOMALIES[je.id];
+    if(isAnomaly){
+      const pl=je.lines.find(l=>l.debit>0)||je.lines[0];
+      const netEffect=je.lines.reduce((s,l)=>(s+(l.debit||0)-(l.credit||0)),0);
+      runBal+=netEffect;
+      rows.push({id:je.id+'-L0',jeId:je.id,date:je.date,dateLabel:fmtDate(je.date),ref:displayRef,refRaw:je.id,refType,refId:je.refId,acct:pl.acct,acctName:pl.acctName,desc:je.memo,debit:pl.debit>0?pl.debit:0,credit:pl.credit>0?pl.credit:0,balance:runBal,jeData:je});
+    } else {
+      je.lines.forEach((l,idx)=>{
+        const debit=l.debit>0?l.debit:0;const credit=l.credit>0?l.credit:0;
+        runBal+=debit-credit;
+        rows.push({id:je.id+'-L'+idx,jeId:je.id,date:je.date,dateLabel:fmtDate(je.date),ref:displayRef,refRaw:je.id,refType,refId:je.refId,acct:l.acct,acctName:l.acctName,desc:l.desc||je.memo,debit,credit,balance:runBal,jeData:je});
+      });
+    }
+  });
+  return rows;
+}
+
+const ALL_ROWS=buildGLRows();
+let filteredRows=[...ALL_ROWS];
+let sortCol='date',sortDir='asc',currentPage=1,PAGE_SIZE=50,filterType='all',filterDateFrom='',filterDateTo='',filterAcct='',filterSearch='';
+
+// Populate account select
+const acctSet=new Set(ALL_ROWS.map(r=>r.acct+'|'+r.acctName));
+const fdAcctSel=document.getElementById('fdAcct');
+[...acctSet].sort().forEach(a=>{const[code,name]=a.split('|');const opt=document.createElement('option');opt.value=code;opt.textContent=`${code} — ${name}`;fdAcctSel.appendChild(opt);});
+
+/* ── FILTER & SORT ── */
+function getFiltered(){
+  let rows=[...ALL_ROWS];
+  if(filterType!=='all') rows=rows.filter(r=>r.refType===filterType);
+  if(filterSearch) rows=rows.filter(r=>(r.ref+r.acct+r.acctName+r.desc).toLowerCase().includes(filterSearch.toLowerCase()));
+  if(filterDateFrom) rows=rows.filter(r=>r.date>=filterDateFrom);
+  if(filterDateTo) rows=rows.filter(r=>r.date<=filterDateTo);
+  if(filterAcct) rows=rows.filter(r=>r.acct===filterAcct);
+  const aF=document.getElementById('fdAnomalyFilter')?.value;
+  if(aF==='anomaly') rows=rows.filter(r=>!!ANOMALIES[r.jeId]&&!dismissedAnomalies.has(r.jeId));
+  return rows;
+}
+function getSorted(rows){
+  const s=[...rows].sort((a,b)=>{
+    let va=a[sortCol]||0,vb=b[sortCol]||0;
+    if(sortCol==='date'){va=a.date;vb=b.date;}
+    if(sortCol==='ref'){va=a.ref;vb=b.ref;}
+    if(sortCol==='acct'){va=a.acct;vb=b.acct;}
+    const c=va<vb?-1:va>vb?1:0;return sortDir==='asc'?c:-c;
+  });
+  let bal=500000000;
+  s.forEach(r=>{bal+=(r.debit||0)-(r.credit||0);r.balance=bal;});
+  return s;
+}
+function applyFilters(){
+  filterSearch=document.getElementById('localSearch').value;
+  filterDateFrom=document.getElementById('fdDateFrom').value;
+  filterDateTo=document.getElementById('fdDateTo').value;
+  filterAcct=document.getElementById('fdAcct').value;
+  filteredRows=getFiltered();currentPage=1;updateFilterBadge();renderTable();
+}
+function updateFilterBadge(){
+  let cnt=0;if(filterDateFrom||filterDateTo)cnt++;if(filterAcct)cnt++;
+  const b=document.getElementById('filterBadge');b.style.display=cnt?'inline-flex':'none';b.textContent=cnt;
+}
+function filterByType(t){
+  filterType=t;filteredRows=getFiltered();
+  document.querySelectorAll('#typeChips .chip').forEach(c=>{c.classList.toggle('on',c.dataset.v===t);c.style.borderStyle='';c.textContent=({'all':'Semua','je':'Jurnal Entry','inv':'Invoice','bill':'Bill'})[c.dataset.v]||c.dataset.v;});
+  closeCmdDropdown();currentPage=1;renderTable();
+}
+function resetFilters(){
+  filterDateFrom='';filterDateTo='';filterAcct='';
+  document.getElementById('fdDateFrom').value='';document.getElementById('fdDateTo').value='';document.getElementById('fdAcct').value='';
+  document.querySelectorAll('.fd-sc').forEach(s=>s.classList.remove('on'));applyFilters();
+}
+function toggleKurs(){kursVisible=document.getElementById('kursToggle').checked;renderTable();}
+
+/* ── TILE CLICK FILTER ── */
+function filterAnomalies(type){
+  if(type==='anomali'){
+    filteredRows=ALL_ROWS.filter(r=>!!ANOMALIES[r.jeId]&&!dismissedAnomalies.has(r.jeId));
+    document.querySelectorAll('#typeChips .chip').forEach(c=>c.classList.remove('on'));
+    const allChip=document.querySelector('#typeChips .chip[data-v="all"]');
+    if(allChip){allChip.style.borderStyle='dashed';allChip.textContent='Semua ↩';}
+  } else if(type==='rekon'){
+    filteredRows=ALL_ROWS.filter(r=>REKON_DATA[r.jeId]==='matched');
+    document.querySelectorAll('#typeChips .chip').forEach(c=>c.classList.remove('on'));
+    const allChip=document.querySelector('#typeChips .chip[data-v="all"]');
+    if(allChip){allChip.style.borderStyle='dashed';allChip.textContent='Semua ↩';}
+  } else {
+    filteredRows=[...ALL_ROWS];
+    document.querySelectorAll('#typeChips .chip').forEach(c=>c.classList.remove('on'));
+    const allChip=document.querySelector('#typeChips .chip[data-v="all"]');
+    if(allChip){allChip.style.borderStyle='';allChip.textContent='Semua';allChip.classList.add('on');}
+  }
+  currentPage=1;renderTable();
+  document.getElementById('scrollArea').scrollTop=0;
+}
+
+/* ── RENDER TABLE ── */
+function renderTable(){
+  const sorted=getSorted(filteredRows);
+  const total=sorted.length;
+  const pages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+  if(currentPage>pages)currentPage=pages;
+  const start=(currentPage-1)*PAGE_SIZE;
+  const pageRows=sorted.slice(start,start+PAGE_SIZE);
+  const tbody=document.getElementById('glBody');
+  const empty=document.getElementById('emptyState');
+  if(!total){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  const rows=[];
+  const seenJeIds=new Set();
+  pageRows.forEach(r=>{
+    const anomKey=r.jeId;
+    const anom=!dismissedAnomalies.has(anomKey)?ANOMALIES[anomKey]:null;
+    const anomClass=anom?(anom.type==='warn'?'anomaly-warn':'anomaly-danger'):'';
+    const isExpanded=expandedRows.has(r.id);
+    const isFirstLine=!seenJeIds.has(r.jeId);seenJeIds.add(r.jeId);
+    const nextIdx=pageRows.indexOf(r)+1;
+    const isLastLine=nextIdx>=pageRows.length||pageRows[nextIdx].jeId!==r.jeId;
+    const flagHtml=(anom&&isFirstLine)?`<span class="anomaly-flag ${anom.type}">⚠ ${anom.flag}</span>`:'';
+    const expandBtn=(anom&&isFirstLine)?`<span onclick="event.stopPropagation();toggleRow('${r.id}')" style="cursor:pointer;margin-left:6px;font-size:10px;color:var(--color-text-tertiary)">${isExpanded?'▲':'▼'}</span>`:'';
+    const kursInfo=KURS_DATA[r.jeId];
+    const kursHtml=kursVisible&&kursInfo?`<div style="font-size:10px;color:var(--color-text-tertiary);font-family:var(--font-mono)">${kursInfo.orig} @ ${kursInfo.rate}</div>`:'';
+    const rekonStatus=REKON_DATA[r.jeId];
+    const rekonCell=`<td style="text-align:center">${rekonStatus==='matched'?'<span class="rekon-badge rekon-matched">✓ rekon</span>':'<span class="rekon-badge rekon-pending">—</span>'}</td>`;
+    rows.push(`<tr class="${anomClass}" onclick="openDrawer('${r.jeId}')">
+      <td class="td-date">${r.dateLabel}</td>
+      <td><span class="td-ref">${r.ref}</span>${flagHtml}${expandBtn}</td>
+      <td><span class="type-badge ${r.refType}">${typeLbl(r.refType)}</span></td>
+      <td><div class="td-acct-name">${r.acctName}</div><div class="td-acct">${r.acct}</div></td>
+      <td class="r">${r.debit?`<div><span class="td-amount debit">${fmtNum(r.debit)}</span>${kursInfo&&r.debit?kursHtml:''}</div>`:'<span style="color:var(--color-border-default)">–</span>'}</td>
+      <td class="r">${r.credit?`<div><span class="td-amount credit">${fmtNum(r.credit)}</span>${kursInfo&&r.credit?kursHtml:''}</div>`:'<span style="color:var(--color-border-default)">–</span>'}</td>
+      <td class="r"><span class="td-balance">${fmtNum(r.balance)}</span></td>
+      ${rekonCell}
+    </tr>`);
+    if(anom&&isExpanded&&isLastLine){
+      rows.push(`<tr class="anomaly-expand-row ${anomClass}"><td colspan="8"><div class="anomaly-expand-inner">
+        <div class="anomaly-expand-title">${anom.detail}</div>
+        <div class="anomaly-expand-grid">${anom.grid.map(g=>`<div class="anomaly-expand-cell"><div class="anomaly-expand-cell-label">${g.label}</div><div class="anomaly-expand-cell-val">${g.val}</div></div>`).join('')}</div>
+        <div class="anomaly-expand-actions">
+          <button class="ai-btn-valid" onclick="event.stopPropagation();markValid('${anomKey}')">Tandai sebagai valid</button>
+          <button class="ai-btn-reklasifikasi" onclick="event.stopPropagation();alert('Membuka ${anomKey} di Journal Entry')">Lihat di Jurnal Entry</button>
+        </div>
+      </div></td></tr>`);
+    }
+  });
+  tbody.innerHTML=rows.join('');
+  const allD=filteredRows.reduce((s,r)=>s+r.debit,0);
+  const allC=filteredRows.reduce((s,r)=>s+r.credit,0);
+  const sortedAll=getSorted(filteredRows);
+  const lastBal=sortedAll.length>0?sortedAll[sortedAll.length-1].balance:500000000;
+  document.getElementById('statTotal').textContent=total+' item';
+  document.getElementById('statShowing').textContent=pageRows.length+' dari '+total;
+  document.getElementById('statDebit').textContent=fmt(allD);
+  document.getElementById('statCredit').textContent=fmt(allC);
+  document.getElementById('statBalance').textContent=fmt(lastBal);
+  document.getElementById('statPage').textContent=currentPage+'/'+pages;
+  updateSortHeaders();
+}
+function typeLbl(t){if(t==='inv')return'Invoice';if(t==='bill')return'Bill';return'JE';}
+function toggleRow(rowId){if(expandedRows.has(rowId))expandedRows.delete(rowId);else expandedRows.add(rowId);renderTable();}
+function markValid(id){dismissedAnomalies.add(id);renderTable();showToast('Ditandai valid: '+id);}
+function showToast(msg){let t=document.getElementById('klay-toast');if(!t){t=document.createElement('div');t.id='klay-toast';t.style.cssText='position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:#080706;color:#fff;font-size:12px;font-weight:600;padding:8px 18px;border-radius:9999px;z-index:9999;opacity:0;transition:opacity .2s ease;pointer-events:none';document.body.appendChild(t);}t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);}
+
+/* ── SORT ── */
+document.querySelectorAll('thead th.sortable').forEach(th=>{
+  th.addEventListener('click',()=>{const col=th.dataset.col;if(sortCol===col)sortDir=sortDir==='asc'?'desc':'asc';else{sortCol=col;sortDir='asc';}renderTable();});
+});
+function updateSortHeaders(){document.querySelectorAll('thead th.sortable').forEach(th=>{th.classList.remove('sort-asc','sort-desc');if(th.dataset.col===sortCol)th.classList.add('sort-'+sortDir);});}
+
+/* ── LOCAL SEARCH ── */
+document.getElementById('localSearch').addEventListener('input',applyFilters);
+
+/* ── TYPE CHIPS ── */
+document.getElementById('typeChips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;filterByType(c.dataset.v);});
+
+/* ── TIME CHIPS ── */
+function setTimeChip(el){
+  const wasOn=el.classList.contains('on');
+  document.querySelectorAll('#timeChips .chip').forEach(c=>c.classList.remove('on'));
+  if(!wasOn){el.classList.add('on');const r=el.dataset.range;const today=new Date().toISOString().slice(0,10);if(r==='today'){filterDateFrom=today;filterDateTo=today;}else if(r==='month'){const d=new Date();d.setDate(1);filterDateFrom=d.toISOString().slice(0,10);filterDateTo=today;}else if(r==='q1'){filterDateFrom='2025-01-01';filterDateTo='2025-03-31';}else if(r==='q2'){filterDateFrom='2025-04-01';filterDateTo='2025-06-30';}}else{filterDateFrom='';filterDateTo='';}
+  document.getElementById('fdDateFrom').value=filterDateFrom;document.getElementById('fdDateTo').value=filterDateTo;
+  filteredRows=getFiltered();currentPage=1;updateFilterBadge();renderTable();
+}
+
+/* ── SIDEBAR SEARCH ── */
+const sbSearchEl=document.getElementById('sbSearch');
+const tbInput=document.getElementById('tbSearchInput');
+const cmdDrop=document.getElementById('cmdDropdown');
+tbInput.addEventListener('focus',()=>{sbSearchEl.classList.add('focused');cmdDrop.classList.add('open');});
+tbInput.addEventListener('blur',()=>{sbSearchEl.classList.remove('focused');setTimeout(()=>cmdDrop.classList.remove('open'),150);});
+tbInput.addEventListener('input',()=>{
+  const q=tbInput.value.trim();
+  document.getElementById('cmdAskAITitle').textContent=q?`✦ "${q}"`:'✦ Tanya AI tentang ini';
+  const results=document.getElementById('cmdResults');
+  if(!q){results.innerHTML='';return;}
+  const matches=ALL_ROWS.filter(r=>(r.ref+r.acctName+r.desc).toLowerCase().includes(q.toLowerCase())).slice(0,4);
+  results.innerHTML=matches.length?`<div class="cmd-divider"></div><div class="cmd-section-label">Hasil GL</div>${matches.map(r=>`<div class="cmd-item" onclick="openDrawer('${r.jeId}')"><div class="cmd-item-icon nav"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="cmd-item-text"><div class="cmd-item-title">${r.ref}</div><div class="cmd-item-sub">${r.acctName} · ${r.dateLabel}</div></div></div>`).join('')}`:'<div class="cmd-divider"></div><div style="padding:12px 14px;font-size:12px;color:var(--color-text-tertiary)">Tidak ditemukan</div>';
+});
+document.getElementById('cmdAskAI').addEventListener('click',()=>{const q=tbInput.value.trim();closeCmdDropdown();tbInput.value='';openAIChat();if(q)setTimeout(()=>askAI(q),100);});
+function closeCmdDropdown(){cmdDrop.classList.remove('open');}
+
+/* ── FILTER DRAWER ── */
+function openFilterDrawer(){document.getElementById('filterDrawer').classList.add('open');document.getElementById('filterOverlay').classList.add('open');}
+function closeFilterDrawer(){document.getElementById('filterDrawer').classList.remove('open');document.getElementById('filterOverlay').classList.remove('open');}
+function setDateShortcut(el){
+  document.querySelectorAll('.fd-sc').forEach(s=>s.classList.remove('on'));el.classList.add('on');
+  const today=new Date().toISOString().slice(0,10);const r=el.dataset.range;
+  if(r==='today'){document.getElementById('fdDateFrom').value=today;document.getElementById('fdDateTo').value=today;}
+  else if(r==='week'){const d=new Date();d.setDate(d.getDate()-7);document.getElementById('fdDateFrom').value=d.toISOString().slice(0,10);document.getElementById('fdDateTo').value=today;}
+  else if(r==='month'){const d=new Date();d.setDate(1);document.getElementById('fdDateFrom').value=d.toISOString().slice(0,10);document.getElementById('fdDateTo').value=today;}
+  else if(r==='q1'){document.getElementById('fdDateFrom').value='2025-01-01';document.getElementById('fdDateTo').value='2025-03-31';}
+  else if(r==='all'){document.getElementById('fdDateFrom').value='';document.getElementById('fdDateTo').value='';}
+  applyFilters();
+}
+
+/* ── DETAIL DRAWER ── */
+let drawerJeId=null;
+function openDrawer(jeId){
+  const je=JE_DATA.find(j=>j.id===jeId);if(!je)return;
+  drawerJeId=jeId;
+  document.getElementById('dRef').textContent=getDisplayRef(je);
+  const tD=je.lines.reduce((s,l)=>s+(l.debit||0),0);
+  const tC=je.lines.reduce((s,l)=>s+(l.credit||0),0);
+  const refLabel=je.refType==='invoice'?'Invoice':je.refType==='bill'?'Bill':je.refType==='bill_payment'?'Pembayaran Bill':je.refType==='invoice_payment'?'Pembayaran Invoice':'Jurnal Entry Manual';
+  const dim=JE_DIM[je.id]||null;
+  const openLink=(je.refType.includes('invoice')||je.refType.includes('bill'))?`<a href="#" class="d-open-link" onclick="alert('Buka ${je.refId}');return false;"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buka ${je.refId}</a>`:'';
+  const anomData=ANOMALIES[jeId];
+  const anomSection=anomData&&!dismissedAnomalies.has(jeId)?`
+    <div class="dsec" style="background:var(--warning-surface);border:1px solid var(--warning-border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4)">
+      <div class="dlbl" style="color:var(--warning-text)">⚠ AI Reasoning — Anomali</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:8px">${anomData.detail}</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px">
+        ${anomData.grid.map(g=>`<div style="background:var(--color-surface-raised);border-radius:var(--radius-sm);padding:6px 8px"><div style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:2px">${g.label}</div><div style="font-size:12px;font-weight:700;font-family:var(--font-mono)">${g.val}</div></div>`).join('')}
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="ai-btn-valid" onclick="markValid('${jeId}');closeDrawer()">Tandai valid</button>
+        <button class="ai-btn-reklasifikasi" onclick="alert('Buka ${jeId} di Journal Entry')">Lihat di Jurnal Entry</button>
+      </div>
+    </div>`:''
+  ;
+  const dimSection=dim?`<div class="dsec"><div class="dlbl">Dimensi</div><div class="dim-grid">${dim.dept?`<div class="dim-row"><span class="dim-row-label">Departemen</span><span class="dpill dp-dept">${dim.dept}</span></div>`:''}${dim.proj?`<div class="dim-row"><span class="dim-row-label">Proyek</span><span class="dpill dp-proj">${dim.proj}</span></div>`:''}${dim.branch?`<div class="dim-row"><span class="dim-row-label">Cabang</span><span class="dpill dp-branch">${dim.branch}</span></div>`:''}</div></div>`:`<div class="dsec"><div class="dlbl">Dimensi</div><div style="font-size:12px;color:var(--color-text-tertiary);padding:4px 0">Tidak ada dimensi.</div></div>`;
+  document.getElementById('dPane0').innerHTML=`${openLink}${anomSection}<div class="dsec"><div class="dlbl">Informasi Transaksi</div><div class="info-row"><label>Referensi</label><span>${getDisplayRef(je)}</span></div><div class="info-row"><label>No. JE</label><span>${je.id}</span></div><div class="info-row"><label>Tipe</label><span>${refLabel}</span></div><div class="info-row"><label>Tanggal</label><span>${fmtDate(je.date)}</span></div><div class="info-row"><label>Keterangan</label><span style="text-align:right;max-width:180px;line-height:1.4">${je.memo}</span></div><div class="info-row"><label>Dibuat oleh</label><span>${je.createdBy}</span></div><div class="info-row"><label>Posted oleh</label><span>${je.postedBy}</span></div><div class="info-row"><label>Tanggal post</label><span>${fmtDate(je.postedDate)}</span></div></div>${dimSection}`;
+  document.getElementById('dPane1').innerHTML=`<div class="dsec"><div class="dlbl">Line Items</div><table class="d-tbl"><thead><tr><th>Akun</th><th class="r">Debit (Rp)</th><th class="r">Kredit (Rp)</th></tr></thead><tbody>${je.lines.map(l=>`<tr><td><div style="font-weight:600;color:var(--color-text-primary)">${l.acctName}</div><div class="li-sub">${l.acct} · ${l.desc}</div></td><td class="r" style="color:${l.debit?'#A02020':'var(--color-text-tertiary)'}">${l.debit?fmt(l.debit):'–'}</td><td class="r" style="color:${l.credit?'#166638':'var(--color-text-tertiary)'}">${l.credit?fmt(l.credit):'–'}</td></tr>`).join('')}</tbody><tfoot><tr><td style="font-weight:700">Total</td><td class="r">${fmt(tD)}</td><td class="r">${fmt(tC)}</td></tr>${tD===tC?`<tr><td colspan="3" style="font-size:10px;color:var(--success-text);text-align:center;background:var(--success-surface);padding:5px;border-radius:4px">✓ Seimbang — Debit = Kredit</td></tr>`:''}</tfoot></table></div>`;
+  document.getElementById('dPane2').innerHTML=`<div class="dsec"><div class="dlbl">Audit Trail</div><div class="audit-list"><div class="audit-item"><div class="audit-dot posted"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/></svg></div><div class="audit-content"><div class="audit-action">Posted</div><div class="audit-meta">oleh <strong>${je.postedBy}</strong> · ${fmtDate(je.postedDate)}</div></div></div><div class="audit-item"><div class="audit-dot created"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg></div><div class="audit-content"><div class="audit-action">Dibuat</div><div class="audit-meta">oleh <strong>${je.createdBy}</strong> · ${fmtDate(je.createdDate)}</div></div></div></div></div>`;
+  switchDrawerTab(0,null);
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawerOverlay').classList.remove('open');drawerJeId=null;}
+function switchDrawerTab(idx,el){document.querySelectorAll('.d-tab').forEach((t,i)=>t.classList.toggle('on',i===idx));document.querySelectorAll('.d-pane').forEach((p,i)=>p.classList.toggle('on',i===idx));}
+
+/* ── EXPORT ── */
+function toggleExp(e){e.stopPropagation();document.getElementById('expMenu').classList.toggle('open');}
+document.addEventListener('click',()=>{const m=document.getElementById('expMenu');if(m)m.classList.remove('open');});
+function doExportNew(){
+  document.getElementById('expMenu').classList.remove('open');
+  const scope=document.querySelector('input[name=expScope]:checked')?.value||'visible';
+  const data=getSorted(scope==='visible'?filteredRows:[...ALL_ROWS]);
+  const rows=[['Tanggal','Referensi','Tipe','Akun','Nama Akun','Keterangan','Debit (Rp)','Kredit (Rp)','Saldo (Rp)']];
+  data.forEach(r=>rows.push([r.dateLabel,r.ref,r.refType.toUpperCase(),r.acct,r.acctName,r.desc,r.debit||'',r.credit||'',r.balance]));
+  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));a.download=`GL_Klay_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+}
+
+/* ── PAGINATION ── */
+function changePageSize(v){PAGE_SIZE=parseInt(v);currentPage=1;renderTable();}
+function prevPage(){if(currentPage>1){currentPage--;renderTable();}}
+function nextPage(){const pages=Math.max(1,Math.ceil(filteredRows.length/PAGE_SIZE));if(currentPage<pages){currentPage++;renderTable();}}
+
+/* ── COMMAND CENTER ── */
+let ccExpanded=false;
+const MONTHS=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+let ccMonthIdx=0; // 0 = Jan 2025
+function ccMonthLabel(idx){const m=MONTHS[idx%12];const y=2025+Math.floor(idx/12);return`${m} ${y}`;}
+function prevMonth(){ccMonthIdx=Math.max(0,ccMonthIdx-1);const lbl=ccMonthLabel(ccMonthIdx);document.getElementById('ccMonth').textContent=lbl;document.getElementById('ccMonthDocked').textContent=lbl;}
+function nextMonth(){ccMonthIdx++;const lbl=ccMonthLabel(ccMonthIdx);document.getElementById('ccMonth').textContent=lbl;document.getElementById('ccMonthDocked').textContent=lbl;}
+function toggleCCExpand(){
+  ccExpanded=!ccExpanded;
+  document.getElementById('ccExpArea').classList.toggle('open',ccExpanded);
+  document.getElementById('ccExpIcon').classList.toggle('open',ccExpanded);
+  document.getElementById('ccExpLbl').textContent=ccExpanded?'Sembunyikan':'Lihat closing checklist & AI log';
+}
+
+/* ── SCROLL DOCK BEHAVIOR ── */
+/* ── SCROLL DOCK — IntersectionObserver watches when cc-band exits viewport ── */
+const ccBand=document.getElementById('ccBand');
+const ccDocked=document.getElementById('ccDocked');
+const scrollArea=document.getElementById('scrollArea');
+
+const observer=new IntersectionObserver(
+  ([entry])=>{
+    // When band is NOT intersecting (scrolled out), show docked bar
+    ccDocked.classList.toggle('visible',!entry.isIntersecting);
+  },
+  {
+    root:scrollArea,      // observe within the scroll container
+    rootMargin:'0px',
+    threshold:0           // trigger as soon as any part exits
+  }
+);
+observer.observe(ccBand);
+
+function scrollToCC(){
+  ccBand.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ── FLOATING BUBBLE ── */
+let bubbleDismissed=false;
+function dismissBubble(e){e.stopPropagation();bubbleDismissed=true;document.getElementById('ccBubble').classList.add('hidden');}
+
+/* ── KLAY AI FLOATING CHAT ── */
+let aiChatOpen=false;
+const AI_REPLIES={
+  'Jelaskan 3 JE yang pending approval':'Ketiga JE dikirim oleh <strong>Budi Santoso (Finance Staff)</strong> kemarin sore dan menunggu approval Finance Manager. JE-2025-0019 adalah penyesuaian biaya operasional Rp 12,5jt. JE-0020 alokasi departemen. JE-0021 penyesuaian akhir bulan. Struktur valid secara akuntansi — hanya perlu tanda tangan.',
+  'Kenapa JE-2025-0001 dianggap anomali?':'Beban Gaji bulan ini <strong>Rp 45jt</strong> — 16.9% di atas rata-rata 3 bulan terakhir (Rp 38,5jt). Kemungkinan penyebab: kenaikan gaji, penambahan karyawan, atau tunjangan khusus. Saya tidak bisa konfirmasi tanpa data HR. Tandai valid jika ada perubahan, atau buka di JE untuk reklasifikasi.',
+  'Rekonsiliasi mana yang belum selesai?':'12 transaksi belum dicocokkan ke mutasi bank. <strong>8 di antaranya</strong> adalah pembayaran vendor dengan nominal bulat — kemungkinan besar mudah dicocokkan manual dalam 30 menit. <strong>4 sisanya</strong> perlu referensi nomor PO untuk konfirmasi.',
+  'Apa yang perlu saya lakukan hari ini supaya closing Jan 2025 tepat waktu?':'<strong>3 prioritas hari ini:</strong><br>1. Minta Finance Manager approve 3 JE pending (kira-kira 5 menit).<br>2. Review anomali JE-2025-0001 dan tandai valid atau reklasifikasi.<br>3. Selesaikan 12 rekonsiliasi bank — 8 yang mudah bisa selesai dalam 30 menit.<br><br>Kalau 3 ini selesai hari ini, closing Jan 2025 bisa dikunci tepat waktu.',
+  'Bandingkan saldo Jan 2025 dengan Desember 2024':'Saldo Jan 2025 <strong>Rp 616,6jt</strong> vs Des 2024 <strong>Rp 583,2jt</strong> — naik Rp 33,4jt (+5.7%). Kenaikan utama dari pelunasan piutang INV-C001 (Rp 33jt) yang masuk 12 Feb. Beban operasional sedikit lebih tinggi dari bulan lalu karena biaya gaji dan logistik.',
+};
+function openAIChat(){aiChatOpen=true;document.getElementById('aiFloat').classList.add('open');}
+function closeAIChat(){aiChatOpen=false;document.getElementById('aiFloat').classList.remove('open');}
+function askAI(q){
+  addAIUserMsg(q);
+  const typing=showAITyping();
+  setTimeout(()=>{typing.remove();addAIReply(AI_REPLIES[q]||'Saya sedang menganalisis data GL Jan 2025 untuk menjawab pertanyaan ini.');},600+Math.random()*600);
+}
+function addAIUserMsg(text){
+  const msgs=document.getElementById('aiFloatMsgs');
+  const el=document.createElement('div');el.className='af-msg-user';el.textContent=text;
+  msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
+  if(!aiChatOpen)openAIChat();
+}
+function addAIReply(html){
+  const msgs=document.getElementById('aiFloatMsgs');
+  const el=document.createElement('div');el.className='af-msg-follow';el.innerHTML=html;
+  msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
+}
+function showAITyping(){
+  const msgs=document.getElementById('aiFloatMsgs');
+  const el=document.createElement('div');el.className='ai-typing-float';
+  el.innerHTML='<span></span><span></span><span></span>';
+  msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;return el;
+}
+function sendAIFloat(){
+  const inp=document.getElementById('aiFloatInput');const val=inp.value.trim();if(!val)return;
+  askAI(val);inp.value='';inp.style.height='auto';
+}
+function aiFloatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAIFloat();}}
+
+/* ── INIT ── */
+filteredRows=getFiltered();renderTable();
+</script>
+</body>
+</html>
